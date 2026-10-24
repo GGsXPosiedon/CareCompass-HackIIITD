@@ -2,21 +2,13 @@ import { caregivers } from '../data';
 import { mockIntake } from './mock';
 import { validateCaregivers, validateTriage } from './contracts';
 import type { BookingRequest, Caregiver, IntakeRequest, TriageResponse } from '../types';
+import { createJsonRequest } from './http';
 
-export const DEMO_MODE = !import.meta.env.VITE_API_BASE_URL;
-const BASE = String(import.meta.env.VITE_API_BASE_URL ?? '').replace(/\/$/, '');
+export const DEMO_MODE = import.meta.env.VITE_DEMO_MODE === 'true';
+const BASE = String(import.meta.env.VITE_API_BASE_URL || '/api');
 const delay = () => new Promise(resolve => setTimeout(resolve, 550));
 
-async function request(path: string, body?: unknown): Promise<unknown> {
-  const response = await fetch(`${BASE}${path}`, {
-    method: body === undefined ? 'GET' : 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    ...(body === undefined ? {} : { body: JSON.stringify(body) }),
-    signal: AbortSignal.timeout(20000),
-  });
-  if (!response.ok) throw new Error('API_REQUEST_FAILED');
-  return response.json();
-}
+const request = createJsonRequest(BASE);
 export async function intake(payload: IntakeRequest): Promise<TriageResponse> {
   if (DEMO_MODE) { await delay(); return mockIntake(payload); }
   return validateTriage(await request('/triage', payload));

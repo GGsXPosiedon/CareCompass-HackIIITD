@@ -48,7 +48,9 @@ npm run build
 npm run preview
 ```
 
-The production build is in `frontend/dist`. Serve it over HTTP; do not open its index.html directly from the file system. The app does not need backend services or API keys to run in demo mode. Briefcase and health services are always synthetic local demos; `VITE_API_BASE_URL` only switches the care-navigation adapter.
+The production build is in `frontend/dist`. Serve it over HTTP; do not open its index.html directly from the file system. Care navigation uses the existing backend by default. Vite dev and preview proxy `/api/*` to `http://127.0.0.1:8000/*`. Start the backend separately using the team's [backend instructions](../backend/README.md). Briefcase and health services remain synthetic local previews.
+
+For an offline UI demonstration, explicitly set `VITE_DEMO_MODE=true` in `.env.local` and restart Vite. API failures never activate demo mode automatically. Gemini keys belong only in the backend's git-ignored environment file.
 
 ## What is implemented
 
@@ -74,9 +76,11 @@ The emergency button is a `tel:112` link and opens the device dialler only after
 
 ## Connect the team's backend
 
-Copy `frontend/.env.example` to `frontend/.env.local`, set `VITE_API_BASE_URL`, and restart Vite. With a base URL set, the app stops using the synthetic API fixtures. It does **not** silently fall back to demo results on live API failures.
+No frontend environment file is needed for the default local connection. Start the existing API on port 8000 and run the frontend on port 5173. To change the local API address, copy `.env.example` to `.env.local`, set `CARECOMPASS_API_TARGET`, and restart Vite. To call a deployed API directly, set `VITE_API_BASE_URL` to its base URL and keep `VITE_DEMO_MODE=false`.
 
-All network access is isolated in **`frontend/src/lib/api.ts`**. The triage contract comes from the problem statement, which explicitly says its final schema is still to be supplied. The profile and booking endpoints below are proposed integration contracts, not organiser-supplied APIs. Adapt this one file when the team finalises names and shapes.
+For a deployed static frontend, configure the host to reverse-proxy `/api/*` to the backend root, or set `VITE_API_BASE_URL` **before building** and configure backend CORS. Vite's dev/preview proxy is not bundled into `dist`.
+
+The adapter is in **`src/lib/api.ts`**; **`src/lib/http.ts`** preserves HTTP status codes for conflict recovery. These endpoints are already implemented by the team's backend. Confirm the final organiser schema separately before evaluation.
 
 ### `POST /triage`
 
@@ -110,11 +114,11 @@ Response:
 
 For follow-ups, return a non-empty `follow_up_question`, with `care_type` and `urgency` nullable. Optional `answer_options: string[]` supplies quick answers. The frontend never invents clinical follow-up questions in live mode. Return translated questions, reasons and answer options for the requested language.
 
-Currently supported care-type values: `paramedic_home_visit`, `nurse_home_visit`, `gp_teleconsult`, `specialist_consult`, `emergency_referral`. Supported urgency: `routine`, `same_day`, `immediate`. Confirm these enums against the final care taxonomy. Responses are validated at runtime; invalid non-emergency output produces a retry error rather than a made-up recommendation.
+Supported care-type values: `paramedic_home_visit`, `home_nursing`, `lab_test_home`, `teleconsultation`, `emergency_112`. Supported urgency: `scheduled`, `same_day`, `emergency`. Responses are validated at runtime; invalid non-emergency output produces a retry error rather than a made-up recommendation.
 
 Emergency fields are checked before normal-response validation, and caregiver matches are discarded on that path—even when the payload is incomplete or conflicting. The frontend does not independently diagnose symptoms. The backend owns clinically validated red-flag detection, negation handling, triage and ranking.
 
-### `GET /caregivers?ids=CG_014%2CCG_022`
+### `GET /caregivers?ids=CG_014%2CCG_022&care_type=home_nursing&date=2026-10-25`
 
 Returns a JSON array of complete profiles. See the **`Caregiver`** interface in `frontend/src/types.ts` and the synthetic examples in `frontend/src/data.ts`. Required fields:
 
@@ -138,9 +142,9 @@ Returns a JSON array of complete profiles. See the **`Caregiver`** interface in 
 }
 ```
 
-Distances are kilometres, ratings are out of five, and slots use 24-hour `HH:mm` in the device's local time. The UI preserves triage ranking; it does not re-sort by rating. Missing or incompatible profiles block booking and show an error. Never hydrate live IDs from synthetic profiles.
+Distances are kilometres, ratings are out of five, and slots use 24-hour `HH:mm` in **Asia/Kolkata (IST)**, matching the existing backend. Requests include `lat` and `lng` when location is known. The UI preserves triage ranking. Missing or incompatible profiles block booking and show an error. Live IDs are never hydrated from synthetic profiles.
 
-The current demo reuses provider slot templates for today/tomorrow, filters past slots, and restricts same-day recommendations to today. Before real scheduling, replace this with backend-owned, date-specific slot IDs, a defined service timezone, and atomic availability validation.
+Scheduled recommendations initially load tomorrow; same-day recommendations load today and cannot be moved to tomorrow. Both caregiver selection and booking request fresh profiles for the selected date. Date changes clear the selected time; loading and failed refreshes block confirmation. Entering booking refreshes availability again. `Refresh availability` retries a failed request. Only explicit offline demo mode reuses synthetic slot templates.
 
 ### `POST /bookings`
 
@@ -155,7 +159,7 @@ The current demo reuses provider slot templates for today/tomorrow, filters past
 
 Return `{ "id": "SERVER_BOOKING_REFERENCE" }` only after success. Confirmation never appears before this completes. The UI prevents duplicate in-flight submissions; production booking still needs server-side idempotency and slot reservation. A real backend also needs authentication, authorisation, input validation and an approved data-handling policy. No client-side API secrets belong in `VITE_*` variables.
 
-Configure CORS to allow the frontend origin. Endpoint failures and 20-second timeouts leave the user's current answers intact. Location selection currently uses fixed synthetic demo areas; replace that control when a real service-area contract exists.
+HTTP 409 clears the selected time, refreshes that date's slots, and asks the user to choose again; bookings are never retried automatically. Endpoint failures and 45-second timeouts preserve the user's request. The local proxy avoids cross-origin calls; a directly configured remote API requires CORS. Location selection still uses fixed synthetic demo areas.
 
 ## Demo walkthrough
 

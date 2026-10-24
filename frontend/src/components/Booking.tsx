@@ -2,20 +2,20 @@ import { ArrowLeft, ArrowRight, CalendarDays, Check, Download, MapPin } from 'lu
 import type { Copy } from '../i18n';
 import { careLabel } from '../i18n';
 import type { Booking as BookingType, Caregiver, CareType, Location } from '../types';
-import { availableSlots, formatDate, formatTime, localDate } from '../lib/flow';
+import { bookingSlots, formatDate, formatTime } from '../lib/flow';
 import { DEMO_MODE } from '../lib/api';
+import { BookingDates } from './BookingDates';
 import { Avatar } from './Caregivers';
 import { BookingSummary } from './Summary';
 
-export function BookingForm({ copy, hindi, caregiver, careType, location, date, setDate, slot, setSlot, sameDay, busy, error, onBack, onConfirm }: { copy: Copy; hindi: boolean; caregiver: Caregiver; careType: CareType; location: Location; date: string; setDate: (date: string) => void; slot: string; setSlot: (slot: string) => void; sameDay: boolean; busy: boolean; error: string; onBack: () => void; onConfirm: () => void }) {
-  const slots = availableSlots(caregiver.slots, date);
-  const dates = sameDay ? [localDate()] : [localDate(), localDate(1)];
+export function BookingForm({ copy, hindi, caregiver, careType, location, date, setDate, slot, setSlot, sameDay, busy, error, onRetry, onBack, onConfirm }: { copy: Copy; hindi: boolean; caregiver: Caregiver; careType: CareType; location: Location; date: string; setDate: (date: string) => void; slot: string; setSlot: (slot: string) => void; sameDay: boolean; busy: boolean; error: string; onBack: () => void; onConfirm: () => void; onRetry: () => void }) {
+  const slots = bookingSlots(caregiver.slots, date);
   return <><button className="text-button back-button" disabled={busy} onClick={onBack}><ArrowLeft size={17} />{copy.back}</button><div className="page-heading"><h1 tabIndex={-1}>{copy.bookingTitle}</h1><p>{copy.bookingIntro}</p></div>
     <div className="care-grid"><section className="request-panel"><div className="booking-provider"><Avatar caregiver={caregiver} /><div><h2>{caregiver.name}</h2><p className="muted">{hindi ? caregiver.roleHi : caregiver.role}</p></div></div>
-      <form onSubmit={e => { e.preventDefault(); onConfirm(); }}><fieldset className="booking-fieldset"><legend>{copy.date}</legend><div className="date-options">{dates.map((d, i) => <button key={d} type="button" className={`date-option ${date === d ? 'chosen' : ''}`} aria-pressed={date === d} onClick={() => setDate(d)} disabled={busy}><CalendarDays size={18} /><span>{i === 0 ? copy.today : copy.tomorrow}<small>{formatDate(d, hindi)}</small></span>{date === d ? <Check size={17} /> : null}</button>)}</div></fieldset>
-        <fieldset className="booking-fieldset"><legend>{copy.slots}</legend><div className="slot-options">{slots.map(s => <button type="button" key={s} className={`slot-option ${slot === s ? 'chosen' : ''}`} aria-pressed={slot === s} onClick={() => setSlot(s)} disabled={busy}>{formatTime(s, hindi)}</button>)}</div>{!slots.length ? <p role="status" className="muted">{copy.noSlots}</p> : null}</fieldset>
-        {error ? <p role="alert" className="error-message">{error}</p> : null}
-        <button className="button primary full-width" disabled={busy || !slots.length} type="submit">{busy ? <span className="spinner" aria-hidden="true" /> : null}{busy ? copy.bookingBusy : DEMO_MODE ? copy.confirmDemo : copy.confirmLive}{!busy ? <ArrowRight size={18} /> : null}</button>
+      <form onSubmit={e => { e.preventDefault(); onConfirm(); }}><BookingDates copy={copy} hindi={hindi} date={date} sameDay={sameDay} busy={busy} onChange={setDate}/>
+        <fieldset className="booking-fieldset"><legend>{copy.slots}</legend><div className="slot-options">{slots.map(s => <button type="button" key={s} className={`slot-option ${slot === s ? 'chosen' : ''}`} aria-pressed={slot === s} onClick={() => setSlot(s)} disabled={busy}>{formatTime(s, hindi)}</button>)}</div>{busy ? <p role="status" className="muted">{copy.loadingAvailability}</p> : null}{!busy && !slots.length ? <p role="status" className="muted">{copy.noSlots}</p> : null}</fieldset>
+        {error ? <p role="alert" className="error-message">{error}</p> : null}<button type="button" className="text-button" disabled={busy} onClick={onRetry}>{copy.refreshAvailability}</button>
+        <button className="button primary full-width" disabled={busy || !slot || !slots.includes(slot)} type="submit">{busy ? <span className="spinner" aria-hidden="true" /> : null}{busy ? copy.bookingBusy : DEMO_MODE ? copy.confirmDemo : copy.confirmLive}{!busy ? <ArrowRight size={18} /> : null}</button>
         {DEMO_MODE ? <p className="small muted booking-note">{copy.bookingNote}</p> : null}
       </form>
     </section><BookingSummary copy={copy} hindi={hindi} caregiver={caregiver} careType={careType} date={date} slot={slot} location={location} /></div></>;

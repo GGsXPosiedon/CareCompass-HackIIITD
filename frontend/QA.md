@@ -1,6 +1,18 @@
 # Frontend verification
 
-Current checkpoint: three main destinations (Find care, My bookings and Briefcase), a shared dark/light theme, and health services reached from My bookings. The old family-workspace page and removed profile/account sections are absent.
+## API-connected booking checkpoint — 24 October 2026
+
+- Frontend changes only; no tracked backend files or dependencies changed.
+- Default `/api` proxy reaches the existing backend on port 8000. Scripted responses require explicit `VITE_DEMO_MODE=true`; outages do not trigger a fallback.
+- A new typed lab request reached `POST /triage`, loaded tomorrow's caregiver profiles, and displayed selectable future slots. Today correctly showed no remaining slots late in the day.
+- Both caregiver and booking date selectors caused date-specific GET requests. Switching dates cleared the selected time and disabled confirmation until a valid replacement was chosen.
+- Entering booking revalidated availability. A second client reserved the chosen 07:00 slot; the frontend received 409, fetched current slots, removed 07:00, cleared the selection and displayed the conflict message. Choosing 08:00 then produced API reference `BK-00002`, visible in My bookings.
+- Stopping the API preserved the typed request and showed an unavailable-service message. Restarting it allowed the same request to continue.
+- Desktop 1440px and mobile 390px layouts inspected in dark/light modes; 320px booking view had no horizontal overflow. Appointment times are explicitly labelled IST.
+- All 27 frontend tests and the production build pass. New checks cover India midnight/year rollover, past slots, date-specific requests, booking payloads, 409 handling, and API outages.
+- The existing backend ran using an isolated review environment. Live Gemini, real patient/caregiver data, and production deployment were not verified. The backend's clean-Windows `tzdata` dependency remains the backend teammate's responsibility.
+
+The sections below record earlier demo-only checks and may refer to UI that has since changed.
 
 ## Navigation and theme verification
 

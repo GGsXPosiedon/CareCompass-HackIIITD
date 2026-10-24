@@ -3,7 +3,8 @@ import { ArrowRight, Check, ChevronDown, Compass, Globe2, HelpCircle, MapPin, Me
 import { getCopy } from './i18n';
 import { emergencyExample, locations, scenarios } from './data';
 import { createBooking, DEMO_MODE, getCaregivers, intake } from './lib/api';
-import { availableSlots, localDate, nextView } from './lib/flow';
+import { bookingSlots, bookingDate, nextView } from './lib/flow';
+import { ApiError } from './lib/http';
 import type { PatientContext, Booking, Caregiver, IntakeRequest, Language, Location, Message, TriageResponse } from './types';
 import { Intake } from './components/Intake';
 import { FollowUps } from './components/FollowUps';
@@ -30,7 +31,7 @@ export default function App({ embedded = false, chatLayout = false, resetRequest
   const [profiles, setProfiles] = useState<Caregiver[]>([]);
   const [selected, setSelected] = useState<Caregiver | null>(null);
   const [filter, setFilter] = useState('all');
-  const [date, setDate] = useState(localDate());
+  const [date, setDate] = useState(bookingDate());
   const [slot, setSlot] = useState('');
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [confirmed, setConfirmed] = useState<Booking | null>(null);
@@ -94,31 +95,58 @@ export default function App({ embedded = false, chatLayout = false, resetRequest
       const nextMessages: Message[] = [...history, { role: 'user', content: payload.user_input }];
       if (response.follow_up_question) nextMessages.push({ role: 'assistant', content: response.follow_up_question });
       setMessages(nextMessages); setResult(response); setAnswer(''); setView(nextView(response));
-    } catch { if (current === generation.current) setError(copy.genericError); }
+    } catch (cause) { if (current === generation.current) setError(!DEMO_MODE && (cause instanceof TypeError || cause instanceof DOMException || (cause instanceof ApiError && cause.status >= 500)) ? copy.connectionError : copy.genericError); }
     finally { if (current === generation.current) { setBusy(false); locked.current = false; } }
   }
-  async function loadProfiles() {
+  async function fetchProfiles(on: string): Promise<Caregiver[]> {
+    if (!result?.matched_caregivers.length) return [];
+    const data = await getCaregivers(result.matched_caregivers.map(m => m.caregiver_id), { careType: result.care_type, lat: location.lat, lng: location.lng, date: on });
+    const ranked = result.matched_caregivers.map(m => data.find(c => c.id === m.caregiver_id));
+    if (ranked.some(c => !c || c.careType !== result.care_type)) throw new Error('MISSING_PROFILE');
+    return ranked as Caregiver[];
+  }
+  async function refreshProfiles(on: string, target: 'caregivers' | 'booking', preserveSelection = true, notice = '') {
     if (!result || locked.current) return;
-    const current = ++generation.current; locked.current = true; setBusy(true); setError('');
+    const selectedId = preserveSelection ? selected?.id : undefined;
+    const current = ++generation.current; locked.current = true;
+    setBusy(true); setError(''); setDate(on); setSlot(''); setProfiles([]); setView(target);
+    setSelected(previous => preserveSelection && previous ? { ...previous, slots: [] } : null);
+    if (!preserveSelection) setFilter('all');
     try {
-      const data = await getCaregivers(result.matched_caregivers.map(m => m.caregiver_id), { careType: result.care_type, lat: location.lat, lng: location.lng, date });
+      const ranked = await fetchProfiles(on);
       if (current !== generation.current) return;
-      const ranked = result.matched_caregivers.map(m => data.find(c => c.id === m.caregiver_id));
-      if (ranked.some(c => !c || c.careType !== result.care_type)) throw new Error('MISSING_PROFILE');
-      setProfiles(ranked as Caregiver[]); setFilter('all'); setSelected(null); setView('caregivers');
+      const next = ranked.find(c => c.id === selectedId);
+      setProfiles(ranked);
+      setSelected(next && (target === 'booking' || bookingSlots(next.slots, on).length) ? next : null);
+      setError(notice);
     } catch { if (current === generation.current) setError(copy.profileError); }
     finally { if (current === generation.current) { setBusy(false); locked.current = false; } }
   }
+  function loadProfiles() {
+    void refreshProfiles(bookingDate(result?.urgency === 'scheduled' ? 1 : 0), 'caregivers', false);
+  }
   async function confirm() {
     if (!selected || !result?.care_type || locked.current) return;
-    if (!slot || !availableSlots(selected.slots, date).includes(slot)) { setSlot(''); setError(copy.chooseSlot); return; }
+    if (!slot) { setError(copy.chooseSlot); return; }
+    if (!bookingSlots(selected.slots, date).includes(slot)) { void refreshProfiles(date, 'booking', true, copy.slotTaken); return; }
     const current = ++generation.current; locked.current = true; setBusy(true); setError('');
     try {
       const response = await createBooking({ caregiver_id: selected.id, slot, date, location: { lat: location.lat, lng: location.lng } });
       if (current !== generation.current) return;
       const booking: Booking = { id: response.id, caregiver: selected, date, slot, location, careType: result.care_type, demo: DEMO_MODE };
       setBookings(previous => [booking, ...previous]); setConfirmed(booking); setView('confirmation');
-    } catch { if (current === generation.current) setError(copy.genericError); }
+    } catch (cause) {
+      if (current !== generation.current) return;
+      if (cause instanceof ApiError && cause.status === 409) {
+        setSlot(''); setSelected(previous => previous ? { ...previous, slots: [] } : null); setProfiles([]);
+        setError(copy.slotTaken);
+        try {
+          const ranked = await fetchProfiles(date);
+          if (current !== generation.current) return;
+          setProfiles(ranked); setSelected(ranked.find(c => c.id === selected.id) ?? { ...selected, slots: [] });
+        } catch { if (current === generation.current) setError(`${copy.slotTaken} ${copy.profileError}`); }
+      } else setError(copy.genericError);
+    }
     finally { if (current === generation.current) { setBusy(false); locked.current = false; } }
   }
   function showLocation() { setDraftLocation(location); setModal('location'); setMenu(false); }
@@ -141,9 +169,9 @@ export default function App({ embedded = false, chatLayout = false, resetRequest
     {view === 'intake' ? <Intake compact={chatLayout} onLocation={showLocation} copy={copy} hindi={hindi} language={language} input={input} setInput={value => { setInput(value); setError(''); }} person={person} setPerson={setPerson} location={location} busy={busy} error={error} onSubmit={() => void submit()} /> : null}
     {view === 'questions' && result && chatLayout ? <ChatQuestion copy={copy} hindi={hindi} result={result} messages={messages} symptom={input} input={answer} setInput={value => { setAnswer(value); setError(''); }} onAnswer={text => void submit({ text, answer: true })} onBack={edit} busy={busy} error={error} /> : null}
     {view === 'questions' && result && !chatLayout ? <FollowUps copy={copy} hindi={hindi} result={result} messages={messages} input={answer} setInput={value => { setAnswer(value); setError(''); }} onSubmit={() => void submit()} onBack={edit} busy={busy} error={error} symptom={input} location={location} /> : null}
-    {view === 'recommendation' && result ? <Recommendation copy={copy} hindi={hindi} result={result} symptom={input} location={location} answers={Math.max(0, messages.filter(m => m.role === 'user').length - 1)} busy={busy} error={error} onContinue={() => void loadProfiles()} onBack={edit} onLocation={showLocation} /> : null}
-    {view === 'caregivers' && result ? <Caregivers copy={copy} hindi={hindi} profiles={profiles} result={result} selected={selected} setSelected={setSelected} filter={filter} setFilter={value => { setFilter(value); if (selected && value !== 'all' && !selected.languages.includes(value)) setSelected(null); }} location={location} onBack={() => setView('recommendation')} onContinue={() => { if (selected) { setDate(localDate()); setSlot(''); setError(''); setView('booking'); } }} /> : null}
-    {view === 'booking' && selected && result?.care_type ? <BookingForm copy={copy} hindi={hindi} caregiver={selected} careType={result.care_type} location={location} date={date} setDate={value => { setDate(value); setSlot(''); setError(''); }} slot={slot} setSlot={value => { setSlot(value); setError(''); }} sameDay={result.urgency === 'same_day'} busy={busy} error={error} onBack={() => { setError(''); setView('caregivers'); }} onConfirm={() => void confirm()} /> : null}
+    {view === 'recommendation' && result ? <Recommendation copy={copy} hindi={hindi} result={result} symptom={input} location={location} answers={Math.max(0, messages.filter(m => m.role === 'user').length - 1)} busy={busy} error={error} onContinue={loadProfiles} onBack={edit} onLocation={showLocation} /> : null}
+    {view === 'caregivers' && result ? <Caregivers copy={copy} hindi={hindi} profiles={profiles} result={result} selected={selected} setSelected={setSelected} filter={filter} setFilter={value => { setFilter(value); if (selected && value !== 'all' && !selected.languages.includes(value)) setSelected(null); }} location={location} date={date} busy={busy} error={error} onDateChange={on => void refreshProfiles(on, 'caregivers')} onRetry={() => void refreshProfiles(date, 'caregivers')} onBack={() => setView('recommendation')} onContinue={() => { if (selected) void refreshProfiles(date, 'booking'); }} /> : null}
+    {view === 'booking' && selected && result?.care_type ? <BookingForm copy={copy} hindi={hindi} caregiver={selected} careType={result.care_type} location={location} date={date} setDate={on => void refreshProfiles(on, 'booking')} slot={slot} setSlot={value => { setSlot(value); setError(''); }} sameDay={result.urgency === 'same_day'} busy={busy} error={error} onBack={() => { setError(''); setView('caregivers'); }} onRetry={() => void refreshProfiles(date, 'booking')} onConfirm={() => void confirm()} /> : null}
     {view === 'confirmation' && confirmed ? <Confirmation copy={copy} hindi={hindi} booking={confirmed} onBookings={showBookings} onNew={reset} /> : null}
     {view === 'bookings' ? <Bookings copy={copy} hindi={hindi} bookings={bookings} onNew={reset} onExploreServices={onExploreServices} /> : null}
     {view === 'emergency' && result ? <Emergency copy={copy} hindi={hindi} result={result} onNew={reset} /> : null}
