@@ -6,3 +6,4 @@ frontend/.env.local
 .taste-skill/before/
 .taste-skill/after/
 work/
+*.env
