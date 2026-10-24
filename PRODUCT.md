@@ -24,9 +24,11 @@ The runnable app uses synthetic cases, caregiver profiles, records, vitals, remi
 
 ## Brand Commitments
 
-Family-workspace refinement: remove Ask CareCompass and Find care from its navigation, and remove the Home chat section. Preserve the approved dark conversational landing page and its fonts; the light family workspace remains secondary.
+Theme contract: provide one dark/light toggle in the main header. The selected mode applies to the entire app, including Find care, My bookings, Briefcase, health services and dialogs. Do not give individual sections independent dark/light themes. Keep the approved typography and layout; dark is the initial mode.
 
-CareCompass name and original compass SVG. User requests a minimalistic interface, references Urban Company and Uber for booking clarity, and Roojh for secondary patient workflows. Latest explicit direction (24 October 2026): build directly from the supplied ChatGPT screenshot with a dark, spacious chat interface and Claude-like typography. This specific reference replaces the earlier unselected visual-concept round and the teal-and-white landing direction. Use open-source Lora serif headings and locally bundled Instrument Sans interface text; preserve the lighter family workspace as a secondary surface. The main experience is the exact fever → follow-ups → recommendation → caregiver → time → demo confirmation → My bookings journey, rather than a health dashboard.
+Navigation contract: keep the approved dark care landing and fonts. Main navigation has exactly Find care, My bookings and Briefcase. Briefcase contains Home, Records, Health summary and Labs. Explore health services belongs inside My bookings. The family-workspace page, family profiles, ABHA preview, Messages & updates, Workspace settings and Care appointments have been removed. There is no separate workspace sidebar, profile-management control or Home chat.
+
+CareCompass name and original compass SVG. User requests a minimalistic interface, references Urban Company and Uber for booking clarity, and Roojh for secondary patient workflows. Latest explicit direction (24 October 2026): build directly from the supplied ChatGPT screenshot with a dark, spacious chat interface and Claude-like typography. This specific reference replaces the earlier unselected visual-concept round and the teal-and-white landing direction. Use open-source Lora serif headings and locally bundled Instrument Sans interface text; retain the lighter record/service styling within Briefcase and health services. The main experience is the exact fever → follow-ups → recommendation → caregiver → time → demo confirmation → My bookings journey, rather than a health dashboard.
 
 ## Evidence on Hand
 

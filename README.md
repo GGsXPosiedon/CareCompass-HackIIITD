@@ -4,6 +4,8 @@ A minimal, responsive patient-facing frontend for the Hack IIITD care-navigation
 
 ## Start here: find care
 
+The header's sun/moon button switches the **entire app** between dark and light mode. Find care, My bookings, Briefcase, health services, inputs and dialogs always share the selected mode. Dark mode is the initial state; the current choice is retained while navigating in this tab. No patient data is written to local storage.
+
 Open **Find care**, then choose **Fever & cough** (or switch to Hindi/Hinglish first).
 
 1. Select **Find the right care**, which appears in the composer after a message is entered. You can also press Enter; Shift+Enter adds a new line.
@@ -12,32 +14,21 @@ Open **Find care**, then choose **Fever & cough** (or switch to Hindi/Hinglish f
 4. Choose a caregiver with remaining slots, select **Choose a time**, pick a time and select **Confirm demo booking**.
 5. View the confirmation, select **Download summary**, then open **My bookings**.
 
-The message box also includes **Speak instead**, with an editable transcript and typing fallback. The sidebar contains **Find care**, **My bookings** and **New request**. On mobile, open the menu to reach them. A new request keeps completed bookings in this tab; refreshing clears them.
+The message box also includes **Speak instead**, with an editable transcript and typing fallback. The sidebar contains **Find care**, **My bookings**, **Briefcase** and **New request**. **My bookings** includes **Explore health services**. On mobile, open the menu to reach them. A new request keeps completed bookings in this tab; refreshing clears them.
 
-## Roojh-inspired patient workspace
+## Briefcase and health services
 
-The secondary **Family workspace** link opens the Roojh-inspired family-health workspace, with these working frontend modules. Ask CareCompass, Find care, Medications and Vitals are omitted from its navigation, and workspace Home has no chat composer. Home focuses on profiles, records and summaries. The main dark care-request landing page remains unchanged.
+The main sidebar has three destinations: **Find care**, **My bookings**, and **Briefcase**. The chat-first landing layout and fonts are retained, with one shared dark/light theme across all sections.
 
-| Module | Implemented behavior |
-| --- | --- |
-| Family profiles | Add/edit fictional members, switch context, isolate records/readings/reminders/conversations and care bookings |
-| Briefcase | Multiple local PDF/image selection, camera-input affordance, synthetic sample insertion, category/search/date sorting, document preview and metadata downloads |
-| Consent preview | Select records, choose a fictional recipient and duration, create a local access preview and revoke it; no actual sharing |
-| Health summary | Computed record/category totals, demographics, sample allergies, medication list, chronological care timeline, JSON download and a doctor-review request preview |
-| Vitals | Blood pressure, glucose, heart rate, weight and SpO2 entry; 7/30/90-day history, trends, numeric validation and CSV export |
-| Labs | Lab-category browsing and links to the profile's laboratory documents and recorded readings |
-| Medications | Add/edit/pause/resume reminders, daily schedule, date range, mark taken/skipped and deduplicated dose history |
-| ABHA preview | Create/link consent flow using an intentionally invalid demo identity; unlink and download a clearly marked demo card |
-| Health services | Synthetic hospitals and nearby-service discovery, sample QR-payload linking, hospital switching, appointment/token request previews, history and cancellation |
-| Messages & updates | Read/unread activity, in-tab due-reminder notices, persistent per-profile local text/image/audio/video message previews |
-| Settings | Data export, profile management, explicit integration limits and complete workspace reset |
-| Care navigation | Original multilingual intake, triage-result display, emergency bypass, caregiver matching, booking and per-profile care-appointment history |
+**Briefcase** opens the document list directly. Its internal navigation contains **Home**, **Records**, **Health summary**, and **Labs**. Home provides record upload and recent documents; Records includes local PDF/image selection, camera-input affordance, sample insertion, search, category/date sorting, document previews, consent previews and metadata downloads. Health summary organizes the current synthetic patient's records and timeline; Labs links categories to documents and the lab-upload workflow.
 
-**These reproduce documented workflows as a local frontend demo, not exact feature parity with Roojh's private app.** Actual OCR/AI extraction, doctor verification, cloud health storage, authentication/OTP, real ABHA/ABDM, permission-enforced sharing, live AI, background notifications, hospital systems, subscriptions and payments are not connected or claimed. Profile data never receives a fake "doctor verified" status. File uploads say "Awaiting connected extraction" and no clinical values are invented from files. In-tab reminder checks run every 30 seconds only while the app remains open. Hospital codes and IDs are deliberately synthetic.
+**My bookings → Explore health services** opens the fictional hospital/service directory, hospital linking, request/token previews and their cancellation/history. It has a return action to My bookings. These previews do not contact hospitals, reserve queue positions or create real appointments.
 
-The public references used were [Roojh's patient page](https://roojh.com/for-patients/), the developer's [Google Play listing](https://play.google.com/store/apps/details?id=com.roojhproject.roojh), its published screenshots (family home, documents, labs and vitals), and [App Store release notes](https://apps.apple.com/in/app/roojh-health-care/id6444840591). Hospital-specific tokens and QR flows are documented in historical release notes; availability in every current Roojh account was not verified. No account was accessed, and no Roojh assets or proprietary code were copied. This app does not inherit Roojh's certifications or affiliations.
+The family-workspace page and its separate sidebar/header have been removed. Family profiles, ABHA preview, Messages & updates, Workspace settings and Care appointments are no longer app sections. The earlier assistant, profile-management, ABHA, messaging, settings and reminder UI files have been removed. Seed data and internal record-isolation helpers remain for synthetic fixtures and tests; no profile-management UI is exposed.
 
-Health-workspace state lives in `frontend/src/health/Store.tsx`; its synthetic seed data is in `health/data.ts`. The existing care API adapter remains separate in `src/lib/api.ts`. No health files are sent to the care API. Local file object URLs are released when the workspace resets. Exported JSON excludes those object URLs and does not contain file bytes. Record-sharing and transcript-export controls do not contact recipients.
+The record and hospital flows take inspiration from Roojh's documented patient experience. This is a local frontend demonstration, with no OCR, clinical verification, authentication, government integration, real sharing, live AI, payments or hospital backend. Record uploads and document URLs stay in this tab; object URLs are released when the application unmounts. State survives navigation between Briefcase, services and care booking, but clears on refresh.
+
+Health state is provided once around the app in `src/health/Store.tsx`. `src/health/Briefcase.tsx` owns the four internal sections; `src/health/Services.tsx` is reached only from My bookings. The care API adapter remains separate in `src/lib/api.ts` and never receives Briefcase files.
 
 ## Run locally
 
@@ -57,7 +48,7 @@ npm run build
 npm run preview
 ```
 
-The production build is in `frontend/dist`. Serve it over HTTP; do not open its index.html directly from the file system. The app does not need backend services or API keys to run in demo mode. The patient workspace is always a synthetic local demo; `VITE_API_BASE_URL` only switches the care-navigation adapter.
+The production build is in `frontend/dist`. Serve it over HTTP; do not open its index.html directly from the file system. The app does not need backend services or API keys to run in demo mode. Briefcase and health services are always synthetic local demos; `VITE_API_BASE_URL` only switches the care-navigation adapter.
 
 ## What is implemented
 
@@ -178,10 +169,11 @@ The **Explore demo scenarios** disclosure shows emergency escalation, outside-co
 frontend/
   src/
     App.tsx              # Original care-flow state and API orchestration
-    CareShell.tsx        # Focused care sidebar, language control and workspace access
-    care-shell.css       # Dark chat-first entry and booking-flow theme
-    health/              # Family workspace, records, summaries, vitals, reminders, chat and previews
-    health.css           # Minimal workspace shell and responsive module styles
+    CareShell.tsx        # Three-destination sidebar, shared health state and services access
+    care-shell.css       # Chat-first shell, navigation and responsive layout
+    themes.css           # Shared dark/light tokens for every section and dialog
+    health/              # Briefcase, records, health summaries, labs, services and synthetic state
+    health.css           # Light record/service module styles
     components/          # Intake, questions, results, providers, booking, emergency, dialogs
     lib/api.ts           # Single network boundary and demo/live switch
     lib/contracts.ts     # Runtime response validation and emergency priority

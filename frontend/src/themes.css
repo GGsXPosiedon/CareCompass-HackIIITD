@@ -1,0 +1,95 @@
+/* One theme boundary covers care, bookings, Briefcase, services and dialogs. */
+.care-shell {
+  --theme-surface:#272725;
+  --care-card:#242422; --care-summary:#2a2a27; --care-hover:#343430;
+  --control:#858174;
+  --action:#e9e4da; --action-ink:#252521; --action-hover:#fff9f0;
+  --choice:#4a3c30; --choice-ink:#ffe0c7; --choice-border:#d7a781;
+  --badge:#3a3b32; --badge-ink:#d9d6c9;
+  --warning-ground:#4b3b21; --warning-ink:#f3d7a0;
+  --error-ground:#452b27; --error-ink:#ffd1c6;
+  --success-ground:#354139; --success-ink:#c9e5ce;
+  --disabled-ground:#383833; --disabled-ink:#aba99f;
+}
+.care-shell.theme-light {
+  --ink:#292b26; --muted:#66665e; --border:#deddd6; --control:#a6a497;
+  --care-ground:#faf9f6; --care-sidebar:#f1efe9; --care-raised:#fff;
+  --theme-surface:#f1f0eb; --surface:#f1f0eb;
+  --teal:#875736; --teal-dark:#754a2c; --danger:#9a3027;
+  --care-card:#fff; --care-summary:#f1f0eb; --care-hover:#e7e5dd;
+  --action:#292b26; --action-ink:#fff; --action-hover:#43473d;
+  --choice:#f1e7dd; --choice-ink:#624328; --choice-border:#947251;
+  --badge:#e9ede5; --badge-ink:#465441;
+  --warning-ground:#fbefd7; --warning-ink:#6e4912;
+  --error-ground:#fff0ec; --error-ink:#9a3027;
+  --success-ground:#e4efe8; --success-ink:#1c6654;
+  --disabled-ground:#eeede8; --disabled-ink:#77766d;
+  color-scheme:light; scrollbar-color:#aaa79b transparent;
+}
+body:has(.care-shell.theme-light) { background:#faf9f6; }
+.care-shell .health-portal {
+  --surface:var(--theme-surface); --raised:var(--care-raised);
+  --rule:var(--border); --grid:var(--border); --axis-ink:var(--muted);
+  --chart-1:var(--teal); --negative:var(--error-ink);
+}
+.care-shell ::selection { background:var(--choice); color:var(--choice-ink); }
+.care-theme-toggle { display:inline-flex; gap:7px; align-items:center; justify-content:center; min-height:44px; padding:8px 11px; border:1px solid var(--border); border-radius:8px; font-size:12px; white-space:nowrap; }
+.care-theme-toggle:hover { background:var(--care-hover); }
+.care-shell :is(.care-primary-nav button.active,.care-primary-nav button:hover,.care-new-request:hover,.icon-button:hover) { background:var(--care-hover); }
+.care-shell .care-demo-badge { color:var(--muted); border-color:var(--control); }
+.care-shell .care-topbar select,.care-shell .care-person-select select { background:transparent; }
+.care-shell :is(input,textarea,select) { background-color:var(--care-raised); color:var(--ink); border-color:var(--control); }
+.care-shell :is(input,textarea)::placeholder { color:var(--muted); }
+.care-shell .search-field input,.care-shell .care-chat-composer textarea { background:transparent; }
+.care-shell .care-chat-composer { background:var(--care-raised); border-color:var(--control); }
+.care-shell .care-chat-composer:focus-within { border-color:var(--teal); }
+.care-shell .care-chat-composer .voice-button { background:transparent; }
+.care-shell .care-chat-composer .voice-button:hover { background:var(--care-hover); }
+.care-shell .care-sample-prompts button { border-color:var(--control); color:var(--ink); }
+.care-shell .care-sample-prompts button:hover { background:var(--care-hover); border-color:var(--teal); }
+.care-shell .care-location-shortcut > span { color:var(--muted); }
+.care-shell .care-send { background:var(--teal); color:var(--care-ground); }
+.care-shell .care-send:hover:not(:disabled) { background:var(--teal-dark); }
+.care-shell .care-chat-composer .care-send:disabled { background:var(--disabled-ground); color:var(--disabled-ink); }
+.care-shell .button.primary { color:var(--action-ink); background:var(--action); border-color:transparent; }
+.care-shell .button.primary:hover:not(:disabled) { background:var(--action-hover); }
+.care-shell .button.secondary { background:transparent; border-color:var(--control); color:var(--ink); }
+.care-shell .button.secondary:hover:not(:disabled) { background:var(--care-hover); border-color:var(--teal); }
+.care-shell button:disabled:not(.brand) { color:var(--disabled-ink); background:var(--disabled-ground); border-color:var(--border); }
+.care-shell .text-button:hover { color:var(--teal); }
+.care-shell :is(.request-panel,.provider-card,.confirmation-card,.past-booking,.health-block,.records-timeline) { background:var(--care-card); }
+.care-shell :is(.summary-panel,.selection-panel,.record-summary-link,.health-upload-panel,.health-summary-banner,.review-preview,.hospital-connect,.empty-bookings,.health-empty) { background:var(--care-summary); }
+.care-shell .briefcase-tabs button.active { background:var(--care-hover); color:var(--ink); }
+.care-shell .briefcase-tabs button:hover { background:var(--theme-surface); }
+.care-shell :is(.record-review-state,.skills span,.status-pill.neutral) { color:var(--badge-ink); background:var(--badge); }
+.care-shell .status-pill.warning { color:var(--warning-ink); background:var(--warning-ground); }
+.care-shell :is(.compact-record,.summary-timeline-row) { border-color:var(--border); }
+.care-shell :is(.compact-record>svg,.health-record-row>svg,.health-empty>svg,.service-item>svg) { color:var(--muted); }
+.care-shell :is(.answer-option,.slot-option,.date-option) { border-color:var(--control); }
+.care-shell :is(.answer-option.chosen,.slot-option.chosen,.date-option.chosen,.selected-button,.location-option.chosen) { background:var(--choice); color:var(--choice-ink); border-color:var(--choice-border); }
+.care-shell .voice-button { background:var(--care-hover); color:var(--ink); }
+.care-shell .voice-button:hover { background:var(--care-summary); }
+.care-shell .voice-button.is-listening { background:var(--error-ground); color:var(--error-ink); }
+.care-shell .voice-status { color:var(--error-ink); }
+.care-shell .user-message { background:var(--care-hover); }
+.care-shell .assistant-message { background:var(--care-raised); }
+.care-shell .confirmation-check { background:var(--success-ground); color:var(--success-ink); }
+.care-shell :is(.error-message,.emergency-card) { background:var(--error-ground); color:var(--error-ink); }
+.care-shell :is(.emergency-card h2,.emergency-card ul) { color:var(--error-ink); }
+.care-shell .emergency-button { background:#b44438; color:#fff; }
+.care-shell .modal { background:var(--care-raised); color:var(--ink); box-shadow:0 20px 70px #0005; }
+.care-shell .modal::backdrop { background:#0009; }
+.care-shell .location-option:hover { background:var(--care-hover); }
+.care-shell .example-button:hover { background:var(--care-hover); border-color:var(--teal); }
+.care-shell .current .progress-mark { border-color:var(--ink); }
+.care-shell .complete .progress-mark { color:var(--care-ground); }
+.care-shell .avatar.sage { background:var(--success-ground); color:var(--success-ink); }
+@media(max-width:767px) {
+  .care-theme-toggle { width:40px; padding:8px; }
+  .care-theme-toggle > span { display:none; }
+}
+@media(max-width:400px) {
+  .care-topbar { padding-left:12px; padding-right:12px; }
+  .care-mobile-brand { font-size:14px; }
+  .care-topbar > div { gap:5px; }
+}

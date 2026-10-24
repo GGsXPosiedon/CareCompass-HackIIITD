@@ -505,7 +505,52 @@
         "name": "family-narrow-max",
         "value": "360px"
       }
-    ]
+    ],
+    "navigation": {
+      "primary": [
+        "Find care",
+        "My bookings",
+        "Briefcase"
+      ],
+      "briefcase": [
+        "Home",
+        "Records",
+        "Health summary",
+        "Labs"
+      ],
+      "servicesEntry": "My bookings / Explore health services",
+      "removed": [
+        "Family workspace",
+        "Family profiles",
+        "ABHA preview",
+        "Messages & updates",
+        "Workspace settings",
+        "Care appointments"
+      ]
+    },
+    "themes": {
+      "scope": "Entire app, including dialogs",
+      "default": "dark",
+      "stylesheet": "frontend/src/themes.css",
+      "dark": {
+        "ground": "#20201e",
+        "sidebar": "#181817",
+        "raised": "#2b2b28",
+        "ink": "#eeece6",
+        "muted": "#b2b0a8",
+        "accent": "#dfab8d",
+        "control": "#858174"
+      },
+      "light": {
+        "ground": "#faf9f6",
+        "sidebar": "#f1efe9",
+        "raised": "#ffffff",
+        "ink": "#292b26",
+        "muted": "#66665e",
+        "accent": "#875736",
+        "control": "#a6a497"
+      }
+    }
   },
   "components": [
     {
@@ -573,7 +618,7 @@
       "css": ".ds-care-card{border:1px solid #3b3b37;border-radius:14px;padding:23px;background:#242422;color:#eeece6;font:400 16px/1.55 'Instrument Sans','Noto Sans Devanagari',sans-serif;transition:border-color .15s}.ds-care-card h2{margin:0;font:500 21px/1.35 'Instrument Sans','Noto Sans Devanagari',sans-serif;letter-spacing:-.025em}.ds-care-card p{color:#b2b0a8;font-size:14px;margin:10px 0 0}.ds-care-card.ds-selected{border-color:#dfab8d}"
     },
     {
-      "name": "Family Health Block",
+      "name": "Briefcase Health Block",
       "kind": "card",
       "refersTo": "family-card",
       "description": "The inherited light family workspace container.",
@@ -583,18 +628,18 @@
   ],
   "narrative": {
     "northStar": "A quiet conversation toward care",
-    "overview": "CareCompass uses a dark, spacious conversational shell with a warm serif question and restrained sans-serif controls. The approved ChatGPT-like spatial model and Claude-like type character guide the primary experience; Lora is an open-source approximation of that serif character. The original compass mark and CareCompass name remain the identity anchors.\n\nA compact sidebar holds navigation while the canvas gives the current care decision room. Tonal surfaces, visible input labels and brief supporting text keep the experience calm and readable. The secondary family workspace deliberately retains its inherited light, green-accented interface; it is a distinct workspace within the same product.",
+    "overview": "The chat-first care layout and serif headings are preserved. A single sidebar contains Find care, My bookings and Briefcase. Briefcase contains Home, Records, Health summary and Labs. Health services is accessed from My bookings. A header sun/moon button selects one dark/light theme for all app sections and dialogs, with no independently themed pages.",
     "keyCharacteristics": [
-      "Warm charcoal surfaces with soft paper-colored text.",
-      "Serif questions paired with clear sans-serif controls.",
-      "A raised composer and restrained terracotta interaction accents.",
-      "Flat cards and visible selected, disabled, loading and error states.",
-      "A separately scoped light family workspace."
+      "Chat-first care shell with Lora headings.",
+      "Three primary navigation destinations.",
+      "One shared dark/light theme across every surface.",
+      "Records and booking state retained across theme and navigation changes.",
+      "No separate family-workspace or removed profile/account sections."
     ],
     "rules": [
       {
-        "name": "The Two Worlds Rule",
-        "body": "Keep dark care tokens in the conversational flow and light family tokens in the family workspace; preserve the explicit theme boundary.",
+        "name": "The One Theme Rule",
+        "body": "All surfaces, forms and dialogs inherit the theme selected on the root care shell. Do not reset Briefcase or services to another mode.",
         "section": "colors"
       },
       {
@@ -609,7 +654,7 @@
       }
     ],
     "dos": [
-      "**Do** preserve the Two Worlds Rule when extending care or family surfaces.",
+      "**Do** preserve the One Theme Rule when extending care or family surfaces.",
       "**Do** pair serif care questions with sans-serif controls and detailed information.",
       "**Do** use tonal layers and borders for resting surfaces.",
       "**Do** show distinct focus, selected, disabled, loading and error states.",

@@ -1,8 +1,18 @@
 # Frontend verification
 
-Current checkpoint: focused care entry with a dark conversational shell and serif headings, plus the secondary Roojh-inspired patient workspace.
+Current checkpoint: three main destinations (Find care, My bookings and Briefcase), a shared dark/light theme, and health services reached from My bookings. The old family-workspace page and removed profile/account sections are absent.
 
-Family-workspace cleanup: Ask CareCompass and Find care were removed from desktop/mobile workspace menus, and the workspace Home chat section and summary assistant shortcut were removed. The main dark CareShell landing page and its fonts are preserved.
+## Navigation and theme verification
+
+- Desktop and mobile menus show Find care, My bookings and Briefcase. Briefcase groups Home, Records, Health summary and Labs, with no second sidebar or header.
+- Briefcase Home → Add health records opens the upload dialog. Inserting a synthetic record updated the summary count from three to four.
+- My bookings → Explore health services opens the service directory; Back to my bookings returns correctly.
+- Full fever journey completed in light mode through age, emergency follow-up, recommendation, caregiver and time selection. Switching to dark mode preserved the selected time; confirmation succeeded and the booking remained after visiting Briefcase and returning.
+- Theme changes preserve the typed care request. Records, care, bookings, services and their dialogs share the selected mode. Upload dialog colors were checked in both modes.
+- Dark/light desktop layouts inspected at 1440px and mobile at 390px. The theme control and booking view also fit at 320px; document width equals client width, with no horizontal overflow.
+- Dark booking text contrast was checked from computed DOM colors. Browser microphone capture, actual uploaded file bytes and backend services were not exercised.
+
+The following sections are historical verification records from preceding checkpoints; removed features are not part of the current UI.
 
 ## Focused care entry — 24 October 2026
 

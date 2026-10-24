@@ -133,13 +133,13 @@ components:
 
 ## Overview
 
-Family-workspace navigation refinement: omit Ask CareCompass and Find care, and omit the chat composer on its Home page. Preserve the primary dark landing page and the secondary workspace's existing light typography and palette.
+Navigation: the main sidebar contains Find care, My bookings and Briefcase. Briefcase groups Home, Records, Health summary and Labs in an internal wrapping navigation row. Explore health services lives inside My bookings and returns there. The former family-workspace shell and removed account/profile/settings sections are no longer mounted or available.
 
 **Creative North Star: "A quiet conversation toward care"**
 
 CareCompass uses a dark, spacious conversational shell with a warm serif question and restrained sans-serif controls. The approved ChatGPT-like spatial model and Claude-like type character guide the primary experience; Lora is an open-source approximation of that serif character. The original compass mark and CareCompass name remain the identity anchors.
 
-A compact sidebar holds navigation while the canvas gives the current care decision room. Tonal surfaces, visible input labels and brief supporting text keep the experience calm and readable. The secondary family workspace deliberately retains its inherited light, green-accented interface; it is a distinct workspace within the same product.
+A compact sidebar holds navigation while the canvas gives the current care decision room. Tonal surfaces, visible input labels and brief supporting text keep the experience calm and readable. Briefcase and health services inherit the same selected dark/light theme inside the single app shell.
 
 **Key Characteristics:**
 
@@ -147,11 +147,17 @@ A compact sidebar holds navigation while the canvas gives the current care decis
 - Serif questions paired with clear sans-serif controls.
 - A raised composer and restrained terracotta interaction accents.
 - Flat cards and visible selected, disabled, loading and error states.
-- A separately scoped light family workspace.
+- One dark/light theme across every app surface.
 
-Evidence: `frontend/src/care-shell.css` supplies the primary world and workspace overrides; `frontend/src/styles.css` supplies inherited primitives; `frontend/src/health.css` supplies the family workspace. `frontend/src/main.tsx` bundles the fonts and loads those styles in that order. This is a source-grounded record of the reviewed implementation, not a new visual proposal.
+Evidence: `frontend/src/care-shell.css` supplies the primary world and workspace overrides; `frontend/src/styles.css` supplies inherited primitives; `frontend/src/health.css` supplies the light record and service modules. `frontend/src/main.tsx` bundles the fonts and loads those styles in that order. This is a source-grounded record of the reviewed implementation, not a new visual proposal.
 
 ## Colors
+
+`frontend/src/themes.css` is the current color authority and loads after the earlier stylesheets. The shell owns a single `theme-dark` or `theme-light` class. All panels, forms, records, service listings, status states and dialogs inherit that mode. Dark is the initial state and the header toggle switches it without remounting the active workflow.
+
+Light tokens: ground `#faf9f6`, sidebar `#f1efe9`, raised/card `#fff`, surface/summary `#f1f0eb`, ink `#292b26`, muted ink `#66665e`, border `#deddd6`, controls `#a6a497`, accent `#875736`. Dark tokens retain the warm charcoal palette below, with control boundaries strengthened to `#858174`.
+
+**One Theme Rule.** Theme is an app-level preference. Briefcase and health services share the current mode with care and bookings; they must not reset to a separate light surface. The original `family-*` token names below are inherited palette references, not a separate theme boundary.
 
 The primary palette is warm charcoal and paper, with terracotta for conversational actions and selection.
 
@@ -163,7 +169,7 @@ The primary palette is warm charcoal and paper, with terracotta for conversation
 
 ### Secondary
 
-- **Family Teal:** the inherited light family workspace's action and chart accent. Use only in that workspace's light context.
+- **Family Teal:** an inherited palette reference. Active accents resolve through the shared global theme.
 - **Emergency Rose:** pale error text on a deep red-brown ground; emergency headings and lists have their own brighter warm treatment. Status colors communicate state rather than decoration.
 
 ### Neutral
@@ -174,7 +180,7 @@ The primary palette is warm charcoal and paper, with terracotta for conversation
 - **Care Border / Control:** restrained dividers and stronger input boundaries.
 - **Family Ground / Ink / Surface:** white, dark green-black text and pale green-white panels remain scoped to the secondary workspace.
 
-**The Two Worlds Rule.** Keep dark care tokens in the conversational flow and light family tokens in the family workspace; preserve the explicit theme boundary.
+**The One Theme Rule.** Use the shared tokens from themes.css for every section; one app-level class selects the entire palette.
 
 ## Typography
 
@@ -204,7 +210,7 @@ At 767px and below, the shell becomes a single column. Navigation becomes a moda
 
 The frontmatter spacing vocabulary records repeated source values, not an enforced mathematical scale. Keep compact control spacing within generous section spacing.
 
-The family workspace retains its own maximum 1440px grid, 214px sidebar and 24px column gap. At 1180px its sidebar narrows; at 900px it switches to a mobile layout with fixed bottom navigation. At 600px its principal grids become single-column. Do not apply the care shell's drawer breakpoint to this inherited workspace.
+Briefcase and health services use a maximum 1220px content area inside the main shell, with 40px desktop gutters and 20px mobile gutters. Briefcase has four wrapping internal navigation buttons with 44px minimum height. There is no secondary sidebar, header or mobile bottom navigation. Inherited record, lab and service panels retain their single-column mobile rules.
 
 ## Elevation & Depth
 
@@ -251,7 +257,7 @@ Other care text fields use the raised background, Control border and 10px corner
 
 ### Navigation
 
-The sidebar uses muted sans-serif text, 46px minimum navigation rows and 8px corners. Active rows use Raised and Paper Ink; hover uses #252523 and Paper Ink. The outlined New request action has 10px corners. Family workspace remains a secondary link near the sidebar bottom. Mobile shows the product name and opens the drawer from the top bar.
+The sidebar uses muted sans-serif text, 46px minimum navigation rows and 8px corners. Active rows use Raised and Paper Ink; hover uses #252523 and Paper Ink. The outlined New request action has 10px corners. Briefcase is the third main navigation destination; health services is reached from My bookings. Mobile shows the product name and opens the drawer from the top bar.
 
 ### Care Progress
 
@@ -261,7 +267,7 @@ Small circular markers, fine connector lines and muted labels show workflow posi
 
 ### Do:
 
-- **Do** preserve the Two Worlds Rule when extending care or family surfaces.
+- **Do** preserve the One Theme Rule when extending care or family surfaces.
 - **Do** pair serif care questions with sans-serif controls and detailed information.
 - **Do** use tonal layers and borders for resting surfaces.
 - **Do** show distinct focus, selected, disabled, loading and error states.

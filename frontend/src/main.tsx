@@ -11,4 +11,5 @@ import '@fontsource/noto-sans-devanagari/devanagari-600.css';
 import './styles.css';
 import './health.css';
 import './care-shell.css';
+import './themes.css';
 createRoot(document.getElementById('root')!).render(<StrictMode><CareShell /></StrictMode>);
