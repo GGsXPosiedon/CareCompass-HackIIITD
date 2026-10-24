@@ -1,6 +1,6 @@
 # Sarvam voice input and output
 
-CareCompass follows GD Arena's short-recording → server transcription → editable text pattern, with server-generated audio that plays automatically after each new assistant response. The existing Python care backend is unchanged.
+CareCompass builds on GD Arena's short-recording → server transcription → generated speech pattern. The care microphone now opens a hands-free conversation that sends spoken turns, plays replies and listens again. The existing Python care backend is unchanged.
 
 ## Enable locally
 
@@ -16,8 +16,14 @@ CareCompass follows GD Arena's short-recording → server transcription → edit
    ```
 
 4. Restart `npm run dev` and reload the browser. `/api/voice` should return `{"provider":"sarvam","maxSeconds":25}`. It never returns the key.
-5. Use **Speak instead**, grant microphone access, speak for up to 25 seconds and press Stop. Check/edit the resulting text before sending it through the care flow. Recording stops automatically at the limit.
-6. Send your message or answer. Each new assistant question, recommendation or emergency response plays automatically using Sarvam when configured (browser speech otherwise). Press **Stop playback** to interrupt it. Sending another answer, recording, changing pages or hiding the tab stops playback. Reopening an old response does not replay it. If your browser blocks automatic audio, press **Read aloud** once to enable playback; it also remains available for replay.
+5. Press the microphone (**Start voice conversation**) on Find care and grant microphone access. Speak your care need, then pause. With Sarvam configured, about 1.25 seconds of quiet after speech ends a turn; **Done speaking** also submits it. Turns are capped at 25 seconds.
+6. The app transcribes and sends the turn to the existing care backend, displays its question or recommendation, speaks it, then listens for your next answer. A transcript stays in the voice panel. A follow-up answer retains the existing care conversation history.
+7. **Speak now** interrupts a spoken reply and opens the microphone. **Pause** turns the microphone off; **Resume listening** continues. **End voice conversation**, Escape, navigating away or hiding the tab ends the session. No speech for 10 seconds pauses Sarvam capture instead of repeatedly sending silent requests.
+8. Emergency guidance is spoken and stops the conversation loop. Use **View emergency guidance** to return to the emergency screen. Voice never books appointments or calls a number; use the existing caregiver and booking controls.
+
+This is turn-based voice conversation over the current care API, not a new general-purpose assistant or simultaneous full-duplex audio. The microphone is off while a reply plays, so the assistant cannot hear itself. Use **Speak now** to interrupt. Browser speech is the fallback without a Sarvam key; its endpoint timing is controlled by browser recognition.
+
+Typed conversations still play new replies automatically with **Stop playback** and **Read aloud** controls. If a browser blocks audio, use the playback control once to enable it. Other existing dictation controls continue to insert editable text without automatically submitting it.
 
 The Sarvam key covers speech input/output only. It does not enable Gemini or change the backend's care-routing model. No Sarvam key is included in the repository or browser bundle.
 
@@ -30,7 +36,7 @@ The Sarvam key covers speech input/output only. It does not enable Gemini or cha
 | Hinglish | `hi-IN` / `translit` (Roman script) | `hi-IN`, including English words |
 | Auto | `unknown` / `transcribe` | Hindi for Devanagari text; English otherwise |
 
-The transcription is added to the input; it is never automatically submitted as a health request. The app transcribes speech rather than asking a generative model to invent a medical answer from audio.
+In voice conversation mode, transcription is automatically submitted as a care request. Outside that mode, dictation only adds editable text to the input. The app transcribes speech rather than asking a generative model to invent a medical answer from audio.
 
 ## Routes and deployment
 
@@ -46,7 +52,7 @@ The browser calls only these same-origin routes. The adapter forwards validated 
 
 **Vercel:** deploy with **Root Directory `frontend`**. `api/voice.mjs` serves the same adapter as a Node function. Set `SARVAM_API_KEY` and optional model/voice variables in the project's server environment, then redeploy. Keep `/api/voice` out of any catch-all rewrite to the care backend. Care API hosting remains configured separately as described in [README.md](README.md).
 
-**Other/static hosts:** uploading only `dist` does not deploy the adapter. Host the voice function separately behind the same-origin `/api/voice` route. Without a working route/key, supported browsers use their speech APIs instead and identify browser voice as the fallback. The UI does not claim to use Sarvam when it is unavailable. Sarvam playback failures also show an explicit browser-fallback notice; transcription failures leave typing available.
+**Other/static hosts:** uploading only `dist` does not deploy the adapter. Host the voice function separately behind the same-origin `/api/voice` route. Without a working route/key, supported browsers use their speech APIs instead and identify browser voice as the fallback. The UI does not claim to use Sarvam when it is unavailable. In conversation mode, Sarvam failures pause the session with a retry control; typing remains available. Standalone read-aloud can fall back to browser speech with an explicit notice.
 
 Microphone recording requires HTTPS or localhost and browser support for `getUserMedia`, `MediaRecorder` and Web Audio. Speech playback resumes audio from the user's click to support browsers that restrict autoplay.
 
@@ -62,7 +68,7 @@ Microphone recording requires HTTPS or localhost and browser support for `getUse
 
 `npm test` includes WAV conversion, silence, language payloads, subscription-key isolation, provider failure handling, microphone track cleanup, navigation cancellation, and real local HTTP middleware tests against an injected Sarvam response. The provider mocks do not make paid calls.
 
-The local `/api/voice` route, browser fallback Read aloud/Stop, theme consistency, and 390px mobile layout were checked. **Live Sarvam recognition accuracy, real microphone capture and Sarvam audio quality are not claimed verified without a configured key and a spoken test on the target device.**
+The local `/api/voice` route, automatic reply playback, conversation start/pause/end, shared light/dark themes and 390px voice-panel layout were checked. Automated conversation tests cover turn order, interruption, silence, provider failure, emergency termination and ignoring late responses after End. **Live Sarvam recognition accuracy, real microphone capture and Sarvam audio quality are not claimed verified without a configured key and a spoken test on the target device.**
 
 ## Reference and attribution
 

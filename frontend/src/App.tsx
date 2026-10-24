@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, Check, ChevronDown, Compass, Globe2, HelpCircle, MapPin, Menu, MessageCircle, ShieldCheck, Stethoscope, X } from 'lucide-react';
-import { getCopy } from './i18n';
+import { careLabel, getCopy } from './i18n';
 import { emergencyExample, locations, scenarios } from './data';
 import { createBooking, DEMO_MODE, getCaregivers, intake } from './lib/api';
 import { bookingSlots, bookingDate, nextView } from './lib/flow';
@@ -14,14 +14,17 @@ import { Caregivers } from './components/Caregivers';
 import { BookingForm, Bookings, Confirmation } from './components/Booking';
 import { Emergency } from './components/Emergency';
 import { Modal } from './components/Modal';
-import { VoiceResponseContext } from './voice/language';
-import { primeVoicePlayback } from './voice/playback';
+import { VoiceResponseContext, VoiceConversationContext, VoiceSessionActiveContext } from './voice/language';
+import { primeVoicePlayback, suppressResponseVoice } from './voice/playback';
 import { stopAllVoice } from './voice/client';
+import { VoiceConversation } from './components/VoiceConversation';
+import type { SpokenReply } from './voice/conversation';
 
 type View = 'intake' | 'questions' | 'recommendation' | 'caregivers' | 'booking' | 'confirmation' | 'bookings' | 'emergency';
 type ModalView = 'location' | 'help' | 'how' | null;
 export default function App({ embedded = false, chatLayout = false, resetRequest = 0, externalLanguage, patientName, patientContext, externalBookings, onStartCare, onViewBookings, onExploreServices }: { embedded?: boolean; chatLayout?: boolean; resetRequest?: number; externalLanguage?: Language; patientName?: string; patientContext?: PatientContext; externalBookings?: boolean; onStartCare?: () => void; onViewBookings?: () => void; onExploreServices?: () => void }) {
   const [view, setView] = useState<View>('intake');
+  const [voiceOpen, setVoiceOpen] = useState(false);
   const [language, setLanguage] = useState<Language>('en');
   const hindi = language === 'hi'; const copy = getCopy(hindi);
   const [input, setInput] = useState('');
@@ -65,11 +68,13 @@ export default function App({ embedded = false, chatLayout = false, resetRequest
   }, [result, view]);
 
   function reset() {
+    setVoiceOpen(false);
     generation.current++; locked.current = false;
     setBusy(false); setView('intake'); setInput(''); setAnswer(''); setMessages([]); setResult(null); setProfiles([]); setSelected(null); setSlot(''); setError(''); setFilter('all'); setMenu(false); setAnnouncement('');
     onStartCare?.();
   }
   function edit() {
+    setVoiceOpen(false);
     generation.current++; locked.current = false;
     setBusy(false); setView('intake'); setAnswer(''); setMessages([]); setResult(null); setProfiles([]); setSelected(null); setError(''); setSlot('');
   }
@@ -79,13 +84,13 @@ export default function App({ embedded = false, chatLayout = false, resetRequest
     if (messages.length && view !== 'confirmation' && view !== 'bookings') edit();
     setError('');
   }
-  async function submit(override?: { text: string; location?: Location; simulateError?: boolean; answer?: boolean }) {
+  async function submit(override?: { text: string; location?: Location; simulateError?: boolean; answer?: boolean; voice?: boolean }) {
     if (locked.current) return;
     const followUp = view === 'questions' && (!override || !!override.answer);
     const text = (override?.text ?? (followUp ? answer : input)).trim();
     if (!text) { setError(copy.blank); return; }
     if (text.length > 2000) { setError(copy.tooLong); return; }
-    stopAllVoice();
+    if (!override?.voice) stopAllVoice();
     primeVoicePlayback(); // Unlock audio in the send gesture before awaiting the API.
     const history = followUp ? messages : [];
     const requestLocation = override?.location ?? location;
@@ -97,9 +102,11 @@ export default function App({ embedded = false, chatLayout = false, resetRequest
       if (override?.simulateError) throw new Error('DEMO_ERROR');
       const response = await intake(payload);
       if (current !== generation.current) return;
+      if (override?.voice) suppressResponseVoice(response); // Ending voice mode also silences a late care reply.
       const nextMessages: Message[] = [...history, { role: 'user', content: payload.user_input }];
       if (response.follow_up_question) nextMessages.push({ role: 'assistant', content: response.follow_up_question });
       setMessages(nextMessages); setResult(response); setAnswer(''); setView(nextView(response));
+      return response;
     } catch (cause) { if (current === generation.current) setError(!DEMO_MODE && (cause instanceof TypeError || cause instanceof DOMException || (cause instanceof ApiError && cause.status >= 500)) ? copy.connectionError : copy.genericError); }
     finally { if (current === generation.current) { setBusy(false); locked.current = false; } }
   }
@@ -169,7 +176,7 @@ export default function App({ embedded = false, chatLayout = false, resetRequest
     <nav className="desktop-nav" aria-label="Main"><button className={view === 'bookings' ? '' : 'nav-active'} onClick={() => { if (view === 'bookings' || view === 'confirmation') reset(); else if (view !== 'intake') edit(); }} disabled={busy}>{copy.findCare}</button><button className={view === 'bookings' ? 'nav-active' : ''} onClick={showBookings} disabled={busy}>{copy.bookings}{bookings.length ? <span className="nav-count">{bookings.length}</span> : null}</button><button onClick={() => setModal('how')}>{copy.howItWorks}</button></nav>
     <div className="header-right"><label className="language-control"><Globe2 size={17} /><span className="sr-only">{copy.language}</span><select aria-label={copy.language} value={language} onChange={e => updateLanguage(e.target.value as Language)} disabled={busy}><option value="en">English</option><option value="hi">हिंदी</option><option value="hinglish">Hinglish</option><option value="auto">Auto</option></select></label><button className="help-button" onClick={() => setModal('help')}><HelpCircle size={18} /><span>{copy.help}</span></button><button className="icon-button menu-toggle" onClick={() => setMenu(!menu)} aria-expanded={menu} aria-label={menu ? copy.close : copy.menu}>{menu ? <X size={22} /> : <Menu size={22} />}</button></div>
   </div>{menu ? <nav className="mobile-nav" aria-label="Mobile"><button onClick={() => { reset(); setMenu(false); }} disabled={busy}>{copy.findCare}</button><button onClick={showBookings} disabled={busy}>{copy.bookings}</button><button onClick={showLocation} disabled={busy}>{copy.location}</button><button onClick={() => { setModal('how'); setMenu(false); }}>{copy.howItWorks}</button><button onClick={() => { setModal('help'); setMenu(false); }}>{copy.help}</button></nav> : null}</header>
-  <VoiceResponseContext.Provider value={result}><MainTag id={embedded ? undefined : 'main'} className={`main-container${chatLayout ? ` focused-care focused-${view}` : ''}`} ref={main}>
+  <VoiceSessionActiveContext.Provider value={voiceOpen}><VoiceConversationContext.Provider value={() => { stopAllVoice(); primeVoicePlayback(); setVoiceOpen(true); }}><VoiceResponseContext.Provider value={result}><MainTag id={embedded ? undefined : 'main'} className={`main-container${chatLayout ? ` focused-care focused-${view}` : ''}`} ref={main}>
     <div className="context-bar">{displayProgress ? <ol className="progress" aria-label={hindi ? 'देखभाल की प्रगति' : 'Care progress'}>{[copy.describe, copy.recommendation, copy.book].map((step, index) => <li key={index} className={index === progress ? 'current' : index < progress ? 'complete' : ''} aria-current={index === progress ? 'step' : undefined}><span className="progress-mark">{index < progress ? <Check size={12} /> : <span />}</span>{step}{index < 2 ? <span className="progress-line" aria-hidden="true" /> : null}</li>)}</ol> : <span />}{DEMO_MODE ? <span className="demo-label"><span />{copy.demo}</span> : null}</div>
     {view === 'intake' ? <Intake compact={chatLayout} onLocation={showLocation} copy={copy} hindi={hindi} language={language} input={input} setInput={value => { setInput(value); setError(''); }} person={person} setPerson={setPerson} location={location} busy={busy} error={error} onSubmit={() => void submit()} /> : null}
     {view === 'questions' && result && chatLayout ? <ChatQuestion copy={copy} hindi={hindi} result={result} messages={messages} symptom={input} input={answer} setInput={value => { setAnswer(value); setError(''); }} onAnswer={text => void submit({ text, answer: true })} onBack={edit} busy={busy} error={error} /> : null}
@@ -181,7 +188,17 @@ export default function App({ embedded = false, chatLayout = false, resetRequest
     {view === 'bookings' ? <Bookings copy={copy} hindi={hindi} bookings={bookings} onNew={reset} onExploreServices={onExploreServices} /> : null}
     {view === 'emergency' && result ? <Emergency copy={copy} hindi={hindi} result={result} onNew={reset} /> : null}
     {DEMO_MODE ? <details className="demo-tools"><summary>{copy.demoTools}</summary><p className="small muted">{copy.demoToolsNote}</p><div><button className="text-button" disabled={busy} onClick={() => void submit({ text: hindi ? emergencyExample.hi : emergencyExample.en })}>{copy.emergencyExample}<ArrowRight size={15} /></button><button className="text-button" disabled={busy} onClick={() => void submit({ text: hindi ? scenarios[0].textHi : scenarios[0].text, location: locations[3] })}>{copy.emptyExample}<ArrowRight size={15} /></button><button className="text-button" disabled={busy} onClick={() => void submit({ text: hindi ? scenarios[0].textHi : scenarios[0].text, simulateError: true })}>{copy.errorExample}<ArrowRight size={15} /></button></div></details> : null}
-  </MainTag></VoiceResponseContext.Provider><footer className="site-footer"><div><span className="footer-brand"><Compass size={20} />CareCompass</span><p>{copy.footerSub}</p></div><p>{copy.footer}</p></footer><div className="sr-only" aria-live="polite" aria-atomic="true">{announcement}</div>
+  </MainTag></VoiceResponseContext.Provider>
+  {voiceOpen ? <VoiceConversation copy={copy} language={language} onClose={() => setVoiceOpen(false)} onTurn={async text => {
+    const response = await submit({ text, answer: view === 'questions', voice: true });
+    if (!response) throw new Error('CARE_RESPONSE_UNAVAILABLE');
+    const destination = nextView(response);
+    const reply: SpokenReply = destination === 'emergency' ? { text: `${copy.emergencyTitle} ${response.reasoning} ${copy.emergencyBody}`, terminal: true }
+      : destination === 'questions' ? { text: `${response.follow_up_question} ${response.answer_options?.join('. ') ?? ''}` }
+      : { text: `${careLabel(response.care_type!, hindi)}. ${response.reasoning} ${copy.voiceSessionNext}` };
+    return reply;
+  }}/> : null}
+  </VoiceConversationContext.Provider></VoiceSessionActiveContext.Provider><footer className="site-footer"><div><span className="footer-brand"><Compass size={20} />CareCompass</span><p>{copy.footerSub}</p></div><p>{copy.footer}</p></footer><div className="sr-only" aria-live="polite" aria-atomic="true">{announcement}</div>
   {modal === 'location' ? <Modal title={copy.locationTitle} closeLabel={copy.close} onClose={() => setModal(null)}><p className="muted">{copy.locationBody}</p><div className="location-options">{locations.map(option => <button key={option.label} className={`location-option ${draftLocation.label === option.label ? 'chosen' : ''}`} aria-pressed={draftLocation.label === option.label} onClick={() => setDraftLocation(option)}><MapPin size={18} /><span>{option.lat === 0 ? copy.outside : option.label}</span>{draftLocation.label === option.label ? <Check size={18} /> : null}</button>)}</div><button className="button primary full-width" onClick={saveLocation}>{copy.saveLocation}<ArrowRight size={17} /></button></Modal> : null}
   {modal === 'help' ? <Modal title={copy.helpTitle} closeLabel={copy.close} onClose={() => setModal(null)}><div className="help-content"><p>{copy.helpBody}</p><h3>{copy.demo}</h3><p>{copy.helpData}</p><h3>{copy.speak}</h3><p>{copy.helpVoice}</p><h3>{copy.emergencyTitle}</h3><p>{copy.emergencyBody}</p><a className="text-button" href="https://112.gov.in/" target="_blank" rel="noreferrer">112 India <ArrowRight size={15} /></a></div></Modal> : null}
   {modal === 'how' ? <Modal title={copy.worksTitle} closeLabel={copy.close} onClose={() => setModal(null)}><div className="how-steps">{[{ title: copy.journeyDescribe, body: copy.worksIntake, Icon: MessageCircle }, { title: copy.journeyCare, body: copy.worksRoute, Icon: Stethoscope }, { title: copy.journeyBook, body: copy.worksMatch, Icon: ShieldCheck }].map(({ title, body, Icon }) => <section key={title}><Icon size={21} /><div><h3>{title}</h3><p>{body}</p></div></section>)}</div><p className="small muted">{copy.demoNotice}</p></Modal> : null}

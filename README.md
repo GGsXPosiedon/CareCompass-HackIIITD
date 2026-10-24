@@ -175,6 +175,18 @@ The **deterministic classifier slot** is rules today. A trained model plugs in t
 
 For a fresh clone, copy `frontend/.env.example` to `frontend/.env.local` first. See [voice setup](frontend/VOICE.md) for local and Vercel configuration. The key stays server-side; no Python backend speech changes are required.
 
+**Hands-free conversation:** open **Find care**, press the microphone (**Start voice conversation**) and allow microphone access. Speak, then pause; the app transcribes and submits your turn, speaks the care backend's reply and listens again. A transcript and listening, transcribing, thinking and speaking states appear in the voice panel.
+
+- **Done speaking** ends the current recording; **Speak now** interrupts a reply and starts listening.
+- **Pause / Resume listening** controls capture. **End voice conversation**, Escape, navigation and hiding the tab end the session.
+- Sarvam turns are limited to 25 seconds; about 1.25 seconds of quiet after speech submits a turn. Ten seconds without speech pauses capture.
+- Emergency guidance ends the conversation loop. Booking confirmation and emergency calls remain manual actions.
+
+The existing care backend supplies the answers; Sarvam provides speech recognition and speech synthesis. This is turn-based care conversation, with the microphone off during replies. Supported browsers provide speech fallback when Sarvam is not configured. Typed requests still get automatic voice replies with stop/replay controls.
+
+The frontend build and **51 automated tests** pass, including turn sequencing, interruption, microphone cleanup, silence handling, emergency termination and late-reply cancellation. Live Sarvam recognition accuracy and audio quality still require a configured key and microphone test. See the [frontend guide](frontend/README.md#voice-conversation) and [full voice setup](frontend/VOICE.md).
+
+
 <!-- USAGE -->
 ## Usage
 

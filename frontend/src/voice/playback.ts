@@ -12,6 +12,7 @@ export function primeVoicePlayback(): AudioContext | null {
 export function voicePlaybackContext() { return playbackContext; }
 
 const spokenResponses = new WeakSet<object>();
+export function suppressResponseVoice(response: object) { spokenResponses.add(response); }
 // Defer the claim so React StrictMode's discarded effect cannot consume it.
 export function scheduleResponseVoice(response: object, play: () => void): () => void {
   let cancelled = false;

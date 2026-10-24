@@ -14,7 +14,19 @@ Open **Find care**, then choose **Fever & cough** (or switch to Hindi/Hinglish f
 4. Choose a caregiver with remaining slots, select **Choose a time**, pick a time and select **Confirm demo booking**.
 5. View the confirmation, select **Download summary**, then open **My bookings**.
 
-The message box also includes **Speak instead**, with an editable transcript and typing fallback. The sidebar contains **Find care**, **My bookings**, **Briefcase** and **New request**. **My bookings** includes **Explore health services**. On mobile, open the menu to reach them. A new request keeps completed bookings in this tab; refreshing clears them.
+The microphone opens **Start voice conversation**, a hands-free care conversation with an on-screen transcript and typing fallback. The sidebar contains **Find care**, **My bookings**, **Briefcase** and **New request**. **My bookings** includes **Explore health services**. On mobile, open the menu to reach them. A new request keeps completed bookings in this tab; refreshing clears them.
+
+## Voice conversation
+
+1. Open **Find care**, press the microphone (**Start voice conversation**) and grant microphone access.
+2. Speak your care need, then pause. Sarvam capture ends a turn after about 1.25 seconds of quiet following speech, or when you press **Done speaking**. Each turn is capped at 25 seconds.
+3. The app transcribes and submits the turn to the existing care backend, shows its question or recommendation, speaks the reply, then listens for your next answer. Follow-up answers retain the current care conversation history.
+4. Use **Speak now** to interrupt playback, **Pause / Resume listening** to control capture, or **End voice conversation** to return to the page. Escape, navigation and hiding the tab also end the session. Ten seconds without speech pauses Sarvam capture.
+5. Review the recommendation and use the existing caregiver and booking controls on screen. Emergency guidance ends the voice loop; calls and bookings require manual action.
+
+The panel includes a transcript and listening, transcribing, thinking, speaking and paused states in both themes. The microphone is off during spoken replies. This is turn-based conversation through the current care API; Sarvam supplies speech rather than the care answers. Supported browsers provide speech fallback when no Sarvam key is configured. Speech-provider failures pause the session with a retry control.
+
+Typed conversations retain automatic reply playback with **Stop playback** and **Read aloud** controls. Full key setup, language behavior and hosting instructions are in [VOICE.md](VOICE.md). Live Sarvam recognition accuracy and audio quality need a configured key and a microphone test on the target device.
 
 ## Briefcase and health services
 
@@ -32,7 +44,7 @@ Health state is provided once around the app in `src/health/Store.tsx`. `src/hea
 
 ## Run locally
 
-Sarvam speech input and read-aloud setup is documented in [VOICE.md](VOICE.md). The subscription key stays server-side; the Python care backend does not need speech changes.
+Sarvam conversational voice and reply-playback setup is documented in [VOICE.md](VOICE.md). The subscription key stays server-side; the Python care backend does not need speech changes.
 
 **To activate Sarvam:** add `SARVAM_API_KEY` to the prepared, git-ignored `frontend/.env.local`, restart the frontend, and reload.
 
@@ -60,7 +72,7 @@ For an offline UI demonstration, explicitly set `VITE_DEMO_MODE=true` in `.env.l
 
 - Symptom intake with editable text, synthetic example prompts and patient-relation context.
 - English and Hindi interface copy; English, Hindi, Hinglish and automatic language request modes.
-- Sarvam microphone transcription and read-aloud when configured, editable transcripts, explicit browser-voice fallback and typing support.
+- Hands-free Sarvam voice conversations when configured: automatic spoken turns, replies, transcript, interruption, pause/resume, explicit browser-voice fallback and typing support.
 - One follow-up question at a time with server-supplied answer options and conversation history.
 - Care type, urgency and explanations, followed by ranked caregiver cards and language filtering.
 - Caregiver selection, available time slots, appointment review and demo confirmation.
@@ -74,7 +86,7 @@ For an offline UI demonstration, explicitly set `VITE_DEMO_MODE=true` in `.env.l
 
 **This is a frontend prototype, not a clinical triage engine.** All cases, provider names, ratings, reviews, distances, availability and bookings are synthetic. `frontend/src/lib/mock.ts` deliberately returns preset outcomes to demonstrate screens. It is not a medically validated classifier, and arbitrary input must not be treated as assessed or safe.
 
-Use only made-up examples. No real patient data should be entered. Requests and bookings are held in this tab's memory, with no localStorage or analytics. Refreshing clears them. Configured Sarvam voice sends recorded audio and read-aloud text to Sarvam; browser fallback may use the browser vendor's speech service. See [VOICE.md](VOICE.md).
+Use only made-up examples. No real patient data should be entered. Requests and bookings are held in this tab's memory, with no localStorage or analytics. Refreshing clears them. Configured Sarvam voice sends recorded audio and spoken-reply text to Sarvam; browser fallback may use the browser vendor's speech service. See [VOICE.md](VOICE.md).
 
 The emergency button is a `tel:112` link and opens the device dialler only after a user selects it. It never calls automatically. The number is for India, verified against the [Government of India's Emergency Response Support System](https://112.gov.in/). Adapt emergency destinations before extending the demo to another country.
 
@@ -197,7 +209,7 @@ frontend/
 
 ## Validation and known limits
 
-`npm test` covers red-flag priority, sparse/conflicting emergency payloads, malformed responses, invalid rankings and profiles, multilingual demo escalation, two-question intake, no availability and past-slot exclusion. `npm run build` checks TypeScript and generates the production bundle.
+`npm test` currently passes **51 checks**, including voice turn sequencing, silence, interruption, capture/playback cleanup, emergency termination, late-reply cancellation, and red-flag priority, sparse/conflicting emergency payloads, malformed responses, invalid rankings and profiles, multilingual demo escalation, two-question intake, no availability and past-slot exclusion. `npm run build` checks TypeScript and generates the production bundle.
 
 Browser QA covers the full synthetic booking flow, English/Hindi layouts at 1440, 768 and 390 pixels, emergency escalation during follow-up, booking validation/history, empty availability, location changes and the simulated failure state. See `frontend/QA.md` for the final verification notes.
 

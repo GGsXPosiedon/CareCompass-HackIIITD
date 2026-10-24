@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { Mic, Square, Volume2 } from 'lucide-react';
 import type { Copy } from '../i18n';
-import { VoiceLanguageContext, VoiceResponseContext } from '../voice/language';
+import { VoiceLanguageContext, VoiceResponseContext, VoiceConversationContext, VoiceSessionActiveContext } from '../voice/language';
 import { recordStream, registerVoiceStop, stopAllVoice, supportsRecording, synthesize, transcribe, voiceConfig } from '../voice/client';
 import type { Recording, VoiceConfig } from '../voice/client';
 import { primeVoicePlayback, scheduleResponseVoice, voicePlaybackContext } from '../voice/playback';
@@ -15,6 +15,7 @@ interface Recognition {
 type SpeechWindow = Window & { SpeechRecognition?: new () => Recognition; webkitSpeechRecognition?: new () => Recognition };
 
 export function VoiceInput({ copy, hindi, disabled, onTranscript }: { copy: Copy; hindi: boolean; disabled: boolean; onTranscript: (text: string) => void }) {
+  const startConversation = useContext(VoiceConversationContext);
   const selectedLanguage = useContext(VoiceLanguageContext);
   const language = hindi ? 'hi' : selectedLanguage;
   const [phase, setPhase] = useState<'idle' | 'permission' | 'recording' | 'transcribing'>('idle');
@@ -89,6 +90,7 @@ export function VoiceInput({ copy, hindi, disabled, onTranscript }: { copy: Copy
     } catch { if (id === generation.current) { cancel(); setNotice(copy.voiceError); } }
   }
   const label = phase === 'permission' ? copy.voicePermission : phase === 'transcribing' ? copy.voiceTranscribing : phase === 'recording' ? copy.stop : copy.speak;
+  if (startConversation) return <button type="button" className="voice-button" disabled={disabled} onClick={startConversation} aria-label={copy.voiceSessionStart} title={copy.voiceSessionStart}><Mic size={18}/><span>{copy.voiceSessionStart}</span></button>;
   return <div className="voice-wrap">
     <button type="button" className={`voice-button ${phase === 'recording' ? 'is-listening' : ''}`} onClick={() => void toggle()} disabled={disabled} aria-pressed={phase !== 'idle'} aria-label={label} title={provider === 'sarvam' ? copy.voiceSarvam : copy.voiceBrowser}>
       {phase === 'idle' ? <Mic size={18}/> : <Square size={16}/>}<span>{label}</span>
@@ -100,6 +102,7 @@ export function VoiceInput({ copy, hindi, disabled, onTranscript }: { copy: Copy
 
 export function ReadAloud({ text, copy, hindi }: { text: string; copy: Copy; hindi: boolean }) {
   const response = useContext(VoiceResponseContext);
+  const conversationActive = useContext(VoiceSessionActiveContext);
   const selectedLanguage = useContext(VoiceLanguageContext);
   const language = hindi ? 'hi' : selectedLanguage;
   const [phase, setPhase] = useState<'idle' | 'loading' | 'playing'>('idle');
@@ -157,8 +160,9 @@ export function ReadAloud({ text, copy, hindi }: { text: string; copy: Copy; hin
   playResponse.current = () => { if (!document.hidden) void read(true); };
   useEffect(() => {
     if (!response || !text.trim()) return;
+    if (conversationActive) return scheduleResponseVoice(response, () => {});
     return scheduleResponseVoice(response, () => playResponse.current());
-  }, [response, text, language]);
+  }, [response, text, language, conversationActive]);
   return <span className="read-aloud"><button type="button" className="text-button" onClick={() => void read()} aria-pressed={phase !== 'idle'}>
     {phase === 'idle' ? <Volume2 size={17}/> : <Square size={17}/>} {phase === 'loading' ? copy.voicePreparing : phase === 'playing' ? copy.voiceStopPlayback : copy.readAloud}
   </button>{notice ? <span role="status" className="small muted voice-output-notice">{notice}</span> : null}</span>;
