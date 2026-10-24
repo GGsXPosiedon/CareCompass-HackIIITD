@@ -1,0 +1,188 @@
+# Follow-up question bank v0 -- DRAFT, NOT CLINICALLY REVIEWED. Wording and ordering need clinician sign-off.
+# Rules: (1) danger questions are asked before routine ones, (2) a question is skipped if its `resolves` concept is
+# already known (present or absent) from the conversation, (3) never repeat, (4) the answer is only evidence for the
+# triage layer -- this file holds NO answer->care_type mapping, because none exists in the provided data.
+version: "0.1.0-draft"
+review_status: unreviewed
+options:
+  en: ["Yes", "No", "Not sure"]
+  hi: ["हाँ", "नहीं", "पक्का नहीं"]
+  hinglish: ["Haan", "Nahi", "Pata nahi"]
+symptoms:
+  knee_pain:
+    - id: kn_injury
+      danger: true
+      resolves: fall_injury
+      purpose: A fall or injury raises the chance of a fracture or ligament tear.
+      en: "Did the knee pain start after a fall or an injury?"
+      hi: "क्या घुटने का दर्द किसी गिरने या चोट के बाद शुरू हुआ?"
+      hinglish: "Kya ghutne ka dard kisi girne ya chot ke baad shuru hua?"
+    - id: kn_swelling
+      purpose: Swelling or redness points to inflammation, injury or infection rather than simple strain.
+      en: "Is the knee swollen, red or warm to touch?"
+      hi: "क्या घुटने में सूजन है, या वह लाल या गरम है?"
+      hinglish: "Kya ghutne mein sujan hai, ya woh laal ya garam hai?"
+    - id: kn_walk
+      purpose: Being unable to bear weight signals a more serious problem and decides home visit versus consultation.
+      en: "Can you put weight on the leg and walk?"
+      hi: "क्या आप पैर पर वज़न डालकर चल पा रहे हैं?"
+      hinglish: "Kya aap pair par wazan daalkar chal pa rahe hain?"
+    - id: kn_fever
+      resolves: fever
+      purpose: Fever with a hot swollen joint can mean infection.
+      en: "Do you also have a fever?"
+      hi: "क्या आपको बुखार भी है?"
+      hinglish: "Kya aapko bukhar bhi hai?"
+  back_pain:
+    - id: bk_numb
+      danger: true
+      purpose: Numbness, leg weakness or loss of bladder control with back pain can mean nerve compression.
+      en: "Do you have numbness or weakness in the legs, or trouble passing urine or stool?"
+      hi: "क्या पैरों में सुन्नपन या कमज़ोरी है, या पेशाब या शौच में दिक्कत है?"
+      hinglish: "Kya pairon mein sunnpan ya kamzori hai, ya peshab ya shauch mein dikkat hai?"
+    - id: bk_injury
+      resolves: fall_injury
+      purpose: Injury changes the likelihood of a fracture.
+      en: "Did the pain start after a fall, lifting something heavy or an injury?"
+      hi: "क्या दर्द गिरने, भारी चीज़ उठाने या चोट के बाद शुरू हुआ?"
+      hinglish: "Kya dard girne, bhaari cheez uthane ya chot ke baad shuru hua?"
+    - id: bk_fever
+      resolves: fever
+      purpose: Fever with back pain can point to infection.
+      en: "Do you also have a fever?"
+      hi: "क्या आपको बुखार भी है?"
+      hinglish: "Kya aapko bukhar bhi hai?"
+  headache:
+    - id: hd_sudden
+      danger: true
+      purpose: A sudden, very severe headache or one after a head injury needs urgent assessment.
+      en: "Did the headache start suddenly and is it the worst you have ever had, or did it follow a head injury?"
+      hi: "क्या सिरदर्द अचानक शुरू हुआ और अब तक का सबसे तेज़ है, या सिर पर चोट के बाद हुआ?"
+      hinglish: "Kya sir dard achanak shuru hua aur ab tak ka sabse tez hai, ya sir par chot ke baad hua?"
+    - id: hd_neuro
+      danger: true
+      purpose: Weakness, trouble speaking or vision changes with headache can be a stroke sign.
+      en: "Any weakness on one side, trouble speaking, or change in vision?"
+      hi: "क्या एक तरफ़ कमज़ोरी, बोलने में दिक्कत या नज़र में बदलाव है?"
+      hinglish: "Kya ek taraf kamzori, bolne mein dikkat ya nazar mein badlav hai?"
+    - id: hd_fever
+      resolves: fever
+      purpose: Fever with headache and a stiff neck can point to infection.
+      en: "Do you also have a fever or a stiff neck?"
+      hi: "क्या बुखार या गर्दन में अकड़न भी है?"
+      hinglish: "Kya bukhar ya gardan mein akdan bhi hai?"
+  stomach_pain:
+    - id: st_severe
+      danger: true
+      purpose: Severe, constant pain, a hard belly, or blood in vomit or stool needs urgent assessment.
+      en: "Is the pain severe and constant, or is there blood in vomit or stool?"
+      hi: "क्या दर्द बहुत तेज़ और लगातार है, या उल्टी या मल में खून है?"
+      hinglish: "Kya dard bahut tez aur lagatar hai, ya ulti ya mal mein khoon hai?"
+    - id: st_vomit
+      resolves: vomiting
+      purpose: Vomiting with pain raises the risk of dehydration.
+      en: "Are you also vomiting?"
+      hi: "क्या उल्टी भी हो रही है?"
+      hinglish: "Kya ulti bhi ho rahi hai?"
+    - id: st_fever
+      resolves: fever
+      purpose: Fever with abdominal pain can point to infection.
+      en: "Do you also have a fever?"
+      hi: "क्या आपको बुखार भी है?"
+      hinglish: "Kya aapko bukhar bhi hai?"
+  vomiting:
+    - id: vm_blood
+      danger: true
+      purpose: Blood in vomit is an emergency sign.
+      en: "Is there any blood in the vomit?"
+      hi: "क्या उल्टी में खून है?"
+      hinglish: "Kya ulti mein khoon hai?"
+    - id: vm_fluids
+      purpose: Not keeping fluids down leads to dehydration and decides how soon care is needed.
+      en: "Are you able to keep water or fluids down?"
+      hi: "क्या आप पानी या तरल पदार्थ पचा पा रहे हैं?"
+      hinglish: "Kya aap paani ya taral padarth pacha pa rahe hain?"
+    - id: vm_loose
+      resolves: loose_motions
+      purpose: Vomiting with loose motions raises dehydration risk.
+      en: "Do you also have loose motions?"
+      hi: "क्या दस्त भी हो रहे हैं?"
+      hinglish: "Kya dast bhi ho rahe hain?"
+  loose_motions:
+    - id: ls_dehydration
+      danger: true
+      purpose: Very little urine, dry mouth or dizziness signal significant dehydration.
+      en: "Is there a dry mouth, very little urine, or dizziness on standing?"
+      hi: "क्या मुँह सूख रहा है, पेशाब बहुत कम है, या खड़े होने पर चक्कर आता है?"
+      hinglish: "Kya muh sookh raha hai, peshab bahut kam hai, ya khade hone par chakkar aata hai?"
+    - id: ls_blood
+      danger: true
+      purpose: Blood in stool needs prompt assessment.
+      en: "Is there blood in the stool?"
+      hi: "क्या मल में खून है?"
+      hinglish: "Kya mal mein khoon hai?"
+    - id: ls_fever
+      resolves: fever
+      purpose: Fever with loose motions can point to infection.
+      en: "Do you also have a fever?"
+      hi: "क्या आपको बुखार भी है?"
+      hinglish: "Kya aapko bukhar bhi hai?"
+  dizziness:
+    - id: dz_faint
+      danger: true
+      purpose: Fainting, chest discomfort or a racing heart with dizziness can be a cardiac sign.
+      en: "Did you faint, or do you have chest discomfort or a racing heartbeat?"
+      hi: "क्या आप बेहोश हुए, या सीने में तकलीफ़ या तेज़ धड़कन है?"
+      hinglish: "Kya aap behosh hue, ya seene mein taklif ya tez dhadkan hai?"
+    - id: dz_neuro
+      danger: true
+      purpose: Weakness, trouble speaking or vision changes with dizziness can be a stroke sign.
+      en: "Any weakness on one side, trouble speaking, or change in vision?"
+      hi: "क्या एक तरफ़ कमज़ोरी, बोलने में दिक्कत या नज़र में बदलाव है?"
+      hinglish: "Kya ek taraf kamzori, bolne mein dikkat ya nazar mein badlav hai?"
+    - id: dz_eat
+      resolves: not_eating
+      purpose: Not eating or drinking can cause dizziness from low sugar or dehydration.
+      en: "Have you been eating and drinking normally?"
+      hi: "क्या आप सामान्य रूप से खा-पी रहे हैं?"
+      hinglish: "Kya aap saamanya roop se kha-pi rahe hain?"
+  fever:
+    - id: fv_breath
+      danger: true
+      resolves: breathlessness
+      purpose: Fever with trouble breathing can be pneumonia or sepsis.
+      en: "Is there any difficulty in breathing?"
+      hi: "क्या साँस लेने में कोई दिक्कत है?"
+      hinglish: "Kya saans lene mein koi dikkat hai?"
+    - id: fv_cough
+      resolves: cough
+      purpose: Fever with cough suggests a chest infection and informs the visit type.
+      en: "Do you also have a cough?"
+      hi: "क्या खांसी भी है?"
+      hinglish: "Kya khansi bhi hai?"
+    - id: fv_eat
+      resolves: not_eating
+      purpose: Not eating or drinking with fever raises dehydration risk.
+      en: "Are you able to eat and drink?"
+      hi: "क्या आप खा-पी पा रहे हैं?"
+      hinglish: "Kya aap kha-pi pa rahe hain?"
+  cough:
+    - id: ch_breath
+      danger: true
+      resolves: breathlessness
+      purpose: Cough with trouble breathing needs urgent assessment.
+      en: "Is there any difficulty in breathing?"
+      hi: "क्या साँस लेने में कोई दिक्कत है?"
+      hinglish: "Kya saans lene mein koi dikkat hai?"
+    - id: ch_blood
+      danger: true
+      purpose: Coughing up blood needs urgent assessment.
+      en: "Are you coughing up blood?"
+      hi: "क्या खांसी में खून आ रहा है?"
+      hinglish: "Kya khansi mein khoon aa raha hai?"
+    - id: ch_fever
+      resolves: fever
+      purpose: Fever with cough suggests a chest infection.
+      en: "Do you also have a fever?"
+      hi: "क्या आपको बुखार भी है?"
+      hinglish: "Kya aapko bukhar bhi hai?"

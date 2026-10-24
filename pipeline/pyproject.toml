@@ -1,0 +1,27 @@
+[project]
+name = "carecompass-pipeline"
+version = "0.1.0"
+description = "CareCompass data pipeline: inventory, leakage-safe splits, label adapter, harmonization"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.6",
+    "pyyaml>=6",
+    "pandas>=2.2",
+    "scikit-learn>=1.5",
+    "scipy>=1.11",
+    "indic-transliteration>=2.3",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+]
+
+[tool.uv]
+# Scripts and tests only; nothing here is installed as a library.
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

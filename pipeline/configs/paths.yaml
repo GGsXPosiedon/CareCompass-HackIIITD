@@ -1,0 +1,12 @@
+# Paths are resolved relative to the repository root (the folder that contains pipeline/).
+# Override the raw-data folder with the CC_DATA_DIR environment variable.
+data_root: ../datasets
+files:
+  carecompass_csv: triage_dataset_flat.csv
+  carecompass_jsonl: triage_dataset.jsonl
+  multi_turn_examples: multi_turn_examples.jsonl
+  caregivers: caregivers.csv
+  synapse: "SYNAPSE_An Expert Annotated Dataset of Patient symptoms and Demographics.csv"
+  ddx_dir: ddx/ddx
+  mediq_dev: all_dev_good.jsonl
+  mediq_craft: all_craft_md.jsonl

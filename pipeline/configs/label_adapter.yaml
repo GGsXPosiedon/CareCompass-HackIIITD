@@ -1,0 +1,20 @@
+schema_version: 1
+mapping_version: interim-csv-v0.1
+# Only these sources may carry approved CareCompass labels.
+approved_sources:
+  carecompass:
+    care_type: {mapping: identity, approved: true, approval: "team decision 2026-10-24: output vocabulary = CSV labels"}
+    urgency:   {mapping: identity, approved: true, approval: "team decision 2026-10-24: output vocabulary = CSV labels"}
+# Wording used in the problem statement. NOT approved; serialising with it is refused.
+problem_statement_urgency_aliases:
+  scheduled:  {to: routine,   approved: false}
+  same_day:   {to: same_day,  approved: false}
+  emergency:  {to: immediate, approved: false}
+# Never allowed, whatever the config says (also enforced in code and tests).
+forbidden_transforms:
+  - {source: synapse,  field: severity,       targets: [care_type, urgency]}
+  - {source: synapse,  field: recommendation, targets: [care_type, urgency]}
+  - {source: ddxplus,  field: pathology,      targets: [care_type, urgency]}
+  - {source: ddxplus,  field: differential,   targets: [care_type, urgency]}
+  - {source: ddxplus,  field: condition_severity, targets: [care_type, urgency]}
+  - {source: mediq,    field: answer,         targets: [care_type, urgency]}

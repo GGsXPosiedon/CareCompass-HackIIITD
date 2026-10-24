@@ -1,0 +1,27 @@
+# Gold for the 66 CareCompass utterances, per scenario family. Authored by the engineering assistant, NOT
+# clinician-reviewed. IN-SAMPLE: the concept registry was written while looking at these utterances, so
+# scores here show consistency across English/Hindi/Hinglish, not generalisation.
+# required: every member must yield these concepts as PRESENT. allowed: other concepts that may appear.
+# Generic concepts (doctor_mention, consult_request, help_request, booking_intent) are always allowed.
+always_allowed: [doctor_mention, consult_request, help_request, booking_intent]
+families:
+  E1: {required: [collapse, unresponsive], allowed: []}
+  E2: {required: [bleeding_heavy, accident_trauma], allowed: [bleeding]}
+  E3: {required: [chest_pain, breathlessness], allowed: []}
+  N1: {required: [injection], allowed: []}
+  N2: {required: [insulin], allowed: [injection]}
+  N3: {required: [dressing], allowed: [surgery_recent, wound]}
+  N4: {required: [dressing], allowed: [wound]}
+  L1: {required: [full_body_checkup], allowed: [sample_collection, health_checkup]}
+  L2: {required: [blood_sugar], allowed: [lab_test]}
+  L3: {required: [cbc, thyroid], allowed: [lab_test, sample_collection]}
+  P1: {required: [weakness], allowed: [not_eating, health_checkup]}
+  P2: {required: [fever, cough], allowed: [], duration_days: 2}
+  P3: {required: [bp, blood_sugar], allowed: []}
+  T1: {required: [acidity_gas], allowed: [], duration_days: 0}
+  T2: {required: [second_opinion, medication], allowed: []}
+  T3: {required: [medical_reports], allowed: []}
+  F1: {required: [], allowed: []}
+  F2: {required: [], allowed: []}
+  F3: {required: [], allowed: []}
+  F4: {required: [], allowed: []}

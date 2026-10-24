@@ -1,0 +1,175 @@
+# Frozen scenario families and folds. Changing this file changes every split: re-run `ccpipe splits`.
+version: 1
+status: approved by team 2026-10-24 (DATA_AUDIT section 7)
+grouping_rule: translation triple (EN/HI/Hinglish), merged with near-paraphrase triples
+families:
+- id: E1
+  care_type: emergency_112
+  note: collapsed and not responding
+  members:
+  - He suddenly collapsed and is not responding
+  - वो अचानक गिर गए और जवाब नहीं दे रहे
+  - wo achanak gir gaye response nahi de rahe
+- id: E2
+  care_type: emergency_112
+  note: heavy bleeding after an accident
+  members:
+  - Heavy bleeding that won't stop after an accident
+  - एक्सीडेंट के बाद खून नहीं रुक रहा
+  - accident ke baad bleeding ruk nahi rahi
+- id: E3
+  care_type: emergency_112
+  note: severe chest pain and cannot breathe
+  members:
+  - My father is having severe chest pain and can't breathe
+  - पापा को तेज सीने में दर्द है और सांस नहीं आ रही
+  - papa ko severe chest pain hai saans nahi aa rahi
+- id: N1
+  care_type: home_nursing
+  note: injection prescribed by doctor + IM injection at home (merged paraphrases)
+  members:
+  - Doctor prescribed an injection, can someone come home
+  - Need an IM injection given at home
+  - डॉक्टर ने इंजेक्शन लिखा है, घर कोई आ सकता है
+  - घर पर इंजेक्शन लगवाना है
+  - doctor ne injection likha hai koi ghar aa sakta hai
+  - ghar pe IM injection lagwana hai
+- id: N2
+  care_type: home_nursing
+  note: insulin injection for father
+  members:
+  - Insulin injection help needed for elderly father
+  - पापा को इंसुलिन लगवाना है
+  - papa ko insulin injection chahiye ghar pe
+- id: N3
+  care_type: home_nursing
+  note: wound dressing after surgery + post-op dressing for wife (merged paraphrases)
+  members:
+  - Need wound dressing at home after surgery
+  - Post-operative dressing change required for my wife
+  - ऑपरेशन के बाद घर पर ड्रेसिंग करवानी है
+  - पत्नी की पट्टी बदलवानी है घर पर
+  - operation ke baad ghar pe dressing karani hai
+  - wife ki post-op dressing change karwani hai
+- id: N4
+  care_type: home_nursing
+  note: grandmother's bedsore dressing
+  members:
+  - Grandmother has a bedsore that needs dressing
+  - दादी को घाव की ड्रेसिंग चाहिए
+  - dadi ko bedsore dressing chahiye
+- id: L1
+  care_type: lab_test_home
+  note: full body checkup, home collection
+  members:
+  - Book a full body checkup, home collection
+  - फुल बॉडी चेकअप घर से सैंपल
+  - full body checkup home collection
+- id: L2
+  care_type: lab_test_home
+  note: blood sugar test tomorrow morning
+  members:
+  - Need blood sugar test at home tomorrow morning
+  - कल सुबह शुगर टेस्ट घर पर
+  - kal subah sugar test ghar pe
+- id: L3
+  care_type: lab_test_home
+  note: CBC and thyroid test
+  members:
+  - Want a CBC and thyroid test with home sample collection
+  - सीबीसी और थायराइड टेस्ट घर से सैंपल लेकर
+  - cbc aur thyroid test ghar se sample lekar
+- id: P1
+  care_type: paramedic_home_visit
+  note: grandfather weak and not eating, home check-up
+  members:
+  - Grandfather is weak and not eating, want a home check-up
+  - दादाजी कमजोर हैं, घर पर जांच चाहिए
+  - dadaji weak hain, ghar pe checkup chahiye
+- id: P2
+  care_type: paramedic_home_visit
+  note: father fever and cough for 2 days
+  members:
+  - My father has had fever and cough for 2 days
+  - पापा को दो दिन से बुखार और खांसी है
+  - papa ko do din se bukhar hai aur khansi bhi
+- id: P3
+  care_type: paramedic_home_visit
+  note: check BP and sugar for mother
+  members:
+  - Need someone to check BP and sugar at home for my mother
+  - माँ का बीपी और शुगर घर पर चेक करवाना है
+  - mummy ka bp sugar ghar pe check karwana hai
+- id: T1
+  care_type: teleconsultation
+  note: mild acidity and gas
+  members:
+  - Mild acidity and gas since morning, want to consult a doctor
+  - सुबह से एसिडिटी है, डॉक्टर से सलाह चाहिए
+  - subah se acidity gas hai, doctor se consult karna hai
+- id: T2
+  care_type: teleconsultation
+  note: second opinion on child's prescription
+  members:
+  - Need a second opinion on my child's prescription
+  - बच्चे की दवा पर सेकंड ओपिनियन चाहिए
+  - bacche ki medicine pe second opinion chahiye
+- id: T3
+  care_type: teleconsultation
+  note: talk to a doctor about reports
+  members:
+  - Want to talk to a doctor about my reports
+  - रिपोर्ट के बारे में डॉक्टर से बात करनी है
+  - reports ke baare me doctor se baat karni hai
+- id: F1
+  care_type: null
+  note: '''doctor chahiye'''
+  members:
+  - Doctor chahiye
+  - डॉक्टर चाहिए
+  - doctor chahiye
+- id: F2
+  care_type: null
+  note: '''is anyone there?'''
+  members:
+  - Hi, is anyone there?
+  - नमस्ते, कोई है?
+  - hello koi hai?
+- id: F3
+  care_type: null
+  note: '''I need help'''
+  members:
+  - I need help
+  - मदद चाहिए
+  - help chahiye
+- id: F4
+  care_type: null
+  note: '''book something for my mother'''
+  members:
+  - I want to book something for my mother
+  - माँ के लिए कुछ बुक करना है
+  - mummy ke liye kuch book karna hai
+folds:
+  A:
+  - E1
+  - N1
+  - N4
+  - L1
+  - P1
+  - T1
+  - F1
+  - F2
+  B:
+  - E2
+  - N2
+  - L2
+  - P2
+  - T2
+  - F3
+  C:
+  - E3
+  - N3
+  - L3
+  - P3
+  - T3
+  - F4

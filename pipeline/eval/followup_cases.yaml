@@ -1,0 +1,20 @@
+# Follow-up behaviour cases (author-written, UNREVIEWED). `first` = id the first question must have; `never` = ids that must not appear.
+- {id: f01, text: "I have knee pain", first: kn_injury, lang: en}
+- {id: f02, text: "mujhe ghutne me dard hai", first: kn_injury, lang: hinglish}
+- {id: f03, text: "मेरे घुटने में दर्द है", first: kn_injury, lang: hi}
+- {id: f04, text: "knee pain after a fall", first: kn_swelling, never: [kn_injury], lang: en}
+- {id: f05, text: "knee pain and fever since two days", first: kn_injury, never: [kn_fever], lang: en}
+- {id: f06, text: "back pain", first: bk_numb, lang: en}
+- {id: f07, text: "kamar dard hai", first: bk_numb, lang: hinglish}
+- {id: f08, text: "I have a headache", first: hd_sudden, lang: en}
+- {id: f09, text: "sir dard aur bukhar", first: hd_sudden, never: [hd_fever], lang: hinglish}
+- {id: f10, text: "stomach pain and vomiting", first: st_severe, never: [st_vomit], lang: en}
+- {id: f11, text: "pet dard hai", first: st_severe, lang: hinglish}
+- {id: f12, text: "vomiting since morning", first: vm_blood, lang: en}
+- {id: f13, text: "loose motions since yesterday", first: ls_dehydration, lang: en}
+- {id: f14, text: "dast ho rahe hain", first: ls_dehydration, lang: hinglish}
+- {id: f15, text: "feeling dizzy", first: dz_faint, lang: en}
+- {id: f16, text: "fever for 3 days", first: fv_breath, lang: en}
+- {id: f17, text: "fever and cough", first: fv_breath, never: [fv_cough, ch_fever], lang: en}
+- {id: f18, text: "cough with no difficulty breathing", first: ch_blood, never: [ch_breath], lang: en}
+- {id: f19, text: "I feel itchy all over", first: null, lang: en}
