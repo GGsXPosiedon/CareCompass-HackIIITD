@@ -1,6 +1,6 @@
 export type Language = 'en' | 'hi' | 'hinglish' | 'auto';
-export type CareType = 'paramedic_home_visit' | 'nurse_home_visit' | 'gp_teleconsult' | 'specialist_consult' | 'emergency_referral';
-export type Urgency = 'routine' | 'same_day' | 'immediate';
+export type CareType = 'paramedic_home_visit' | 'home_nursing' | 'teleconsultation' | 'lab_test_home' | 'emergency_112';
+export type Urgency = 'scheduled' | 'same_day' | 'emergency';
 export interface Message { role: 'user' | 'assistant'; content: string }
 export interface Location { lat: number; lng: number; label: string }
 export interface IntakeRequest {
@@ -8,6 +8,7 @@ export interface IntakeRequest {
   language: Language;
   location: { lat: number; lng: number };
   conversation_history: Message[];
+  patient_context?: PatientContext;
 }
 export interface Match { caregiver_id: string; score: number; reason: string }
 export interface TriageResponse {
@@ -27,10 +28,10 @@ export interface Caregiver {
   roleHi: string;
   careType: CareType;
   experience: number;
-  distance: number;
+  distance?: number;
   languages: string[];
   rating: number;
-  reviews: number;
+  reviews?: number;
   skills: string[];
   skillsHi: string[];
   slots: string[];
@@ -46,3 +47,11 @@ export interface Booking {
   demo: boolean;
 }
 export interface BookingRequest { caregiver_id: string; slot: string; date: string; location: { lat: number; lng: number } }
+
+export interface PatientContext {
+  active_member_id: string | null;
+  members: Array<{
+    id: string; name: string; relation: string; age?: number; sex?: string;
+    conditions: string[]; allergies: string[]; medications: Array<{ name: string; dose?: string }>; notes: string[];
+  }>;
+}

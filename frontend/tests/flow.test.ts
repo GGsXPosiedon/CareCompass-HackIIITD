@@ -14,8 +14,8 @@ test('red flags override a follow-up and existing caregiver matches', () => {
   assert.equal(nextView(output), 'emergency'); assert.equal(output.follow_up_question, null); assert.deepEqual(output.matched_caregivers, []);
 });
 test('sparse emergency response still escalates instead of failing validation', () => {
-  assert.equal(nextView(validateTriage({ urgency: 'immediate' })), 'emergency');
-  assert.equal(nextView(validateTriage({ care_type: 'emergency_referral', matched_caregivers: 'invalid' })), 'emergency');
+  assert.equal(nextView(validateTriage({ urgency: 'emergency' })), 'emergency');
+  assert.equal(nextView(validateTriage({ care_type: 'emergency_112', matched_caregivers: 'invalid' })), 'emergency');
 });
 test('malformed non-emergency responses cannot display a recommendation', () => {
   for (const value of [null, {}, { ...baseline, care_type: 'unknown' }, { ...baseline, care_type: null }, { ...baseline, urgency: null }, { ...baseline, red_flags: 'none' }, { ...baseline, follow_up_question: '' }]) assert.throws(() => validateTriage(value));

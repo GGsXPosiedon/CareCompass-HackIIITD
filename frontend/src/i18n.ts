@@ -39,7 +39,7 @@ const en = {
   profilesDemo: 'All profiles, ratings, distances and time slots below are fictional.',
   filterLanguage: 'Caregiver language', allLanguages: 'All languages', matchReason: 'Why this match',
   choose: 'Choose', selected: 'Selected', chooseContinue: 'Choose a time', matchLabel: 'Matching caregivers',
-  years: 'years of experience', reviews: 'reviews', km: 'km away', online: 'Online consultation',
+  years: 'years of experience', reviews: 'reviews', km: 'km away', online: 'Online consultation', nearby: 'Near you',
   noMatches: 'No caregivers available here.', noMatchesBody: 'Try another demo area or change your request. Availability does not change the urgency of your recommendation.',
   changeArea: 'Change demo area', noFilter: 'No caregivers speak this language in this demo.', clearFilter: 'Clear filter',
   profileError: 'We couldn’t load caregiver details. Please try again.', retry: 'Try again',
@@ -112,7 +112,7 @@ const hi: typeof en = {
   profilesDemo: 'सभी प्रोफ़ाइल, रेटिंग, दूरी और समय काल्पनिक हैं।',
   filterLanguage: 'देखभालकर्ता की भाषा', allLanguages: 'सभी भाषाएँ', matchReason: 'यह विकल्प क्यों',
   choose: 'चुनें', selected: 'चुना गया', chooseContinue: 'समय चुनें', matchLabel: 'उपयुक्त देखभालकर्ता',
-  years: 'वर्षों का अनुभव', reviews: 'समीक्षाएँ', km: 'किमी दूर', online: 'ऑनलाइन परामर्श',
+  years: 'वर्षों का अनुभव', reviews: 'समीक्षाएँ', km: 'किमी दूर', online: 'ऑनलाइन परामर्श', nearby: 'आपके पास',
   noMatches: 'यहाँ कोई देखभालकर्ता उपलब्ध नहीं है।', noMatchesBody: 'दूसरा डेमो क्षेत्र आज़माएँ या अनुरोध बदलें। उपलब्धता से सुझाई गई तात्कालिकता नहीं बदलती।',
   changeArea: 'डेमो क्षेत्र बदलें', noFilter: 'इस डेमो में इस भाषा का कोई देखभालकर्ता नहीं है।', clearFilter: 'फ़िल्टर हटाएँ',
   profileError: 'देखभालकर्ता की जानकारी नहीं मिली। फिर से कोशिश करें।', retry: 'फिर से कोशिश करें',
@@ -150,13 +150,13 @@ export function getCopy(hindi: boolean): Copy { return hindi ? hi : en; }
 export function careLabel(type: CareType, hindi: boolean): string {
   const labels: Record<CareType, [string, string]> = {
     paramedic_home_visit: ['Paramedic home visit', 'घर पर पैरामेडिक मुलाक़ात'],
-    nurse_home_visit: ['Nurse home visit', 'घर पर नर्स की मुलाक़ात'],
-    gp_teleconsult: ['GP teleconsultation', 'ऑनलाइन सामान्य डॉक्टर'],
-    specialist_consult: ['Specialist consultation', 'विशेषज्ञ से परामर्श'],
-    emergency_referral: ['Emergency referral', 'आपातकालीन रेफ़रल'],
+    home_nursing: ['Home nursing', 'घर पर नर्सिंग देखभाल'],
+    teleconsultation: ['Doctor teleconsultation', 'ऑनलाइन डॉक्टर परामर्श'],
+    lab_test_home: ['Lab test at home', 'घर पर लैब टेस्ट'],
+    emergency_112: ['Emergency (call 112)', 'आपातकाल (112 पर कॉल करें)'],
   };
   return labels[type][hindi ? 1 : 0];
 }
 export function urgencyLabel(urgency: Urgency, hindi: boolean): string {
-  return ({ routine: ['Routine', 'नियमित'], same_day: ['Same-day care', 'आज ही देखभाल'], immediate: ['Immediate help', 'तुरंत मदद'] })[urgency][hindi ? 1 : 0];
+  return ({ scheduled: ['Scheduled', 'निर्धारित'], same_day: ['Same-day care', 'आज ही देखभाल'], emergency: ['Immediate help', 'तुरंत मदद'] })[urgency][hindi ? 1 : 0];
 }

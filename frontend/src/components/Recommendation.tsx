@@ -8,7 +8,7 @@ import { ReadAloud } from './Voice';
 
 export function Recommendation({ copy, hindi, result, symptom, location, answers, busy, error, onContinue, onBack, onLocation }: { copy: Copy; hindi: boolean; result: TriageResponse; symptom: string; location: Location; answers: number; busy: boolean; error: string; onContinue: () => void; onBack: () => void; onLocation: () => void }) {
   if (!result.care_type || !result.urgency) return null;
-  const online = result.care_type === 'gp_teleconsult';
+  const online = result.care_type === 'teleconsultation';
   return <><button className="text-button back-button" disabled={busy} onClick={onBack}><ArrowLeft size={17} />{copy.edit}</button><div className="page-heading"><h1 tabIndex={-1}>{copy.resultTitle}</h1><p>{copy.resultIntro}</p></div>
     <div className="care-grid"><section className="request-panel result-panel">
       <span className={`status-pill ${result.urgency === 'same_day' ? 'warning' : 'neutral'}`}><Clock3 size={14} />{urgencyLabel(result.urgency, hindi)}</span>

@@ -1,0 +1,210 @@
+{
+  "version": "0.2.0-draft",
+  "status": "DRAFT - not clinically validated. Must be reviewed by clinical mentors before any real use.",
+  "rules": [
+    {
+      "id": "RF-CP-01",
+      "flag": "chest_pain",
+      "patterns": [
+        "chest (?:pain|tightness|pressure|discomfort)",
+        "heart attack",
+        "seene (?:\\S+ ){0,3}dard",
+        "chhati (?:\\S+ ){0,3}dard",
+        "chati (?:\\S+ ){0,3}dard",
+        "dil ka daura",
+        "सीने (?:\\S+ ){0,3}दर्द",
+        "छाती (?:\\S+ ){0,3}दर्द",
+        "दिल का दौरा"
+      ]
+    },
+    {
+      "id": "RF-BR-01",
+      "flag": "breathlessness",
+      "negation_safe": true,
+      "patterns": [
+        "can'?t breathe",
+        "cannot breathe",
+        "can not breathe",
+        "unable to breathe",
+        "struggling to breathe",
+        "gasping",
+        "breathless",
+        "short(?:ness)? of breath",
+        "(?:difficulty|trouble) (?:in )?breathing",
+        "breathing (?:difficulty|trouble|problem)",
+        "saans (?:nahi|na) (?:aa|aati|le|le pa)",
+        "saans (?:\\S+ ){0,4}(?:dikkat|taklif|phool|rukti|ruk)",
+        "dam (?:ghut|phool)",
+        "(?:सांस|साँस) (?:नहीं|ना) (?:आ|ले)",
+        "(?:सांस|साँस) (?:\\S+ ){0,4}(?:दिक्कत|तकलीफ|फूल|रुक)",
+        "दम (?:घुट|फूल)",
+        "sans (?:\\S+ ){0,4}(?:dikkat|taklif|phool)",
+        "(?:lips|face) (?:\\S+ ){0,2}(?:blue|neela)",
+        "breathing (?:very )?fast"
+      ]
+    },
+    {
+      "id": "RF-UC-01",
+      "flag": "unconsciousness",
+      "negation_safe": true,
+      "patterns": [
+        "unconscious",
+        "unresponsive",
+        "\\bcollapsed?\\b",
+        "not respon(?:ding|d)",
+        "passed out",
+        "\\bfaint(?:ed|ing)?\\b",
+        "not waking",
+        "behosh",
+        "(?:achanak|suddenly) (?:\\S+ ){0,2}gir",
+        "response nahi",
+        "hosh nahi",
+        "बेहोश",
+        "बेहोशी",
+        "अचानक (?:\\S+ ){0,2}गिर",
+        "जवाब नहीं दे",
+        "होश नहीं"
+      ]
+    },
+    {
+      "id": "RF-BL-01",
+      "flag": "severe_bleeding",
+      "negation_safe": true,
+      "patterns": [
+        "(?:heavy|severe|profuse|excessive) bleeding",
+        "bleeding (?:won'?t|will not|does not|doesn'?t|not|nahi) (?:stop|ruk)",
+        "bleeding ruk nahi",
+        "bleeding (?:is )?not stopping",
+        "khoon (?:nahi )?(?:ruk|beh)",
+        "bahut khoon",
+        "खून (?:नहीं )?(?:रुक|बह)",
+        "बहुत खून",
+        "ब्लीडिंग (?:नहीं )?रुक"
+      ]
+    },
+    {
+      "id": "RF-ST-01",
+      "flag": "stroke_symptoms",
+      "negation_safe": true,
+      "patterns": [
+        "face (?:is )?(?:droop|drooping|crooked)",
+        "slurred speech",
+        "speech (?:is )?slurred",
+        "\\bstroke\\b",
+        "paralysis",
+        "lakwa",
+        "munh tedha",
+        "one side (?:of (?:the )?body )?(?:is )?(?:weak|numb)",
+        "bol nahi pa",
+        "zubaan (?:lad|ladkhada)",
+        "लकवा",
+        "मुंह टेढ़ा",
+        "मुँह टेढ़ा",
+        "बोल नहीं पा",
+        "जुबान लड़खड़",
+        "mu(?:n|nh)?h? (?:\\S+ ){0,2}(?:tedha|tirchha|latak)",
+        "moo?nh (?:\\S+ ){0,2}tedha",
+        "(?:ek|one) (?:taraf|side|haath|hath|pair|arm|leg)\\b(?:\\S* ){0,4}(?:kaam nahi|kaam nhi|sunn|kamzor|weak|numb|not working|chal nahi)",
+        "(?:haath|hath|pair) (?:\\S+ ){0,2}(?:sunn|kaam nahi kar)",
+        "(?:sudden|achanak) (?:\\S+ ){0,3}(?:confus|blurr|dikhna band)",
+        "एक तरफ (?:\\S+ ){0,3}(?:कमज़ोर|कमजोर|सुन्न|काम नहीं)",
+        "(?:हाथ|पैर) (?:\\S+ ){0,2}(?:सुन्न|काम नहीं)"
+      ]
+    },
+    {
+      "id": "RF-SZ-01",
+      "flag": "seizure",
+      "patterns": [
+        "seizure",
+        "convuls",
+        "\\bfits\\b",
+        "(?:had|having|got) a fit\\b",
+        "epilep",
+        "mirgi",
+        "jhatke",
+        "daura pad",
+        "मिर्गी",
+        "झटके",
+        "दौरा पड़"
+      ]
+    },
+    {
+      "id": "RF-IF-01",
+      "flag": "high_fever_infant",
+      "all_of": [
+        [
+          "\\b(?:baby|infant|newborn|nawjaat|shishu)\\b",
+          "नवजात",
+          "शिशु",
+          "\\b\\d{1,2} ?(?:month|months|mahine|mahina)\\b",
+          "\\b\\d{1,2} ?(?:महीने|माह)",
+          "\\b(?:one|two|three|ek|do|teen|1|2|3) ?(?:week|weeks|hafte|hafta|din)s? (?:ka|ki|ke|old)\\b",
+          "(?:one|two|three|ek|do|teen|dhai) ?(?:month|months|mahine|mahina)",
+          "(?:एक|दो|तीन|ढाई) ?(?:महीने|माह|हफ्ते)",
+          "\\d{1,2} ?(?:हफ्ते|सप्ताह|दिन) (?:का|की|के)"
+        ],
+        [
+          "\\bfever\\b",
+          "\\bbukhar\\b",
+          "temperature",
+          "बुखार"
+        ]
+      ],
+      "patterns": []
+    },
+    {
+      "id": "RF-SI-01",
+      "flag": "suicidal_ideation",
+      "negation_safe": true,
+      "patterns": [
+        "suicid",
+        "kill (?:myself|himself|herself)",
+        "end (?:my|his|her) life",
+        "want(?:s)? to die",
+        "marna chah",
+        "jeena nahi",
+        "jina nahi",
+        "khud ko khatam",
+        "aatmahatya",
+        "आत्महत्या",
+        "मरना चाह",
+        "जीना नहीं",
+        "जीने की इच्छा नहीं"
+      ]
+    },
+    {
+      "id": "RF-DH-01",
+      "flag": "severe_dehydration",
+      "patterns": [
+        "severe dehydration",
+        "extreme dehydration"
+      ],
+      "all_of": [
+        [
+          "vomit",
+          "\\bulti\\b",
+          "उल्टी",
+          "diarrh?oea",
+          "loose motion",
+          "\\bdast\\b",
+          "दस्त"
+        ],
+        [
+          "can'?t keep",
+          "cannot keep",
+          "not able to (?:drink|keep)",
+          "no urine",
+          "not passed urine",
+          "sunken eyes",
+          "very weak",
+          "bahut kamzor",
+          "pesab nahi",
+          "पेशाब नहीं",
+          "पानी नहीं (?:पी|रुक)",
+          "बहुत कमजोर",
+          "बहुत कमज़ोर"
+        ]
+      ]
+    }
+  ]
+}

@@ -10,8 +10,8 @@ export const hospitals: Hospital[] = [
 ];
 export function initialHealthState(): HealthState {
   const members = [
-    { id: 'P_01', name: 'Aditi Mehra', relation: 'Myself', age: 28, initials: 'AM', tint: 'sage', bloodGroup: 'O+', allergies: [] },
-    { id: 'P_02', name: 'Raj Mehra', relation: 'Father', age: 62, initials: 'RM', tint: 'blue', bloodGroup: 'B+', allergies: ['Sample allergy — confirm with clinician'] },
+    { id: 'P_01', name: 'Aditi Mehra', relation: 'Myself', age: 28, initials: 'AM', tint: 'sage', bloodGroup: 'O+', allergies: [], conditions: [] as string[] },
+    { id: 'P_02', name: 'Raj Mehra', relation: 'Father', age: 62, initials: 'RM', tint: 'blue', bloodGroup: 'B+', allergies: ['Sample allergy — confirm with clinician'], conditions: ['Sample condition (demo)'] },
     { id: 'P_03', name: 'Meera Mehra', relation: 'Mother', age: 57, initials: 'MM', tint: 'rose', bloodGroup: 'A+', allergies: [] },
   ];
   const records = members.flatMap((m, i) => [
@@ -27,7 +27,7 @@ export function initialHealthState(): HealthState {
   return {
     members, activeId: members[0].id, records, readings,
     medications: members.map((m, i) => ({ id: `M_${i}`, memberId: m.id, name: 'Demo medicine A', instructions: 'Sample reminder only. Follow the prescriber’s actual directions.', time: '20:00', startDate: localDate(-3), endDate: localDate(10), active: true })),
-    doses: [], chats: [], grants: [], linkedHospitals: [], tokens: [], abhaLinked: [], careMessages: [],
+    shareProfile: true, doses: [], chats: [], grants: [], linkedHospitals: [], tokens: [], abhaLinked: [], careMessages: [],
     notices: [{ id: 'N_1', title: 'Your sample records are ready', body: 'Open the briefcase to explore records grouped by type and date.', read: false, page: 'records' }, { id: 'N_2', title: 'A place for the whole family', body: 'Switch profiles to see how records, readings and reminders stay separate.', read: false, page: 'family' }],
   };
 }

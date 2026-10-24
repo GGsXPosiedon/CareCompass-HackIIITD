@@ -1,6 +1,6 @@
 import type { TriageResponse } from '../types.ts';
 export function isEmergency(response: TriageResponse): boolean {
-  return response.red_flags.length > 0 || response.urgency === 'immediate' || response.care_type === 'emergency_referral';
+  return response.red_flags.length > 0 || response.urgency === 'emergency' || response.care_type === 'emergency_112';
 }
 export function nextView(response: TriageResponse): 'emergency' | 'questions' | 'recommendation' {
   if (isEmergency(response)) return 'emergency';

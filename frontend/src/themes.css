@@ -4,7 +4,7 @@
   --care-card:#242422; --care-summary:#2a2a27; --care-hover:#343430;
   --control:#858174;
   --action:#e9e4da; --action-ink:#252521; --action-hover:#fff9f0;
-  --choice:#4a3c30; --choice-ink:#ffe0c7; --choice-border:#d7a781;
+  --choice:#17324d; --choice-ink:#d7ebfd; --choice-border:#5aa4e6;
   --badge:#3a3b32; --badge-ink:#d9d6c9;
   --warning-ground:#4b3b21; --warning-ink:#f3d7a0;
   --error-ground:#452b27; --error-ink:#ffd1c6;
@@ -15,10 +15,10 @@
   --ink:#292b26; --muted:#66665e; --border:#deddd6; --control:#a6a497;
   --care-ground:#faf9f6; --care-sidebar:#f1efe9; --care-raised:#fff;
   --theme-surface:#f1f0eb; --surface:#f1f0eb;
-  --teal:#875736; --teal-dark:#754a2c; --danger:#9a3027;
+  --teal:#0b6bb5; --teal-dark:#08548e; --danger:#9a3027;
   --care-card:#fff; --care-summary:#f1f0eb; --care-hover:#e7e5dd;
   --action:#292b26; --action-ink:#fff; --action-hover:#43473d;
-  --choice:#f1e7dd; --choice-ink:#624328; --choice-border:#947251;
+  --choice:#e3f0fb; --choice-ink:#0a4677; --choice-border:#3c86c4;
   --badge:#e9ede5; --badge-ink:#465441;
   --warning-ground:#fbefd7; --warning-ink:#6e4912;
   --error-ground:#fff0ec; --error-ink:#9a3027;

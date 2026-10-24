@@ -4,9 +4,10 @@ import { getCopy } from './i18n';
 import { emergencyExample, locations, scenarios } from './data';
 import { createBooking, DEMO_MODE, getCaregivers, intake } from './lib/api';
 import { availableSlots, localDate, nextView } from './lib/flow';
-import type { Booking, Caregiver, IntakeRequest, Language, Location, Message, TriageResponse } from './types';
+import type { PatientContext, Booking, Caregiver, IntakeRequest, Language, Location, Message, TriageResponse } from './types';
 import { Intake } from './components/Intake';
 import { FollowUps } from './components/FollowUps';
+import { ChatQuestion } from './components/ChatQuestion';
 import { Recommendation } from './components/Recommendation';
 import { Caregivers } from './components/Caregivers';
 import { BookingForm, Bookings, Confirmation } from './components/Booking';
@@ -15,7 +16,7 @@ import { Modal } from './components/Modal';
 
 type View = 'intake' | 'questions' | 'recommendation' | 'caregivers' | 'booking' | 'confirmation' | 'bookings' | 'emergency';
 type ModalView = 'location' | 'help' | 'how' | null;
-export default function App({ embedded = false, chatLayout = false, resetRequest = 0, externalLanguage, patientName, externalBookings, onStartCare, onViewBookings, onExploreServices }: { embedded?: boolean; chatLayout?: boolean; resetRequest?: number; externalLanguage?: Language; patientName?: string; externalBookings?: boolean; onStartCare?: () => void; onViewBookings?: () => void; onExploreServices?: () => void }) {
+export default function App({ embedded = false, chatLayout = false, resetRequest = 0, externalLanguage, patientName, patientContext, externalBookings, onStartCare, onViewBookings, onExploreServices }: { embedded?: boolean; chatLayout?: boolean; resetRequest?: number; externalLanguage?: Language; patientName?: string; patientContext?: PatientContext; externalBookings?: boolean; onStartCare?: () => void; onViewBookings?: () => void; onExploreServices?: () => void }) {
   const [view, setView] = useState<View>('intake');
   const [language, setLanguage] = useState<Language>('en');
   const hindi = language === 'hi'; const copy = getCopy(hindi);
@@ -74,16 +75,16 @@ export default function App({ embedded = false, chatLayout = false, resetRequest
     if (messages.length && view !== 'confirmation' && view !== 'bookings') edit();
     setError('');
   }
-  async function submit(override?: { text: string; location?: Location; simulateError?: boolean }) {
+  async function submit(override?: { text: string; location?: Location; simulateError?: boolean; answer?: boolean }) {
     if (locked.current) return;
-    const followUp = view === 'questions' && !override;
+    const followUp = view === 'questions' && (!override || !!override.answer);
     const text = (override?.text ?? (followUp ? answer : input)).trim();
     if (!text) { setError(copy.blank); return; }
     if (text.length > 2000) { setError(copy.tooLong); return; }
     const history = followUp ? messages : [];
     const requestLocation = override?.location ?? location;
     const relation = `${patientName ? `${patientName} (demo) · ` : ''}${person === 'me' ? copy.me : copy.family}`;
-    const payload: IntakeRequest = { user_input: followUp ? text : `${relation}: ${text}`, language, location: { lat: requestLocation.lat, lng: requestLocation.lng }, conversation_history: history };
+    const payload: IntakeRequest = { user_input: followUp ? text : `${relation}: ${text}`, language: language === 'en' ? 'auto' : language, location: { lat: requestLocation.lat, lng: requestLocation.lng }, conversation_history: history, ...(patientContext ? { patient_context: patientContext } : {}) };
     const current = ++generation.current; locked.current = true; setBusy(true); setError('');
     if (!followUp) { setInput(text); setLocation(requestLocation); setMessages([]); setResult(null); setSelected(null); setProfiles([]); setView('intake'); }
     try {
@@ -100,7 +101,7 @@ export default function App({ embedded = false, chatLayout = false, resetRequest
     if (!result || locked.current) return;
     const current = ++generation.current; locked.current = true; setBusy(true); setError('');
     try {
-      const data = await getCaregivers(result.matched_caregivers.map(m => m.caregiver_id));
+      const data = await getCaregivers(result.matched_caregivers.map(m => m.caregiver_id), { careType: result.care_type, lat: location.lat, lng: location.lng, date });
       if (current !== generation.current) return;
       const ranked = result.matched_caregivers.map(m => data.find(c => c.id === m.caregiver_id));
       if (ranked.some(c => !c || c.careType !== result.care_type)) throw new Error('MISSING_PROFILE');
@@ -138,7 +139,8 @@ export default function App({ embedded = false, chatLayout = false, resetRequest
   <MainTag id={embedded ? undefined : 'main'} className={`main-container${chatLayout ? ` focused-care focused-${view}` : ''}`} ref={main}>
     <div className="context-bar">{displayProgress ? <ol className="progress" aria-label={hindi ? 'देखभाल की प्रगति' : 'Care progress'}>{[copy.describe, copy.recommendation, copy.book].map((step, index) => <li key={index} className={index === progress ? 'current' : index < progress ? 'complete' : ''} aria-current={index === progress ? 'step' : undefined}><span className="progress-mark">{index < progress ? <Check size={12} /> : <span />}</span>{step}{index < 2 ? <span className="progress-line" aria-hidden="true" /> : null}</li>)}</ol> : <span />}{DEMO_MODE ? <span className="demo-label"><span />{copy.demo}</span> : null}</div>
     {view === 'intake' ? <Intake compact={chatLayout} onLocation={showLocation} copy={copy} hindi={hindi} language={language} input={input} setInput={value => { setInput(value); setError(''); }} person={person} setPerson={setPerson} location={location} busy={busy} error={error} onSubmit={() => void submit()} /> : null}
-    {view === 'questions' && result ? <FollowUps copy={copy} hindi={hindi} result={result} messages={messages} input={answer} setInput={value => { setAnswer(value); setError(''); }} onSubmit={() => void submit()} onBack={edit} busy={busy} error={error} symptom={input} location={location} /> : null}
+    {view === 'questions' && result && chatLayout ? <ChatQuestion copy={copy} hindi={hindi} result={result} messages={messages} symptom={input} input={answer} setInput={value => { setAnswer(value); setError(''); }} onAnswer={text => void submit({ text, answer: true })} onBack={edit} busy={busy} error={error} /> : null}
+    {view === 'questions' && result && !chatLayout ? <FollowUps copy={copy} hindi={hindi} result={result} messages={messages} input={answer} setInput={value => { setAnswer(value); setError(''); }} onSubmit={() => void submit()} onBack={edit} busy={busy} error={error} symptom={input} location={location} /> : null}
     {view === 'recommendation' && result ? <Recommendation copy={copy} hindi={hindi} result={result} symptom={input} location={location} answers={Math.max(0, messages.filter(m => m.role === 'user').length - 1)} busy={busy} error={error} onContinue={() => void loadProfiles()} onBack={edit} onLocation={showLocation} /> : null}
     {view === 'caregivers' && result ? <Caregivers copy={copy} hindi={hindi} profiles={profiles} result={result} selected={selected} setSelected={setSelected} filter={filter} setFilter={value => { setFilter(value); if (selected && value !== 'all' && !selected.languages.includes(value)) setSelected(null); }} location={location} onBack={() => setView('recommendation')} onContinue={() => { if (selected) { setDate(localDate()); setSlot(''); setError(''); setView('booking'); } }} /> : null}
     {view === 'booking' && selected && result?.care_type ? <BookingForm copy={copy} hindi={hindi} caregiver={selected} careType={result.care_type} location={location} date={date} setDate={value => { setDate(value); setSlot(''); setError(''); }} slot={slot} setSlot={value => { setSlot(value); setError(''); }} sameDay={result.urgency === 'same_day'} busy={busy} error={error} onBack={() => { setError(''); setView('caregivers'); }} onConfirm={() => void confirm()} /> : null}

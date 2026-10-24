@@ -21,10 +21,14 @@ export async function intake(payload: IntakeRequest): Promise<TriageResponse> {
   if (DEMO_MODE) { await delay(); return mockIntake(payload); }
   return validateTriage(await request('/triage', payload));
 }
-export async function getCaregivers(ids: string[]): Promise<Caregiver[]> {
+export async function getCaregivers(ids: string[], opts: { careType?: string | null; lat?: number; lng?: number; date?: string } = {}): Promise<Caregiver[]> {
   if (DEMO_MODE) { await delay(); return caregivers.filter(c => ids.includes(c.id)); }
   // Companion endpoint agreed with your backend team; never hydrate real matches with demo profiles.
-  const data = await request(`/caregivers?ids=${encodeURIComponent(ids.join(','))}`);
+  const q = new URLSearchParams({ ids: ids.join(',') });
+  if (opts.careType) q.set('care_type', opts.careType);
+  if (opts.lat !== undefined && opts.lng !== undefined && !(opts.lat === 0 && opts.lng === 0)) { q.set('lat', String(opts.lat)); q.set('lng', String(opts.lng)); }
+  if (opts.date) q.set('date', opts.date);
+  const data = await request(`/caregivers?${q}`);
   return validateCaregivers(data);
 }
 export async function createBooking(payload: BookingRequest): Promise<{ id: string }> {
