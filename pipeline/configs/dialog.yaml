@@ -1,0 +1,97 @@
+# Dialog policy v0 -- DRAFT, author-written, not clinically reviewed. Turn-type patterns are regexes over lower-cased text
+# with letter runs of 3+ collapsed ("chaiyeee" -> "chaiye"). Questions are SLOT templates (duration, severity, ...), not a
+# per-symptom bank; `hints` only choose which example symptoms are listed in the "anything else?" question.
+version: "0.1.0-draft"
+review_status: unreviewed
+max_questions: 2
+patterns:
+  crisis: ['\bsuicide\b', 'kill myself', 'end my life', 'want to die', 'wanna die', 'marna chah', 'jeena nahi', 'jina nahi', 'jeene ka mann nahi', 'khatam kar(na|ne)? (chah|dun|doon)', 'hurt myself', 'self.?harm', 'मरना चाह', 'जीना नहीं', 'जीने का मन नहीं', 'आत्महत्या']
+  decline: ['\b(nhi|nahi|nahin|nai|no|dont|don''t|not)\b.{0,30}\b(chahiye|chaiye|chahie|chahta|chahti|want|need|require|book)', '\bno need\b', '\bi am fine\b', "\\bi'?m fine\\b", '\b(mai|main|mein)\b.{0,12}\b(theek|thik|sahi)\b', '\bekel[ea]\b', '\bakel[ea]\b', 'leave me alone', '\bcancel\b', 'नहीं चाहिए', 'नही चाहिए', 'मैं ठीक', 'मै ठीक', 'अकेला', 'अकेले']
+  abuse: ['bhaad me', 'bhad me', 'bhaad mein', '\bchup\b', 'shut up', '\bstupid\b', '\buseless\b', '\bbakwas\b', '\bbekar\b', '\bidiot\b', 'go away', 'get lost', '\bpagal\b', 'बकवास', 'बेकार', 'भाड़ में', 'चुप']
+  distress: ['ghabra', 'dar lag', 'darr lag', '\bscared\b', '\bpanic', '\banxious\b', '\bworried\b', 'pareshan', '\bcrying\b', 'rona aa', 'घबरा', 'डर', 'परेशान']
+  greeting: ['^(hi+|hello+|hey+|hii+|namaste|namaskar|hlo|good (morning|evening|afternoon))\b', '^(नमस्ते|नमस्कार|हेलो)']
+  unsure: ['pata nahi', 'pata nhi', 'not sure', "don'?t know", 'dont know', 'पता नहीं']
+  yes_ans: ['^(yes|yeah|yep|haan|han|ha|haa|हाँ|हां|जी हाँ)\b']
+  no_ans: ['^(no|nope|nahi|nahin|nhi|नहीं|नही)\b']
+names:   # display names for symptom concepts, per language
+  fever: {en: fever, hi: बुखार, hinglish: bukhar}
+  cough: {en: cough, hi: खांसी, hinglish: khansi}
+  knee_pain: {en: knee pain, hi: घुटने का दर्द, hinglish: ghutne ka dard}
+  back_pain: {en: back pain, hi: पीठ का दर्द, hinglish: peeth ka dard}
+  headache: {en: headache, hi: सिरदर्द, hinglish: sir dard}
+  stomach_pain: {en: stomach pain, hi: पेट का दर्द, hinglish: pet ka dard}
+  vomiting: {en: vomiting, hi: उल्टी, hinglish: ulti}
+  loose_motions: {en: loose motions, hi: दस्त, hinglish: dast}
+  dizziness: {en: dizziness, hi: चक्कर, hinglish: chakkar}
+  weakness: {en: weakness, hi: कमज़ोरी, hinglish: kamzori}
+  not_eating: {en: loss of appetite, hi: भूख न लगना, hinglish: bhook na lagna}
+  acidity_gas: {en: acidity, hi: एसिडिटी, hinglish: acidity}
+  wound: {en: wound, hi: घाव, hinglish: ghaav}
+  chest_pain: {en: chest pain, hi: सीने का दर्द, hinglish: seene ka dard}
+pain_symptoms: [knee_pain, back_pain, headache, stomach_pain, chest_pain]
+slot_order:
+  fever: [duration, temperature, associated, patient]
+  pain: [severity_pain, duration, associated, patient]
+  default: [duration, severity, associated, patient]
+hints:   # example symptoms listed in the "anything else?" question
+  fever: {en: "cough, breathing trouble, vomiting or a rash", hi: "खांसी, साँस में तकलीफ़, उल्टी या दाने", hinglish: "khansi, saans mein taklif, ulti ya daane"}
+  knee_pain: {en: "swelling, redness, fever or trouble walking", hi: "सूजन, लालपन, बुखार या चलने में दिक्कत", hinglish: "sujan, laalpan, bukhar ya chalne mein dikkat"}
+  back_pain: {en: "numbness, leg weakness or fever", hi: "सुन्नपन, पैरों में कमज़ोरी या बुखार", hinglish: "sunnpan, pairon mein kamzori ya bukhar"}
+  headache: {en: "vomiting, blurred vision or fever", hi: "उल्टी, धुंधला दिखना या बुखार", hinglish: "ulti, dhundhla dikhna ya bukhar"}
+  stomach_pain: {en: "vomiting, loose motions or fever", hi: "उल्टी, दस्त या बुखार", hinglish: "ulti, dast ya bukhar"}
+  default: {en: "fever, vomiting or breathing trouble", hi: "बुखार, उल्टी या साँस में तकलीफ़", hinglish: "bukhar, ulti ya saans mein taklif"}
+questions:
+  duration:
+    en: "How long have you had the {symptom}?"
+    hi: "{symptom} कब से है?"
+    hinglish: "{symptom} kab se hai?"
+    options: {en: ["Since today", "1–2 days", "3 days or more"], hi: ["आज से", "1–2 दिन से", "3 दिन या ज़्यादा"], hinglish: ["Aaj se", "1–2 din se", "3 din ya zyada"]}
+  temperature:
+    en: "Have you checked the temperature? If yes, what does it show?"
+    hi: "क्या आपने तापमान नापा? अगर हाँ, तो कितना है?"
+    hinglish: "Kya aapne temperature naapa? Agar haan, to kitna hai?"
+  severity_pain:
+    en: "How bad is the {symptom} on a scale of 1 to 10, and does it stop you from moving or walking?"
+    hi: "{symptom} 1 से 10 में कितना तेज़ है, और क्या इससे चलने-फिरने में दिक्कत हो रही है?"
+    hinglish: "{symptom} 1 se 10 mein kitna tez hai, aur kya isse chalne-phirne mein dikkat ho rahi hai?"
+  severity:
+    en: "How severe is the {symptom}: mild, moderate or severe?"
+    hi: "{symptom} कितना गंभीर है: हल्का, मध्यम या तेज़?"
+    hinglish: "{symptom} kitna serious hai: halka, madhyam ya tez?"
+  associated:
+    en: "Is there anything else along with it, such as {hints}?"
+    hi: "क्या इसके साथ कुछ और भी है, जैसे {hints}?"
+    hinglish: "Kya iske saath kuch aur bhi hai, jaise {hints}?"
+  patient:
+    en: "Who is this for, and how old are they?"
+    hi: "यह किसके लिए है, और उनकी उम्र क्या है?"
+    hinglish: "Yeh kiske liye hai, aur unki umar kya hai?"
+replies:
+  no_health:
+    en: "I can help with health and home-care needs. Could you tell me in a few words what is wrong, or who is unwell?"
+    hi: "मैं स्वास्थ्य और घर पर देखभाल में मदद कर सकता हूँ। कृपया थोड़े शब्दों में बताइए कि क्या तकलीफ़ है या कौन बीमार है।"
+    hinglish: "Main health aur ghar par care mein madad kar sakta hoon. Kripya thode shabdon mein bataiye ki kya taklif hai ya kaun bimaar hai."
+  greeting:
+    en: "Hello! Tell me what is troubling you or someone in your family, and I will help find the right care."
+    hi: "नमस्ते! बताइए आपको या आपके परिवार में किसी को क्या तकलीफ़ है, मैं सही देखभाल ढूँढने में मदद करूँगा।"
+    hinglish: "Namaste! Bataiye aapko ya aapke parivar mein kisi ko kya taklif hai, main sahi care dhoondhne mein madad karunga."
+  decline:
+    en: "Understood, I won't book anything. If you change your mind I'm here. If there is trouble breathing, chest pain or confusion, please call 112."
+    hi: "समझ गया, मैं कुछ बुक नहीं करूँगा। मन बदले तो मैं यहाँ हूँ। अगर साँस लेने में तकलीफ़, सीने में दर्द या भ्रम हो तो कृपया 112 पर कॉल करें।"
+    hinglish: "Samajh gaya, main kuch book nahi karunga. Mann badle to main yahan hoon. Agar saans lene mein taklif, seene mein dard ya confusion ho to kripya 112 par call karein."
+  deescalate:
+    en: "I'm sorry if I frustrated you. I'll stop here, and you can message me whenever you want help."
+    hi: "अगर मैंने आपको परेशान किया तो माफ़ कीजिए। मैं यहीं रुकता हूँ, जब भी मदद चाहिए मुझे लिख दीजिएगा।"
+    hinglish: "Agar maine aapko pareshan kiya to maaf kijiye. Main yahin rukta hoon, jab bhi madad chahiye mujhe likh dijiyega."
+  distress:
+    en: "That sounds stressful, and I'm here to help. Can you tell me what is happening?"
+    hi: "यह तनावपूर्ण लग रहा है, मैं मदद के लिए यहाँ हूँ। क्या आप बता सकते हैं कि क्या हो रहा है?"
+    hinglish: "Yeh stressful lag raha hai, main madad ke liye yahan hoon. Kya aap bata sakte hain ki kya ho raha hai?"
+  crisis:
+    en: "I'm really sorry you are feeling this way, and you don't have to face it alone. If you might hurt yourself, please call 112 now or tell someone near you. I can stay here and help you find support."
+    hi: "मुझे बहुत दुख है कि आप ऐसा महसूस कर रहे हैं, आप अकेले नहीं हैं। अगर आप खुद को नुकसान पहुँचा सकते हैं तो अभी 112 पर कॉल करें या पास किसी को बताएँ। मैं यहाँ हूँ और सहायता ढूँढने में मदद कर सकता हूँ।"
+    hinglish: "Mujhe bahut dukh hai ki aap aisa mehsoos kar rahe hain, aap akele nahi hain. Agar aap khud ko nuksaan pahuncha sakte hain to abhi 112 par call karein ya paas kisi ko batayein. Main yahan hoon aur support dhoondhne mein madad kar sakta hoon."
+  offer_exit:
+    en: "I can help whenever you need health or home care. Just tell me what is wrong."
+    hi: "जब भी आपको स्वास्थ्य या घर पर देखभाल चाहिए, मैं यहाँ हूँ। बस बताइए क्या तकलीफ़ है।"
+    hinglish: "Jab bhi aapko health ya ghar par care chahiye, main yahan hoon. Bas bataiye kya taklif hai."

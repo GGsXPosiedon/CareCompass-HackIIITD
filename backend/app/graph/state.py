@@ -13,6 +13,7 @@ class TriageState(TypedDict, total=False):
     request: TriageRequest
     facts: CaseFacts
     rule_safety: SafetyResult            # deterministic red-flag engine
+    dialogue: Any                        # dialogue.DialogueDecision (reply | ask | proceed)
     det: RouteDecision                   # deterministic classifier slot (rules now, trained model later)
     llm_safety: Optional[SafetyReview]   # Gemini safety screener
     llm_triage: Optional[TriageAssessment]  # Gemini triage analyst

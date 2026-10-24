@@ -78,8 +78,8 @@ def test_answer_option_label_resolves(client):
 
 def test_follow_up_cap_falls_back_to_safe_default(client):
     hist = [
-        {"role": "user", "content": "help chahiye"}, {"role": "assistant", "content": "q1"},
-        {"role": "user", "content": "kuch"}, {"role": "assistant", "content": "q2"},
+        {"role": "user", "content": "help chahiye"}, {"role": "assistant", "content": "q1?"},
+        {"role": "user", "content": "kuch"}, {"role": "assistant", "content": "q2?"},
     ]
     body = client.post("/triage", json=req("pata nahi", history=hist)).json()
     assert body["follow_up_question"] is None
@@ -98,7 +98,7 @@ def test_validation_errors(client):
 
 
 def test_no_location_still_works(client):
-    body = client.post("/triage", json=req("papa ko bukhar hai ghar pe dikhana hai", location=None)).json()
+    body = client.post("/triage", json=req("papa ko do din se bukhar hai ghar pe dikhana hai", location=None)).json()
     assert body["care_type"] == "paramedic_home_visit"
 
 

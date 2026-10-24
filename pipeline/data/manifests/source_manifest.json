@@ -1,0 +1,282 @@
+{
+  "files": [
+    {
+      "path": "SYNAPSE_An Expert Annotated Dataset of Patient symptoms and Demographics.csv",
+      "bytes": 20745068,
+      "sha256": "3244475a5d2fbf0cd3290e9aaa6f50c8fc9d6abcd648480296ebd20871b18847",
+      "kind": "csv",
+      "rows": 130637,
+      "columns": [
+        "Symptoms",
+        "Gender",
+        "Age",
+        "Duration",
+        "Severity",
+        "Final Recommendation"
+      ],
+      "empty_counts": {
+        "Symptoms": 0,
+        "Gender": 0,
+        "Age": 0,
+        "Duration": 0,
+        "Severity": 0,
+        "Final Recommendation": 0
+      },
+      "notes": []
+    },
+    {
+      "path": "all_craft_md.jsonl",
+      "bytes": 245479,
+      "sha256": "658441e6c6692c84d78fdf1c5ddb406ee6705f4a43330f0f759a1b941d8bfcdc",
+      "kind": "jsonl",
+      "rows": 140,
+      "columns": [
+        "id",
+        "question",
+        "context",
+        "options",
+        "answer",
+        "answer_idx",
+        "facts",
+        "patient"
+      ],
+      "empty_counts": null,
+      "notes": []
+    },
+    {
+      "path": "all_dev_good.jsonl",
+      "bytes": 2585822,
+      "sha256": "3bfc7090d060dd8d11e4237344ed78846707faab433a84d078191627ad3c9526",
+      "kind": "jsonl",
+      "rows": 1272,
+      "columns": [
+        "id",
+        "question",
+        "context",
+        "context_len",
+        "options",
+        "answer",
+        "answer_idx",
+        "explanation",
+        "facts",
+        "patient"
+      ],
+      "empty_counts": null,
+      "notes": []
+    },
+    {
+      "path": "caregivers.csv",
+      "bytes": 10613,
+      "sha256": "b38b6b81e41fe7816b1de2f1ab772e6573963cd9fdcb3418b0b9c3341b5b88ea",
+      "kind": "csv",
+      "rows": 60,
+      "columns": [
+        "caregiver_id",
+        "name",
+        "role",
+        "qualification",
+        "gender",
+        "languages",
+        "skills",
+        "base_area",
+        "base_lat",
+        "base_lng",
+        "max_radius_km",
+        "tier",
+        "rating",
+        "experience_years",
+        "free_from",
+        "free_until",
+        "active"
+      ],
+      "empty_counts": {
+        "caregiver_id": 0,
+        "name": 0,
+        "role": 0,
+        "qualification": 0,
+        "gender": 0,
+        "languages": 0,
+        "skills": 0,
+        "base_area": 0,
+        "base_lat": 0,
+        "base_lng": 0,
+        "max_radius_km": 0,
+        "tier": 32,
+        "rating": 0,
+        "experience_years": 0,
+        "free_from": 0,
+        "free_until": 0,
+        "active": 0
+      },
+      "notes": []
+    },
+    {
+      "path": "ddx/ddx/release_conditions.json",
+      "bytes": 20889,
+      "sha256": "56edf4682d8e86a4209fc3a33932e50ce03d1cc1fecc326c26d5ef8fa5c24890",
+      "kind": "json",
+      "rows": 49,
+      "columns": [
+        "Spontaneous pneumothorax",
+        "Cluster headache",
+        "Boerhaave",
+        "Spontaneous rib fracture",
+        "GERD"
+      ],
+      "empty_counts": null,
+      "notes": []
+    },
+    {
+      "path": "ddx/ddx/release_evidences.json",
+      "bytes": 120263,
+      "sha256": "281c78b044ae60514e28ecc9052d08a8225dd3e2db3f00f8788b99c47b05e0c0",
+      "kind": "json",
+      "rows": 223,
+      "columns": [
+        "E_91",
+        "E_55",
+        "E_53",
+        "E_57",
+        "E_54"
+      ],
+      "empty_counts": null,
+      "notes": []
+    },
+    {
+      "path": "ddx/ddx/release_test_patients.csv",
+      "bytes": 88717003,
+      "sha256": "b7bbc5e32b26ae4989e7e69b5eefa4f1438af01a19a5ce25481ff1e4a2fabd11",
+      "kind": "csv",
+      "rows": 134529,
+      "columns": [
+        "AGE",
+        "DIFFERENTIAL_DIAGNOSIS",
+        "SEX",
+        "PATHOLOGY",
+        "EVIDENCES",
+        "INITIAL_EVIDENCE"
+      ],
+      "empty_counts": {
+        "AGE": 0,
+        "DIFFERENTIAL_DIAGNOSIS": 0,
+        "SEX": 0,
+        "PATHOLOGY": 0,
+        "EVIDENCES": 0,
+        "INITIAL_EVIDENCE": 0
+      },
+      "notes": []
+    },
+    {
+      "path": "ddx/ddx/release_train_patients.csv",
+      "bytes": 670584506,
+      "sha256": "93933e9a9a7a00d618a931deda7767485af299fe4635bf189a7c63b510e8b172",
+      "kind": "csv",
+      "rows": 1025602,
+      "columns": [
+        "AGE",
+        "DIFFERENTIAL_DIAGNOSIS",
+        "SEX",
+        "PATHOLOGY",
+        "EVIDENCES",
+        "INITIAL_EVIDENCE"
+      ],
+      "empty_counts": {
+        "AGE": 0,
+        "DIFFERENTIAL_DIAGNOSIS": 0,
+        "SEX": 0,
+        "PATHOLOGY": 0,
+        "EVIDENCES": 0,
+        "INITIAL_EVIDENCE": 0
+      },
+      "notes": []
+    },
+    {
+      "path": "ddx/ddx/release_validate_patients.csv",
+      "bytes": 87371169,
+      "sha256": "b84733533bff01daa1d47d27a0cd4d684bb54a0fc20d80aaee1250ff8ff989ed",
+      "kind": "csv",
+      "rows": 132448,
+      "columns": [
+        "AGE",
+        "DIFFERENTIAL_DIAGNOSIS",
+        "SEX",
+        "PATHOLOGY",
+        "EVIDENCES",
+        "INITIAL_EVIDENCE"
+      ],
+      "empty_counts": {
+        "AGE": 0,
+        "DIFFERENTIAL_DIAGNOSIS": 0,
+        "SEX": 0,
+        "PATHOLOGY": 0,
+        "EVIDENCES": 0,
+        "INITIAL_EVIDENCE": 0
+      },
+      "notes": []
+    },
+    {
+      "path": "multi_turn_examples.jsonl",
+      "bytes": 1044,
+      "sha256": "634a146457744f0d7f66f640bb95b73af1fda57b3d91d48a6c7f309386ae48c9",
+      "kind": "jsonl",
+      "rows": 2,
+      "columns": [
+        "id",
+        "turns"
+      ],
+      "empty_counts": null,
+      "notes": []
+    },
+    {
+      "path": "triage_dataset.jsonl",
+      "bytes": 202820,
+      "sha256": "51a157aa94d9d7715d3422675229be09f4bc772adeb77fb28b469cfa7269a3e0",
+      "kind": "jsonl",
+      "rows": 340,
+      "columns": [
+        "id",
+        "detected_language",
+        "request",
+        "response"
+      ],
+      "empty_counts": null,
+      "notes": []
+    },
+    {
+      "path": "triage_dataset_flat.csv",
+      "bytes": 78335,
+      "sha256": "1a567311c73aa1e181b5dde8ddcc1cd32e5e44ae14718170c71eaeacf8004dfc",
+      "kind": "csv",
+      "rows": 340,
+      "columns": [
+        "id",
+        "detected_language",
+        "user_input",
+        "lat",
+        "lng",
+        "care_type",
+        "urgency",
+        "red_flags",
+        "follow_up_question",
+        "reasoning",
+        "matched_caregiver_ids",
+        "top_score"
+      ],
+      "empty_counts": {
+        "id": 0,
+        "detected_language": 0,
+        "user_input": 0,
+        "lat": 0,
+        "lng": 0,
+        "care_type": 39,
+        "urgency": 39,
+        "red_flags": 284,
+        "follow_up_question": 301,
+        "reasoning": 0,
+        "matched_caregiver_ids": 131,
+        "top_score": 131
+      },
+      "notes": []
+    }
+  ]
+}

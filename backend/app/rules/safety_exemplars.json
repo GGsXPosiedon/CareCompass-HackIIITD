@@ -1,0 +1,126 @@
+{
+ "_status": "DRAFT seed phrasings written by the dev team - NOT clinically reviewed. Review before real use.",
+ "positive": {
+  "breathlessness": [
+   "he is not breathing",
+   "she stopped breathing suddenly",
+   "I cannot breathe properly",
+   "gasping for air",
+   "breath is stuck, choking badly",
+   "saans nahi le pa raha",
+   "uski saans ruk gayi hai",
+   "saans band ho rahi hai",
+   "dam ghut raha hai",
+   "मुझे सांस नहीं आ रही",
+   "सांस रुक रही है",
+   "turning blue and struggling to breathe"
+  ],
+  "chest_pain": [
+   "severe chest pain spreading to left arm",
+   "crushing pressure in the chest",
+   "heart attack symptoms, chest feels tight",
+   "seene me tez dard ho raha hai",
+   "chhati me bhaari dabav hai",
+   "dil me bahut dard hai",
+   "सीने में तेज़ दर्द है",
+   "chest is burning with sweating and pain"
+  ],
+  "unconsciousness": [
+   "he fainted and is not responding",
+   "she is unconscious on the floor",
+   "he collapsed and won't wake up",
+   "behosh ho gaye hain",
+   "uth nahi raha, hosh nahi hai",
+   "होश नहीं है, जवाब नहीं दे रहा",
+   "passed out and not waking",
+   "bilkul behosh pada hai"
+  ],
+  "severe_bleeding": [
+   "blood is gushing out of the wound",
+   "bleeding heavily and won't stop",
+   "lots of blood loss after accident",
+   "khoon bahut beh raha hai ruk nahi raha",
+   "gehra ghav hai khoon nikal raha hai",
+   "खून बहुत बह रहा है रुक नहीं रहा",
+   "vomiting blood",
+   "coughing up blood"
+  ],
+  "stroke_symptoms": [
+   "face drooping and speech slurred",
+   "sudden weakness on one side of the body",
+   "cannot lift his arm, mouth is twisted",
+   "achanak bolna band, ek taraf kamzori",
+   "muh tedha ho gaya aur haath nahi utha",
+   "अचानक एक तरफ लकवा जैसा हो गया",
+   "slurred speech and numb face suddenly"
+  ],
+  "seizure": [
+   "having a seizure, body shaking and jerking",
+   "fits aa rahe hain, muh se jhaag",
+   "mirgi ka daura pad gaya",
+   "दौरा पड़ा है, मुँह से झाग",
+   "convulsions, eyes rolled back"
+  ],
+  "high_fever_infant": [
+   "newborn baby has high fever and is drowsy",
+   "3 month old with fever and not feeding",
+   "chhote bachche ko tez bukhar hai doodh nahi pi raha",
+   "नवजात को तेज़ बुखार है",
+   "infant very hot and lethargic"
+  ],
+  "suicidal_ideation": [
+   "I want to end my life",
+   "I do not want to live anymore",
+   "thinking of killing myself",
+   "main jeena nahi chahta, marna chahta hoon",
+   "mujhe khud ko khatam kar lena hai",
+   "मैं जीना नहीं चाहता",
+   "he said he wants to die and has pills"
+  ],
+  "severe_dehydration": [
+   "no urine all day and very weak with vomiting",
+   "severe loose motions, sunken eyes, can't drink",
+   "ulti dast se bahut kamzori, peshab nahi aaya",
+   "बहुत दस्त और उल्टी, पेशाब नहीं आया",
+   "dry mouth, dizzy, vomiting all day and not passing urine"
+  ]
+ },
+ "negative": [
+  "I don't have chest pain",
+  "no breathing problem, just a mild cold",
+  "fever since two days with cough",
+  "mujhe halka sa sir dard hai",
+  "papa ko bukhar hai",
+  "need a nurse to check blood pressure at home",
+  "book a blood test at home",
+  "knee pain for a week",
+  "mummy ko kamzori hai",
+  "consult a doctor for prescription refill",
+  "my mother needs physiotherapy",
+  "it is not an emergency, just routine checkup",
+  "seene me dard nahi hai, saans theek hai",
+  "I want to talk to a doctor about my report",
+  "hello",
+  "what is 2+2",
+  "chhoti si chot lagi hai, band-aid chahiye",
+  "cough and sore throat",
+  "stomach pain after eating",
+  "घर पर इंजेक्शन लगवाना है",
+  "घर पर खून की जांच करवानी है",
+  "मुझे डॉक्टर से ऑनलाइन सलाह लेनी है",
+  "पापा को दो दिन से बुखार और खांसी है",
+  "दादी के घुटनों में दर्द है",
+  "माँ को कमज़ोरी है नर्स चाहिए",
+  "nebulization needed at home, he is breathing fine now",
+  "asthmatic son, breathing normal now",
+  "dadi ke ghutne mein dard hai",
+  "mere dost ki naak se khoon arha h",
+  "nosebleed that stopped",
+  "doctor se online baat karni hai",
+  "injection lagwana hai ghar par",
+  "pata nahi",
+  "i don't know",
+  "not sure",
+  "maybe tomorrow"
+ ]
+}

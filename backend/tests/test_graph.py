@@ -44,7 +44,7 @@ def make(safety=SAFE, tri=None, *, status=200, raises=False, raw=None, capture=N
     return Pipeline(settings=s, repo=repo, matcher=matcher, llm=GeminiClient(s, transport=httpx.MockTransport(handler)))
 
 
-def run(p, text="mummy ko bukhar hai", **kw):
+def run(p, text="mummy ko do din se bukhar hai", **kw):
     return p.triage(TriageRequest(**req(text, **kw)))
 
 
@@ -106,7 +106,7 @@ def test_possible_flag_asks_danger_sign_question_then_escalates_when_budget_spen
     p = make(safety=s, tri=triage(care_type="paramedic_home_visit"))
     r = run(p, "bete ko kal raat se bukhar hai")
     assert r.follow_up_question == "Is the baby younger than 3 months?" and r.answer_options == ["Yes", "No", "Not sure"]
-    hist = [{"role": "user", "content": "x"}, {"role": "assistant", "content": "q1"}, {"role": "user", "content": "y"}, {"role": "assistant", "content": "q2"}]
+    hist = [{"role": "user", "content": "x"}, {"role": "assistant", "content": "q1?"}, {"role": "user", "content": "y"}, {"role": "assistant", "content": "q2?"}]
     r2 = run(p, "pata nahi", history=hist)
     assert r2.care_type == "emergency_112"
 
@@ -148,7 +148,7 @@ def test_gemini_urgency_can_be_scheduled_for_a_routine_consultation():
 
 def test_gemini_emergency_urgency_alone_escalates_and_never_returns_matches():
     p = make(tri=triage(care_type="teleconsultation", urgency="emergency"))
-    result = run(p, "unclear need")
+    result = run(p, "I need help choosing care")
     assert result.care_type == "emergency_112" and not result.matched_caregivers
 
 
@@ -203,10 +203,10 @@ def test_gemini3_uses_thinking_level_and_retries_temporary_server_failure():
 
 def test_recommendation_starts_new_follow_up_budget():
     p = make(tri=triage(follow_up_question="What would you like help with now?"))
-    history = [{"role": "assistant", "content": "q1", "kind": "follow_up"},
-               {"role": "assistant", "content": "q2", "kind": "follow_up"},
+    history = [{"role": "assistant", "content": "How long have you had the fever?", "kind": "follow_up"},
+               {"role": "assistant", "content": "What is your temperature?", "kind": "follow_up"},
                {"role": "assistant", "content": "A medic can visit.", "kind": "recommendation"}]
-    result = run(p, "I also have another concern", history=history)
+    result = run(p, "I need help choosing care", history=history)
     assert result.follow_up_question == "What would you like help with now?"
 
 
@@ -232,7 +232,7 @@ def test_model_first_policy_prefers_confident_model():
 
 def test_follow_up_cap_forces_safe_default():
     p = make(tri=triage(follow_up_question="Again?"))
-    hist = [{"role": "user", "content": "help"}, {"role": "assistant", "content": "q1"}, {"role": "user", "content": "x"}, {"role": "assistant", "content": "q2"}]
+    hist = [{"role": "user", "content": "help"}, {"role": "assistant", "content": "q1?"}, {"role": "user", "content": "x"}, {"role": "assistant", "content": "q2?"}]
     r = run(p, "pata nahi", history=hist)
     assert r.follow_up_question is None and r.care_type == "paramedic_home_visit"
 
@@ -240,7 +240,7 @@ def test_follow_up_cap_forces_safe_default():
 def test_profile_is_sent_inside_fenced_case():
     cap = []
     p = make(tri=triage(care_type="paramedic_home_visit", confidence="high"), capture=cap)
-    body = req("papa ko bukhar hai")
+    body = req("papa ko do din se bukhar hai")
     body["patient_context"] = {"active_member_id": "m1", "members": [
         {"id": "m1", "name": "Ramesh", "relation": "Father", "age": 68, "conditions": ["Type 2 diabetes"], "allergies": ["Penicillin"]}]}
     p.triage(TriageRequest(**body))
@@ -257,7 +257,7 @@ def test_trace_explains_every_step():
 
 def test_llm_off_without_key(pipeline):
     assert pipeline.llm.enabled is False
-    t = pipeline.trace(TriageRequest(**req("mummy ko bukhar hai ghar pe dikhana hai")))
+    t = pipeline.trace(TriageRequest(**req("mummy ko do din se bukhar hai ghar pe dikhana hai")))
     assert any("skipped" in x["detail"] for x in t["trace"] if x["node"] == "llm_triage")
 
 

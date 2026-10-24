@@ -55,6 +55,9 @@ class Pipeline:
                 }[state["facts"].language]
         h = hashlib.sha256(state["facts"].text_norm.encode()).hexdigest()[:10]  # no raw text in logs
         log.info("case=%s care_type=%s flags=%s path=%s", h, resp.care_type, resp.red_flags, [t["node"] for t in state["trace"]])
+        from .failure_log import record
+
+        record(req, resp, state)
         return resp, state
 
     def triage(self, req: TriageRequest) -> TriageResponse:

@@ -3,7 +3,11 @@
             ┌──────────┐   ┌──────────────┐  fired   ┌───────────┐
   START ──▶ │  intake  │──▶│ rules_safety │ ───────▶ │ emergency │──▶ END
             └──────────┘   └──────┬───────┘          └───────────┘
-                                  │ clear (parallel fan-out)  ▲
+                                  │ clear
+                           ┌──────▼──────┐  chat / refusal / stop / frustration / slot question
+                           │  converse   │ ──▶ reply_guard (LLM safety screen) ──▶ dialogue_reply ──▶ END
+                           └──────┬──────┘
+                                  │ proceed (parallel fan-out)  ▲
                 ┌─────────────────┼──────────────────┐        │
                 ▼                 ▼                  ▼        │
            ┌─────────┐     ┌────────────┐     ┌────────────┐  │
@@ -40,16 +44,18 @@ class TriageGraph:
     def __init__(self, pipe: "Pipeline"):
         n = Nodes(pipe)
         g = StateGraph(TriageState)
-        for name in ("intake", "rules_safety", "classify", "llm_safety", "llm_triage", "fuse",
+        for name in ("intake", "rules_safety", "converse", "reply_guard", "dialogue_reply", "classify", "llm_safety", "llm_triage", "fuse",
                      "emergency", "follow_up", "match", "respond"):
             g.add_node(name, getattr(n, name))
         g.add_edge(START, "intake")
         g.add_edge("intake", "rules_safety")
-        g.add_conditional_edges("rules_safety", n.after_rules, ["emergency", "classify", "llm_safety", "llm_triage"])
+        g.add_conditional_edges("rules_safety", n.after_rules, ["emergency", "converse"])
+        g.add_conditional_edges("converse", n.after_converse, ["reply_guard", "classify", "llm_safety", "llm_triage"])
+        g.add_conditional_edges("reply_guard", n.after_guard, ["emergency", "follow_up", "dialogue_reply"])
         g.add_edge(["classify", "llm_safety", "llm_triage"], "fuse")
         g.add_conditional_edges("fuse", n.after_fuse, ["emergency", "follow_up", "match"])
         g.add_edge("match", "respond")
-        for terminal in ("emergency", "follow_up", "respond"):
+        for terminal in ("emergency", "dialogue_reply", "follow_up", "respond"):
             g.add_edge(terminal, END)
         self.compiled = g.compile()
 

@@ -1,0 +1,40 @@
+{"id": "a01", "text": "No fever, but cough since yesterday", "facts": [["fever", "absent"], ["cough", "present"]], "tag": "negation", "duration_days": 1}
+{"id": "a02", "text": "He denies chest pain", "facts": [["chest_pain", "absent"]], "tag": "negation", "experiencer": "other_unspecified"}
+{"id": "a03", "text": "Mother has fever and cough", "facts": [["fever", "present"], ["cough", "present"]], "tag": "third_party", "experiencer": "mother"}
+{"id": "a04", "text": "Fever without cough", "facts": [["fever", "present"], ["cough", "absent"]], "tag": "negation"}
+{"id": "a05", "text": "History of chest pain, now fine, wants a BP check", "facts": [["chest_pain", "historical"], ["bp", "present"]], "tag": "history"}
+{"id": "a06", "text": "If the fever continues, I will need a doctor", "facts": [["fever", "hypothetical"], ["doctor_mention", "present"]], "tag": "hypothetical", "experiencer": "self"}
+{"id": "a07", "text": "Not weak, but not eating", "facts": [["weakness", "absent"], ["not_eating", "present"]], "tag": "negation"}
+{"id": "a08", "text": "No chest pain or breathlessness", "facts": [["chest_pain", "absent"], ["breathlessness", "absent"]], "tag": "negation"}
+{"id": "a09", "text": "He cannot breathe and is unresponsive", "facts": [["breathlessness", "present"], ["unresponsive", "present"]], "tag": "emergency", "experiencer": "other_unspecified"}
+{"id": "a10", "text": "My father collapsed and is not responding", "facts": [["collapse", "present"], ["unresponsive", "present"]], "tag": "emergency", "experiencer": "father"}
+{"id": "a11", "text": "Wants blood sugar and BP check for my wife", "facts": [["blood_sugar", "present"], ["bp", "present"]], "tag": "third_party", "experiencer": "wife"}
+{"id": "a12", "text": "Chest pain last year, now only needs report review", "facts": [["chest_pain", "historical"], ["medical_reports", "present"]], "tag": "history"}
+{"id": "a13", "text": "I do not have fever", "facts": [["fever", "absent"]], "tag": "negation", "experiencer": "self"}
+{"id": "a14", "text": "Fever nahi hai, khansi hai", "facts": [["fever", "absent"], ["cough", "present"]], "tag": "negation_hinglish"}
+{"id": "a15", "text": "बुखार नहीं है लेकिन खांसी है", "facts": [["fever", "absent"], ["cough", "present"]], "tag": "negation_hindi"}
+{"id": "a16", "text": "papa ko bukhar tha pehle, ab theek hai", "facts": [["fever", "historical"]], "tag": "history_hinglish", "experiencer": "father"}
+{"id": "a17", "text": "dadi ko saans nahi aa rahi aur seene me dard hai", "facts": [["breathlessness", "present"], ["chest_pain", "present"]], "tag": "emergency_hinglish", "experiencer": "grandmother"}
+{"id": "a18", "text": "mummy ko bukhar nahi, bas weak lag rahi hain", "facts": [["fever", "absent"], ["weakness", "present"]], "tag": "negation_hinglish", "experiencer": "mother"}
+{"id": "a19", "text": "bukhaar aur khasi hai 3 din se", "facts": [["fever", "present"], ["cough", "present"]], "tag": "spelling", "duration_days": 3}
+{"id": "a20", "text": "papa ko teen din se bukhar hai", "facts": [["fever", "present"]], "tag": "duration", "experiencer": "father", "duration_days": 3}
+{"id": "a21", "text": "मेरी माँ को सीने में दर्द नहीं है", "facts": [["chest_pain", "absent"]], "tag": "negation_hindi", "experiencer": "mother"}
+{"id": "a22", "text": "पापा को खांसी नहीं रुक रही", "facts": [["cough", "present"]], "tag": "persistence", "experiencer": "father"}
+{"id": "a23", "text": "bukhar nahi utar raha", "facts": [["fever", "present"]], "tag": "persistence"}
+{"id": "a24", "text": "wo gir gaye aur behosh hain", "facts": [["collapse", "present"], ["unresponsive", "present"]], "tag": "emergency_hinglish", "experiencer": "other_unspecified"}
+{"id": "a25", "text": "kal subah blood sugar test chahiye", "facts": [["blood_sugar", "present"], ["lab_test", "present"]], "tag": "request"}
+{"id": "a26", "text": "Fever and cough for two days, no breathlessness", "facts": [["fever", "present"], ["cough", "present"], ["breathlessness", "absent"]], "tag": "negation", "duration_days": 2}
+{"id": "a27", "text": "She has no chest pain but severe headache", "facts": [["chest_pain", "absent"], ["headache", "present"]], "tag": "negation_then_new_symptom", "experiencer": "other_unspecified"}
+{"id": "a28", "text": "severe itching and sneezing since morning", "facts": [], "tag": "oov", "duration_days": 0, "needs_clarification": true}
+{"id": "a29", "text": "Hi", "facts": [], "tag": "empty_like", "needs_clarification": true}
+{"id": "a30", "text": "", "facts": [], "tag": "empty", "needs_clarification": true}
+{"id": "a31", "text": "bukhr hai aur kasi", "facts": [["fever", "present"], ["cough", "present"]], "tag": "noisy"}
+{"id": "a32", "text": "chst pain since morning", "facts": [["chest_pain", "present"]], "tag": "noisy", "duration_days": 0}
+{"id": "a33", "text": "saans nhi aa rhi", "facts": [["breathlessness", "present"]], "tag": "noisy"}
+{"id": "a34", "text": "No fever. Fever since morning.", "facts": [["fever", "conflicting"]], "tag": "contradiction", "duration_days": 0}
+{"id": "a35", "text": "दो दिन से बुखार", "facts": [["fever", "present"]], "tag": "duration_hindi", "duration_days": 2}
+{"id": "a36", "text": "Grandfather is weak and has no fever", "facts": [["weakness", "present"], ["fever", "absent"]], "tag": "negation", "experiencer": "grandfather"}
+{"id": "a37", "text": "I need an injection for my child, no fever", "facts": [["injection", "present"], ["fever", "absent"]], "tag": "mixed", "experiencer": "child"}
+{"id": "a38", "text": "ghar pe dressing karwani hai, bleeding nahi ho rahi", "facts": [["dressing", "present"], ["bleeding", "absent"]], "tag": "negation_hinglish"}
+{"id": "a39", "text": "She is having chest pain", "facts": [["chest_pain", "present"]], "tag": "third_party", "experiencer": "other_unspecified"}
+{"id": "a40", "text": "Wife ki post-op dressing change karwani hai, no fever", "facts": [["dressing", "present"], ["surgery_recent", "present"], ["fever", "absent"]], "tag": "mixed", "experiencer": "wife"}

@@ -1,0 +1,41 @@
+{
+  "carecompass": {
+    "rows": 340,
+    "families": 20,
+    "problems": []
+  },
+  "synapse": {
+    "rows": 130637,
+    "groups": 3142,
+    "rows_per_split": {
+      "test": 12261,
+      "train": 106302,
+      "val": 12074
+    },
+    "groups_per_split": {
+      "test": 298,
+      "train": 2556,
+      "val": 288
+    }
+  },
+  "ddxplus": {
+    "test": {
+      "rows": 134529,
+      "dropped_within_split": 270,
+      "dropped_cross_split": 0,
+      "kept": 134259
+    },
+    "validate": {
+      "rows": 132448,
+      "dropped_within_split": 210,
+      "dropped_cross_split": 508,
+      "kept": 131730
+    },
+    "train": {
+      "rows": 1025602,
+      "dropped_within_split": 27385,
+      "dropped_cross_split": 11521,
+      "kept": 986696
+    }
+  }
+}

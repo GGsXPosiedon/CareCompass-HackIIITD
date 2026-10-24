@@ -1,0 +1,66 @@
+# Replayed conversations. `turns`: user message -> expected action (and optional slot / language of the reply). Author-written, UNREVIEWED.
+# c01 is the failing chat reported from the live demo (screenshots, 25 Oct 2026).
+- id: c01_live_demo_chat
+  turns:
+    - ["2+2=?", redirect]
+    - ["abba dabba jabba", redirect]
+    - ["i want to watch netflix", redirect]
+    - ["mujhe bukhar hai", ask, duration]
+    - ["2 din se", ask, temperature]
+    - ["101", commit]
+- id: c02_refusal_then_anger
+  turns:
+    - ["mujhe bukhar hai", ask, duration]
+    - ["mujhe medic nhi chaiyeee mujhe koi bhi nhi chaiye mai ekele hi theek hu", acknowledge_decline]
+    - ["bhaad me jaaaa", deescalate]
+- id: c03_complete_first_message
+  turns:
+    - ["3 din se bukhar hai, 102 degree", ask, associated]
+    - ["nahi", ask, patient]
+    - ["mere papa ke liye, 60 saal", commit]
+- id: c04_knee_pain
+  turns:
+    - ["I have knee pain", ask, severity_pain]
+    - ["about 6, it hurts to walk", ask, duration]
+    - ["since last week", commit]
+- id: c05_child_fever_english
+  turns:
+    - ["my son has fever", ask, duration]
+    - ["since yesterday", ask, temperature]
+    - ["not checked", commit]
+- id: c06_crisis
+  turns: [["mujhe jeena nahi hai", crisis_safety]]
+- id: c07_crisis_english
+  turns: [["I want to die", crisis_safety]]
+- id: c08_emergency_sign
+  turns: [["chest pain ho raha hai", defer_to_safety]]
+- id: c09_unsure_answers
+  turns:
+    - ["bukhar hai", ask, duration]
+    - ["pata nahi", ask, temperature]
+    - ["pata nahi", commit]
+- id: c10_refusal_first
+  turns: [["I don't need any help", acknowledge_decline]]
+- id: c11_greeting
+  turns: [["hello", greet]]
+- id: c12_repeated_gibberish
+  turns:
+    - ["asdf", redirect]
+    - ["qwerty", redirect]
+    - ["lol", redirect]
+    - ["hmm hmm", offer_exit]
+- id: c13_hindi_script
+  turns:
+    - ["मुझे बुखार है", ask, duration, hi]
+    - ["2 दिन से", ask, temperature, hi]
+- id: c14_distress_no_symptom
+  turns: [["mujhe bahut ghabrahat ho rahi hai", redirect]]
+- id: c15_symptom_plus_refusal
+  turns: [["bukhar hai but doctor nahi chahiye", acknowledge_decline]]
+- id: c16_headache_hinglish
+  turns:
+    - ["sir dard hai", ask, severity_pain, hinglish]
+    - ["7 hai", ask, duration]
+- id: c17_associated_question_lists_relevant_symptoms
+  turns:
+    - ["knee pain since 2 days, 5 out of 10", ask, associated]

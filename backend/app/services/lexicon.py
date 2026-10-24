@@ -12,6 +12,8 @@ HINGLISH_MARKERS = {
     "khansi", "dard", "papa", "mummy", "maa", "dadaji", "dadi", "bacche", "bachcha", "karwana", "karna",
     "karni", "hai", "ho", "raha", "rahi", "rahe", "aur", "se", "tak", "kal", "subah", "lagwana", "baat",
     "kamzor", "wo", "achanak", "gir", "gaye", "dikhana", "do", "din", "bhi", "mujhe", "unko", "unhe",
+    "thak", "gaya", "gayi", "hu", "hoon", "hora", "sharir", "ulti", "shyd", "shayad", "kab", "kya", "kuch", "bahut", "tez", "khoon",
+    "naak", "dost", "saans", "seene", "pet", "thoda", "thodi", "lag", "lagi", "lagta", "rha", "rhi", "arha", "arhi", "aaj",
 }
 
 # Common romanised-Hindi spelling variants -> one canonical token.
@@ -79,7 +81,7 @@ CONCEPTS: dict[str, tuple[str, str]] = {
     # symptoms / complaints
     "fever": ("symptom", r"\bfever\b|\btemperature\b|\bbukhar\b|बुखार|\bताप\b"),
     "cough": ("symptom", r"\bcough|\bkhansi\b|खांसी|खाँसी|खासी"),
-    "weakness": ("symptom", r"\bweak(?:ness)?\b|\bkamzor(?:i)?\b|कमज़?ोर|कमज़?ोरी"),
+    "weakness": ("symptom", r"\bweak(?:ness)?\b|\bkamzor(?:i)?\b|\bthak(?:a|aan|an|aavat|gaya|gayi|gaye)?\b|\btired(?:ness)?\b|\bfatigue\b|कमज़?ोर|कमज़?ोरी|थका|थकान|थक"),
     "pain": ("symptom", r"\bpain\b|\bdard\b|दर्द"),
     "stomach_upset": ("symptom", r"vomit|\bulti\b|उल्टी|diarrh?oea|loose motion|\bdast\b|दस्त|acidity|\bgas\b|एसिडिटी|गैस"),
     "bp_sugar_check": ("symptom", r"\bbp\b|blood pressure|बीपी|बी पी"),

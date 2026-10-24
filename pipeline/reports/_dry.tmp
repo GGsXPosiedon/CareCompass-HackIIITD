@@ -1,0 +1,37 @@
+# Stage 7a: retrieval baselines and follow-up bank
+
+66 unique texts, 20 families, leave-one-family-out, k=5. Classes: 5 care types + ask_followup. With this little data treat differences of a few points as noise.
+
+## Retrieval kNN routing
+
+### dry-run-hash  (0.0s)
+
+| method | macro_f1 | accuracy | emergency_recall | emergency_fn | over_triage |
+|---|---|---|---|---|---|
+| bm25 | 0.326 | 0.348 | 0.333 | 6 | 1 |
+| dense | 0.379 | 0.379 | 0.111 | 8 | 3 |
+| hybrid | 0.29 | 0.333 | 0.444 | 5 | 2 |
+
+## Follow-up question bank (rule selection, no model)
+
+| id | message | first question asked | expected | ok |
+|---|---|---|---|---|
+| f01 | I have knee pain | kn_injury | kn_injury | yes |
+| f02 | mujhe ghutne me dard hai | kn_injury | kn_injury | yes |
+| f03 | मेरे घुटने में दर्द है | kn_injury | kn_injury | yes |
+| f04 | knee pain after a fall | kn_swelling | kn_swelling | yes |
+| f05 | knee pain and fever since two days | kn_injury | kn_injury | yes |
+| f06 | back pain | bk_numb | bk_numb | yes |
+| f07 | kamar dard hai | bk_numb | bk_numb | yes |
+| f08 | I have a headache | hd_sudden | hd_sudden | yes |
+| f09 | sir dard aur bukhar | hd_sudden | hd_sudden | yes |
+| f10 | stomach pain and vomiting | st_severe | st_severe | yes |
+| f11 | pet dard hai | st_severe | st_severe | yes |
+| f12 | vomiting since morning | vm_blood | vm_blood | yes |
+| f13 | loose motions since yesterday | ls_dehydration | ls_dehydration | yes |
+| f14 | dast ho rahe hain | ls_dehydration | ls_dehydration | yes |
+| f15 | feeling dizzy | dz_faint | dz_faint | yes |
+| f16 | fever for 3 days | fv_breath | fv_breath | yes |
+| f17 | fever and cough | fv_breath | fv_breath | yes |
+| f18 | cough with no difficulty breathing | ch_blood | ch_blood | yes |
+| f19 | I feel itchy all over | None | None | yes |

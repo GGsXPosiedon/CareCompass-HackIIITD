@@ -1,0 +1,23 @@
+# INTERIM taxonomy: the team chose the CSV vocabulary as the output vocabulary on 2026-10-24.
+# This is NOT organizer-approved. Replace with the official taxonomy when it is published.
+version: interim-csv-v0.1
+status: interim_team_decision
+decided_by: team (Aryan), 2026-10-24
+care_types:
+  - home_nursing
+  - emergency_112
+  - lab_test_home
+  - teleconsultation
+  - paramedic_home_visit
+urgencies:
+  - scheduled
+  - same_day
+  - emergency
+# Safety invariants only. No other care/urgency coupling is enforced: the CSV happens to be
+# perfectly coupled, and that is something to test against, not to hard-code.
+pair_rules:
+  - if_care_type: emergency_112
+    require_urgency: emergency
+  - if_urgency: emergency
+    require_care_type: emergency_112
+needs_clinical_review: true

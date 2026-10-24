@@ -1,0 +1,224 @@
+# Concept registry for the rule-based extractor. STATUS: draft, authored by the engineering assistant from
+# the 66 CareCompass utterances plus common spellings. NOT clinician-reviewed. It is deliberately narrow:
+# a symptom that is not listed is not extracted (the extractor then asks for clarification, never assumes absence).
+# Variants are matched on tokens, case-insensitively; Devanagari is matched without nukta / chandrabindu.
+version: draft-0.1
+review_status: unreviewed
+concepts:
+  collapse:
+    category: symptom
+    en: ["collapsed", "fainted", "passed out", "fell down", "suddenly fell"]
+    hi: ["गिर गए", "गिर गया", "गिर गई"]
+    hinglish: ["gir gaye", "gir gaya", "gir gayi", "gir gae"]
+  unresponsive:
+    category: symptom
+    en: ["not responding", "unresponsive", "unconscious", "won't wake up", "not waking up", "not responding to"]
+    hi: ["जवाब नहीं दे", "बेहोश", "होश में नहीं", "जवाब नही दे"]
+    hinglish: ["response nahi de", "jawab nahi de", "jawaab nahi de", "behosh", "hosh me nahi", "response nhi de"]
+  bleeding_heavy:
+    category: symptom
+    en: ["heavy bleeding", "severe bleeding", "bleeding won't stop", "bleeding that won't stop", "bleeding is not stopping", "bleeding not stopping", "blood won't stop"]
+    hi: ["खून नहीं रुक", "खून नही रुक", "खून बहुत बह"]
+    hinglish: ["bleeding ruk nahi", "bleeding nahi ruk", "khoon nahi ruk", "khun nahi ruk", "bleeding ruk nhi", "khoon bahut beh"]
+  bleeding:
+    category: symptom
+    en: ["bleeding", "bleed"]
+    hi: ["खून"]
+    hinglish: ["khoon", "khun"]
+  accident_trauma:
+    category: context
+    en: ["accident", "road accident"]
+    hi: ["एक्सीडेंट", "दुर्घटना"]
+    hinglish: ["accident", "accidant"]
+  chest_pain:
+    category: symptom
+    en: ["chest pain", "pain in chest", "pain in the chest"]
+    hi: ["सीने में दर्द", "सीने मे दर्द", "छाती में दर्द", "सीने का दर्द"]
+    hinglish: ["chest pain", "seene me dard", "seene mein dard", "sine me dard", "chhati me dard", "chaati me dard"]
+  breathlessness:
+    category: symptom
+    en: ["can't breathe", "cannot breathe", "cant breathe", "difficulty breathing", "short of breath", "shortness of breath", "breathless", "breathlessness", "trouble breathing", "struggling to breathe"]
+    hi: ["सांस नहीं आ", "सांस नही आ", "सांस लेने में तकलीफ", "सांस लेने में दिक्कत", "सांस फूल"]
+    hinglish: ["saans nahi aa", "saans nhi aa", "sans nahi aa", "saas nahi aa", "saans lene me dikkat", "saans lene mein takleef", "saans phool"]
+  weakness:
+    category: symptom
+    en: ["weak", "weakness"]
+    hi: ["कमजोर", "कमजोरी"]
+    hinglish: ["kamzor", "kamjor", "kamzori", "kamjori"]
+  not_eating:
+    category: symptom
+    en: ["not eating", "won't eat", "refusing food", "loss of appetite"]
+    hi: ["खाना नहीं खा", "कुछ नहीं खा"]
+    hinglish: ["khana nahi kha", "khana nhi kha", "kuch nahi kha"]
+  fever:
+    category: symptom
+    en: ["fever", "high temperature"]
+    hi: ["बुखार"]
+    hinglish: ["bukhar", "bukhaar", "bukar", "bukhaar"]
+  cough:
+    category: symptom
+    en: ["cough", "coughing"]
+    hi: ["खांसी", "खासी"]
+    hinglish: ["khansi", "khaansi", "khasi", "khasi"]
+  acidity_gas:
+    category: symptom
+    en: ["acidity", "gas", "acid reflux", "heartburn", "indigestion"]
+    hi: ["एसिडिटी", "गैस", "अपच"]
+    hinglish: []
+  wound:
+    category: symptom
+    en: ["wound", "bedsore", "bed sore", "pressure sore"]
+    hi: ["घाव", "जख्म"]
+    hinglish: ["ghav", "ghaav", "zakhm"]
+  surgery_recent:
+    category: context
+    en: ["after surgery", "post operative", "post op", "postop", "after operation", "after the operation"]
+    hi: ["ऑपरेशन के बाद", "सर्जरी के बाद"]
+    hinglish: ["operation ke baad", "surgery ke baad"]
+  injection:
+    category: request
+    en: ["im injection", "injection", "injections"]
+    hi: ["इंजेक्शन"]
+    hinglish: ["injection", "injaction"]
+  insulin:
+    category: request
+    en: ["insulin"]
+    hi: ["इंसुलिन"]
+    hinglish: []
+  dressing:
+    category: request
+    en: ["wound dressing", "dressing change", "dressing", "bandage"]
+    hi: ["ड्रेसिंग", "पट्टी"]
+    hinglish: ["patti", "pattee"]
+  blood_sugar:
+    category: request
+    en: ["blood sugar", "sugar level", "glucose", "sugar"]
+    hi: ["शुगर", "ब्लड शुगर"]
+    hinglish: ["shugar"]
+  bp:
+    category: request
+    en: ["bp", "blood pressure"]
+    hi: ["बीपी", "ब्लड प्रेशर"]
+    hinglish: []
+  cbc:
+    category: request
+    en: ["cbc", "complete blood count"]
+    hi: ["सीबीसी"]
+    hinglish: []
+  thyroid:
+    category: request
+    en: ["thyroid"]
+    hi: ["थायराइड"]
+    hinglish: []
+  lab_test:
+    category: request
+    en: ["lab test", "blood test", "test", "tests"]
+    hi: ["टेस्ट"]
+    hinglish: []
+  full_body_checkup:
+    category: request
+    en: ["full body checkup", "full body check up"]
+    hi: ["फुल बॉडी चेकअप", "फुल बॉडी चेक अप"]
+    hinglish: []
+  health_checkup:
+    category: request
+    en: ["checkup", "check up", "health check"]
+    hi: ["जांच", "चेकअप"]
+    hinglish: ["jaanch", "jaach"]
+  sample_collection:
+    category: request
+    en: ["sample collection", "home collection", "sample"]
+    hi: ["सैंपल", "सैम्पल"]
+    hinglish: []
+  second_opinion:
+    category: request
+    en: ["second opinion"]
+    hi: ["सेकंड ओपिनियन"]
+    hinglish: []
+  medication:
+    category: context
+    en: ["prescription", "medicine", "medicines"]
+    hi: ["दवा", "दवाई"]
+    hinglish: ["dawa", "dawai"]
+  medical_reports:
+    category: context
+    en: ["reports", "report", "test results", "lab results"]
+    hi: ["रिपोर्ट", "रिपोर्ट्स"]
+    hinglish: []
+  # --- generic concepts: they do not say what is wrong, so they never satisfy "enough information" ---
+  doctor_mention:
+    category: request
+    generic: true
+    en: ["doctor"]
+    hi: ["डॉक्टर"]
+    hinglish: []
+  consult_request:
+    category: request
+    generic: true
+    en: ["consult", "consultation", "talk to", "speak to", "advice"]
+    hi: ["सलाह", "बात करनी", "बात करना", "परामर्श"]
+    hinglish: ["salah", "baat karni", "baat karna"]
+  help_request:
+    category: request
+    generic: true
+    en: ["help"]
+    hi: ["मदद"]
+    hinglish: ["madad"]
+  booking_intent:
+    category: request
+    generic: true
+    en: ["book"]
+    hi: ["बुक"]
+    hinglish: []
+  knee_pain:
+    category: symptom
+    en: ["knee pain", "pain in knee", "pain in my knee", "pain in the knee", "knee hurts", "knee ache"]
+    hi: ["घुटने में दर्द", "घुटने मे दर्द", "घुटनों में दर्द", "घुटने का दर्द"]
+    hinglish: ["ghutne me dard", "ghutne mein dard", "ghutno me dard", "ghutne ka dard", "knee me dard", "knee mein dard"]
+  back_pain:
+    category: symptom
+    en: ["back pain", "backache", "pain in back", "pain in my back", "lower back pain"]
+    hi: ["पीठ में दर्द", "पीठ दर्द", "कमर दर्द", "कमर में दर्द"]
+    hinglish: ["peeth me dard", "peeth mein dard", "kamar me dard", "kamar mein dard", "kamar dard"]
+  headache:
+    category: symptom
+    en: ["headache", "head ache", "head hurts", "pain in head"]
+    hi: ["सिरदर्द", "सिर दर्द", "सर दर्द", "सिर में दर्द", "सर में दर्द"]
+    hinglish: ["sir dard", "sar dard", "sirdard", "sardard", "sir me dard", "sar me dard"]
+  stomach_pain:
+    category: symptom
+    en: ["stomach pain", "stomach ache", "stomachache", "abdominal pain", "belly pain", "tummy pain"]
+    hi: ["पेट दर्द", "पेट में दर्द", "पेट मे दर्द"]
+    hinglish: ["pet dard", "pet me dard", "pet mein dard"]
+  vomiting:
+    category: symptom
+    en: ["vomiting", "vomit", "vomits", "throwing up", "nausea"]
+    hi: ["उल्टी", "उलटी", "मतली"]
+    hinglish: ["ulti", "ulti ho rahi", "ulti aa rahi"]
+  loose_motions:
+    category: symptom
+    en: ["diarrhea", "diarrhoea", "loose motions", "loose motion", "loose stools"]
+    hi: ["दस्त", "पतले दस्त"]
+    hinglish: ["dast", "loose motion", "patle dast"]
+  dizziness:
+    category: symptom
+    en: ["dizziness", "dizzy", "giddiness", "light headed", "lightheaded"]
+    hi: ["चक्कर", "चक्कर आ रहे"]
+    hinglish: ["chakkar", "chakkar aa rahe", "chakkar aa raha"]
+  fall_injury:
+    category: context
+    en: ["a fall", "fell", "fallen", "slipped", "injury", "injured", "hurt it"]
+    hi: ["गिरने", "गिर पड़ा", "चोट"]
+    hinglish: ["girne", "gir pada", "chot", "chot lagi"]
+
+relations:
+  father: ["father", "dad", "papa", "pita", "pitaji", "पापा", "पिता", "पिताजी"]
+  mother: ["mother", "mom", "mummy", "maa", "mataji", "माँ", "मम्मी", "माता"]
+  wife: ["wife", "patni", "biwi", "पत्नी", "बीवी"]
+  husband: ["husband", "pati", "पति"]
+  grandmother: ["grandmother", "grandma", "dadi", "nani", "दादी", "नानी"]
+  grandfather: ["grandfather", "grandpa", "dada", "dadaji", "nana", "nanaji", "दादा", "दादाजी", "नाना"]
+  child: ["child", "kid", "baby", "bacche", "bachche", "bachcha", "बच्चे", "बच्चा", "बेटा", "बेटी", "son", "daughter", "beta", "beti"]
+  sibling: ["brother", "sister", "bhai", "behen", "bhaiya", "didi", "भाई", "बहन"]
+first_person: ["i", "me", "my", "mujhe", "main", "mera", "meri", "मुझे", "मैं", "मेरा", "मेरी"]
+third_person: ["he", "she", "him", "her", "his", "they", "wo", "woh", "vo", "वो", "वह"]

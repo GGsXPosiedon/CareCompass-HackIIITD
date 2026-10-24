@@ -43,7 +43,7 @@ def test_red_flags_escalate_without_caregivers(client, text, flags):
     "text",
     [
         "no chest pain, just mild fever since morning",
-        "papa ko bukhar hai, seene me dard nahi hai",
+        "papa ko do din se bukhar hai, seene me dard nahi hai",
         "She is breathing normally, only cough",
     ],
 )
@@ -91,5 +91,5 @@ def test_model_guard_escalation_has_no_caregivers(pipeline):
     pipeline.router = Alarmist()
     from app.schemas.external import TriageRequest
 
-    resp = pipeline.triage(TriageRequest(**req("mummy ko bukhar hai")))
+    resp = pipeline.triage(TriageRequest(**req("mummy ko do din se bukhar hai")))
     assert resp.care_type == "emergency_112" and resp.matched_caregivers == []

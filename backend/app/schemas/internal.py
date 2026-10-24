@@ -24,6 +24,8 @@ class CaseFacts:
     latest_input: str = ""
     history: list = field(default_factory=list)  # [{'role','content'}]
     patient_context: Optional[dict] = None  # sanitised, client-supplied profile data
+    safety_text_norm: str = ""  # ALL user text; the red-flag rules read this, never the scoped text
+    analysis: Optional[object] = None  # dialogue.Analysis (intent, scoped context, slots)
 
     def present(self, concept: str) -> bool:
         return self.concepts.get(concept) == FactStatus.PRESENT

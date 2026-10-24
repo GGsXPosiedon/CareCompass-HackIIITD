@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from ..config import get_settings
 from ..schemas.internal import CaseFacts, RouteDecision
+from . import dialogue
 
 QUESTIONS = {
     "en": "Happy to help. What kind of care do you need?",
@@ -21,6 +22,12 @@ def should_ask(facts: CaseFacts, decision: RouteDecision) -> bool:
 
 
 def next_question(facts: CaseFacts) -> tuple[str, list[str]]:
+    """Symptom-specific slot question when we know the symptom, otherwise the generic 'what care do you need?'."""
+    a = facts.analysis
+    if a is not None:
+        q = dialogue.next_slot_question(a)
+        if q:
+            return q.message, q.options or []
     lang = facts.language
     if facts.n_follow_ups_asked:
         return {
