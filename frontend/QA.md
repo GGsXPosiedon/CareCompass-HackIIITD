@@ -73,3 +73,17 @@ The real backend is absent. Live triage, actual appointments, authentication, AB
 The frontend design inspector could not launch its own browser in this environment (`spawn EPERM`), so visual checks used the connected in-app browser. The source design lint reported zero failures; its two warnings were intentional date zero-padding and the floating dialog's shadow.
 
 The latest user-supplied ChatGPT screenshot and Claude-like type direction replace the earlier unselected generated landing-page concepts. The implemented landing screen is a working care intake, not a marketing page.
+
+
+## Chat viewport and interaction regression checks
+
+Local browser checks used a synthetic HTTP server on port 8002 and an isolated frontend on port 5176; no health data or provider credentials were sent externally.
+
+- The first sent message appears immediately with a thinking state and an available stop control.
+- Long replies stay inside the message viewport; the header, sidebar and composer remain stationary.
+- Scrolling upward during a pending reply preserves the reading position after completion, with a working jump-to-latest control.
+- Stop cancels a response; retry resends the uncommitted message with the same history length and no duplicated committed turn.
+- A draft typed while waiting is retained after the response arrives.
+- Navigation remains on the selected page after a pending response is cancelled.
+- Typed chat replies do not automatically request speech playback.
+- Build and 58 frontend tests pass. Real microphone capture and speech quality still require checking on the target device.

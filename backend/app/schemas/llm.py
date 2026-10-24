@@ -56,6 +56,8 @@ class TriageAssessment(_Strict):
 
     care_type: Optional[LLMCareType] = Field(description="null only when one more fact is genuinely needed")
     confidence: Confidence
+    urgency: Optional[Literal["scheduled", "same_day", "emergency"]] = Field(
+        default=None, description="Urgency of this need; not inferred solely from the service. null while clarifying.")
     red_flags: Annotated[list[RedFlag], Capped(9)] = Field(default_factory=list)
     follow_up_question: Optional[Text(220)] = None
     answer_options: Annotated[list[Text(40)], Capped(4)] = Field(default_factory=list)

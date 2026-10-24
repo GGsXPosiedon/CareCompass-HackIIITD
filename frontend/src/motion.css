@@ -97,3 +97,12 @@ html[data-care-motion="full"] {
   from { transform: rotate(-20deg); }
   to { transform: none; }
 }
+/* Short compositor-only transitions; scrolling never waits for an animation. */
+html[data-care-motion="full"] .care-conversation .chat-bubble { animation:care-message-arrive 180ms cubic-bezier(.2,.7,.2,1); }
+html[data-care-motion="full"] .care-conversation .chat-bubble[data-animate="false"] { animation:none; }
+html[data-care-motion="full"] .care-chat-next { animation:care-reveal 200ms ease-out; }
+html[data-care-motion="full"] .care-chat-thinking { animation:care-reveal 160ms ease-out; }
+html[data-care-motion="full"] .care-stage { transition:none; }
+@media(prefers-reduced-motion:reduce) {
+  .care-shell *,.care-shell *::before,.care-shell *::after { animation:none !important; transition:none !important; scroll-behavior:auto !important; }
+}

@@ -5,6 +5,7 @@ import { VoiceLanguageContext, VoiceResponseContext, VoiceConversationContext, V
 import { recordStream, registerVoiceStop, stopAllVoice, supportsRecording, synthesize, transcribe, voiceConfig } from '../voice/client';
 import type { Recording, VoiceConfig } from '../voice/client';
 import { primeVoicePlayback, scheduleResponseVoice, voicePlaybackContext } from '../voice/playback';
+import { recognitionLocale, spokenLanguage } from '../voice/locale';
 
 interface Recognition {
   lang: string; continuous: boolean; interimResults: boolean;
@@ -76,7 +77,7 @@ export function VoiceInput({ copy, hindi, disabled, onTranscript }: { copy: Copy
         const Speech = (window as SpeechWindow).SpeechRecognition ?? (window as SpeechWindow).webkitSpeechRecognition;
         if (!Speech) { setNotice(copy.voiceUnsupported); setPhase('idle'); return; }
         const next = new Speech(); recognition.current = next;
-        next.lang = language === 'hi' || language === 'hinglish' ? 'hi-IN' : 'en-IN';
+        next.lang = recognitionLocale(language);
         next.continuous = false; next.interimResults = false;
         next.onresult = event => {
           if (id !== generation.current) return;
@@ -100,11 +101,11 @@ export function VoiceInput({ copy, hindi, disabled, onTranscript }: { copy: Copy
   </div>;
 }
 
-export function ReadAloud({ text, copy, hindi }: { text: string; copy: Copy; hindi: boolean }) {
+export function ReadAloud({ text, copy, hindi, autoPlay = true }: { text: string; copy: Copy; hindi: boolean; autoPlay?: boolean }) {
   const response = useContext(VoiceResponseContext);
   const conversationActive = useContext(VoiceSessionActiveContext);
   const selectedLanguage = useContext(VoiceLanguageContext);
-  const language = hindi ? 'hi' : selectedLanguage;
+  const language = spokenLanguage(hindi ? 'hi' : selectedLanguage, text);
   const [phase, setPhase] = useState<'idle' | 'loading' | 'playing'>('idle');
   const [notice, setNotice] = useState('');
   const request = useRef<AbortController | null>(null), generation = useRef(0), mounted = useRef(false);
@@ -159,10 +160,10 @@ export function ReadAloud({ text, copy, hindi }: { text: string; copy: Copy; hin
   const playResponse = useRef(() => {});
   playResponse.current = () => { if (!document.hidden) void read(true); };
   useEffect(() => {
-    if (!response || !text.trim()) return;
+    if (!autoPlay || !response || !text.trim()) return;
     if (conversationActive) return scheduleResponseVoice(response, () => {});
     return scheduleResponseVoice(response, () => playResponse.current());
-  }, [response, text, language, conversationActive]);
+  }, [response, text, language, conversationActive, autoPlay]);
   return <span className="read-aloud"><button type="button" className="text-button" onClick={() => void read()} aria-pressed={phase !== 'idle'}>
     {phase === 'idle' ? <Volume2 size={17}/> : <Square size={17}/>} {phase === 'loading' ? copy.voicePreparing : phase === 'playing' ? copy.voiceStopPlayback : copy.readAloud}
   </button>{notice ? <span role="status" className="small muted voice-output-notice">{notice}</span> : null}</span>;

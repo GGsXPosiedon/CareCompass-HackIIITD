@@ -9,9 +9,9 @@ const BASE = String(import.meta.env.VITE_API_BASE_URL || '/api');
 const delay = () => new Promise(resolve => setTimeout(resolve, 550));
 
 const request = createJsonRequest(BASE);
-export async function intake(payload: IntakeRequest): Promise<TriageResponse> {
-  if (DEMO_MODE) { await delay(); return mockIntake(payload); }
-  return validateTriage(await request('/triage', payload));
+export async function intake(payload: IntakeRequest, signal?: AbortSignal): Promise<TriageResponse> {
+  if (DEMO_MODE) { await delay(); signal?.throwIfAborted(); return mockIntake(payload); }
+  return validateTriage(await request('/triage', payload, signal));
 }
 export async function getCaregivers(ids: string[], opts: { careType?: string | null; lat?: number; lng?: number; date?: string } = {}): Promise<Caregiver[]> {
   if (DEMO_MODE) { await delay(); return caregivers.filter(c => ids.includes(c.id)); }

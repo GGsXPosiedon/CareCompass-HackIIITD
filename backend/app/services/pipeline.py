@@ -42,6 +42,17 @@ class Pipeline:
 
     def run(self, req: TriageRequest) -> tuple[TriageResponse, dict]:
         resp, state = self.graph.run(req)
+        resp.response_language = state["facts"].language
+        if state["rule_safety"].requires_emergency:
+            resp.response_source = "safety_rules"
+        else:
+            resp.response_source = "gemini" if state.get("llm_triage") is not None else "rules"
+            if state.get("llm_triage") is None or state.get("llm_safety") is None:
+                resp.service_notice = {
+                    "en": "Gemini could not complete all checks. Limited fallback rules were used for this reply.",
+                    "hi": "Gemini उपलब्ध नहीं है या उत्तर सही नहीं था। यह जवाब सीमित वैकल्पिक नियमों पर आधारित है।",
+                    "hinglish": "Gemini available nahi hai ya response sahi nahi tha. Yeh reply limited fallback rules se hai.",
+                }[state["facts"].language]
         h = hashlib.sha256(state["facts"].text_norm.encode()).hexdigest()[:10]  # no raw text in logs
         log.info("case=%s care_type=%s flags=%s path=%s", h, resp.care_type, resp.red_flags, [t["node"] for t in state["trace"]])
         return resp, state

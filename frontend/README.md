@@ -1,10 +1,10 @@
 # CareCompass
 
-A minimal, responsive patient-facing frontend for the Hack IIITD care-navigation challenge. The app opens directly into a conversational care request: describe the need → answer follow-ups → review a recommendation → choose a caregiver and time → confirm a demo booking. The dark, spacious layout follows the user's ChatGPT screenshot, with locally bundled Lora serif headings inspired by Claude's typographic feel. CareCompass retains its own name and compass mark.
+A minimal, responsive patient-facing frontend for the Hack IIITD care-navigation challenge. The app opens directly into a conversational care request: describe the need → answer follow-ups → review a recommendation → choose a caregiver and time → confirm a demo booking. The light, spacious layout uses a continuing chat thread and a recent-conversations sidebar, with locally bundled Lora serif headings inspired by Claude's typographic feel. CareCompass retains its own name and compass mark.
 
 ## Start here: find care
 
-The header's sun/moon button switches the **entire app** between dark and light mode. Find care, My bookings, Briefcase, health services, inputs and dialogs always share the selected mode. Dark mode is the initial state; the current choice is retained while navigating in this tab. No patient data is written to local storage.
+**Settings** at the bottom of the sidebar contains **Profile & family** and the **Light / Dark** appearance controls for the entire app. Find care, My bookings, Briefcase, health services, inputs and dialogs always share the selected mode. Light mode is the initial state; the current choice is retained while navigating in this tab. Successful care conversations are saved in this browser’s local storage; use the sidebar to rename or delete them. Profiles and files remain in memory.
 
 Open **Find care**, then choose **Fever & cough** (or switch to Hindi/Hinglish first).
 
@@ -14,13 +14,23 @@ Open **Find care**, then choose **Fever & cough** (or switch to Hindi/Hinglish f
 4. Choose a caregiver with remaining slots, select **Choose a time**, pick a time and select **Confirm demo booking**.
 5. View the confirmation, select **Download summary**, then open **My bookings**.
 
-The microphone opens **Start voice conversation**, a hands-free care conversation with an on-screen transcript and typing fallback. The sidebar contains **Find care**, **My bookings**, **Briefcase**, **Profile**, **Chat history** and **New request**. **My bookings** includes **Explore health services**. On mobile, open the menu to reach them. A new request keeps completed bookings in this tab; refreshing clears them.
+The microphone opens **Start voice conversation**, a hands-free care conversation with an on-screen transcript and typing fallback. The sidebar contains **Find care**, **My bookings**, **Briefcase**, **Chat history**, **Settings** and **New request**. **My bookings** includes **Explore health services**. On mobile, open the menu to reach them. A new request keeps completed bookings in this tab; refreshing clears them.
 
 ## Attachments and chat history
 
+Sidebar destinations have their own URLs: `/care`, `/bookings`, `/briefcase`, `/profile`, `/history`, `/services`, and `/settings`. Saved conversations open at `/chat/:id`. Links support direct loads, refresh, browser Back/Forward, and opening sidebar destinations in a new tab. Chat links can reopen only conversations saved in that browser. Unknown URLs show a missing-page message. Vite handles these paths locally; a production static host must serve `index.html` for frontend routes while keeping `/api/*` directed to the backend.
+
 The composer’s **+** button replaces the Myself / Family member selector. Choose **Lab reports and files** or **Photos and images** to select PDF, JPG or PNG files (up to 10 files, 10 MB each). Selected files appear with remove controls and are saved to the active profile’s Briefcase in this tab. File contents are not uploaded to the care API or analysed. Existing profile sharing can include record names in patient context.
 
-**Chat history**, beneath Profile, saves successful text and voice care conversations in this tab. Open an entry to read its transcript, then select **Open conversation** to resume a pending question or reopen the recommendation. Continuing updates the same thread; New request starts another. Opening an old response does not automatically replay audio. History and files clear on refresh; no account or persistent chat database is added.
+**Recents** in the sidebar saves successful text and voice care conversations on this device. Open a chat to continue its transcript, even after a recommendation. The sidebar shows only the five most recently updated conversations. Rename or delete a recent entry with the controls beside its title; older chats and their management controls remain in **Chat history**. **Chat history** also provides a full list. New request starts another thread. Opening an old response does not automatically replay audio. Chat history survives refresh; files and profiles do not. If browser storage is blocked or full, a notice explains that chats are retained only in the current tab. There is no account sync or server chat database.
+
+## Chat scrolling and response controls
+
+The transcript has its own scroll viewport; the reply box stays visible without covering messages. New messages follow the bottom only while you are near it. Scrolling up pauses following and shows a jump-to-latest button. Sending a new turn resumes following. Resize events are coalesced into one scroll update per frame; replies no longer reset the page scroll position.
+
+Sent text appears immediately, followed by a thinking indicator. **Stop response** aborts the HTTP request and ignores late results. **Retry response** resends the uncommitted turn without duplicating conversation history. You can draft the next message while waiting, and the response does not erase that draft. Navigation cancels a pending reply so it cannot redirect you back to chat. Replies include copy and optional read-aloud controls. Older messages do not reanimate when a saved chat opens. Reduced-motion preferences disable decorative animations.
+
+Gemini remains the only chat provider; no Groq or OpenAI-compatible key is required. The API still validates the complete care response before rendering it; the interface does not simulate token streaming of unvalidated medical output.
 
 ## Voice conversation
 
@@ -32,7 +42,7 @@ The composer’s **+** button replaces the Myself / Family member selector. Choo
 
 The chat composer includes the spoken transcript and listening, transcribing, thinking, speaking and paused states in both themes. Voice uses the current chat bar instead of a separate floating panel, including during follow-up questions. The microphone is off during spoken replies. This is turn-based conversation through the current care API; Sarvam supplies speech rather than the care answers. Supported browsers provide speech fallback when no Sarvam key is configured. Speech-provider failures pause the session with a retry control.
 
-Typed conversations retain automatic reply playback with **Stop playback** and **Read aloud** controls. Full key setup, language behavior and hosting instructions are in [VOICE.md](VOICE.md). Live Sarvam recognition accuracy and audio quality need a configured key and a microphone test on the target device.
+Typed conversations stay silent until **Read aloud** is selected. Voice conversation mode still speaks each response automatically. Full key setup, language behavior and hosting instructions are in [VOICE.md](VOICE.md). Live Sarvam recognition accuracy and audio quality need a configured key and a microphone test on the target device.
 
 ## Briefcase and health services
 
@@ -92,7 +102,7 @@ For an offline UI demonstration, explicitly set `VITE_DEMO_MODE=true` in `.env.l
 
 **This is a frontend prototype, not a clinical triage engine.** All cases, provider names, ratings, reviews, distances, availability and bookings are synthetic. `frontend/src/lib/mock.ts` deliberately returns preset outcomes to demonstrate screens. It is not a medically validated classifier, and arbitrary input must not be treated as assessed or safe.
 
-Use only made-up examples. No real patient data should be entered. Requests and bookings are held in this tab's memory, with no localStorage or analytics. Refreshing clears them. Configured Sarvam voice sends recorded audio and spoken-reply text to Sarvam; browser fallback may use the browser vendor's speech service. See [VOICE.md](VOICE.md).
+Use only made-up examples. No real patient data should be entered. Successful conversation text is saved in local browser storage until deleted through the sidebar. Profiles, files and bookings are held in memory and clear on refresh. Configured Sarvam voice sends recorded audio and spoken-reply text to Sarvam; browser fallback may use the browser vendor's speech service. See [VOICE.md](VOICE.md).
 
 The emergency button is a `tel:112` link and opens the device dialler only after a user selects it. It never calls automatically. The number is for India, verified against the [Government of India's Emergency Response Support System](https://112.gov.in/). Adapt emergency destinations before extending the demo to another country.
 
@@ -215,14 +225,22 @@ frontend/
 
 ## Validation and known limits
 
-`npm test` currently passes **51 checks**, including voice turn sequencing, silence, interruption, capture/playback cleanup, emergency termination, late-reply cancellation, and red-flag priority, sparse/conflicting emergency payloads, malformed responses, invalid rankings and profiles, multilingual demo escalation, two-question intake, no availability and past-slot exclusion. `npm run build` checks TypeScript and generates the production bundle.
+`npm test` currently passes **64 checks**, including voice turn sequencing, silence, interruption, capture/playback cleanup, emergency termination, late-reply cancellation, and red-flag priority, sparse/conflicting emergency payloads, malformed responses, invalid rankings and profiles, multilingual demo escalation, two-question intake, no availability and past-slot exclusion. `npm run build` checks TypeScript and generates the production bundle.
 
 Browser QA covers the full synthetic booking flow, English/Hindi layouts at 1440, 768 and 390 pixels, emergency escalation during follow-up, booking validation/history, empty availability, location changes and the simulated failure state. See `frontend/QA.md` for the final verification notes.
 
-Actual microphone capture, speech quality and permission-denial dialogs require manual verification on the target device. The real backend is not present in this repository and has not been validated. This frontend does not implement the team's model training, hidden-test prediction CSV, production dispatch, authentication, payments, or real medical decision support.
+Actual microphone capture, speech quality and permission-denial dialogs require manual verification on the target device. The FastAPI backend is in `../backend`; automated tests exercise its API and mocked Gemini responses. This frontend does not implement the team's model training, hidden-test prediction CSV, production dispatch, authentication, payments, or real medical decision support.
 
 ## Design and attribution
 
 Design reference: [Urban Company](https://www.urbancompany.com/) for service clarity and [Uber](https://www.uber.com/in/en/) for the compact request/selection/confirmation pattern. No logos, photos, text or proprietary components from either site are used. The CareCompass mark is an original SVG; caregiver identities are initials, not stock doctor portraits.
 
-React, Vite, TypeScript, Lucide icons and Fontsource fonts are declared in `frontend/package.json`; their licences remain with their packages. The app follows the Editorial greeting direction (seed `174117051`), adapted to a patient flow with sage surfaces and a custom care-journey rail. The dependency-free SVG chart helper in `frontend/public/health-charts.js` comes from the local frontend-design skill, with observer cleanup added. No model or external AI API is used by this frontend.
+React, Vite, TypeScript, Lucide icons and Fontsource fonts are declared in `frontend/package.json`; their licences remain with their packages. The app follows the Editorial greeting direction (seed `174117051`), adapted to a patient flow with sage surfaces and a custom care-journey rail. The dependency-free SVG chart helper in `frontend/public/health-charts.js` comes from the local frontend-design skill, with observer cleanup added. The frontend calls the FastAPI backend for Gemini-powered care navigation, and uses configured Sarvam or browser speech for voice.
+
+The desktop sidebar collapses into a 72px icon rail with an in-place expand control; navigation and Settings remain available. Collapse and theme preferences survive refresh. Mobile navigation uses its own drawer and returns to desktop mode when the viewport widens.
+
+## Back navigation and language preservation
+
+Supporting pages have a top-bar Back control. Direct Profile links return to Settings and direct Services links return to Bookings, with a safe Care fallback. This does not depend on whether the sidebar is expanded or collapsed. The Care landing page includes subtle decorative contour patterns.
+
+New conversations start in **Auto** language mode. Sarvam transcribes speech in the spoken language rather than translating it to English. Browser speech has no portable automatic detection; Auto uses Hindi recognition for the India-focused demo, while choosing English explicitly uses English recognition. Text and playback follow the resolved Hindi/Hinglish/English response language. Older saved chats retain their chosen language and can be switched to Auto from the language menu.

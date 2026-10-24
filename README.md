@@ -142,30 +142,10 @@ The **deterministic classifier slot** is rules today. A trained model plugs in t
 
 ### Installation
 
-1. Clone the repo
-   ```sh
-   git clone https://github.com/dipesh4000/CareCompass-HackIIITD.git
-   cd CareCompass-HackIIITD
-   ```
-2. Start the backend
-   ```sh
-   cd backend
-   uv sync
-   cp .env.example .env     # optional: add GEMINI_API_KEY, otherwise the rules path runs
-   uv run uvicorn app.main:app --reload
-   ```
-   API docs are at http://127.0.0.1:8000/docs
-3. Start the frontend in a second terminal
-   ```sh
-   cd frontend
-   npm install
-   VITE_API_BASE_URL=http://127.0.0.1:8000 npm run dev
-   ```
-   On PowerShell: `$env:VITE_API_BASE_URL="http://127.0.0.1:8000"; npm run dev`. Leave the variable unset for the offline demo. The app opens at http://127.0.0.1:5173
-4. Run the tests (89, no network)
-   ```sh
-   cd backend && uv run pytest -q
-   ```
+
+On Windows, double-click [`start.cmd`](start.cmd) (or run `.\start.cmd` in PowerShell) to start both servers. Install the prerequisites above first. The launcher syncs backend dependencies, installs frontend dependencies when `node_modules` is missing, and opens the app at http://127.0.0.1:5173. It connects the frontend to the local backend, with offline demo mode disabled. Press **Ctrl+C** in each server window to stop, then close the windows.
+
+To start each server manually:
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -182,9 +162,9 @@ For a fresh clone, copy `frontend/.env.example` to `frontend/.env.local` first. 
 - Sarvam turns are limited to 25 seconds; about 1.25 seconds of quiet after speech submits a turn. Ten seconds without speech pauses capture.
 - Emergency guidance ends the conversation loop. Booking confirmation and emergency calls remain manual actions.
 
-The existing care backend supplies the answers; Sarvam provides speech recognition and speech synthesis. This is turn-based care conversation, with the microphone off during replies. Supported browsers provide speech fallback when Sarvam is not configured. Typed requests still get automatic voice replies with stop/replay controls.
+The existing care backend supplies the answers; Sarvam provides speech recognition and speech synthesis. This is turn-based care conversation, with the microphone off during replies. Supported browsers provide speech fallback when Sarvam is not configured. Typed chat replies stay silent until **Read aloud** is selected; voice conversation mode speaks automatically.
 
-The frontend build and **51 automated tests** pass, including turn sequencing, interruption, microphone cleanup, silence handling, emergency termination and late-reply cancellation. Live Sarvam recognition accuracy and audio quality still require a configured key and microphone test. See the [frontend guide](frontend/README.md#voice-conversation) and [full voice setup](frontend/VOICE.md).
+The frontend build and **64 automated tests** pass, including turn sequencing, interruption, microphone cleanup, silence handling, emergency termination and late-reply cancellation. Live Sarvam recognition accuracy and audio quality still require a configured key and microphone test. See the [frontend guide](frontend/README.md#voice-conversation) and [full voice setup](frontend/VOICE.md).
 
 
 <!-- USAGE -->
@@ -341,3 +321,5 @@ CareCompass is care navigation, not diagnosis or prescription. All caregivers an
 [gemini-url]: https://ai.google.dev/
 [uv-shield]: https://img.shields.io/badge/uv-DE5FE9?style=for-the-badge&logo=astral&logoColor=white
 [uv-url]: https://docs.astral.sh/uv/
+
+Project readiness, fixes and remaining submission deliverables are documented in [the problem-statement audit](docs/PROJECT_AUDIT.md).

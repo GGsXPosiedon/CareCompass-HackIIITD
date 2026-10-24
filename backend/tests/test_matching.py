@@ -4,13 +4,13 @@ from app.config import ROLE_BY_CARE_TYPE, get_settings
 from app.db.repository import CaregiverRepository
 from app.schemas.external import Location
 from app.services.matching import Matcher, haversine_km
-from conftest import IST
+from conftest import IST, seed_settings
 
 LOC = Location(lat=28.54, lng=77.27)
 
 
 def make(hour=12):
-    s = get_settings()
+    s = seed_settings()
     return Matcher(CaregiverRepository(s.caregivers_path), s, now_fn=lambda: datetime(2026, 10, 24, hour, 0, tzinfo=IST))
 
 
@@ -70,3 +70,12 @@ def test_reason_only_uses_real_profile_fields():
     for c in res:
         cg = m.repo.get(c.caregiver_id)
         assert f"{cg.rating:.1f}" in c.reason or "km" in c.reason or cg.free_from in c.reason
+
+
+def test_fully_booked_caregiver_is_not_recommended():
+    matcher = make()
+    caregiver = matcher.repo.get('SYN_001')
+    for slot in matcher.slots_for(caregiver, matcher.now().date()):
+        matcher.repo.book(caregiver.caregiver_id, matcher.now().date().isoformat(), slot)
+    matches = matcher.match('paramedic_home_visit', 'same_day', [], set(), 'en', LOC)
+    assert caregiver.caregiver_id not in {candidate.caregiver_id for candidate in matches}

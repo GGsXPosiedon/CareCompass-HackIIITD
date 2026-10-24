@@ -9,7 +9,7 @@ export function validateTriage(value: unknown): TriageResponse {
   // Escalation must not be blocked by incomplete or conflicting non-emergency fields.
   const flags = Array.isArray(r.red_flags) ? r.red_flags.filter((flag): flag is string => typeof flag === 'string') : [];
   if (flags.length || r.urgency === 'emergency' || r.care_type === 'emergency_112') {
-    return { follow_up_question: null, care_type: 'emergency_112', urgency: 'emergency', red_flags: flags, reasoning: typeof r.reasoning === 'string' ? r.reasoning : '', matched_caregivers: [] };
+    return { follow_up_question: null, care_type: 'emergency_112', urgency: 'emergency', red_flags: flags, reasoning: typeof r.reasoning === 'string' ? r.reasoning : '', matched_caregivers: [], ...(r.response_language === 'hi' || r.response_language === 'en' || r.response_language === 'hinglish' ? { response_language: r.response_language } : {}) };
   }
   if (!(r.follow_up_question === null || (typeof r.follow_up_question === 'string' && r.follow_up_question.trim())) || !Array.isArray(r.red_flags) || !r.red_flags.every(f => typeof f === 'string') || typeof r.reasoning !== 'string' || !Array.isArray(r.matched_caregivers)) throw new Error('INVALID_RESPONSE');
   if (!(r.care_type === null || careTypes.has(String(r.care_type))) || !(r.urgency === null || urgencies.has(String(r.urgency)))) throw new Error('INVALID_RESPONSE');
