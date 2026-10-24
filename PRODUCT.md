@@ -24,6 +24,8 @@ The runnable app uses synthetic cases, caregiver profiles, records, vitals, remi
 
 ## Brand Commitments
 
+Family-workspace refinement: remove Ask CareCompass and Find care from its navigation, and remove the Home chat section. Preserve the approved dark conversational landing page and its fonts; the light family workspace remains secondary.
+
 CareCompass name and original compass SVG. User requests a minimalistic interface, references Urban Company and Uber for booking clarity, and Roojh for secondary patient workflows. Latest explicit direction (24 October 2026): build directly from the supplied ChatGPT screenshot with a dark, spacious chat interface and Claude-like typography. This specific reference replaces the earlier unselected visual-concept round and the teal-and-white landing direction. Use open-source Lora serif headings and locally bundled Instrument Sans interface text; preserve the lighter family workspace as a secondary surface. The main experience is the exact fever → follow-ups → recommendation → caregiver → time → demo confirmation → My bookings journey, rather than a health dashboard.
 
 ## Evidence on Hand

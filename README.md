@@ -16,7 +16,7 @@ The message box also includes **Speak instead**, with an editable transcript and
 
 ## Roojh-inspired patient workspace
 
-The secondary **Family workspace** link opens the Roojh-inspired family-health workspace, with these working frontend modules. Medications and Vitals are omitted from its navigation; their underlying demo data and components remain available to summaries and related workflows.
+The secondary **Family workspace** link opens the Roojh-inspired family-health workspace, with these working frontend modules. Ask CareCompass, Find care, Medications and Vitals are omitted from its navigation, and workspace Home has no chat composer. Home focuses on profiles, records and summaries. The main dark care-request landing page remains unchanged.
 
 | Module | Implemented behavior |
 | --- | --- |
@@ -27,7 +27,6 @@ The secondary **Family workspace** link opens the Roojh-inspired family-health w
 | Vitals | Blood pressure, glucose, heart rate, weight and SpO2 entry; 7/30/90-day history, trends, numeric validation and CSV export |
 | Labs | Lab-category browsing and links to the profile's laboratory documents and recorded readings |
 | Medications | Add/edit/pause/resume reminders, daily schedule, date range, mark taken/skipped and deduplicated dose history |
-| Ask CareCompass | Profile-aware scripted conversations, history/resume/delete, feedback, optional speech input/output and transcript export |
 | ABHA preview | Create/link consent flow using an intentionally invalid demo identity; unlink and download a clearly marked demo card |
 | Health services | Synthetic hospitals and nearby-service discovery, sample QR-payload linking, hospital switching, appointment/token request previews, history and cancellation |
 | Messages & updates | Read/unread activity, in-tab due-reminder notices, persistent per-profile local text/image/audio/video message previews |

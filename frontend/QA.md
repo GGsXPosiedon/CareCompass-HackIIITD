@@ -2,6 +2,8 @@
 
 Current checkpoint: focused care entry with a dark conversational shell and serif headings, plus the secondary Roojh-inspired patient workspace.
 
+Family-workspace cleanup: Ask CareCompass and Find care were removed from desktop/mobile workspace menus, and the workspace Home chat section and summary assistant shortcut were removed. The main dark CareShell landing page and its fonts are preserved.
+
 ## Focused care entry — 24 October 2026
 
 - Full English browser journey exercised in the new shell: Fever & cough → Find the right care → age → No to the synthetic emergency question → recommendation → caregiver → remaining time → Confirm demo booking → confirmation → Download summary action → My bookings.

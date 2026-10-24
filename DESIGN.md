@@ -133,6 +133,8 @@ components:
 
 ## Overview
 
+Family-workspace navigation refinement: omit Ask CareCompass and Find care, and omit the chat composer on its Home page. Preserve the primary dark landing page and the secondary workspace's existing light typography and palette.
+
 **Creative North Star: "A quiet conversation toward care"**
 
 CareCompass uses a dark, spacious conversational shell with a warm serif question and restrained sans-serif controls. The approved ChatGPT-like spatial model and Claude-like type character guide the primary experience; Lora is an open-source approximation of that serif character. The original compass mark and CareCompass name remain the identity anchors.

@@ -1,4 +1,4 @@
-export type HealthPage = 'home' | 'records' | 'summary' | 'vitals' | 'labs' | 'medications' | 'ask' | 'family' | 'abha' | 'services' | 'messages' | 'settings' | 'care' | 'appointments';
+export type HealthPage = 'home' | 'records' | 'summary' | 'vitals' | 'labs' | 'medications' | 'family' | 'abha' | 'services' | 'messages' | 'settings' | 'care' | 'appointments';
 export interface Member { id: string; name: string; relation: string; age: number; initials: string; tint: string; bloodGroup: string; allergies: string[] }
 export type RecordCategory = 'Lab report' | 'Prescription' | 'Radiology' | 'Cardiology' | 'Vaccination' | 'Consultation';
 export interface HealthRecord { id: string; memberId: string; title: string; category: RecordCategory; date: string; source: string; status: 'Sample reviewed' | 'Awaiting extraction'; description: string; url?: string; fileType?: string; tags: string[] }
