@@ -175,7 +175,7 @@ The **deterministic classifier slot** is rules today. A trained model plugs in t
 
 For a fresh clone, copy `frontend/.env.example` to `frontend/.env.local` first. See [voice setup](frontend/VOICE.md) for local and Vercel configuration. The key stays server-side; no Python backend speech changes are required.
 
-**Hands-free conversation:** open **Find care**, press the microphone (**Start voice conversation**) and allow microphone access. Speak, then pause; the app transcribes and submits your turn, speaks the care backend's reply and listens again. A transcript and listening, transcribing, thinking and speaking states appear in the voice panel.
+**Hands-free conversation:** open **Find care**, press the microphone (**Start voice conversation**) and allow microphone access. Speak, then pause; the app transcribes and submits your turn, speaks the care backend's reply and listens again. A transcript and listening, transcribing, thinking and speaking states appear inside the chat composer, without a separate floating panel.
 
 - **Done speaking** ends the current recording; **Speak now** interrupts a reply and starts listening.
 - **Pause / Resume listening** controls capture. **End voice conversation**, Escape, navigation and hiding the tab end the session.

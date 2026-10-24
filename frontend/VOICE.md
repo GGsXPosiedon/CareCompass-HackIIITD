@@ -17,7 +17,7 @@ CareCompass builds on GD Arena's short-recording → server transcription → ge
 
 4. Restart `npm run dev` and reload the browser. `/api/voice` should return `{"provider":"sarvam","maxSeconds":25}`. It never returns the key.
 5. Press the microphone (**Start voice conversation**) on Find care and grant microphone access. Speak your care need, then pause. With Sarvam configured, about 1.25 seconds of quiet after speech ends a turn; **Done speaking** also submits it. Turns are capped at 25 seconds.
-6. The app transcribes and sends the turn to the existing care backend, displays its question or recommendation, speaks it, then listens for your next answer. A transcript stays in the voice panel. A follow-up answer retains the existing care conversation history.
+6. The app transcribes and sends the turn to the existing care backend, displays its question or recommendation, speaks it, then listens for your next answer. Your spoken transcript and voice controls appear inside the chat composer, with no floating panel. Full conversations remain available in Chat history. A follow-up answer retains the existing care conversation history.
 7. **Speak now** interrupts a spoken reply and opens the microphone. **Pause** turns the microphone off; **Resume listening** continues. **End voice conversation**, Escape, navigating away or hiding the tab ends the session. No speech for 10 seconds pauses Sarvam capture instead of repeatedly sending silent requests.
 8. Emergency guidance is spoken and stops the conversation loop. Use **View emergency guidance** to return to the emergency screen. Voice never books appointments or calls a number; use the existing caregiver and booking controls.
 
@@ -68,7 +68,7 @@ Microphone recording requires HTTPS or localhost and browser support for `getUse
 
 `npm test` includes WAV conversion, silence, language payloads, subscription-key isolation, provider failure handling, microphone track cleanup, navigation cancellation, and real local HTTP middleware tests against an injected Sarvam response. The provider mocks do not make paid calls.
 
-The local `/api/voice` route, automatic reply playback, conversation start/pause/end, shared light/dark themes and 390px voice-panel layout were checked. Automated conversation tests cover turn order, interruption, silence, provider failure, emergency termination and ignoring late responses after End. **Live Sarvam recognition accuracy, real microphone capture and Sarvam audio quality are not claimed verified without a configured key and a spoken test on the target device.**
+The local `/api/voice` route, automatic reply playback, conversation start/pause/end, shared light/dark themes and 390px inline voice-composer layout were checked. Automated conversation tests cover turn order, interruption, silence, provider failure, emergency termination and ignoring late responses after End. **Live Sarvam recognition accuracy, real microphone capture and Sarvam audio quality are not claimed verified without a configured key and a spoken test on the target device.**
 
 ## Reference and attribution
 

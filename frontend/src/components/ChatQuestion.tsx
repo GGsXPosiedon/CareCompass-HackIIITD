@@ -1,8 +1,10 @@
 import { ArrowUp, CornerDownLeft, MessageCircleQuestion, Pencil } from 'lucide-react';
-import { useEffect, useId, useRef, useState } from 'react';
+import { useContext, useEffect, useId, useRef, useState } from 'react';
 import type { Copy } from '../i18n';
 import type { Message, TriageResponse } from '../types';
 import { ReadAloud, VoiceInput } from './Voice';
+import { VoiceComposerSlot } from './VoiceComposerSlot';
+import { VoiceSessionActiveContext } from '../voice/language';
 
 // Chat-style follow-up: the question "pops up" in the answer bar, the way ChatGPT/Claude ask clarifying
 // questions. Tapping an option (or pressing its number) answers immediately; "Something else" opens a
@@ -11,6 +13,7 @@ export function ChatQuestion({ copy, hindi, result, messages, symptom, input, se
   copy: Copy; hindi: boolean; result: TriageResponse; messages: Message[]; symptom: string;
   input: string; setInput: (value: string) => void; onAnswer: (text: string) => void; onBack: () => void; busy: boolean; error: string;
 }) {
+  const voiceActive = useContext(VoiceSessionActiveContext);
   const t = (en: string, hi: string) => hindi ? hi : en;
   const options = result.answer_options ?? [];
   const [custom, setCustom] = useState(options.length === 0);
@@ -54,14 +57,14 @@ export function ChatQuestion({ copy, hindi, result, messages, symptom, input, se
           <kbd aria-hidden="true">{options.length + 1}</kbd><span>{t('Something else…', 'कुछ और…')}</span>
         </button> : null}
       </div> : null}
-      {custom ? <div className="ask-composer">
+      {custom || voiceActive ? <div className="ask-composer">{voiceActive ? <VoiceComposerSlot/> : <>
         <label className="sr-only" htmlFor={`${titleId}-answer`}>{copy.followLabel}</label>
         <textarea id={`${titleId}-answer`} ref={textarea} rows={2} maxLength={2000} value={input} disabled={busy} placeholder={copy.followPlaceholder}
           aria-invalid={!!error} aria-describedby={error ? errorId : undefined} onChange={e => setInput(e.target.value)}
           onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); if (input.trim() && !busy) onAnswer(input.trim()); } if (e.key === 'Escape' && options.length) { e.preventDefault(); setCustom(false); } }} />
         <div className="ask-composer-actions"><VoiceInput copy={copy} hindi={hindi} disabled={busy} onTranscript={text => setInput(text.slice(0, 2000))} />
           <button type="submit" className="care-send" disabled={busy || !input.trim()} aria-label={busy ? copy.checking : copy.send}>{busy && !picked ? <span className="spinner" aria-hidden="true" /> : <ArrowUp size={20} />}</button></div>
-      </div> : null}
+      </>}</div> : null}
       {error ? <p className="error-message" id={errorId} role="alert">{error}</p> : null}
       <p className="ask-hint">{busy ? copy.checking : options.length ? t(`Press 1–${options.length + 1} to answer · Esc to edit your request`, `जवाब के लिए 1–${options.length + 1} दबाएँ · अनुरोध बदलने के लिए Esc`) : t('Enter to send · Shift+Enter for a new line', 'भेजने के लिए Enter · नई लाइन के लिए Shift+Enter')}</p>
     </form>

@@ -261,33 +261,31 @@ body:has(.care-shell) { min-width:0; background:#20201e; }
   .ask-hint { display:none; }
 }
 
-/* Voice conversation: one persistent task surface in the current app theme. */
-.voice-session { position:fixed; z-index:80; right:24px; bottom:24px; width:min(420px,calc(100vw - 32px)); max-height:calc(100dvh - 48px); overflow-y:auto; display:flex; flex-direction:column; background:var(--care-raised,var(--surface)); color:var(--ink); border:1px solid var(--control); border-radius:16px; padding:22px; }
-.voice-session-head { display:flex; align-items:center; justify-content:space-between; gap:12px; }
-.voice-session-head h2 { font-family:'Lora',serif; font-size:21px; letter-spacing:-.025em; }
-.voice-session-state { text-align:center; padding:22px 0 12px; }
-.voice-session-state > p { margin:12px 0 5px; font-size:16px; font-weight:500; text-wrap:balance; }
-.voice-session-wave { height:44px; display:flex; align-items:center; justify-content:center; gap:5px; color:var(--teal); }
-.voice-session-wave span { width:6px; height:12px; border-radius:6px; background:currentColor; }
-.voice-session-state:is(.is-listening,.is-speaking) .voice-session-wave span { animation:voice-turn-wave 1.15s ease-in-out infinite alternate; }
-.voice-session-wave span:nth-child(2) { animation-delay:-.4s; height:26px; }
-.voice-session-wave span:nth-child(3) { animation-delay:-.7s; height:38px; }
-.voice-session-wave span:nth-child(4) { animation-delay:-.2s; height:26px; }
+/* Voice capture belongs to the existing composer, with no floating task surface. */
+.voice-composer-slot { width:100%; }
+.voice-inline { padding:12px 18px 14px; min-width:0; }
+.voice-inline-status { display:flex; align-items:center; gap:10px; }
+.voice-inline-status > p { flex:1; font-size:13px; line-height:1.5; min-width:0; text-wrap:balance; }
+.voice-inline-status .icon-button { width:44px; height:44px; flex-shrink:0; }
+.voice-inline.is-error .voice-inline-status > p { color:var(--error-ink,var(--danger)); }
+.voice-session-wave { width:34px; height:28px; display:flex; align-items:center; justify-content:center; gap:3px; color:var(--teal); flex-shrink:0; }
+.voice-session-wave span { width:4px; height:8px; border-radius:4px; background:currentColor; }
+.voice-inline:is(.is-listening,.is-speaking) .voice-session-wave span { animation:voice-turn-wave 1.15s ease-in-out infinite alternate; }
+.voice-session-wave span:nth-child(2) { animation-delay:-.4s; height:16px; }
+.voice-session-wave span:nth-child(3) { animation-delay:-.7s; height:24px; }
+.voice-session-wave span:nth-child(4) { animation-delay:-.2s; height:16px; }
 .voice-session-wave span:nth-child(5) { animation-delay:-.6s; }
-.voice-session-state.is-error { color:var(--error-ink,var(--danger)); }
-.voice-session-hint { font-size:13px; line-height:1.6; color:var(--muted); margin:0 0 16px; }
-.voice-session-transcript { overflow:auto; min-height:48px; max-height:220px; padding:16px 0; border-block:1px solid var(--border); overscroll-behavior:contain; scrollbar-width:thin; }
-.voice-session-turn + .voice-session-turn { margin-top:18px; }
-.voice-session-turn > span { display:block; font-size:12px; color:var(--muted); margin-bottom:5px; }
-.voice-session-turn > p { font-size:14px; line-height:1.65; overflow-wrap:anywhere; white-space:pre-wrap; }
-.voice-session-controls { display:flex; flex-wrap:wrap; align-items:center; gap:8px 16px; padding-top:16px; }
-.voice-session-controls .button { min-height:44px; padding:10px 14px; font-size:13px; }
-.voice-session-controls .text-button { font-size:12px; min-height:44px; }
-.voice-session-foot { display:flex; align-items:flex-start; gap:7px; line-height:1.5; font-size:11px; margin-top:10px; }
-.voice-session-foot svg { flex-shrink:0; margin-top:2px; }
+.voice-inline-transcript { margin:8px 0 14px; font-size:16px; line-height:1.65; min-height:48px; max-height:130px; overflow:auto; overflow-wrap:anywhere; white-space:pre-wrap; }
+.voice-inline.is-listening .voice-inline-transcript { color:var(--muted); }
+.voice-inline-actions,.voice-inline-actions > div { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.voice-inline-actions { justify-content:space-between; }
+.voice-inline-actions .text-button { min-height:44px; font-size:12px; }
+.voice-inline-actions > span { font-size:11px; }
+.voice-inline-actions .icon-button { width:44px; height:44px; }
+.voice-followup-composer { max-width:760px; margin:24px auto; }
 @keyframes voice-turn-wave { from { transform:scaleY(.55); } to { transform:scaleY(1); } }
 @media (prefers-reduced-motion:reduce) { .voice-session-wave span { animation:none !important; } }
-@media (max-width:600px) { .voice-session { right:12px; bottom:12px; width:calc(100vw - 24px); padding:18px; max-height:calc(100dvh - 24px); } .voice-session-transcript { max-height:25dvh; } }
+@media (max-width:600px) { .voice-inline { padding:10px 14px; } .voice-inline-actions { gap:2px 8px; } .voice-inline-status { gap:7px; } }
 
 .care-attachments { position:relative; flex:1; min-width:0; }
 .care-attach-button { width:44px; height:44px; }
