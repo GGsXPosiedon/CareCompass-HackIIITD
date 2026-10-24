@@ -1,0 +1,626 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-24T09:54:45.118Z",
+  "title": "Design System: CareCompass",
+  "extensions": {
+    "colorMeta": {
+      "care-accent": {
+        "role": "primary",
+        "displayName": "Care Accent",
+        "tonalRamp": [
+          "oklch(15% 0.0739 51.28)",
+          "oklch(26% 0.0739 51.28)",
+          "oklch(37% 0.0739 51.28)",
+          "oklch(49% 0.0739 51.28)",
+          "oklch(61% 0.0739 51.28)",
+          "oklch(73% 0.0739 51.28)",
+          "oklch(85% 0.0739 51.28)",
+          "oklch(95% 0.0739 51.28)"
+        ]
+      },
+      "care-accent-hover": {
+        "role": "primary",
+        "displayName": "Care Accent Hover",
+        "tonalRamp": [
+          "oklch(15% 0.0613 53.80)",
+          "oklch(26% 0.0613 53.80)",
+          "oklch(37% 0.0613 53.80)",
+          "oklch(49% 0.0613 53.80)",
+          "oklch(61% 0.0613 53.80)",
+          "oklch(73% 0.0613 53.80)",
+          "oklch(85% 0.0613 53.80)",
+          "oklch(95% 0.0613 53.80)"
+        ]
+      },
+      "care-ground": {
+        "role": "neutral",
+        "displayName": "Care Ground",
+        "tonalRamp": [
+          "oklch(15% 0.0037 106.67)",
+          "oklch(26% 0.0037 106.67)",
+          "oklch(37% 0.0037 106.67)",
+          "oklch(49% 0.0037 106.67)",
+          "oklch(61% 0.0037 106.67)",
+          "oklch(73% 0.0037 106.67)",
+          "oklch(85% 0.0037 106.67)",
+          "oklch(95% 0.0037 106.67)"
+        ]
+      },
+      "care-sidebar": {
+        "role": "neutral",
+        "displayName": "Care Sidebar",
+        "tonalRamp": [
+          "oklch(15% 0.0019 106.57)",
+          "oklch(26% 0.0019 106.57)",
+          "oklch(37% 0.0019 106.57)",
+          "oklch(49% 0.0019 106.57)",
+          "oklch(61% 0.0019 106.57)",
+          "oklch(73% 0.0019 106.57)",
+          "oklch(85% 0.0019 106.57)",
+          "oklch(95% 0.0019 106.57)"
+        ]
+      },
+      "care-raised": {
+        "role": "neutral",
+        "displayName": "Care Raised",
+        "tonalRamp": [
+          "oklch(15% 0.0054 106.73)",
+          "oklch(26% 0.0054 106.73)",
+          "oklch(37% 0.0054 106.73)",
+          "oklch(49% 0.0054 106.73)",
+          "oklch(61% 0.0054 106.73)",
+          "oklch(73% 0.0054 106.73)",
+          "oklch(85% 0.0054 106.73)",
+          "oklch(95% 0.0054 106.73)"
+        ]
+      },
+      "care-surface": {
+        "role": "neutral",
+        "displayName": "Care Surface",
+        "tonalRamp": [
+          "oklch(15% 0.0036 106.64)",
+          "oklch(26% 0.0036 106.64)",
+          "oklch(37% 0.0036 106.64)",
+          "oklch(49% 0.0036 106.64)",
+          "oklch(61% 0.0036 106.64)",
+          "oklch(73% 0.0036 106.64)",
+          "oklch(85% 0.0036 106.64)",
+          "oklch(95% 0.0036 106.64)"
+        ]
+      },
+      "care-card": {
+        "role": "neutral",
+        "displayName": "Care Card",
+        "tonalRamp": [
+          "oklch(15% 0.0037 106.65)",
+          "oklch(26% 0.0037 106.65)",
+          "oklch(37% 0.0037 106.65)",
+          "oklch(49% 0.0037 106.65)",
+          "oklch(61% 0.0037 106.65)",
+          "oklch(73% 0.0037 106.65)",
+          "oklch(85% 0.0037 106.65)",
+          "oklch(95% 0.0037 106.65)"
+        ]
+      },
+      "care-summary": {
+        "role": "neutral",
+        "displayName": "Care Summary",
+        "tonalRamp": [
+          "oklch(15% 0.0054 106.74)",
+          "oklch(26% 0.0054 106.74)",
+          "oklch(37% 0.0054 106.74)",
+          "oklch(49% 0.0054 106.74)",
+          "oklch(61% 0.0054 106.74)",
+          "oklch(73% 0.0054 106.74)",
+          "oklch(85% 0.0054 106.74)",
+          "oklch(95% 0.0054 106.74)"
+        ]
+      },
+      "care-ink": {
+        "role": "neutral",
+        "displayName": "Care Ink",
+        "tonalRamp": [
+          "oklch(15% 0.0083 91.49)",
+          "oklch(26% 0.0083 91.49)",
+          "oklch(37% 0.0083 91.49)",
+          "oklch(49% 0.0083 91.49)",
+          "oklch(61% 0.0083 91.49)",
+          "oklch(73% 0.0083 91.49)",
+          "oklch(85% 0.0083 91.49)",
+          "oklch(95% 0.0083 91.49)"
+        ]
+      },
+      "care-muted": {
+        "role": "neutral",
+        "displayName": "Care Muted",
+        "tonalRamp": [
+          "oklch(15% 0.0115 95.21)",
+          "oklch(26% 0.0115 95.21)",
+          "oklch(37% 0.0115 95.21)",
+          "oklch(49% 0.0115 95.21)",
+          "oklch(61% 0.0115 95.21)",
+          "oklch(73% 0.0115 95.21)",
+          "oklch(85% 0.0115 95.21)",
+          "oklch(95% 0.0115 95.21)"
+        ]
+      },
+      "care-border": {
+        "role": "neutral",
+        "displayName": "Care Border",
+        "tonalRamp": [
+          "oklch(15% 0.0068 106.74)",
+          "oklch(26% 0.0068 106.74)",
+          "oklch(37% 0.0068 106.74)",
+          "oklch(49% 0.0068 106.74)",
+          "oklch(61% 0.0068 106.74)",
+          "oklch(73% 0.0068 106.74)",
+          "oklch(85% 0.0068 106.74)",
+          "oklch(95% 0.0068 106.74)"
+        ]
+      },
+      "care-control": {
+        "role": "neutral",
+        "displayName": "Care Control",
+        "tonalRamp": [
+          "oklch(15% 0.0112 100.20)",
+          "oklch(26% 0.0112 100.20)",
+          "oklch(37% 0.0112 100.20)",
+          "oklch(49% 0.0112 100.20)",
+          "oklch(61% 0.0112 100.20)",
+          "oklch(73% 0.0112 100.20)",
+          "oklch(85% 0.0112 100.20)",
+          "oklch(95% 0.0112 100.20)"
+        ]
+      },
+      "composer-border": {
+        "role": "neutral",
+        "displayName": "Composer Border",
+        "tonalRamp": [
+          "oklch(15% 0.0129 101.10)",
+          "oklch(26% 0.0129 101.10)",
+          "oklch(37% 0.0129 101.10)",
+          "oklch(49% 0.0129 101.10)",
+          "oklch(61% 0.0129 101.10)",
+          "oklch(73% 0.0129 101.10)",
+          "oklch(85% 0.0129 101.10)",
+          "oklch(95% 0.0129 101.10)"
+        ]
+      },
+      "composer-focus": {
+        "role": "neutral",
+        "displayName": "Composer Focus",
+        "tonalRamp": [
+          "oklch(15% 0.0567 58.61)",
+          "oklch(26% 0.0567 58.61)",
+          "oklch(37% 0.0567 58.61)",
+          "oklch(49% 0.0567 58.61)",
+          "oklch(61% 0.0567 58.61)",
+          "oklch(73% 0.0567 58.61)",
+          "oklch(85% 0.0567 58.61)",
+          "oklch(95% 0.0567 58.61)"
+        ]
+      },
+      "action-paper": {
+        "role": "neutral",
+        "displayName": "Action Paper",
+        "tonalRamp": [
+          "oklch(15% 0.0145 84.58)",
+          "oklch(26% 0.0145 84.58)",
+          "oklch(37% 0.0145 84.58)",
+          "oklch(49% 0.0145 84.58)",
+          "oklch(61% 0.0145 84.58)",
+          "oklch(73% 0.0145 84.58)",
+          "oklch(85% 0.0145 84.58)",
+          "oklch(95% 0.0145 84.58)"
+        ]
+      },
+      "action-ink": {
+        "role": "neutral",
+        "displayName": "Action Ink",
+        "tonalRamp": [
+          "oklch(15% 0.0073 106.89)",
+          "oklch(26% 0.0073 106.89)",
+          "oklch(37% 0.0073 106.89)",
+          "oklch(49% 0.0073 106.89)",
+          "oklch(61% 0.0073 106.89)",
+          "oklch(73% 0.0073 106.89)",
+          "oklch(85% 0.0073 106.89)",
+          "oklch(95% 0.0073 106.89)"
+        ]
+      },
+      "action-hover": {
+        "role": "neutral",
+        "displayName": "Action Hover",
+        "tonalRamp": [
+          "oklch(15% 0.0135 78.26)",
+          "oklch(26% 0.0135 78.26)",
+          "oklch(37% 0.0135 78.26)",
+          "oklch(49% 0.0135 78.26)",
+          "oklch(61% 0.0135 78.26)",
+          "oklch(73% 0.0135 78.26)",
+          "oklch(85% 0.0135 78.26)",
+          "oklch(95% 0.0135 78.26)"
+        ]
+      },
+      "choice-ground": {
+        "role": "neutral",
+        "displayName": "Choice Ground",
+        "tonalRamp": [
+          "oklch(15% 0.0279 62.39)",
+          "oklch(26% 0.0279 62.39)",
+          "oklch(37% 0.0279 62.39)",
+          "oklch(49% 0.0279 62.39)",
+          "oklch(61% 0.0279 62.39)",
+          "oklch(73% 0.0279 62.39)",
+          "oklch(85% 0.0279 62.39)",
+          "oklch(95% 0.0279 62.39)"
+        ]
+      },
+      "choice-ink": {
+        "role": "neutral",
+        "displayName": "Choice Ink",
+        "tonalRamp": [
+          "oklch(15% 0.0478 61.06)",
+          "oklch(26% 0.0478 61.06)",
+          "oklch(37% 0.0478 61.06)",
+          "oklch(49% 0.0478 61.06)",
+          "oklch(61% 0.0478 61.06)",
+          "oklch(73% 0.0478 61.06)",
+          "oklch(85% 0.0478 61.06)",
+          "oklch(95% 0.0478 61.06)"
+        ]
+      },
+      "choice-border": {
+        "role": "neutral",
+        "displayName": "Choice Border",
+        "tonalRamp": [
+          "oklch(15% 0.0765 59.66)",
+          "oklch(26% 0.0765 59.66)",
+          "oklch(37% 0.0765 59.66)",
+          "oklch(49% 0.0765 59.66)",
+          "oklch(61% 0.0765 59.66)",
+          "oklch(73% 0.0765 59.66)",
+          "oklch(85% 0.0765 59.66)",
+          "oklch(95% 0.0765 59.66)"
+        ]
+      },
+      "danger-ink": {
+        "role": "neutral",
+        "displayName": "Danger Ink",
+        "tonalRamp": [
+          "oklch(15% 0.0543 33.70)",
+          "oklch(26% 0.0543 33.70)",
+          "oklch(37% 0.0543 33.70)",
+          "oklch(49% 0.0543 33.70)",
+          "oklch(61% 0.0543 33.70)",
+          "oklch(73% 0.0543 33.70)",
+          "oklch(85% 0.0543 33.70)",
+          "oklch(95% 0.0543 33.70)"
+        ]
+      },
+      "danger-ground": {
+        "role": "neutral",
+        "displayName": "Danger Ground",
+        "tonalRamp": [
+          "oklch(15% 0.0397 29.06)",
+          "oklch(26% 0.0397 29.06)",
+          "oklch(37% 0.0397 29.06)",
+          "oklch(49% 0.0397 29.06)",
+          "oklch(61% 0.0397 29.06)",
+          "oklch(73% 0.0397 29.06)",
+          "oklch(85% 0.0397 29.06)",
+          "oklch(95% 0.0397 29.06)"
+        ]
+      },
+      "family-ground": {
+        "role": "neutral",
+        "displayName": "Family Ground",
+        "tonalRamp": [
+          "oklch(15% 0.0000 89.88)",
+          "oklch(26% 0.0000 89.88)",
+          "oklch(37% 0.0000 89.88)",
+          "oklch(49% 0.0000 89.88)",
+          "oklch(61% 0.0000 89.88)",
+          "oklch(73% 0.0000 89.88)",
+          "oklch(85% 0.0000 89.88)",
+          "oklch(95% 0.0000 89.88)"
+        ]
+      },
+      "family-ink": {
+        "role": "neutral",
+        "displayName": "Family Ink",
+        "tonalRamp": [
+          "oklch(15% 0.0114 156.35)",
+          "oklch(26% 0.0114 156.35)",
+          "oklch(37% 0.0114 156.35)",
+          "oklch(49% 0.0114 156.35)",
+          "oklch(61% 0.0114 156.35)",
+          "oklch(73% 0.0114 156.35)",
+          "oklch(85% 0.0114 156.35)",
+          "oklch(95% 0.0114 156.35)"
+        ]
+      },
+      "family-muted": {
+        "role": "neutral",
+        "displayName": "Family Muted",
+        "tonalRamp": [
+          "oklch(15% 0.0163 155.26)",
+          "oklch(26% 0.0163 155.26)",
+          "oklch(37% 0.0163 155.26)",
+          "oklch(49% 0.0163 155.26)",
+          "oklch(61% 0.0163 155.26)",
+          "oklch(73% 0.0163 155.26)",
+          "oklch(85% 0.0163 155.26)",
+          "oklch(95% 0.0163 155.26)"
+        ]
+      },
+      "family-surface": {
+        "role": "neutral",
+        "displayName": "Family Surface",
+        "tonalRamp": [
+          "oklch(15% 0.0041 157.18)",
+          "oklch(26% 0.0041 157.18)",
+          "oklch(37% 0.0041 157.18)",
+          "oklch(49% 0.0041 157.18)",
+          "oklch(61% 0.0041 157.18)",
+          "oklch(73% 0.0041 157.18)",
+          "oklch(85% 0.0041 157.18)",
+          "oklch(95% 0.0041 157.18)"
+        ]
+      },
+      "family-border": {
+        "role": "neutral",
+        "displayName": "Family Border",
+        "tonalRamp": [
+          "oklch(15% 0.0103 145.49)",
+          "oklch(26% 0.0103 145.49)",
+          "oklch(37% 0.0103 145.49)",
+          "oklch(49% 0.0103 145.49)",
+          "oklch(61% 0.0103 145.49)",
+          "oklch(73% 0.0103 145.49)",
+          "oklch(85% 0.0103 145.49)",
+          "oklch(95% 0.0103 145.49)"
+        ]
+      },
+      "family-control": {
+        "role": "neutral",
+        "displayName": "Family Control",
+        "tonalRamp": [
+          "oklch(15% 0.0202 152.71)",
+          "oklch(26% 0.0202 152.71)",
+          "oklch(37% 0.0202 152.71)",
+          "oklch(49% 0.0202 152.71)",
+          "oklch(61% 0.0202 152.71)",
+          "oklch(73% 0.0202 152.71)",
+          "oklch(85% 0.0202 152.71)",
+          "oklch(95% 0.0202 152.71)"
+        ]
+      },
+      "family-accent": {
+        "role": "secondary",
+        "displayName": "Family Accent",
+        "tonalRamp": [
+          "oklch(15% 0.0773 185.46)",
+          "oklch(26% 0.0773 185.46)",
+          "oklch(37% 0.0773 185.46)",
+          "oklch(49% 0.0773 185.46)",
+          "oklch(61% 0.0773 185.46)",
+          "oklch(73% 0.0773 185.46)",
+          "oklch(85% 0.0773 185.46)",
+          "oklch(95% 0.0773 185.46)"
+        ]
+      },
+      "family-accent-deep": {
+        "role": "secondary",
+        "displayName": "Family Accent Deep",
+        "tonalRamp": [
+          "oklch(15% 0.0666 182.04)",
+          "oklch(26% 0.0666 182.04)",
+          "oklch(37% 0.0666 182.04)",
+          "oklch(49% 0.0666 182.04)",
+          "oklch(61% 0.0666 182.04)",
+          "oklch(73% 0.0666 182.04)",
+          "oklch(85% 0.0666 182.04)",
+          "oklch(95% 0.0666 182.04)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Care Question",
+        "purpose": "The intake question, with compact desktop and mobile size reductions."
+      },
+      "headline": {
+        "displayName": "Care Page Heading",
+        "purpose": "Serif care workflow page headings."
+      },
+      "title": {
+        "displayName": "Section Title",
+        "purpose": "Sans-serif supporting sections."
+      },
+      "body": {
+        "displayName": "Reading Text",
+        "purpose": "Inherited interface body text."
+      },
+      "label": {
+        "displayName": "Input Label",
+        "purpose": "Visible labels and compact supporting controls."
+      }
+    },
+    "shadows": [
+      {
+        "name": "care-dialog",
+        "value": "0 20px 70px #0008",
+        "purpose": "Care flow modal overlay."
+      },
+      {
+        "name": "inherited-light-dialog",
+        "value": "0 15px 70px #18251e26",
+        "purpose": "Inherited dialog shadow in light contexts."
+      }
+    ],
+    "motion": [
+      {
+        "name": "care-button",
+        "value": "background .15s ease, color .15s ease",
+        "purpose": "Care shell button state transitions; disabled by reduced-motion rules."
+      },
+      {
+        "name": "guide-chevron",
+        "value": "transform .15s ease",
+        "purpose": "Disclosure rotation; disabled by reduced-motion rules."
+      },
+      {
+        "name": "loading-spinner",
+        "value": "spin .8s linear infinite",
+        "purpose": "Loading status; removed by global reduced-motion rules."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "care-wide-min",
+        "value": "1800px"
+      },
+      {
+        "name": "care-compact-max",
+        "value": "1100px"
+      },
+      {
+        "name": "care-mobile-max",
+        "value": "767px"
+      },
+      {
+        "name": "family-compact-max",
+        "value": "1180px"
+      },
+      {
+        "name": "family-mobile-max",
+        "value": "900px"
+      },
+      {
+        "name": "family-small-max",
+        "value": "600px"
+      },
+      {
+        "name": "family-narrow-max",
+        "value": "360px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Workflow Primary",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The next action in the care workflow.",
+      "html": "<button class=\"ds-primary\">Continue</button>",
+      "css": ".ds-primary{display:inline-flex;align-items:center;justify-content:center;gap:12px;border:1px solid transparent;border-radius:100px;min-height:48px;padding:12px 23px;font:500 15px/1.4 'Instrument Sans','Noto Sans Devanagari',sans-serif;cursor:pointer;transition:background .15s ease,color .15s ease;background:#e9e4da;color:#252521}.ds-primary:hover:not(:disabled){background:#fff9f0}.ds-primary:active:not(:disabled){transform:translateY(1px)}.ds-primary:disabled{color:#aba99f;background:#383833;border-color:#494942;cursor:not-allowed}.ds-primary:focus-visible,.ds-secondary:focus-visible,.ds-send:focus-visible,.ds-nav button:focus-visible,.ds-prompt:focus-visible,.ds-choice:focus-visible{outline:3px solid #dfab8d;outline-offset:4px}"
+    },
+    {
+      "name": "Workflow Secondary",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "A supporting care workflow action.",
+      "html": "<div class=\"ds-preview\"><button class=\"ds-secondary\">Back</button></div>",
+      "css": ".ds-preview{background:#20201e;padding:16px}.ds-secondary{display:inline-flex;align-items:center;justify-content:center;gap:12px;border:1px solid transparent;border-radius:100px;min-height:48px;padding:12px 23px;font:500 15px/1.4 'Instrument Sans','Noto Sans Devanagari',sans-serif;cursor:pointer;transition:background .15s ease,color .15s ease;background:transparent;color:#eeece6;border-color:#66645b}.ds-secondary:hover:not(:disabled){background:#383831;border-color:#aaa591}.ds-secondary:active:not(:disabled){transform:translateY(1px)}.ds-secondary:disabled{color:#aba99f;background:#383833;border-color:#494942;cursor:not-allowed}.ds-primary:focus-visible,.ds-secondary:focus-visible,.ds-send:focus-visible,.ds-nav button:focus-visible,.ds-prompt:focus-visible,.ds-choice:focus-visible{outline:3px solid #dfab8d;outline-offset:4px}"
+    },
+    {
+      "name": "Composer Send",
+      "kind": "button",
+      "refersTo": "button-send",
+      "description": "Circular send action; a filled request expands it to a labelled action.",
+      "html": "<button class=\"ds-send\" aria-label=\"Find the right care\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M12 19V5m-7 7 7-7 7 7\"/></svg></button>",
+      "css": ".ds-send{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border:0;border-radius:50%;background:#dfab8d;color:#251e19;cursor:pointer;transition:background .15s ease,color .15s ease}.ds-send:hover:not(:disabled){background:#efc4a9}.ds-send:disabled{background:#4a4a42;color:#b3b0a2;cursor:not-allowed}.ds-primary:focus-visible,.ds-secondary:focus-visible,.ds-send:focus-visible,.ds-nav button:focus-visible,.ds-prompt:focus-visible,.ds-choice:focus-visible{outline:3px solid #dfab8d;outline-offset:4px}"
+    },
+    {
+      "name": "Care Composer",
+      "kind": "input",
+      "refersTo": "composer",
+      "description": "Visible label and raised, resizable request field.",
+      "html": "<div class=\"ds-preview\"><label class=\"ds-label\" for=\"ds-care-request\">Describe the care you need</label><div class=\"ds-composer\"><textarea id=\"ds-care-request\" rows=\"2\" placeholder=\"Describe how you’re feeling…\"></textarea></div></div>",
+      "css": ".ds-preview{background:#20201e;padding:16px}.ds-label{display:block;margin:0 6px 10px;color:#b2b0a8;font:400 13px/1.55 'Instrument Sans','Noto Sans Devanagari',sans-serif}.ds-composer{background:#2b2b28;border:1px solid #525149;border-radius:18px}.ds-composer:focus-within{border-color:#c8a489}.ds-composer textarea{display:block;box-sizing:border-box;resize:vertical;padding:20px 22px 10px;width:100%;min-height:94px;max-height:240px;border:0;border-radius:18px 18px 0 0;outline:none;background:transparent;color:#eeece6;font:400 17px/1.6 'Instrument Sans','Noto Sans Devanagari',sans-serif;caret-color:#dfab8d}.ds-composer textarea::placeholder{color:#b2b0a8}.ds-composer textarea:disabled{background:#30302c}"
+    },
+    {
+      "name": "Care Navigation",
+      "kind": "nav",
+      "refersTo": "navigation-active",
+      "description": "Muted sidebar rows with an explicit current page.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Care navigation\"><button aria-current=\"page\">Find care</button><button>My bookings</button></nav>",
+      "css": ".ds-nav{display:flex;flex-direction:column;gap:4px;padding:14px;background:#181817}.ds-nav button{display:flex;align-items:center;gap:12px;min-height:46px;padding:11px 13px;text-align:left;font:400 14px/1.55 'Instrument Sans','Noto Sans Devanagari',sans-serif;border:0;border-radius:8px;background:transparent;color:#b2b0a8;cursor:pointer;transition:background .15s ease,color .15s ease}.ds-nav button[aria-current]{background:#2b2b28;color:#eeece6}.ds-nav button:hover{background:#252523;color:#eeece6}.ds-primary:focus-visible,.ds-secondary:focus-visible,.ds-send:focus-visible,.ds-nav button:focus-visible,.ds-prompt:focus-visible,.ds-choice:focus-visible{outline:3px solid #dfab8d;outline-offset:4px}"
+    },
+    {
+      "name": "Example Prompt",
+      "kind": "chip",
+      "refersTo": "prompt",
+      "description": "A short synthetic example that fills the request.",
+      "html": "<div class=\"ds-preview\"><button class=\"ds-prompt\">Fever and body ache</button></div>",
+      "css": ".ds-preview{background:#20201e;padding:16px}.ds-prompt{border:1px solid #484840;border-radius:9px;padding:9px 15px;min-height:44px;background:transparent;color:#d2cfc5;font:400 13px/1.55 'Instrument Sans','Noto Sans Devanagari',sans-serif;cursor:pointer;transition:background .15s ease,color .15s ease}.ds-prompt:hover{background:#32322c;border-color:#8c806d}.ds-primary:focus-visible,.ds-secondary:focus-visible,.ds-send:focus-visible,.ds-nav button:focus-visible,.ds-prompt:focus-visible,.ds-choice:focus-visible{outline:3px solid #dfab8d;outline-offset:4px}"
+    },
+    {
+      "name": "Selected Answer",
+      "kind": "chip",
+      "refersTo": "choice-selected",
+      "description": "An answer or time choice with visible selection.",
+      "html": "<div class=\"ds-preview\"><button class=\"ds-choice\" aria-pressed=\"true\">Two days</button></div>",
+      "css": ".ds-preview{background:#20201e;padding:16px}.ds-choice{border:1px solid #68665b;border-radius:9px;min-height:47px;padding:10px 17px;background:transparent;color:#eeece6;font:400 15px/1.55 'Instrument Sans','Noto Sans Devanagari',sans-serif;cursor:pointer;transition:background .15s ease,color .15s ease}.ds-choice:hover{border-color:#dfab8d}.ds-choice[aria-pressed=true]{background:#4a3c30;color:#ffe0c7;border-color:#d7a781}.ds-primary:focus-visible,.ds-secondary:focus-visible,.ds-send:focus-visible,.ds-nav button:focus-visible,.ds-prompt:focus-visible,.ds-choice:focus-visible{outline:3px solid #dfab8d;outline-offset:4px}"
+    },
+    {
+      "name": "Caregiver Container",
+      "kind": "card",
+      "refersTo": "care-card",
+      "description": "Flat dark caregiver container with an outlined selected state.",
+      "html": "<article class=\"ds-care-card\"><h2>Demo caregiver</h2><p>Synthetic profile for care matching.</p></article>",
+      "css": ".ds-care-card{border:1px solid #3b3b37;border-radius:14px;padding:23px;background:#242422;color:#eeece6;font:400 16px/1.55 'Instrument Sans','Noto Sans Devanagari',sans-serif;transition:border-color .15s}.ds-care-card h2{margin:0;font:500 21px/1.35 'Instrument Sans','Noto Sans Devanagari',sans-serif;letter-spacing:-.025em}.ds-care-card p{color:#b2b0a8;font-size:14px;margin:10px 0 0}.ds-care-card.ds-selected{border-color:#dfab8d}"
+    },
+    {
+      "name": "Family Health Block",
+      "kind": "card",
+      "refersTo": "family-card",
+      "description": "The inherited light family workspace container.",
+      "html": "<section class=\"ds-family-card\"><h2>Family records</h2></section>",
+      "css": ".ds-family-card{border:1px solid #dfe5df;border-radius:16px;padding:24px;min-width:0;background:#fff;color:#202622;font:400 16px/1.55 'Instrument Sans','Noto Sans Devanagari',sans-serif}.ds-family-card h2{margin:0;font:500 20px/1.35 'Instrument Sans','Noto Sans Devanagari',sans-serif;letter-spacing:-.025em}"
+    }
+  ],
+  "narrative": {
+    "northStar": "A quiet conversation toward care",
+    "overview": "CareCompass uses a dark, spacious conversational shell with a warm serif question and restrained sans-serif controls. The approved ChatGPT-like spatial model and Claude-like type character guide the primary experience; Lora is an open-source approximation of that serif character. The original compass mark and CareCompass name remain the identity anchors.\n\nA compact sidebar holds navigation while the canvas gives the current care decision room. Tonal surfaces, visible input labels and brief supporting text keep the experience calm and readable. The secondary family workspace deliberately retains its inherited light, green-accented interface; it is a distinct workspace within the same product.",
+    "keyCharacteristics": [
+      "Warm charcoal surfaces with soft paper-colored text.",
+      "Serif questions paired with clear sans-serif controls.",
+      "A raised composer and restrained terracotta interaction accents.",
+      "Flat cards and visible selected, disabled, loading and error states.",
+      "A separately scoped light family workspace."
+    ],
+    "rules": [
+      {
+        "name": "The Two Worlds Rule",
+        "body": "Keep dark care tokens in the conversational flow and light family tokens in the family workspace; preserve the explicit theme boundary.",
+        "section": "colors"
+      },
+      {
+        "name": "The Question Voice Rule",
+        "body": "Use the serif for primary care questions and workflow page headings; keep controls and detailed supporting information in the sans-serif.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tonal Depth Rule",
+        "body": "Use surface tone and borders for everyday hierarchy; reserve the established ambient shadow for dialogs.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** preserve the Two Worlds Rule when extending care or family surfaces.",
+      "**Do** pair serif care questions with sans-serif controls and detailed information.",
+      "**Do** use tonal layers and borders for resting surfaces.",
+      "**Do** show distinct focus, selected, disabled, loading and error states.",
+      "**Do** keep Hindi glyph coverage, visible labels and keyboard navigation.",
+      "**Do** retain plain demo disclosures and emergency emphasis."
+    ],
+    "donts": [
+      "**Don't** introduce decorative imagery or gradients into the approved primary conversational world.",
+      "**Don't** turn the intake into a feature-card dashboard or fabricate conversation history.",
+      "**Don't** replace the original compass identity or imply proprietary Claude fonts are bundled.",
+      "**Don't** promote inherited incidental labels or one-off styling into new system rules."
+    ]
+  }
+}

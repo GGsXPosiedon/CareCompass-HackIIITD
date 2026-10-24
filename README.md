@@ -1,10 +1,22 @@
 # CareCompass
 
-A minimal, responsive patient-facing frontend for the Hack IIITD care-navigation challenge. The UI takes cues from Urban Company's service booking and Uber's request → selection → confirmation flow, while retaining its own teal-and-white identity. The expanded workspace follows Roojh's publicly documented patient workflow: choose a family profile → add records → organize the briefcase → review a summary → track readings and reminders → ask questions or connect to care.
+A minimal, responsive patient-facing frontend for the Hack IIITD care-navigation challenge. The app opens directly into a conversational care request: describe the need → answer follow-ups → review a recommendation → choose a caregiver and time → confirm a demo booking. The dark, spacious layout follows the user's ChatGPT screenshot, with locally bundled Lora serif headings inspired by Claude's typographic feel. CareCompass retains its own name and compass mark.
+
+## Start here: find care
+
+Open **Find care**, then choose **Fever & cough** (or switch to Hindi/Hinglish first).
+
+1. Select **Find the right care**, which appears in the composer after a message is entered. You can also press Enter; Shift+Enter adds a new line.
+2. Answer the age question and select **Continue**. Then choose **No** for the synthetic emergency question and select **Continue** again.
+3. Review the preset recommendation and select **See available caregivers**.
+4. Choose a caregiver with remaining slots, select **Choose a time**, pick a time and select **Confirm demo booking**.
+5. View the confirmation, select **Download summary**, then open **My bookings**.
+
+The message box also includes **Speak instead**, with an editable transcript and typing fallback. The sidebar contains **Find care**, **My bookings** and **New request**. On mobile, open the menu to reach them. A new request keeps completed bookings in this tab; refreshing clears them.
 
 ## Roojh-inspired patient workspace
 
-The app now opens on a family-health home, with these working frontend modules:
+The secondary **Family workspace** link opens the Roojh-inspired family-health workspace, with these working frontend modules. Medications and Vitals are omitted from its navigation; their underlying demo data and components remain available to summaries and related workflows.
 
 | Module | Implemented behavior |
 | --- | --- |
@@ -60,7 +72,7 @@ The production build is in `frontend/dist`. Serve it over HTTP; do not open its 
 - Emergency escalation that bypasses follow-ups, matching and booking when a response contains red flags, immediate urgency or emergency referral.
 - Empty availability, network failure, validation, disabled, loading and retry states.
 - Mobile navigation, native accessible dialogs, keyboard focus, labels, live announcements and reduced-motion support.
-- Locally bundled Instrument Sans and Noto Sans Devanagari; no external font requests.
+- Locally bundled Lora, Instrument Sans and Noto Sans Devanagari; no external font requests.
 
 ## Important demo boundary
 
@@ -157,12 +169,7 @@ Configure CORS to allow the frontend origin. Endpoint failures and 20-second tim
 
 ## Demo walkthrough
 
-1. Open **Find care**, then choose **Fever & cough** (or switch to Hindi/Hinglish first).
-2. Select **Find the right care**.
-3. Answer the age question, then **No** to the synthetic emergency question.
-4. Review the preset recommendation and open caregiver selection.
-5. Choose a caregiver with remaining slots, choose a time, and confirm the **demo** booking.
-6. View the confirmation, download the summary, and open **My bookings**.
+Follow the **Start here: find care** steps above. The landing screen starts this same care-navigation flow; it does not route the request through the separate scripted health-record assistant.
 
 The **Explore demo scenarios** disclosure shows emergency escalation, outside-coverage empty availability and a simulated connection error. These controls are absent when a backend URL is configured. Alternatively answer **Yes** or **Not sure** to the demo's emergency follow-up to test escalation mid-conversation.
 
@@ -172,6 +179,8 @@ The **Explore demo scenarios** disclosure shows emergency escalation, outside-co
 frontend/
   src/
     App.tsx              # Original care-flow state and API orchestration
+    CareShell.tsx        # Focused care sidebar, language control and workspace access
+    care-shell.css       # Dark chat-first entry and booking-flow theme
     health/              # Family workspace, records, summaries, vitals, reminders, chat and previews
     health.css           # Minimal workspace shell and responsive module styles
     components/          # Intake, questions, results, providers, booking, emergency, dialogs

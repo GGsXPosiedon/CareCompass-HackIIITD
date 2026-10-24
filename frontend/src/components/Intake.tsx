@@ -4,11 +4,16 @@ import type { Copy } from '../i18n';
 import type { Language, Location } from '../types';
 import { Journey } from './Journey';
 import { VoiceInput } from './Voice';
+import { ChatIntake } from './ChatIntake';
 
-export function Intake({ copy, hindi, language, input, setInput, person, setPerson, location, busy, error, onSubmit }: {
+export interface IntakeProps {
   copy: Copy; hindi: boolean; language: Language; input: string; setInput: (input: string) => void;
   person: string; setPerson: (person: string) => void; location: Location; busy: boolean; error: string; onSubmit: () => void;
-}) {
+  onLocation?: () => void; compact?: boolean;
+}
+export function Intake(props: IntakeProps) {
+  const { copy, hindi, language, input, setInput, person, setPerson, location, busy, error, onSubmit } = props;
+  if (props.compact) return <ChatIntake {...props}/>;
   const services = [
     { title: copy.serviceParamedic, description: copy.serviceParamedicDesc, Icon: House },
     { title: copy.serviceNurse, description: copy.serviceNurseDesc, Icon: HeartPulse },

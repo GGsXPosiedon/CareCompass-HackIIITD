@@ -1,6 +1,17 @@
 # Frontend verification
 
-Checkpoint: CareCompass core care flow plus the Roojh-inspired patient workspace.
+Current checkpoint: focused care entry with a dark conversational shell and serif headings, plus the secondary Roojh-inspired patient workspace.
+
+## Focused care entry — 24 October 2026
+
+- Full English browser journey exercised in the new shell: Fever & cough → Find the right care → age → No to the synthetic emergency question → recommendation → caregiver → remaining time → Confirm demo booking → confirmation → Download summary action → My bookings.
+- New request preserves a completed booking in this tab. English/Hindi switching updates the care interface; the booking remains in history.
+- Hindi sample submission reaches the Hindi age question from the new composer.
+- Synthetic emergency input from the composer skips matching and booking and shows the 112 link. No call was placed.
+- Mobile drawer opens, chooses a destination and closes; desktop sidebar can collapse/expand. The secondary family workspace opens and the primary care entry remains available.
+- Entry inspected at 1440×900 and 390×844. Hindi input and follow-up checked at 320 pixels, with document scroll width equal to client width after correcting the body's minimum width. Tablet layout also inspected.
+- Review captures are local working artifacts under `.impeccable/review/`. The full-page capture API produced an invalid desktop export despite correct DOM geometry; the native viewport capture was used and inspected for the desktop review.
+- All 18 automated checks and the TypeScript/Vite production build pass. No real backend or microphone session was used. The summary download action was exercised; the downloaded file contents were not independently inspected.
 
 ## Automated
 
@@ -28,4 +39,4 @@ The real backend is absent. Live triage, actual appointments, authentication, AB
 
 The frontend design inspector could not launch its own browser in this environment (`spawn EPERM`), so visual checks used the connected in-app browser. The source design lint reported zero failures; its two warnings were intentional date zero-padding and the floating dialog's shadow.
 
-Landing-page concepts are a later, separate task and are excluded from this checkpoint.
+The latest user-supplied ChatGPT screenshot and Claude-like type direction replace the earlier unselected generated landing-page concepts. The implemented landing screen is a working care intake, not a marketing page.
