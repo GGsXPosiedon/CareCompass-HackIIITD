@@ -1,0 +1,12 @@
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import Portal from './health/Portal';
+import '@fontsource/instrument-sans/latin-400.css';
+import '@fontsource/instrument-sans/latin-500.css';
+import '@fontsource/instrument-sans/latin-600.css';
+import '@fontsource/noto-sans-devanagari/devanagari-400.css';
+import '@fontsource/noto-sans-devanagari/devanagari-500.css';
+import '@fontsource/noto-sans-devanagari/devanagari-600.css';
+import './styles.css';
+import './health.css';
+createRoot(document.getElementById('root')!).render(<StrictMode><Portal /></StrictMode>);

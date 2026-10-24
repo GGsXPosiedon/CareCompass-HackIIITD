@@ -1,0 +1,8 @@
+node_modules/
+frontend/dist/
+frontend/.env.local
+*.tsbuildinfo
+.taste-skill/inspect/
+.taste-skill/before/
+.taste-skill/after/
+work/
