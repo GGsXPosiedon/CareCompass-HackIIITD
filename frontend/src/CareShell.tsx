@@ -32,6 +32,10 @@ function Shell() {
   function navigate(next: Page) { if (next === 'briefcase') setBriefcaseVisited(true); if (next === 'services') setServicesVisited(true); if (next === 'profile') setProfileVisited(true); setPage(next); setDrawer(false); window.scrollTo({top:0,behavior:'instant'}); }
   useEffect(() => { document.documentElement.lang = hi ? 'hi' : 'en'; }, [hi, page]);
   useEffect(() => {
+    document.documentElement.dataset.careMotion = 'full';
+    return () => { delete document.documentElement.dataset.careMotion; };
+  }, []);
+  useEffect(() => {
     document.documentElement.style.colorScheme = theme;
     document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#20201e' : '#faf9f6');
   }, [theme]);

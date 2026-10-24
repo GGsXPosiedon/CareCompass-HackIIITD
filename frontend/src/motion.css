@@ -1,0 +1,99 @@
+/* Motion follows the care conversation: acknowledge, reveal, then settle.
+   Everything is visible without animation; no interaction waits on an effect. */
+.care-shell {
+  --motion-feedback: 140ms;
+  --motion-panel: 260ms;
+  --motion-settle: cubic-bezier(.16, 1, .3, 1);
+}
+
+html[data-care-motion="full"] {
+  /* Keep theme changes in sync across the shell, forms and health pages. */
+  .care-shell,
+  .care-shell :where(.care-sidebar, .care-topbar, .health-portal, .health-card,
+    .request-panel, .summary-panel, .selection-panel, .provider-card,
+    .confirmation-card, .past-booking, .ask-card, .chat-bubble,
+    .care-chat-composer, .modal, input, textarea, select) {
+    transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+  }
+
+  .care-shell button {
+    transition: background-color var(--motion-feedback) ease,
+      color var(--motion-feedback) ease, border-color var(--motion-feedback) ease,
+      opacity var(--motion-feedback) ease, transform var(--motion-feedback) var(--motion-settle);
+  }
+  .care-shell :where(.button, .care-send, .icon-button, .care-theme-toggle):active:not(:disabled) {
+    transform: scale(.97);
+  }
+  .care-theme-toggle svg { animation: care-icon-turn 240ms var(--motion-settle); }
+  .care-chat-composer:focus-within { transition-duration: var(--motion-feedback); }
+
+  /* The composer arrives as one unit; prompt choices follow as a small group. */
+  .chat-intake-heading { animation: care-reveal 360ms var(--motion-settle); }
+  .care-chat-form { animation: care-composer-arrive 420ms var(--motion-settle); }
+  .care-sample-prompts button { animation: care-reveal 280ms var(--motion-settle) backwards; }
+  .care-sample-prompts button:nth-child(2) { animation-delay: 35ms; }
+  .care-sample-prompts button:nth-child(3) { animation-delay: 70ms; }
+
+  /* Only newly mounted messages animate, so the conversation never replays. */
+  .chat-bubble { animation: care-message-arrive var(--motion-panel) var(--motion-settle); }
+  .ask-card { animation: care-question-arrive 300ms var(--motion-settle); }
+  .ask-composer { animation: care-reveal 180ms ease-out; }
+  .focused-care:not(.focused-emergency) > :where(.page-heading, .care-grid,
+    .provider-layout, .confirmation, .empty-bookings, .bookings-list) {
+    animation: care-reveal var(--motion-panel) var(--motion-settle);
+  }
+  .care-support-page:not([hidden]) { animation: care-reveal var(--motion-panel) var(--motion-settle); }
+  .briefcase-content > :not(.briefcase-tabs), .profile-detail > * {
+    animation: care-reveal 200ms ease-out;
+  }
+  .care-sidebar-help ol { animation: care-reveal 180ms ease-out; }
+
+  /* Confirm the outcome once, without confetti or a repeating attention loop. */
+  .confirmation-check { animation: care-confirm 360ms var(--motion-settle); }
+  .confirmation-check svg { animation: care-check 420ms var(--motion-settle); }
+  .care-shell .modal[open] { animation: care-dialog-arrive 240ms var(--motion-settle); }
+  .care-shell .modal[open]::backdrop { animation: care-reveal 180ms ease-out; }
+
+  @media (hover: hover) and (pointer: fine) {
+    .care-shell :where(.care-send, .button.primary):hover:not(:disabled) { transform: translateY(-1px); }
+    .care-shell :where(.care-send, .button.primary):active:not(:disabled) { transform: scale(.97); }
+  }
+  @media (max-width: 767px) {
+    .care-sidebar.is-open { animation: care-drawer-arrive 240ms var(--motion-settle); }
+    .care-drawer-backdrop { animation: care-reveal 180ms ease-out; }
+  }
+}
+
+@keyframes care-reveal { from { opacity: .35; } to { opacity: 1; } }
+@keyframes care-composer-arrive {
+  from { opacity: .65; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes care-message-arrive {
+  from { opacity: .4; transform: translateY(5px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes care-question-arrive {
+  from { opacity: .65; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes care-confirm {
+  from { transform: scale(.9); }
+  to { transform: scale(1); }
+}
+@keyframes care-check {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0); }
+}
+@keyframes care-dialog-arrive {
+  from { opacity: .6; transform: translateY(8px) scale(.99); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes care-drawer-arrive {
+  from { transform: translateX(-24px); opacity: .5; }
+  to { transform: none; opacity: 1; }
+}
+@keyframes care-icon-turn {
+  from { transform: rotate(-20deg); }
+  to { transform: none; }
+}
