@@ -65,15 +65,11 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-<table>
-  <tr>
-    <td width="50%"><img src="docs/screenshots/01-follow-up-question.png" alt="Follow-up question, dark mode"></td>
-    <td width="50%"><img src="docs/screenshots/01-follow-up-question-light.png" alt="Follow-up question, light mode"></td>
-  </tr>
-  <tr>
-    <td colspan="2" align="center"><sub>One clear question when the message is vague. Dark and light themes.</sub></td>
-  </tr>
-</table>
+<p align="center">
+  <img src="docs/screenshots/01-follow-up-question.png" width="90%" alt="CareCompass asking one clear follow-up question">
+  <br />
+  <sub>One clear question when the message is vague.</sub>
+</p>
 
 A family types something like *"mummy theek nahi hai, kal raat se bukhar hai"*. CareCompass:
 
@@ -176,35 +172,24 @@ The **deterministic classifier slot** is rules today. A trained model plugs in t
 <!-- USAGE -->
 ## Usage
 
-Type a request, answer at most a couple of questions (press `1`–`5`, or choose *Something else…*), then pick a caregiver. Every screen below is shown in dark and light mode.
+Type a request, answer at most a couple of questions (press `1`–`5`, or choose *Something else…*), then pick a caregiver. The app also has a dark theme, switched from the header.
 
 <table>
   <tr>
-    <th width="50%">Dark</th>
-    <th width="50%">Light</th>
+    <td width="50%"><img src="docs/screenshots/02-recommendation.png" alt="Recommendation with plain-language reasoning"></td>
+    <td width="50%"><img src="docs/screenshots/03-caregivers.png" alt="Ranked caregivers with match reasons"></td>
   </tr>
   <tr>
-    <td><img src="docs/screenshots/02-recommendation.png" alt="Recommendation, dark"></td>
-    <td><img src="docs/screenshots/02-recommendation-light.png" alt="Recommendation, light"></td>
-  </tr>
-  <tr>
-    <td colspan="2" align="center"><sub><b>A recommendation with the reason behind it</b>, in the language the family wrote in.</sub></td>
-  </tr>
-  <tr>
-    <td><img src="docs/screenshots/03-caregivers.png" alt="Caregivers, dark"></td>
-    <td><img src="docs/screenshots/03-caregivers-light.png" alt="Caregivers, light"></td>
-  </tr>
-  <tr>
-    <td colspan="2" align="center"><sub><b>Caregivers ranked and explained</b>: language, distance, free slot and skills.</sub></td>
-  </tr>
-  <tr>
-    <td><img src="docs/screenshots/04-emergency.png" alt="Emergency, dark"></td>
-    <td><img src="docs/screenshots/04-emergency-light.png" alt="Emergency, light"></td>
-  </tr>
-  <tr>
-    <td colspan="2" align="center"><sub><b>Emergencies never reach a booking.</b> The red flags found are listed and matching is skipped.</sub></td>
+    <td align="center"><sub><b>A recommendation with the reason behind it</b>, in the language the family wrote in.</sub></td>
+    <td align="center"><sub><b>Caregivers ranked and explained</b>: language, distance, free slot and skills.</sub></td>
   </tr>
 </table>
+
+<p align="center">
+  <img src="docs/screenshots/04-emergency.png" width="50%" alt="Emergency path directing to 112">
+  <br />
+  <sub><b>Emergencies never reach a booking.</b> The red flags found are listed and matching is skipped.</sub>
+</p>
 
 The frontend walkthrough (Briefcase, health services, profile) is in [`frontend/README.md`](frontend/README.md).
 
@@ -268,7 +253,7 @@ Config, fusion policy, prompts and schema enforcement are covered in [`backend/R
 - [x] LangGraph pipeline with safety-first fusion and a Gemini fallback
 - [x] Hindi / Hinglish red-flag rules and a 52-case evaluation set
 - [x] Chat-style follow-up questions
-- [x] Dark and light themes
+- [x] Light and dark themes
 - [ ] Plug in our own trained classifier at the deterministic slot
 - [ ] Verify the live Gemini path end to end
 - [ ] Confirm red-flag rules and helpline numbers with clinicians or mentors
