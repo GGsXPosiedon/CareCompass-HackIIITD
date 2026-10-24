@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Activity, ArrowRight, Bell, BriefcaseMedical, CalendarHeart, ChevronDown, FileHeart, FlaskConical, Globe2, HeartHandshake, House, IdCard, Menu, MessageCircle, MoreHorizontal, Pill, Settings2, Users, X } from 'lucide-react';
+import { ArrowRight, Bell, BriefcaseMedical, CalendarHeart, ChevronDown, FileHeart, FlaskConical, Globe2, HeartHandshake, House, IdCard, Menu, MessageCircle, MoreHorizontal, Settings2, Users, X } from 'lucide-react';
 import App from '../App';
 import { Modal } from '../components/Modal';
 import { localDate } from '../lib/flow';
@@ -19,8 +19,8 @@ import { MemberAvatar, words } from './ui';
 
 const destinations = [
   {id:'home',en:'Home',hi:'होम',Icon:House}, {id:'records',en:'Briefcase',hi:'ब्रीफ़केस',Icon:BriefcaseMedical},
-  {id:'summary',en:'Health summary',hi:'स्वास्थ्य सारांश',Icon:FileHeart}, {id:'vitals',en:'Vitals',hi:'वाइटल्स',Icon:Activity},
-  {id:'labs',en:'Labs',hi:'लैब',Icon:FlaskConical}, {id:'medications',en:'Medications',hi:'दवाएँ',Icon:Pill},
+  {id:'summary',en:'Health summary',hi:'स्वास्थ्य सारांश',Icon:FileHeart},
+  {id:'labs',en:'Labs',hi:'लैब',Icon:FlaskConical},
   {id:'ask',en:'Ask CareCompass',hi:'CareCompass से पूछें',Icon:MessageCircle}, {id:'care',en:'Find care',hi:'देखभाल खोजें',Icon:HeartHandshake},
   {id:'appointments',en:'Care appointments',hi:'देखभाल अपॉइंटमेंट',Icon:CalendarHeart},
   {id:'family',en:'Family profiles',hi:'परिवार की प्रोफ़ाइल',Icon:Users}, {id:'abha',en:'ABHA preview',hi:'ABHA प्रीव्यू',Icon:IdCard},
@@ -39,7 +39,7 @@ function Workspace() {
     checkDue();const interval=window.setInterval(checkDue,30000);return()=>window.clearInterval(interval);
   },[setState]);
   return <div className="health-portal"><a className="skip-link" href="#workspace-main">{t('Skip to main content','मुख्य भाग पर जाएँ')}</a><header className="portal-header"><div><button className="brand" onClick={()=>navigate('home')} aria-label="CareCompass home"><img src="/compass.svg" alt="" width="32" height="32"/><span>CareCompass</span></button><span className="portal-context">{t('Your family health workspace','परिवार का स्वास्थ्य कार्यस्थल')}</span><div className="portal-header-actions"><label className="language-control"><Globe2 size={17}/><select aria-label={t('Language','भाषा')} value={language} onChange={e=>setLanguage(e.target.value as Language)}><option value="en">English</option><option value="hi">हिंदी</option><option value="hinglish">Hinglish</option><option value="auto">Auto</option></select></label><button className="icon-button notice-button" aria-label={`${t('Notifications','सूचनाएँ')} ${unread}`} onClick={()=>navigate('messages')}><Bell size={20}/>{unread?<span>{unread}</span>:null}</button><button className="portal-profile" onClick={()=>setProfilePicker(true)}><MemberAvatar member={active} small/><span>{active.name.split(' ')[0]}</span><ChevronDown size={14}/></button><button className="icon-button portal-menu-toggle" aria-label={t('Open navigation','नेविगेशन खोलें')} aria-expanded={menu} onClick={()=>setMenu(true)}><Menu size={22}/></button></div></div></header>
-    <div className="portal-layout"><aside className="portal-sidebar"><span className="sidebar-caption">{t('Your health','आपका स्वास्थ्य')}</span><nav aria-label={t('Workspace','कार्यस्थल')}>{destinations.map(({id,en,hi:hin,Icon},i)=><button key={id} className={`${page===id?'active':''} ${i===8?'nav-group-start':''}`} aria-current={page===id?'page':undefined} onClick={()=>navigate(id)}><Icon size={18} strokeWidth={1.7}/><span>{t(en,hin)}</span></button>)}</nav><div className="sidebar-demo"><span className="demo-label"><span/>{t('Synthetic demo','कृत्रिम डेमो')}</span><p>{t('A personal health workspace, built with made-up data.','काल्पनिक डेटा से बना स्वास्थ्य कार्यस्थल।')}</p></div></aside>
+    <div className="portal-layout"><aside className="portal-sidebar"><span className="sidebar-caption">{t('Your health','आपका स्वास्थ्य')}</span><nav aria-label={t('Workspace','कार्यस्थल')}>{destinations.map(({id,en,hi:hin,Icon})=><button key={id} className={`${page===id?'active':''} ${id==='family'?'nav-group-start':''}`} aria-current={page===id?'page':undefined} onClick={()=>navigate(id)}><Icon size={18} strokeWidth={1.7}/><span>{t(en,hin)}</span></button>)}</nav><div className="sidebar-demo"><span className="demo-label"><span/>{t('Synthetic demo','कृत्रिम डेमो')}</span><p>{t('A personal health workspace, built with made-up data.','काल्पनिक डेटा से बना स्वास्थ्य कार्यस्थल।')}</p></div></aside>
     <main className="workspace-content" id="workspace-main" ref={content}><div className="workspace-breadcrumb"><span>{t('Health workspace','स्वास्थ्य कार्यस्थल')}</span><span>/</span><span>{active.name}</span><span className="workspace-demo">{t('Demo data','डेमो डेटा')}</span></div>
       {page==='home'?<HealthHome hi={hi} navigate={navigate} onUpload={addRecord}/>:null}
       {page==='records'?<Records key={state.activeId} hi={hi} openUpload={upload} onUploadClosed={()=>setUpload(false)} onSummary={()=>navigate('summary')}/>:null}

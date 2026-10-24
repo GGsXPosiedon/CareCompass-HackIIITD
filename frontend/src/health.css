@@ -197,6 +197,16 @@
 .dose-history-row strong { font-size:15px; font-weight:500; }
 .dose-history-row p { font-size:12px; color:var(--muted); margin-top:6px; }
 .ask-layout { display:grid; grid-template-columns:210px minmax(0,1fr); gap:20px; align-items:start; }
+.home-chat { margin-bottom:32px; }
+.home-chat-heading { display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:16px; }
+.home-chat-heading h2 { font-size:24px; }
+.home-chat .ask-layout { display:flex; flex-direction:column-reverse; align-items:stretch; }
+.home-chat .chat-window { display:flex; flex-direction:column; }
+.home-chat .chat-composer { order:-1; border-top:0; border-bottom:1px solid var(--border); }
+.home-chat .chat-start { padding:24px; }
+.home-chat .chat-history:has(> p) { display:none; }
+.home-chat .chat-history > div { display:inline-flex; max-width:240px; margin-right:12px; }
+.home-recent-records { margin-bottom:24px; }
 .chat-history { border:1px solid var(--border); border-radius:13px; padding:17px; }
 .chat-history h2 { font-size:15px; margin-bottom:16px; }
 .chat-history > div { display:flex; align-items:center; border-radius:7px; margin-top:5px; }
