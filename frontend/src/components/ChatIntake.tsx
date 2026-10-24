@@ -3,8 +3,9 @@ import { useId } from 'react';
 import { scenarios } from '../data';
 import type { IntakeProps } from './Intake';
 import { VoiceInput } from './Voice';
+import { Attachments } from './Attachments';
 
-export function ChatIntake({copy,hindi,language,input,setInput,person,setPerson,location,busy,error,onSubmit,onLocation}:IntakeProps) {
+export function ChatIntake({copy,hindi,language,input,setInput,location,busy,error,onSubmit,onLocation}:IntakeProps) {
   const t = (en:string,hi:string) => hindi ? hi : en;
   const inputId = useId(); const hintId = useId(); const errorId = useId();
   return <section className="chat-intake" aria-label={copy.findCare}>
@@ -12,7 +13,7 @@ export function ChatIntake({copy,hindi,language,input,setInput,person,setPerson,
     <form className="care-chat-form" onSubmit={e=>{e.preventDefault();onSubmit();}}>
       <label htmlFor={inputId} className="care-input-label">{copy.inputLabel}</label>
       <div className="care-chat-composer"><textarea id={inputId} rows={2} maxLength={2000} value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.nativeEvent.isComposing){e.preventDefault();if(input.trim()&&!busy)onSubmit();}}} placeholder={t('Describe how you’re feeling…','अपनी परेशानी बताएँ…')} disabled={busy} aria-invalid={!!error} aria-describedby={`${hintId}${error?` ${errorId}`:''}`}/>
-        <div className="care-chat-actions"><label className="care-person-select"><span className="sr-only">{copy.person}</span><select value={person} onChange={e=>setPerson(e.target.value)} disabled={busy}><option value="me">{copy.me}</option><option value="family">{copy.family}</option></select></label><div className="care-send-actions"><VoiceInput copy={copy} hindi={hindi} disabled={busy} onTranscript={text=>setInput(`${input}${input?' ':''}${text}`.slice(0,2000))}/><button type="submit" className={`care-send${input.trim()?' has-message':''}`} disabled={busy||!input.trim()} aria-label={busy?copy.checking:copy.continue} title={copy.continue}>{input.trim()?<span>{busy?copy.checking:copy.continue}</span>:null}{busy?<span className="spinner" aria-hidden="true"/>:<ArrowUp size={22}/>}</button></div></div>
+        <div className="care-chat-actions"><Attachments hindi={hindi} disabled={busy}/><div className="care-send-actions"><VoiceInput copy={copy} hindi={hindi} disabled={busy} onTranscript={text=>setInput(`${input}${input?' ':''}${text}`.slice(0,2000))}/><button type="submit" className={`care-send${input.trim()?' has-message':''}`} disabled={busy||!input.trim()} aria-label={busy?copy.checking:copy.continue} title={copy.continue}>{input.trim()?<span>{busy?copy.checking:copy.continue}</span>:null}{busy?<span className="spinner" aria-hidden="true"/>:<ArrowUp size={22}/>}</button></div></div>
       </div>
       {error?<p className="error-message" role="alert" id={errorId}>{error}</p>:null}
       <p className="care-input-hint" id={hintId}>{busy?copy.checking:t('Type or speak in English, हिंदी or Hinglish.', 'English, हिंदी या Hinglish में लिखें या बोलें।')}</p>

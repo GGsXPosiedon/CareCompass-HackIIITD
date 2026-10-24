@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
-import { ArrowLeft, BriefcaseMedical, CalendarDays, ChevronRight, Globe2, Menu, MessageSquare, Moon, PanelLeftClose, PanelLeftOpen, Plus, Sun, UserRound, X } from 'lucide-react';
+import { ArrowLeft, BriefcaseMedical, CalendarDays, ChevronRight, Globe2, History, Menu, MessageSquare, Moon, PanelLeftClose, PanelLeftOpen, Plus, Sun, UserRound, X } from 'lucide-react';
 import App from './App';
 import { getCopy } from './i18n';
 import type { Language } from './types';
@@ -7,13 +7,18 @@ import { HealthProvider, useHealth } from './health/Store';
 import { buildPatientContext } from './health/context';
 import { VoiceLanguageContext } from './voice/language';
 import { stopAllVoice } from './voice/client';
+import { ChatHistory } from './components/ChatHistory';
+import { saveConversation } from './lib/history';
+import type { CareConversation } from './lib/history';
 const Briefcase = lazy(() => import('./health/Briefcase'));
 const Profile = lazy(() => import('./health/Profile'));
 const Services = lazy(() => import('./health/Services').then(module => ({ default: module.Services })));
-type Page = 'care' | 'bookings' | 'briefcase' | 'services' | 'profile';
+type Page = 'care' | 'bookings' | 'briefcase' | 'services' | 'profile' | 'history';
 
 function Shell() {
   const [page, setPage] = useState<Page>('care');
+  const [history, setHistory] = useState<CareConversation[]>([]);
+  const [restoredConversation, setRestoredConversation] = useState<{ entry: CareConversation }>();
   const [language, setLanguage] = useState<Language>('en');
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [resetKey, setResetKey] = useState(0);
@@ -75,14 +80,16 @@ function Shell() {
         <button className={page === 'bookings' || page === 'services' ? 'active' : ''} aria-current={page === 'bookings' || page === 'services' ? 'page' : undefined} onClick={() => navigate('bookings')}><CalendarDays size={18}/>{copy.bookings}</button>
         <button className={page === 'briefcase' ? 'active' : ''} aria-current={page === 'briefcase' ? 'page' : undefined} onClick={() => navigate('briefcase')}><BriefcaseMedical size={18}/>{t('Briefcase', 'ब्रीफ़केस')}</button>
         <button className={page === 'profile' ? 'active' : ''} aria-current={page === 'profile' ? 'page' : undefined} onClick={() => navigate('profile')}><UserRound size={18}/>{t('Profile', 'प्रोफ़ाइल')}</button>
+        <button className={page === 'history' ? 'active' : ''} aria-current={page === 'history' ? 'page' : undefined} onClick={() => navigate('history')}><History size={18}/>{t('Chat history', 'बातचीत का इतिहास')}</button>
       </nav>
       <div className="care-sidebar-help"><button className="care-guide-toggle" onClick={() => setGuide(!guide)} aria-expanded={guide}>{copy.howItWorks}<ChevronRight size={16} className={guide ? 'rotated' : ''}/></button>{guide ? <ol><li>{t('Describe the need.', 'ज़रूरत बताएँ।')}</li><li>{t('Answer a few questions.', 'कुछ सवालों के जवाब दें।')}</li><li>{t('Review the care recommendation.', 'देखभाल का सुझाव देखें।')}</li><li>{t('Choose a caregiver and time.', 'देखभालकर्ता और समय चुनें।')}</li><li>{t('Confirm a demo booking.', 'डेमो बुकिंग पक्की करें।')}</li></ol> : null}</div>
       <div className="care-sidebar-bottom"><div className="care-demo-note"><span/>{t('Demo · no real appointments', 'डेमो · कोई वास्तविक बुकिंग नहीं')}</div></div>
     </aside>
     <div className="care-stage" inert={drawer}>
-      <header className="care-topbar"><div><button ref={menuButton} className="icon-button care-mobile-menu" aria-label={t('Open navigation', 'नेविगेशन खोलें')} aria-expanded={drawer} onClick={() => setDrawer(true)}><Menu size={21}/></button>{collapsed ? <button className="icon-button sidebar-desktop-toggle" aria-label={t('Expand sidebar', 'साइडबार खोलें')} onClick={() => setCollapsed(false)}><PanelLeftOpen size={20}/></button> : null}<span className="care-mobile-brand">CareCompass</span><span className="care-topbar-name">{page === 'bookings' ? copy.bookings : page === 'briefcase' ? t('Briefcase', 'ब्रीफ़केस') : page === 'services' ? t('Health services', 'स्वास्थ्य सेवाएँ') : copy.findCare}</span></div><div><button className="care-theme-toggle" type="button" onClick={() => setTheme(current => current === 'dark' ? 'light' : 'dark')} aria-label={theme === 'dark' ? t('Switch to light mode', 'लाइट मोड चालू करें') : t('Switch to dark mode', 'डार्क मोड चालू करें')} title={theme === 'dark' ? t('Switch to light mode', 'लाइट मोड चालू करें') : t('Switch to dark mode', 'डार्क मोड चालू करें')}>{theme === 'dark' ? <Sun size={17}/> : <Moon size={17}/>}<span>{theme === 'dark' ? t('Light mode', 'लाइट मोड') : t('Dark mode', 'डार्क मोड')}</span></button><span className="care-demo-badge">{t('Demo', 'डेमो')}</span><label className="language-control"><Globe2 size={16}/><select aria-label={copy.language} value={language} onChange={e => setLanguage(e.target.value as Language)}><option value="en">English</option><option value="hi">हिंदी</option><option value="hinglish">Hinglish</option><option value="auto">Auto</option></select></label></div></header>
+      <header className="care-topbar"><div><button ref={menuButton} className="icon-button care-mobile-menu" aria-label={t('Open navigation', 'नेविगेशन खोलें')} aria-expanded={drawer} onClick={() => setDrawer(true)}><Menu size={21}/></button>{collapsed ? <button className="icon-button sidebar-desktop-toggle" aria-label={t('Expand sidebar', 'साइडबार खोलें')} onClick={() => setCollapsed(false)}><PanelLeftOpen size={20}/></button> : null}<span className="care-mobile-brand">CareCompass</span><span className="care-topbar-name">{page === 'bookings' ? copy.bookings : page === 'briefcase' ? t('Briefcase', 'ब्रीफ़केस') : page === 'services' ? t('Health services', 'स्वास्थ्य सेवाएँ') : page === 'history' ? t('Chat history', 'बातचीत का इतिहास') : page === 'profile' ? t('Profile', 'प्रोफ़ाइल') : copy.findCare}</span></div><div><button className="care-theme-toggle" type="button" onClick={() => setTheme(current => current === 'dark' ? 'light' : 'dark')} aria-label={theme === 'dark' ? t('Switch to light mode', 'लाइट मोड चालू करें') : t('Switch to dark mode', 'डार्क मोड चालू करें')} title={theme === 'dark' ? t('Switch to light mode', 'लाइट मोड चालू करें') : t('Switch to dark mode', 'डार्क मोड चालू करें')}>{theme === 'dark' ? <Sun size={17}/> : <Moon size={17}/>}<span>{theme === 'dark' ? t('Light mode', 'लाइट मोड') : t('Dark mode', 'डार्क मोड')}</span></button><span className="care-demo-badge">{t('Demo', 'डेमो')}</span><label className="language-control"><Globe2 size={16}/><select aria-label={copy.language} value={language} onChange={e => setLanguage(e.target.value as Language)}><option value="en">English</option><option value="hi">हिंदी</option><option value="hinglish">Hinglish</option><option value="auto">Auto</option></select></label></div></header>
       <div id="care-main" role="main" className="care-main">
-        <div className="care-shell-flow" hidden={page !== 'care' && page !== 'bookings'}><App embedded chatLayout patientContext={patientContext} externalLanguage={language} externalBookings={page === 'bookings'} resetRequest={resetKey} onStartCare={() => navigate('care')} onViewBookings={() => navigate('bookings')} onExploreServices={() => navigate('services')}/></div>
+        <div className="care-shell-flow" hidden={page !== 'care' && page !== 'bookings'}><App embedded chatLayout restoredConversation={restoredConversation} onConversation={entry => setHistory(previous => saveConversation(previous, entry))} patientContext={patientContext} externalLanguage={language} externalBookings={page === 'bookings'} resetRequest={resetKey} onStartCare={() => navigate('care')} onViewBookings={() => navigate('bookings')} onExploreServices={() => navigate('services')}/></div>
+        {page === 'history' ? <ChatHistory history={history} hindi={hi} onNew={newRequest} onOpen={entry => { setLanguage(entry.language); setRestoredConversation({ entry }); navigate('care'); }}/> : null}
         {briefcaseVisited ? <div className="care-support-page" hidden={page !== 'briefcase'}><Suspense fallback={<p className="workspace-loading" role="status">{t('Opening your briefcase…', 'ब्रीफ़केस खोल रहे हैं…')}</p>}><Briefcase hi={hi}/></Suspense></div> : null}
         {profileVisited ? <div className="care-support-page" hidden={page !== 'profile'}><Suspense fallback={<p className="workspace-loading" role="status">{t('Opening your profile…', 'प्रोफ़ाइल खोल रहे हैं…')}</p>}><Profile hi={hi}/></Suspense></div> : null}
         {servicesVisited ? <div className="care-support-page" hidden={page !== 'services'}><div className="health-portal services-content"><button className="text-button services-back" onClick={() => navigate('bookings')}><ArrowLeft size={17}/>{t('Back to my bookings', 'मेरी बुकिंग पर लौटें')}</button><Suspense fallback={<p role="status">{t('Opening health services…', 'स्वास्थ्य सेवाएँ खोल रहे हैं…')}</p>}><Services hi={hi} onCare={newRequest}/></Suspense></div></div> : null}

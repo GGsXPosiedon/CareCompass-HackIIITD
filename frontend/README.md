@@ -14,7 +14,13 @@ Open **Find care**, then choose **Fever & cough** (or switch to Hindi/Hinglish f
 4. Choose a caregiver with remaining slots, select **Choose a time**, pick a time and select **Confirm demo booking**.
 5. View the confirmation, select **Download summary**, then open **My bookings**.
 
-The microphone opens **Start voice conversation**, a hands-free care conversation with an on-screen transcript and typing fallback. The sidebar contains **Find care**, **My bookings**, **Briefcase** and **New request**. **My bookings** includes **Explore health services**. On mobile, open the menu to reach them. A new request keeps completed bookings in this tab; refreshing clears them.
+The microphone opens **Start voice conversation**, a hands-free care conversation with an on-screen transcript and typing fallback. The sidebar contains **Find care**, **My bookings**, **Briefcase**, **Profile**, **Chat history** and **New request**. **My bookings** includes **Explore health services**. On mobile, open the menu to reach them. A new request keeps completed bookings in this tab; refreshing clears them.
+
+## Attachments and chat history
+
+The composer’s **+** button replaces the Myself / Family member selector. Choose **Lab reports and files** or **Photos and images** to select PDF, JPG or PNG files (up to 10 files, 10 MB each). Selected files appear with remove controls and are saved to the active profile’s Briefcase in this tab. File contents are not uploaded to the care API or analysed. Existing profile sharing can include record names in patient context.
+
+**Chat history**, beneath Profile, saves successful text and voice care conversations in this tab. Open an entry to read its transcript, then select **Open conversation** to resume a pending question or reopen the recommendation. Continuing updates the same thread; New request starts another. Opening an old response does not automatically replay audio. History and files clear on refresh; no account or persistent chat database is added.
 
 ## Voice conversation
 
@@ -30,7 +36,7 @@ Typed conversations retain automatic reply playback with **Stop playback** and *
 
 ## Briefcase and health services
 
-The main sidebar has three destinations: **Find care**, **My bookings**, and **Briefcase**. The chat-first landing layout and fonts are retained, with one shared dark/light theme across all sections.
+The main sidebar has **Find care**, **My bookings**, **Briefcase**, **Profile**, and **Chat history**. The chat-first landing layout and fonts are retained, with one shared dark/light theme across all sections.
 
 **Briefcase** opens the document list directly. Its internal navigation contains **Home**, **Records**, **Health summary**, and **Labs**. Home provides record upload and recent documents; Records includes local PDF/image selection, camera-input affordance, sample insertion, search, category/date sorting, document previews, consent previews and metadata downloads. Health summary organizes the current synthetic patient's records and timeline; Labs links categories to documents and the lab-upload workflow.
 

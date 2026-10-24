@@ -19,12 +19,14 @@ import { primeVoicePlayback, suppressResponseVoice } from './voice/playback';
 import { stopAllVoice } from './voice/client';
 import { VoiceConversation } from './components/VoiceConversation';
 import type { SpokenReply } from './voice/conversation';
+import type { CareConversation } from './lib/history';
 
 type View = 'intake' | 'questions' | 'recommendation' | 'caregivers' | 'booking' | 'confirmation' | 'bookings' | 'emergency';
 type ModalView = 'location' | 'help' | 'how' | null;
-export default function App({ embedded = false, chatLayout = false, resetRequest = 0, externalLanguage, patientName, patientContext, externalBookings, onStartCare, onViewBookings, onExploreServices }: { embedded?: boolean; chatLayout?: boolean; resetRequest?: number; externalLanguage?: Language; patientName?: string; patientContext?: PatientContext; externalBookings?: boolean; onStartCare?: () => void; onViewBookings?: () => void; onExploreServices?: () => void }) {
+export default function App({ embedded = false, chatLayout = false, resetRequest = 0, externalLanguage, patientName, patientContext, externalBookings, restoredConversation, onConversation, onStartCare, onViewBookings, onExploreServices }: { embedded?: boolean; chatLayout?: boolean; resetRequest?: number; externalLanguage?: Language; patientName?: string; patientContext?: PatientContext; externalBookings?: boolean; restoredConversation?: { entry: CareConversation }; onConversation?: (entry: CareConversation) => void; onStartCare?: () => void; onViewBookings?: () => void; onExploreServices?: () => void }) {
   const [view, setView] = useState<View>('intake');
   const [voiceOpen, setVoiceOpen] = useState(false);
+  const conversationId = useRef<string | null>(null);
   const [language, setLanguage] = useState<Language>('en');
   const hindi = language === 'hi'; const copy = getCopy(hindi);
   const [input, setInput] = useState('');
@@ -60,6 +62,15 @@ export default function App({ embedded = false, chatLayout = false, resetRequest
     else if (embedded && view === 'bookings') setView('intake');
   }, [externalBookings]);
   useEffect(() => {
+    if (!restoredConversation) return;
+    const entry = restoredConversation.entry;
+    stopAllVoice(); generation.current++; locked.current = false; conversationId.current = entry.id;
+    suppressResponseVoice(entry.result);
+    setVoiceOpen(false); setBusy(false); setError(''); setLanguage(entry.language); setInput(entry.input); setPerson(entry.person);
+    setLocation(entry.location); setMessages(entry.messages); setResult(entry.result); setAnswer('');
+    setProfiles([]); setSelected(null); setSlot(''); setView(nextView(entry.result));
+  }, [restoredConversation]);
+  useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
     if (view !== 'intake') main.current?.querySelector<HTMLElement>('h1')?.focus({ preventScroll: true });
   }, [view]);
@@ -68,12 +79,14 @@ export default function App({ embedded = false, chatLayout = false, resetRequest
   }, [result, view]);
 
   function reset() {
+    conversationId.current = null;
     setVoiceOpen(false);
     generation.current++; locked.current = false;
     setBusy(false); setView('intake'); setInput(''); setAnswer(''); setMessages([]); setResult(null); setProfiles([]); setSelected(null); setSlot(''); setError(''); setFilter('all'); setMenu(false); setAnnouncement('');
     onStartCare?.();
   }
   function edit() {
+    conversationId.current = null;
     setVoiceOpen(false);
     generation.current++; locked.current = false;
     setBusy(false); setView('intake'); setAnswer(''); setMessages([]); setResult(null); setProfiles([]); setSelected(null); setError(''); setSlot('');
@@ -95,7 +108,7 @@ export default function App({ embedded = false, chatLayout = false, resetRequest
     const history = followUp ? messages : [];
     const requestLocation = override?.location ?? location;
     const relation = `${patientName ? `${patientName} (demo) · ` : ''}${person === 'me' ? copy.me : copy.family}`;
-    const payload: IntakeRequest = { user_input: followUp ? text : `${relation}: ${text}`, language: language === 'en' ? 'auto' : language, location: { lat: requestLocation.lat, lng: requestLocation.lng }, conversation_history: history, ...(patientContext ? { patient_context: patientContext } : {}) };
+    const payload: IntakeRequest = { user_input: followUp || chatLayout ? text : `${relation}: ${text}`, language: language === 'en' ? 'auto' : language, location: { lat: requestLocation.lat, lng: requestLocation.lng }, conversation_history: history, ...(patientContext ? { patient_context: patientContext } : {}) };
     const current = ++generation.current; locked.current = true; setBusy(true); setError('');
     if (!followUp) { setInput(text); setLocation(requestLocation); setMessages([]); setResult(null); setSelected(null); setProfiles([]); setView('intake'); }
     try {
@@ -106,6 +119,9 @@ export default function App({ embedded = false, chatLayout = false, resetRequest
       const nextMessages: Message[] = [...history, { role: 'user', content: payload.user_input }];
       if (response.follow_up_question) nextMessages.push({ role: 'assistant', content: response.follow_up_question });
       setMessages(nextMessages); setResult(response); setAnswer(''); setView(nextView(response));
+      if (!followUp || !conversationId.current) conversationId.current = crypto.randomUUID();
+      const archivedMessages: Message[] = response.follow_up_question ? nextMessages : [...nextMessages, { role: 'assistant', content: nextView(response) === 'emergency' ? `${copy.emergencyTitle} ${response.reasoning} ${copy.emergencyBody}` : `${careLabel(response.care_type!, hindi)}. ${response.reasoning}` }];
+      onConversation?.({ id: conversationId.current, title: (followUp ? input : text).slice(0, 100), input: followUp ? input : text, person, language, location: requestLocation, messages: archivedMessages, result: response, updatedAt: new Date().toISOString() });
       return response;
     } catch (cause) { if (current === generation.current) setError(!DEMO_MODE && (cause instanceof TypeError || cause instanceof DOMException || (cause instanceof ApiError && cause.status >= 500)) ? copy.connectionError : copy.genericError); }
     finally { if (current === generation.current) { setBusy(false); locked.current = false; } }
