@@ -97,15 +97,3 @@ html[data-care-motion="full"] {
   from { transform: rotate(-20deg); }
   to { transform: none; }
 }
-
-/* A user's explicit app preference wins over the OS default. */
-html[data-care-motion="reduced"] {
-  &, *, *::before, *::after {
-    animation: none !important;
-    transition: none !important;
-    scroll-behavior: auto !important;
-  }
-  .care-shell, .care-shell :where(button, input, textarea, select) {
-    transition: background-color 80ms linear, color 80ms linear, border-color 80ms linear !important;
-  }
-}
