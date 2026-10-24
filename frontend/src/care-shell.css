@@ -208,7 +208,6 @@ body:has(.care-shell) { min-width:0; background:#20201e; }
   .briefcase-tabs button { padding:9px 10px; font-size:12px; }
   .care-support-page { min-height:calc(100dvh - 68px); }
 }
-@media(prefers-reduced-motion:reduce) { .care-shell button,.care-guide-toggle svg { transition:none; } }
 
 /* ---- Chat-style follow-up question (pops up in the answer bar) ---------------------------- */
 .focused-questions > .context-bar,.focused-questions > .demo-tools { display:none; }
@@ -224,7 +223,6 @@ body:has(.care-shell) { min-width:0; background:#20201e; }
   padding:16px 16px 12px; box-shadow:0 14px 40px #0004, 0 0 0 1px color-mix(in srgb, var(--teal) 18%, transparent); animation:ask-in .22s ease-out; }
 .ask-card:focus-within { border-color:var(--teal); }
 @keyframes ask-in { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
-@media (prefers-reduced-motion:reduce) { .ask-card { animation:none; } }
 .ask-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; }
 .ask-badge { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:500; color:var(--teal); background:var(--choice); border-radius:999px; padding:5px 10px; }
 .ask-head-actions { display:flex; align-items:center; gap:4px; }

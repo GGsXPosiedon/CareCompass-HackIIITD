@@ -6,7 +6,7 @@
   --motion-settle: cubic-bezier(.16, 1, .3, 1);
 }
 
-@media (prefers-reduced-motion: no-preference) {
+html[data-care-motion="full"] {
   /* Keep theme changes in sync across the shell, forms and health pages. */
   .care-shell,
   .care-shell :where(.care-sidebar, .care-topbar, .health-portal, .health-card,
@@ -98,9 +98,13 @@
   to { transform: none; }
 }
 
-/* Existing global reduced-motion rules remove all spatial animations.
-   Retain only immediate color feedback for controls and theme changes. */
-@media (prefers-reduced-motion: reduce) {
+/* A user's explicit app preference wins over the OS default. */
+html[data-care-motion="reduced"] {
+  &, *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
   .care-shell, .care-shell :where(button, input, textarea, select) {
     transition: background-color 80ms linear, color 80ms linear, border-color 80ms linear !important;
   }
