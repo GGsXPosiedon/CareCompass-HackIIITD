@@ -23,7 +23,7 @@ CareCompass builds on GD Arena's short-recording → server transcription → ge
 
 This is turn-based voice conversation over the current care API, not a new general-purpose assistant or simultaneous full-duplex audio. The microphone is off while a reply plays, so the assistant cannot hear itself. Use **Speak now** to interrupt. Browser speech is the fallback without a Sarvam key; its endpoint timing is controlled by browser recognition.
 
-Typed conversations still play new replies automatically with **Stop playback** and **Read aloud** controls. If a browser blocks audio, use the playback control once to enable it. Other existing dictation controls continue to insert editable text without automatically submitting it.
+Typed care conversations stay silent until **Read aloud** is selected. Voice conversation mode speaks replies automatically; **Stop playback** remains available during manual playback. If a browser blocks audio, use the playback control once to enable it. Other existing dictation controls continue to insert editable text without automatically submitting it.
 
 The Sarvam key covers speech input/output only. It does not enable Gemini or change the backend's care-routing model. No Sarvam key is included in the repository or browser bundle.
 
@@ -34,7 +34,7 @@ The Sarvam key covers speech input/output only. It does not enable Gemini or cha
 | English | `en-IN` / `transcribe` | `en-IN` |
 | Hindi | `hi-IN` / `transcribe` | `hi-IN` |
 | Hinglish | `hi-IN` / `translit` (Roman script) | `hi-IN`, including English words |
-| Auto | `unknown` / `transcribe` | Hindi for Devanagari text; English otherwise |
+| Auto | `unknown` / `transcribe` | Hindi for Devanagari/Hinglish text; English otherwise |
 
 In voice conversation mode, transcription is automatically submitted as a care request. Outside that mode, dictation only adds editable text to the input. The app transcribes speech rather than asking a generative model to invent a medical answer from audio.
 
@@ -75,3 +75,7 @@ The local `/api/voice` route, automatic reply playback, conversation start/pause
 - GD Arena [speech-to-text implementation](https://github.com/GGsXPosiedon/ps2-gd-arena/blob/ee9bee3e6d73899beba996373e8b8ca26076873d/src/lib/server/stt.ts) and [Sarvam voices](https://github.com/GGsXPosiedon/ps2-gd-arena/blob/ee9bee3e6d73899beba996373e8b8ca26076873d/src/lib/server/voices.ts), MIT, Copyright (c) 2026 Shubham Swami. CareCompass adapts the workflow, WAV/silence approach and language settings, with one care-assistant voice rather than GD Arena's participant voices.
 - [Sarvam speech-to-text REST](https://docs.sarvam.ai/api-reference/speech-to-text/transcribe) and [text-to-speech REST](https://docs.sarvam.ai/api-reference/text-to-speech/convert).
 - [Vercel Node.js Functions](https://vercel.com/docs/functions/runtimes/node-js).
+
+### Preserving Hindi
+
+New chats default to Auto. Auto sends Sarvam `language_code=unknown` with `mode=transcribe`; Hindi output is preserved in Devanagari. It does not call a speech-to-English translation route. Hindi/Hinglish text chooses Hindi playback. Explicit language choices remain available; older saved conversations retain their language, so choose Auto or Hindi if needed. Browser fallback uses Hindi recognition for Auto because Web Speech lacks a portable multi-language auto-detection setting. These paths have mocked regression coverage; live microphone recognition accuracy must still be checked on the demo device.

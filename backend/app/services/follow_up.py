@@ -29,4 +29,10 @@ def next_question(facts: CaseFacts) -> tuple[str, list[str]]:
         if q:
             return q.message, q.options or []
     lang = facts.language
+    if facts.n_follow_ups_asked:
+        return {
+            "en": "What symptoms or care task are you concerned about right now?",
+            "hi": "अभी कौन से लक्षण हैं या कौन सा देखभाल का काम चाहिए?",
+            "hinglish": "Abhi kya symptoms hain ya kaunsi care ka kaam chahiye?",
+        }[lang], OPTIONS[lang]
     return QUESTIONS[lang], OPTIONS[lang]

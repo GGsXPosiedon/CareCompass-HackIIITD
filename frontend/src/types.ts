@@ -1,7 +1,7 @@
 export type Language = 'en' | 'hi' | 'hinglish' | 'auto';
 export type CareType = 'paramedic_home_visit' | 'home_nursing' | 'teleconsultation' | 'lab_test_home' | 'emergency_112';
 export type Urgency = 'scheduled' | 'same_day' | 'emergency';
-export interface Message { role: 'user' | 'assistant'; content: string }
+export interface Message { role: 'user' | 'assistant'; content: string; kind?: 'follow_up' | 'recommendation' | 'emergency' }
 export interface Location { lat: number; lng: number; label: string }
 export interface IntakeRequest {
   user_input: string;
@@ -19,6 +19,9 @@ export interface TriageResponse {
   reasoning: string;
   matched_caregivers: Match[];
   answer_options?: string[];
+  response_source?: 'gemini' | 'rules' | 'safety_rules';
+  service_notice?: string | null;
+  response_language?: 'en' | 'hi' | 'hinglish';
 }
 export interface Caregiver {
   id: string;

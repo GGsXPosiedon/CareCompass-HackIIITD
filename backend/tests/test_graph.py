@@ -10,10 +10,11 @@ from app.config import get_settings
 from app.db.repository import CaregiverRepository
 from app.schemas.external import TriageRequest
 from app.schemas.internal import RouteDecision
+from app.schemas.llm import SafetyReview
 from app.services.gemini import GeminiClient
 from app.services.matching import Matcher
 from app.services.pipeline import Pipeline
-from conftest import IST, req
+from conftest import IST, req, seed_settings
 
 SAFE = {"findings": [], "screening_question": None, "screening_options": []}
 
@@ -25,7 +26,7 @@ def triage(**kw):
 
 
 def make(safety=SAFE, tri=None, *, status=200, raises=False, raw=None, capture=None, **settings):
-    s = dataclasses.replace(get_settings(), gemini_api_key="test-key", llm_backend="auto", **settings)
+    s = dataclasses.replace(seed_settings(), gemini_api_key="test-key", llm_backend="auto", **settings)
 
     def handler(request: httpx.Request) -> httpx.Response:
         body = json.loads(request.content)
@@ -130,16 +131,92 @@ def test_llm_decision_and_reasoning_used_with_skills_enforced():
     assert r.matched_caregivers and all("injection_iv" in p.repo.get(c.caregiver_id).skills for c in r.matched_caregivers)
 
 
+def test_all_llm_required_skills_are_hard_filters_and_never_relaxed():
+    skills = ["injection_iv", "catheter_care"]
+    p = make(tri=triage(care_type="home_nursing", required_skills=skills))
+    result = run(p, "Need nursing help", location=None)
+    assert result.matched_caregivers
+    assert all(set(skills) <= p.repo.get(c.caregiver_id).skills for c in result.matched_caregivers)
+    p = make(tri=triage(care_type="home_nursing", required_skills=["nebulization", "catheter_care", "post_surgical_care"]))
+    assert run(p, "Need nursing help", location=None).matched_caregivers == []
+
+
+def test_gemini_urgency_can_be_scheduled_for_a_routine_consultation():
+    p = make(tri=triage(care_type="teleconsultation", urgency="scheduled"))
+    assert run(p, "Routine doctor follow-up tomorrow").urgency == "scheduled"
+
+
+def test_gemini_emergency_urgency_alone_escalates_and_never_returns_matches():
+    p = make(tri=triage(care_type="teleconsultation", urgency="emergency"))
+    result = run(p, "I need help choosing care")
+    assert result.care_type == "emergency_112" and not result.matched_caregivers
+
+
 def test_llm_follow_up_question_and_options():
     p = make(tri=triage(follow_up_question="Kisko madad chahiye, aur kya problem hai?", answer_options=["Bukhar", "Injection", "Test", "Doctor se baat"]))
     r = run(p, "help chahiye")
     assert r.follow_up_question.startswith("Kisko") and len(r.answer_options) == 4 and r.care_type is None
 
 
-def test_confident_model_overrides_llm_asking():
-    # Rules are confident (named procedure) -> no needless question even if the LLM wanted one.
+def test_llm_first_respects_contextual_question_even_when_rules_are_confident():
     r = run(make(tri=triage(follow_up_question="What do you need?")), "ghar pe injection lagwana hai")
-    assert r.care_type == "home_nursing"
+    assert r.follow_up_question == "What do you need?" and r.care_type is None
+
+
+def test_short_answer_and_original_case_are_sent_to_gemini():
+    cap = []
+    p = make(tri=triage(care_type="teleconsultation", reasoning="A doctor can discuss the reports."), capture=cap)
+    history = [{"role": "user", "content": "I need help with reports"},
+               {"role": "assistant", "content": "Do you want a doctor to review them?", "kind": "follow_up"}]
+    result = run(p, "Yes", history=history)
+    assert result.care_type == "teleconsultation" and result.response_source == "gemini"
+    for _, body in cap:
+        case = body["contents"][0]["parts"][0]["text"]
+        assert "I need help with reports" in case and "Do you want a doctor to review them?" in case
+        assert "<user_message>\nYes\n</user_message>" in case
+
+
+def test_repeated_gemini_question_is_replaced_with_a_different_question():
+    p = make(tri=triage(follow_up_question="What do you need?"))
+    result = run(p, "help", history=[{"role": "assistant", "content": "What do you need?"}])
+    assert result.follow_up_question and result.follow_up_question != "What do you need?"
+
+
+def test_gemini_failure_is_visible_in_response():
+    result = run(make(status=503), "need a blood test")
+    assert result.response_source == "rules" and result.service_notice
+
+
+def test_gemini3_uses_thinking_level_and_retries_temporary_server_failure():
+    settings = dataclasses.replace(get_settings(), gemini_api_key="test", gemini_model="gemini-3.5-flash")
+    requests = []
+    def handler(request):
+        requests.append(json.loads(request.content))
+        if len(requests) == 1:
+            return httpx.Response(503)
+        return httpx.Response(200, json={"candidates": [{"finishReason": "STOP", "content": {"parts": [{"text": json.dumps(SAFE)}]}}]})
+    output = GeminiClient(settings, transport=httpx.MockTransport(handler)).structured("SAFETY SCREENER", "Hello", SafetyReview)
+    assert output.findings == [] and len(requests) == 2
+    assert requests[0]["generationConfig"]["thinkingConfig"] == {"thinkingLevel": "low"}
+    assert requests[0]["generationConfig"]["maxOutputTokens"] >= 4096
+
+
+def test_recommendation_starts_new_follow_up_budget():
+    p = make(tri=triage(follow_up_question="What would you like help with now?"))
+    history = [{"role": "assistant", "content": "How long have you had the fever?", "kind": "follow_up"},
+               {"role": "assistant", "content": "What is your temperature?", "kind": "follow_up"},
+               {"role": "assistant", "content": "A medic can visit.", "kind": "recommendation"}]
+    result = run(p, "I need help choosing care", history=history)
+    assert result.follow_up_question == "What would you like help with now?"
+
+
+def test_unresolved_danger_sign_does_not_repeat_the_same_screening_question():
+    safety = {"findings": [{"flag": "breathlessness", "status": "possible", "evidence": "unclear"}],
+              "screening_question": "Is breathing difficult?", "screening_options": ["Yes", "No"]}
+    p = make(safety=safety, tri=triage(care_type="paramedic_home_visit"))
+    result = run(p, "I cannot tell", history=[{"role": "assistant", "content": "Is breathing difficult?", "kind": "follow_up"}])
+    assert result.care_type == "emergency_112" and result.follow_up_question is None
+    assert result.matched_caregivers == []
 
 
 def test_agree_or_ask_policy_asks_on_disagreement():

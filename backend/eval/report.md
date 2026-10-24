@@ -1,7 +1,9 @@
 # CareCompass evaluation report
 
-- Data: `gold_cases.jsonl` (52 cases) · Mode: **LLM=gemini-2.5-flash** · Clock: 2026-10-24T12:00 IST
-- Median latency: 62 ms
+- Data: `gold_cases.jsonl` (52 cases) · Mode: **LLM off (rules only)** · Clock: 2026-10-24T12:00 IST
+- Median latency: 2 ms
+
+- Actual response sources: {'safety_rules': 22, 'rules': 30}
 
 ## 1. Safety (never miss an emergency)
 
@@ -17,6 +19,8 @@
 |---|---|
 | Care-type accuracy | 97.9% (47/48) |
 | Urgency accuracy | 97.9% |
+| Care-type macro-F1 | 0.9800 |
+| Urgency macro-F1 | 0.9666 |
 | Care-type accuracy · en | 95.5% (21/22) |
 | Care-type accuracy · hi | 100.0% (8/8) |
 | Care-type accuracy · hinglish | 100.0% (18/18) |
@@ -33,11 +37,11 @@
 | Check | Ours | Baseline recipe |
 |---|---|---|
 | Right role & active | 100.0% | 100.0% |
-| Has the required skill | 100.0% | 87.5% |
+| Has the required skill | 100.0% | 96.2% |
 | Free in the needed window | 100.0% | 100.0% |
 | Within service radius | 100.0% | 100.0% |
-| Speaks the family's language | 100.0% | 100.0% |
-| Routed cases with no eligible caregiver | 3.8% | – |
+| Speaks the family's language | 77.9% | 78.2% |
+| Routed cases with no eligible caregiver | 0.0% | – |
 
 ## 5. Explainability
 

@@ -102,6 +102,17 @@ def pct(a: float, b: float) -> str:
     return "n/a" if not b else f"{100 * a / b:.1f}%"
 
 
+def macro_f1(pairs: list[tuple[str, str | None]]) -> float:
+    labels = {expected for expected, _ in pairs}
+    scores = []
+    for label in labels:
+        tp = sum(expected == predicted == label for expected, predicted in pairs)
+        fp = sum(expected != label and predicted == label for expected, predicted in pairs)
+        fn = sum(expected == label and predicted != label for expected, predicted in pairs)
+        scores.append(2 * tp / (2 * tp + fp + fn) if 2 * tp + fp + fn else 0.0)
+    return sum(scores) / len(scores) if scores else 0.0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--file", default=str(Path(__file__).with_name("gold_cases.jsonl")))
@@ -124,12 +135,15 @@ def main() -> int:
     by_lang = defaultdict(lambda: defaultdict(int))
     ours, base = defaultdict(int), defaultdict(int)
     failures, latencies = [], []
+    care_pairs, urgency_pairs = [], []
+    sources = defaultdict(int)
     for r in rows:
         exp = r["expected"]
         req = TriageRequest(**{k: r[k] for k in ("user_input", "conversation_history", "location") if k in r},
                             language=r.get("language", "auto") if r.get("language") in ("en", "hi", "hinglish", "auto") else "auto")
         t0 = time.perf_counter()
         resp = pipe.triage(req)
+        sources[resp.response_source] += 1
         latencies.append(time.perf_counter() - t0)
         facts = intake.build_facts(req)
         lang = r.get("language", facts.language)
@@ -149,6 +163,8 @@ def main() -> int:
             tally["noask_gold"] += 1
             tally["needless_ask"] += bool(resp.follow_up_question)
         if exp["care_type"]:
+            care_pairs.append((exp["care_type"], resp.care_type))
+            urgency_pairs.append((exp["urgency"], resp.urgency))
             tally["ct_gold"] += 1
             ok_ct = resp.care_type == exp["care_type"]
             tally["ct_hit"] += ok_ct
@@ -175,6 +191,7 @@ def main() -> int:
         "# CareCompass evaluation report", "",
         f"- Data: `{Path(args.file).name}` ({tally['n']} cases) · Mode: **{mode}** · Clock: {args.now} IST",
         f"- Median latency: {sorted(latencies)[len(latencies) // 2] * 1000:.0f} ms", "",
+        f"- Actual response sources: {dict(sources)}", "",
         "## 1. Safety (never miss an emergency)", "",
         "| Metric | Value | Target |", "|---|---|---|",
         f"| Emergency recall | **{pct(tally['em_hit'], tally['em_gold'])}** ({tally['em_hit']}/{tally['em_gold']}) | 100% |",
@@ -184,6 +201,8 @@ def main() -> int:
         "| Metric | Value |", "|---|---|",
         f"| Care-type accuracy | {pct(tally['ct_hit'], tally['ct_gold'])} ({tally['ct_hit']}/{tally['ct_gold']}) |",
         f"| Urgency accuracy | {pct(tally['urg_hit'], tally['ct_gold'])} |",
+        f"| Care-type macro-F1 | {macro_f1(care_pairs):.4f} |",
+        f"| Urgency macro-F1 | {macro_f1(urgency_pairs):.4f} |",
         *[f"| Care-type accuracy · {k} | {pct(v['hit'], v['n'])} ({v['hit']}/{v['n']}) |" for k, v in sorted(by_lang.items())], "",
         "## 3. Knows when to ask", "",
         "| Metric | Value |", "|---|---|",

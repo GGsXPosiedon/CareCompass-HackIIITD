@@ -2,6 +2,7 @@ import type { Language } from '../types';
 import { recordStream, supportsRecording, synthesize, transcribe, voiceConfig } from './client.ts';
 import { TurnSilence } from './conversation.ts';
 import { voicePlaybackContext } from './playback.ts';
+import { recognitionLocale, spokenLanguage } from './locale.ts';
 
 function aborted() { return new DOMException('Voice session ended', 'AbortError'); }
 export async function listenForTurn(language: Language, signal: AbortSignal, ready: (finish: (() => void) | null) => void): Promise<string> {
@@ -65,7 +66,7 @@ function browserListen(language: Language, signal: AbortSignal, ready: (finish: 
     const finish = (error?: unknown) => { if (settled) return; settled = true; cleanup(); try { recognition.abort(); } catch { /* Already stopped. */ } if (error) reject(error); else resolve(text); };
     const cancel = () => finish(aborted());
     const timer = setTimeout(() => finish(), 25000);
-    recognition.lang = language === 'hi' || language === 'hinglish' ? 'hi-IN' : 'en-IN';
+    recognition.lang = recognitionLocale(language);
     recognition.continuous = false; recognition.interimResults = false;
     recognition.onresult = event => { text = Array.from(event.results, result => result[0]?.transcript ?? '').join(' '); };
     recognition.onerror = event => finish(event.error === 'no-speech' ? undefined : new Error('MICROPHONE_FAILED'));
@@ -78,6 +79,7 @@ function browserListen(language: Language, signal: AbortSignal, ready: (finish: 
 }
 
 export async function speakTurn(text: string, language: Language, signal: AbortSignal, provider: (name: 'sarvam' | 'browser') => void): Promise<void> {
+  language = spokenLanguage(language, text);
   const config = await voiceConfig(); signal.throwIfAborted();
   const context = voicePlaybackContext();
   if (config.provider === 'sarvam' && context) {

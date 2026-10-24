@@ -9,7 +9,7 @@ organiser contract: `care_type`, `urgency`, `red_flags`, an optional single `fol
 uv sync                              # creates .venv with the locked deps (Python 3.12 via .python-version)
 cp .env.example .env                 # add GEMINI_API_KEY (optional: without it the deterministic path runs)
 uv run uvicorn app.main:app --reload # http://127.0.0.1:8000/docs
-uv run pytest -q                     # 89 tests, no network
+uv run pytest -q                     # 105 tests, no network
 uv run python -m eval.run_eval       # judging metrics -> eval/report.md (exit 1 if any emergency is missed)
 ```
 
@@ -61,7 +61,7 @@ START → intake → rules_safety ──fired──▶ emergency (112, no caregi
 5. If Gemini fails, times out, or returns anything that violates the schema, the deterministic path answers.
 
 ### Fusion policy (`FUSION_POLICY`)
-- `llm_first` (default now): LLM decides; if it wants to ask but your classifier is confident (≥ `MODEL_TRUST_THRESHOLD`, 0.85) the classifier answers instead, so no needless question.
+- `llm_first` (default now): Gemini chooses the service or a contextual follow-up. The placeholder rule classifier does not override a successful Gemini question. Rules remain the fallback when Gemini is unavailable; emergency rules always run first.
 - `model_first`: use when your trained model is in place; LLM is the fallback.
 - `agree_or_ask`: if both decide and disagree, ask one clarifying question.
 Agreement between the two is logged in the trace for analysis.
@@ -71,7 +71,7 @@ Versioned Markdown files with a front-matter header (`id`, `version`, `node`, `o
 - `safety_screener.md`: red-flag definitions with Hindi/Hinglish cues, present-vs-possible rules, negation and history handling, screening question, examples.
 - `triage_analyst.md`: service definitions and tie-breaks, follow-up policy, skills vocabulary, how to use the family profile, language/tone rules, examples.
 
-Both prompts treat `<history>`, `<user_message>` and `PROFILE` as untrusted data (prompt-injection guard). Prompt tags (`triage_analyst@1.0.0`) appear in the trace.
+Both prompts treat `<history>`, `<user_message>` and `PROFILE` as untrusted data (prompt-injection guard). Prompt tags (`triage_analyst@1.2.0`) appear in the trace.
 
 ## Schema enforcement
 - **Requests:** `TriageRequest` types/ranges are validated (422 on bad input); unknown keys ignored for harness compatibility.
@@ -91,7 +91,7 @@ Both prompts treat `<history>`, `<user_message>` and `PROFILE` as untrusted data
 | Skill | 0.20 | `0.85 × coverage of needed/preferred skills + 0.15 × tier` (tier only for Medics) |
 | Rating | 0.15 | `rating / 5` |
 
-Ties go to whoever is free sooner. Gemini-suggested skills are applied as a requirement first and relaxed if nobody qualifies. The `reason` string is built only from real profile fields (top two factors + availability window).
+Ties go to whoever is free sooner. Every Gemini-required skill is enforced independently; no matches are returned when nobody qualifies. The `reason` string is built only from real profile fields (top two factors + availability window).
 
 ## Evaluation (`eval/`)
 `run_eval.py` scores any JSONL in our gold format or the organiser's nested format against the judging questions: emergency recall (must be 100%), false-alarm rate, care-type/urgency accuracy per language, asking on vague input vs needless questions, caregiver validity vs the organiser baseline, and explainability. See `eval/report.md` for the latest run.
@@ -100,3 +100,23 @@ Ties go to whoever is free sooner. Gemini-suggested skills are applied as a requ
 ## Configuration
 See `.env.example`. Key settings: `GEMINI_API_KEY`, `GEMINI_MODEL`, `LLM_BACKEND`, `ROUTER_BACKEND`, `FUSION_POLICY`, `MODEL_TRUST_THRESHOLD`, `MAX_FOLLOW_UPS`, `CAREGIVERS_PATH`.
 Health data from the Profile is sent to Gemini only when the user leaves "Share with the care assistant" on.
+
+## Conversational development setup
+
+The default model is `gemini-3.5-flash`, verified with a neutral live greeting. Set `GEMINI_MODEL` in `backend/.env` to change it. Gemini 3 uses `GEMINI_THINKING_LEVEL=low`; legacy Gemini 2.5 models use `GEMINI_THINKING_BUDGET`. Temporary HTTP 502/503/504 responses get one retry. HTTP status codes are logged without keys or provider response bodies.
+
+Responses include `response_source` (`gemini`, `rules`, or `safety_rules`) and an optional `service_notice` when any Gemini check falls back. The UI displays that notice so fallback answers cannot silently look like live Gemini replies. `/health` reports configuration; a configured model name alone does not prove a successful provider call.
+
+Text and voice share the same history. Assistant turns may carry `kind` (`follow_up`, `recommendation`, `emergency`); a completed recommendation resets the next clarification budget. Legacy turns without `kind` remain supported. The frontend sends at most 40 history turns and keeps the complete saved transcript locally. Repeated ordinary questions are replaced; an unresolved possible danger sign that would repeat its screening question escalates rather than looping.
+
+## Supplied caregiver roster
+
+The default repository is `app/data/caregivers.csv`, copied from the supplied `HackIIITD/caregivers.csv`: 60 unique caregivers (18 doctors, 28 medics, 14 phlebotomists), with 52 active. Matching retains active, role, skill, distance and availability filters; the roster does not create real appointments. Set `CAREGIVERS_PATH` to override the file. The source CSV outside this repository was left unchanged.
+
+The synthetic `caregivers_seed.csv` remains a regression-test fixture. Tests explicitly select that fixture, while roster integration checks load the supplied data and verify that the default API returns `CG_` profiles.
+
+## Audit corrections
+
+`TriageAssessment.urgency` allows Gemini to distinguish routine scheduled care from same-day needs. Emergency urgency alone triggers the guard. Each Gemini-required skill is a hard filter; unavailable skill combinations return no matches rather than relaxing requirements. Matching also excludes caregivers whose slots for the recommendation date are all booked. Invalid dates and incomplete/out-of-range coordinates on caregiver lookup return 422.
+
+Responses include `response_language` so Hindi voice replies can preserve their script and playback language. `eval.run_eval --llm off` reports macro-F1 and actual response sources in addition to accuracy. The full requirements and submission-gap review is in `../docs/PROJECT_AUDIT.md`.

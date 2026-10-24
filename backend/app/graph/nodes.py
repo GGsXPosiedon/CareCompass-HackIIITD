@@ -144,7 +144,7 @@ class Nodes:
         escalators = []
         if flags:
             escalators.append("llm")
-        if tr and tr.care_type == "emergency_112":
+        if tr and (tr.care_type == "emergency_112" or tr.urgency == "emergency"):
             escalators.append("llm_triage")
         if det.care_type == "emergency_112":
             escalators.append(det.source)
@@ -154,7 +154,9 @@ class Nodes:
 
         if possible:
             q = sr.screening_question if sr else None
-            if budget_left and q:
+            already_asked = bool(q) and any(t["role"] == "assistant" and
+                " ".join(t["content"].casefold().split()) == " ".join(q.casefold().split()) for t in f.history)
+            if budget_left and q and not already_asked:
                 d = {"outcome": "follow_up", "question": q, "options": sr.screening_options or None, "basis": "safety_screen", "possible": possible}
                 return {"decision": d, **_t("fuse", f"possible red flag {possible}: asking one danger-sign question")}
             d = {"outcome": "emergency", "flags": possible, "basis": "model_guard", "escalated_by": ["possible_flag_no_budget"]}
@@ -174,7 +176,7 @@ class Nodes:
                 ct, basis = (llm_ct, "llm") if llm_ct else (det_ct, "model") if det_ct else (None, None)
         else:  # llm_first (default while no trained model exists)
             if tr is not None:
-                ct, basis = (llm_ct, "llm") if llm_ct else (trusted_det, "model") if trusted_det else (None, None)
+                ct, basis = (llm_ct, "llm") if llm_ct else (None, None)
             else:
                 ct, basis = (det_ct, "model") if det_ct else (None, None)
         agreement = None if not (llm_ct and det_ct) else llm_ct == det_ct
@@ -184,6 +186,10 @@ class Nodes:
                 if tr and tr.follow_up_question:
                     q, opts, src = tr.follow_up_question, tr.answer_options or None, "llm"
                 else:
+                    q, opts = follow_up.next_question(f)
+                    src = "template"
+                previous = {" ".join(t["content"].casefold().split()) for t in f.history if t["role"] == "assistant"}
+                if " ".join(q.casefold().split()) in previous:
                     q, opts = follow_up.next_question(f)
                     src = "template"
                 d = {"outcome": "follow_up", "question": q, "options": opts, "basis": f"ask_{src}"}
@@ -199,7 +205,8 @@ class Nodes:
             d = {"outcome": "follow_up", "question": q.message, "options": q.options, "basis": "ask_timing"}
             return {"decision": d, **_t("fuse", f"{ct} is a visit and timing is unknown -> one question about when it is needed")}
 
-        d = {"outcome": "route", "care_type": ct, "basis": basis, "policy": policy, "agreement": agreement,
+        urgency = tr.urgency if basis == "llm" and tr and tr.urgency else urgency_for(ct)
+        d = {"outcome": "route", "care_type": ct, "urgency": urgency, "basis": basis, "policy": policy, "agreement": agreement,
              "llm": {"care_type": llm_ct, "confidence": tr.confidence if tr else None},
              "model": {"care_type": det_ct, "confidence": round(det_conf, 2), "source": det.source}}
         return {"decision": d, **_t("fuse", f"{ct} via {basis} (policy={policy}, model={det_ct}, llm={llm_ct}, agree={agreement})")}
@@ -230,7 +237,7 @@ class Nodes:
         f, d, req = s["facts"], s["decision"], s["request"]
         tr: TriageAssessment | None = s.get("llm_triage")
         ct = d["care_type"]
-        urgency = urgency_for(ct)
+        urgency = d["urgency"]
         timing, timing_src = dialogue.effective_timing(f.analysis)  # stated, else inferred from severity words, else today
         required = [g for c in f.concepts if f.present(c) for g in REQUIRED_SKILLS.get(c, [])]
         if ct == "teleconsultation":
@@ -243,15 +250,11 @@ class Nodes:
         llm_skills = {k for k in (tr.required_skills if tr else []) if k not in hints}
         if ct in ("paramedic_home_visit", "home_nursing"):
             llm_skills -= {"sample_collection", "home_phlebotomy", "teleconsultation", "prescription", "report_review"}
-        relaxed = False
-        cands = []
-        if llm_skills and ct in ("home_nursing", "paramedic_home_visit"):
-            cands = self.p.matcher.match(ct, urgency, required + [llm_skills], hints | llm_skills, f.language, req.location, timing)
-        if not cands:
-            relaxed = bool(llm_skills)
-            cands = self.p.matcher.match(ct, urgency, required, hints | llm_skills, f.language, req.location, timing)
+        if d["basis"] == "llm":
+            required += [{skill} for skill in sorted(llm_skills)]
+        cands = self.p.matcher.match(ct, urgency, required, hints | llm_skills, f.language, req.location, timing)
         return {"candidates": cands, **_t("match", f"{len(cands)} eligible; required={[sorted(g) for g in required]} "
-                                                    f"preferred={sorted(llm_skills)}{' (relaxed)' if relaxed else ''}; availability={timing} ({timing_src})",
+                                                    f"skills={sorted(hints | llm_skills)}; availability={timing} ({timing_src})",
                                          ranking=[{"id": c.caregiver_id, "score": c.score, **c.components} for c in cands])}
 
     def respond(self, s: TriageState) -> dict:
@@ -266,7 +269,7 @@ class Nodes:
             stub = RouteDecision(ct, d["model"]["confidence"], s["det"].evidence, d["basis"])
             reasoning = explain.decision_text(f, stub, ct, fallback=d["basis"] == "fallback", no_match=not cands)
         resp = TriageResponse(
-            care_type=ct, urgency=urgency_for(ct), red_flags=[], reasoning=reasoning,
+            care_type=ct, urgency=d["urgency"], red_flags=[], reasoning=reasoning,
             matched_caregivers=[MatchedCaregiver(caregiver_id=c.caregiver_id, score=c.score, reason=c.reason) for c in cands],
         )
         return {"response": resp, **_t("respond", f"reasoning from {'llm' if d['basis'] == 'llm' else 'template'}")}

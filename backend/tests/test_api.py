@@ -141,3 +141,14 @@ def test_trace_and_graph_endpoints(client):
 def test_openapi_documents_contract(client):
     spec = client.get("/openapi.json").json()
     assert "TriageResponse" in spec["components"]["schemas"] and "PatientContext" in spec["components"]["schemas"]
+
+
+def test_invalid_caregiver_filters_are_validation_errors(client):
+    for params in [{"date": "2026-02-31"}, {"lat": 100, "lng": 77}, {"lat": 28}]:
+        assert client.get('/caregivers', params={"ids": "SYN_001", **params}).status_code == 422
+
+
+def test_auto_mode_keeps_hindi_reply_language(client):
+    result = client.post('/triage', json=req('मुझे घर पर खून की जांच करवानी है', language='auto')).json()
+    assert result['response_language'] == 'hi'
+    assert any('\u0900' <= char <= '\u097f' for char in result['reasoning'])

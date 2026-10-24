@@ -1,0 +1,61 @@
+caregiver_id,name,role,qualification,gender,languages,skills,base_area,base_lat,base_lng,max_radius_km,tier,rating,experience_years,free_from,free_until,active
+CG_001,Mohit Gupta,doctor,MBBS,M,Hindi;Haryanvi,teleconsultation;prescription;report_review,Noida Sec 18,28.5575,77.3381,5,,3.9,8,14:00,17:00,True
+CG_002,Mohit Bisht,medic,B.Sc Nursing,M,Hindi;English;Punjabi,vitals_monitoring;wound_dressing;catheter_care;post_surgical_care;nebulization;injection_im,Greater Noida,28.4704,77.5004,5,base,4.2,9,09:00,15:00,True
+CG_003,Ankit Verma,doctor,MBBS,M,Hindi;Haryanvi;Punjabi,teleconsultation;prescription;report_review,Greater Noida,28.4647,77.5096,7,,4.7,3,09:00,12:00,True
+CG_004,Anjali Mishra,phlebotomist,DMLT,F,Hindi;Tamil;English,sample_collection;home_phlebotomy,Faridabad NIT,28.3688,77.3016,7,,4.0,13,10:00,17:00,True
+CG_005,Naveen Kumar,phlebotomist,DMLT,M,Hindi;Bhojpuri;Bengali,sample_collection;home_phlebotomy,Govindpuri,28.5308,77.239,10,,4.1,16,09:00,13:00,True
+CG_006,Neha Gupta,phlebotomist,DMLT,F,Hindi;Tamil;Haryanvi,sample_collection;home_phlebotomy,Dwarka,28.5807,77.0491,12,,4.2,5,14:00,21:00,True
+CG_007,Rahul Yadav,medic,B.Sc Nursing,M,Hindi;Bhojpuri,nebulization;vitals_monitoring;injection_im;elderly_care;post_surgical_care;sample_collection;wound_dressing,Rohini,28.7492,77.108,10,standard,4.3,9,13:00,16:00,False
+CG_008,Naveen Gupta,doctor,MBBS,M,Hindi;Haryanvi,teleconsultation;prescription;report_review,Pitampura,28.7079,77.1132,10,,4.4,4,16:00,19:00,False
+CG_009,Pooja Sharma,phlebotomist,DMLT,F,Hindi;Tamil,sample_collection;home_phlebotomy,Noida Sec 18,28.587,77.3489,7,,4.0,16,15:00,18:00,False
+CG_010,Pooja Rawat,medic,B.Sc Nursing,F,Hindi;Bhojpuri;Haryanvi,catheter_care;bp_sugar_check;injection_iv;wound_dressing,Noida Sec 62,28.6366,77.3668,7,standard,3.8,2,08:00,15:00,True
+CG_011,Sunita Rawat,phlebotomist,DMLT,F,Hindi;Tamil,sample_collection;home_phlebotomy,Noida Sec 18,28.56,77.3253,12,,4.8,7,15:00,19:00,True
+CG_012,Kavita Das,doctor,MBBS,F,Hindi;English,teleconsultation;prescription;report_review,Janakpuri,28.6374,77.0641,10,,4.8,4,14:00,21:00,True
+CG_013,Neha Das,medic,GNM Nursing,F,Hindi;Bhojpuri,nebulization;injection_im;injection_iv;post_surgical_care,Rohini,28.726,77.0991,12,standard,4.1,13,11:00,15:00,False
+CG_014,Ankit Gupta,medic,B.Sc Nursing,M,Hindi;Punjabi;Tamil,injection_im;nebulization;bp_sugar_check;elderly_care;wound_dressing,Janakpuri,28.6113,77.0971,12,standard,4.8,6,08:00,11:00,True
+CG_015,Rahul Chauhan,medic,GNM Nursing,M,Hindi;Haryanvi,bp_sugar_check;injection_iv;post_surgical_care;elderly_care,Saket,28.5324,77.193,10,base,4.7,8,16:00,21:00,True
+CG_016,Ritu Kumar,medic,GNM Nursing,F,Hindi;English,wound_dressing;elderly_care;injection_iv;sample_collection;bp_sugar_check;nebulization,Saket,28.5024,77.2128,10,standard,5.0,17,10:00,16:00,True
+CG_017,Divya Verma,doctor,MBBS,F,Hindi;Bengali,teleconsultation;prescription;report_review,Dwarka,28.5815,77.066,7,,4.7,7,12:00,19:00,True
+CG_018,Anjali Sharma,phlebotomist,DMLT,F,Hindi;English,sample_collection;home_phlebotomy,Saket,28.5305,77.2235,10,,4.0,15,13:00,17:00,True
+CG_019,Rahul Verma,medic,GNM Nursing,M,Hindi;Bhojpuri,vitals_monitoring;elderly_care;injection_im;wound_dressing,Dwarka,28.5942,77.0632,7,standard,4.2,18,11:00,19:00,True
+CG_020,Manoj Yadav,medic,B.Sc Nursing,M,Hindi;Bhojpuri;Punjabi,injection_iv;post_surgical_care;injection_im;nebulization;catheter_care,Rohini,28.7532,77.0876,12,base,4.8,8,11:00,15:00,True
+CG_021,Rekha Gupta,doctor,MBBS,F,Hindi;Tamil;Haryanvi,teleconsultation;prescription;report_review,Saket,28.5455,77.1953,5,,4.9,9,13:00,16:00,True
+CG_022,Priya Verma,phlebotomist,DMLT,F,Hindi;Haryanvi;Tamil,sample_collection;home_phlebotomy,Mayur Vihar,28.602,77.3057,7,,4.1,14,09:00,15:00,True
+CG_023,Vikas Das,phlebotomist,DMLT,M,Hindi;Tamil;English,sample_collection;home_phlebotomy,Saket,28.5447,77.2282,10,,4.6,11,12:00,19:00,True
+CG_024,Manoj Das,medic,GNM Nursing,M,Hindi;Bhojpuri;Haryanvi,vitals_monitoring;catheter_care;post_surgical_care;sample_collection;bp_sugar_check;elderly_care,Vasant Kunj,28.528,77.1797,12,standard,4.1,16,13:00,19:00,True
+CG_025,Naveen Verma,phlebotomist,DMLT,M,Hindi;English;Punjabi,sample_collection;home_phlebotomy,Gurugram Sec 29,28.4667,77.0688,7,,4.0,2,12:00,16:00,True
+CG_026,Pawan Das,medic,GNM Nursing,M,Hindi;Punjabi;Tamil,post_surgical_care;catheter_care;wound_dressing;bp_sugar_check,Noida Sec 62,28.6368,77.366,5,standard,4.9,4,16:00,21:00,True
+CG_027,Ritu Chauhan,doctor,MBBS,F,Hindi;Punjabi;Bhojpuri,teleconsultation;prescription;report_review,Pitampura,28.6997,77.1519,7,,4.8,9,15:00,20:00,True
+CG_028,Deepak Mishra,medic,GNM Nursing,M,Hindi;Bengali;Haryanvi,wound_dressing;catheter_care;post_surgical_care;elderly_care;injection_iv,Saket,28.5341,77.193,12,standard,4.5,14,11:00,14:00,True
+CG_029,Meena Saini,doctor,MBBS,F,Hindi;Bhojpuri;English,teleconsultation;prescription;report_review,Kalkaji,28.5496,77.2727,12,,4.8,14,13:00,18:00,True
+CG_030,Pawan Singh,doctor,MBBS,M,Hindi;Tamil;Bhojpuri,teleconsultation;prescription;report_review,Indirapuram,28.6391,77.3468,7,,5.0,18,10:00,16:00,True
+CG_031,Rahul Bisht,medic,B.Sc Nursing,M,Hindi;Bengali,catheter_care;sample_collection;elderly_care;wound_dressing;bp_sugar_check;post_surgical_care,Mayur Vihar,28.5926,77.289,5,standard,4.7,2,14:00,19:00,False
+CG_032,Naveen Sharma,medic,GNM Nursing,M,Hindi;Haryanvi,wound_dressing;sample_collection;injection_iv;vitals_monitoring;nebulization,Kalkaji,28.5538,77.2437,10,advanced,4.0,4,15:00,21:00,True
+CG_033,Sunita Chauhan,medic,GNM Nursing,F,Hindi;Bhojpuri;Punjabi,injection_iv;vitals_monitoring;bp_sugar_check;post_surgical_care;nebulization,Kalkaji,28.5528,77.263,12,standard,3.9,11,08:00,13:00,True
+CG_034,Sunita Das,medic,GNM Nursing,F,Hindi;Bhojpuri,bp_sugar_check;nebulization;sample_collection;catheter_care;post_surgical_care;vitals_monitoring,Faridabad NIT,28.3901,77.3258,7,advanced,3.9,15,12:00,17:00,True
+CG_035,Rekha Sharma,medic,B.Sc Nursing,F,Hindi;Bengali,vitals_monitoring;bp_sugar_check;injection_im;nebulization;injection_iv;sample_collection,Karol Bagh,28.6668,77.1737,12,standard,4.7,16,11:00,19:00,True
+CG_036,Rahul Gupta,medic,B.Sc Nursing,M,Hindi;Bhojpuri;Haryanvi,nebulization;elderly_care;bp_sugar_check;sample_collection;catheter_care;wound_dressing;vitals_monitoring,Noida Sec 18,28.5657,77.3128,5,advanced,4.2,18,12:00,16:00,False
+CG_037,Manoj Saini,doctor,MBBS,M,Hindi;English;Punjabi,teleconsultation;prescription;report_review,Karol Bagh,28.6409,77.1946,10,,4.0,1,12:00,16:00,True
+CG_038,Amit Rawat,medic,B.Sc Nursing,M,Hindi;English;Tamil,sample_collection;bp_sugar_check;elderly_care;injection_iv;injection_im;wound_dressing;catheter_care,Gurugram Sec 29,28.4749,77.0429,12,standard,4.5,2,09:00,12:00,True
+CG_039,Sunita Singh,doctor,MBBS,F,Hindi;Haryanvi,teleconsultation;prescription;report_review,Lajpat Nagar,28.5731,77.2389,12,,4.2,14,14:00,20:00,True
+CG_040,Manoj Bisht,doctor,MBBS,M,Hindi;Punjabi,teleconsultation;prescription;report_review,Noida Sec 62,28.6164,77.3505,7,,3.8,15,16:00,19:00,True
+CG_041,Manoj Gupta,medic,GNM Nursing,M,Hindi;Bengali,injection_iv;nebulization;catheter_care;elderly_care;bp_sugar_check;wound_dressing;post_surgical_care,Gurugram Sec 29,28.4751,77.0596,7,advanced,4.5,10,09:00,12:00,True
+CG_042,Nisha Das,medic,GNM Nursing,F,Hindi;Haryanvi,elderly_care;vitals_monitoring;injection_im;sample_collection;injection_iv;nebulization;post_surgical_care,Indirapuram,28.642,77.3707,5,advanced,4.0,17,12:00,19:00,True
+CG_043,Sandeep Das,phlebotomist,DMLT,M,Hindi;Bengali;Tamil,sample_collection;home_phlebotomy,Karol Bagh,28.6721,77.1885,10,,4.3,16,09:00,13:00,True
+CG_044,Pawan Verma,phlebotomist,DMLT,M,Hindi;Haryanvi;English,sample_collection;home_phlebotomy,Gurugram DLF,28.4678,77.0713,12,,3.9,17,16:00,21:00,True
+CG_045,Priya Singh,doctor,MBBS,F,Hindi;Tamil;Bhojpuri,teleconsultation;prescription;report_review,Indirapuram,28.6442,77.393,7,,4.7,10,09:00,12:00,True
+CG_046,Manoj Verma,medic,B.Sc Nursing,M,Hindi;Bhojpuri,post_surgical_care;sample_collection;nebulization;injection_iv;catheter_care;vitals_monitoring,Janakpuri,28.6411,77.0946,7,expert,4.4,5,10:00,16:00,True
+CG_047,Rekha Rawat,medic,B.Sc Nursing,F,Hindi;Haryanvi;Tamil,sample_collection;nebulization;bp_sugar_check;wound_dressing;post_surgical_care,Indirapuram,28.6564,77.3599,12,standard,4.2,7,16:00,21:00,False
+CG_048,Pooja Das,medic,B.Sc Nursing,F,Hindi;Bhojpuri;Punjabi,wound_dressing;nebulization;elderly_care;post_surgical_care,Govindpuri,28.5348,77.2616,5,standard,4.3,5,09:00,15:00,True
+CG_049,Rahul Mishra,doctor,MBBS,M,Hindi;Bengali,teleconsultation;prescription;report_review,Indirapuram,28.6347,77.3809,10,,4.6,16,16:00,21:00,True
+CG_050,Manoj Bisht,medic,B.Sc Nursing,M,Hindi;English;Tamil,vitals_monitoring;injection_im;nebulization;wound_dressing;sample_collection,Gurugram Sec 29,28.4884,77.0746,10,standard,4.1,14,12:00,17:00,True
+CG_051,Sunil Verma,doctor,MBBS,M,Hindi;Punjabi,teleconsultation;prescription;report_review,Vasant Kunj,28.5254,77.1457,10,,4.4,1,15:00,21:00,True
+CG_052,Divya Rawat,medic,B.Sc Nursing,F,Hindi;Tamil;Bhojpuri,vitals_monitoring;catheter_care;post_surgical_care;sample_collection;nebulization;injection_im;injection_iv,Rohini,28.7168,77.1349,10,standard,5.0,10,14:00,21:00,True
+CG_053,Anjali Sharma,doctor,MBBS,F,Hindi;Punjabi;Haryanvi,teleconsultation;prescription;report_review,Govindpuri,28.5615,77.2756,7,,4.5,5,13:00,17:00,True
+CG_054,Deepak Mishra,phlebotomist,DMLT,M,Hindi;Bengali,sample_collection;home_phlebotomy,Govindpuri,28.5466,77.2749,12,,4.0,5,13:00,21:00,True
+CG_055,Shalini Rawat,phlebotomist,DMLT,F,Hindi;Bengali;Tamil,sample_collection;home_phlebotomy,Indirapuram,28.6569,77.3585,5,,4.0,8,09:00,15:00,True
+CG_056,Shalini Kumar,doctor,MBBS,F,Hindi;Bhojpuri,teleconsultation;prescription;report_review,Saket,28.5376,77.1817,10,,4.5,12,13:00,21:00,True
+CG_057,Sandeep Rawat,medic,B.Sc Nursing,M,Hindi;Tamil,post_surgical_care;injection_iv;wound_dressing;injection_im;bp_sugar_check;sample_collection,Gurugram DLF,28.4977,77.0767,5,base,4.4,13,15:00,18:00,True
+CG_058,Meena Saini,doctor,MBBS,F,Hindi;Haryanvi;Bhojpuri,teleconsultation;prescription;report_review,Dwarka,28.6095,77.0539,10,,4.1,15,12:00,15:00,False
+CG_059,Naveen Kumar,phlebotomist,DMLT,M,Hindi;Bhojpuri,sample_collection;home_phlebotomy,Greater Noida,28.4921,77.5104,5,,4.9,15,12:00,16:00,True
+CG_060,Amit Kumar,medic,GNM Nursing,M,Hindi;English,catheter_care;elderly_care;wound_dressing;post_surgical_care;vitals_monitoring,Noida Sec 18,28.592,77.3407,7,expert,4.4,6,08:00,13:00,True

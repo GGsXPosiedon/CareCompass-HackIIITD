@@ -1,5 +1,6 @@
 import type { Language } from '../types';
 import { encodeWav, RECORDING_SECONDS } from './wav.ts';
+import { spokenLanguage } from './locale.ts';
 
 export interface VoiceConfig { provider: 'sarvam' | 'browser'; maxSeconds: number }
 let config: Promise<VoiceConfig> | undefined;
@@ -27,6 +28,7 @@ export async function transcribe(wav: Blob, language: Language, signal: AbortSig
   return result.text;
 }
 export async function synthesize(text: string, language: Language, signal: AbortSignal): Promise<ArrayBuffer> {
+  language = spokenLanguage(language, text);
   const response = await fetch(`/api/voice?action=speak&language=${language}`, {
     method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CareCompass-Voice': '1' }, body: JSON.stringify({ text }),
     signal: AbortSignal.any([signal, AbortSignal.timeout(30000)]),

@@ -57,14 +57,19 @@ def create_app() -> FastAPI:
     @api.get("/caregivers", response_model=list[CaregiverProfile])
     def caregivers(
         ids: str = Query(..., description="comma separated caregiver ids"),
-        lat: Optional[float] = None,
-        lng: Optional[float] = None,
+        lat: Optional[float] = Query(None, ge=-90, le=90),
+        lng: Optional[float] = Query(None, ge=-180, le=180),
         date: Optional[str] = None,
         care_type: Optional[str] = Query(None, description="care type the profiles are being shown for"),
     ):
         pipe = get_pipeline()
+        if (lat is None) != (lng is None):
+            raise HTTPException(422, "provide both lat and lng")
         loc = Location(lat=lat, lng=lng) if lat is not None and lng is not None else None
-        on = Date.fromisoformat(date) if date else pipe.matcher.now().date()
+        try:
+            on = Date.fromisoformat(date) if date else pipe.matcher.now().date()
+        except ValueError:
+            raise HTTPException(422, "invalid date")
         out: list[CaregiverProfile] = []
         for i, cid in enumerate(x for x in ids.split(",") if x.strip()):
             cg = pipe.repo.get(cid.strip())

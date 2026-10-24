@@ -1,7 +1,7 @@
 """Caregiver repository (CSV-backed prototype) + in-memory bookings.
 
 The CSV uses the same columns as the organiser roster so a real roster can be dropped in via
-CAREGIVERS_PATH. The seed file shipped here is our own synthetic data.
+CAREGIVERS_PATH. The default file is the supplied roster; the synthetic seed remains a test fixture.
 """
 from __future__ import annotations
 
@@ -56,7 +56,7 @@ def _row_to_caregiver(r: dict) -> Caregiver:
 
 class CaregiverRepository:
     def __init__(self, path: str):
-        with open(path, newline="", encoding="utf-8") as fh:
+        with open(path, newline="", encoding="utf-8-sig") as fh:
             self._items = [_row_to_caregiver(r) for r in csv.DictReader(fh)]
         self._by_id = {c.caregiver_id: c for c in self._items}
         self._bookings: dict[tuple[str, str, str], str] = {}

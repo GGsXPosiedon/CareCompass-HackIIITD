@@ -10,7 +10,7 @@ import { primeVoicePlayback } from '../voice/playback';
 import { registerVoiceStop, voiceConfig } from '../voice/client';
 
 export function VoiceConversation({ copy, language, host, onTurn, onClose }: {
-  copy: Copy; language: Language; host: HTMLElement | null; onTurn: (text: string) => Promise<SpokenReply>; onClose: () => void;
+  copy: Copy; language: Language; host: HTMLElement | null; onTurn: (text: string, signal: AbortSignal) => Promise<SpokenReply>; onClose: () => void;
 }) {
   const [phase, setPhase] = useState<ConversationPhase>('listening');
   const [provider, setProvider] = useState<'sarvam' | 'browser' | null>(null);
@@ -23,7 +23,7 @@ export function VoiceConversation({ copy, language, host, onTurn, onClose }: {
     const previousFocus = document.activeElement as HTMLElement | null;
     const engine = new Conversation({
       listen: signal => listenForTurn(language, signal, value => { finish.current = value; if (mounted && value === null && !signal.aborted) setPhase('transcribing'); }),
-      respond: text => latest.current.onTurn(text),
+      respond: (text, signal) => latest.current.onTurn(text, signal),
       speak: (text, signal) => speakTurn(text, language, signal, value => { if (mounted) setProvider(value); }),
       phase: value => { if (mounted) { setPhase(value); if (value === 'listening') setSpokenText(''); } },
       transcript: (role, text) => { if (mounted && role === 'user') setSpokenText(text); },

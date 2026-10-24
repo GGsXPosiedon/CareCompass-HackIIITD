@@ -38,4 +38,3 @@ Reading these numbers: each fold's test scenarios are *unseen scenarios in all t
 | test | 134529 | 270 | 0 | 134259 |
 | validate | 132448 | 210 | 508 | 131730 |
 | train | 1025602 | 27385 | 11521 | 986696 |
-

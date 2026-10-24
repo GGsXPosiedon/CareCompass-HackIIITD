@@ -62,6 +62,15 @@ test('silence, invalid WAV and overlong clips never reach a paid provider', asyn
   assert.equal((await handleVoice(request('transcribe', 'en', new Uint8Array(100)), env, never)).status, 400);
   assert.equal((await handleVoice(request('transcribe', 'en', wave(27)), env, never)).status, 413);
 });
+test('Hindi speech stays in the original script and never requests translation', async () => {
+  const transcript = 'पापा को दो दिन से बुखार है';
+  const response = await handleVoice(request('transcribe', 'auto', wave()), env, async (_url, init) => {
+    assert.equal(init.body.get('language_code'), 'unknown');
+    assert.equal(init.body.get('mode'), 'transcribe');
+    return Response.json({ transcript, language_code: 'hi-IN' });
+  });
+  assert.equal((await response.json()).text, transcript);
+});
 
 test('Sarvam TTS uses Bulbul, Indian language voices, and returns decoded WAV bytes', async () => {
   const wav = Buffer.from(wave(.1));

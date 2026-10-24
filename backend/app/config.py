@@ -45,8 +45,8 @@ RED_FLAGS = (
     "severe_dehydration",
 )
 
-# Observed in the organiser data: urgency follows care type. Kept as a table so
-# it can be replaced by a model/rules later without touching the pipeline.
+# Conservative urgency defaults for deterministic fallback and older assessments.
+# Validated Gemini urgency is used directly when available.
 URGENCY_BY_CARE_TYPE = {
     "emergency_112": "emergency",
     "paramedic_home_visit": "same_day",
@@ -88,10 +88,11 @@ class Settings:
     # How the deterministic classifier and the LLM are combined (see app/graph/nodes.py::fuse)
     fusion_policy: str = os.getenv("FUSION_POLICY", "llm_first")  # llm_first | model_first | agree_or_ask
     model_trust_threshold: float = float(os.getenv("MODEL_TRUST_THRESHOLD", "0.85"))
-    caregivers_path: str = os.getenv("CAREGIVERS_PATH", str(DATA_DIR / "caregivers_seed.csv"))
+    caregivers_path: str = os.getenv("CAREGIVERS_PATH", str(DATA_DIR / "caregivers.csv"))
     redflag_rules_path: str = os.getenv("REDFLAG_RULES_PATH", str(RULES_DIR / "redflags.json"))
     gemini_api_key: str = field(default_factory=lambda: os.getenv("GEMINI_API_KEY", ""), repr=False)
-    gemini_model: str = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")  # verify against your key
+    gemini_model: str = os.getenv("GEMINI_MODEL", "gemini-3.5-flash")
+    gemini_thinking_level: str = os.getenv("GEMINI_THINKING_LEVEL", "low")
     gemini_timeout_s: float = float(os.getenv("GEMINI_TIMEOUT_S", "15"))
     gemini_thinking_budget: int = int(os.getenv("GEMINI_THINKING_BUDGET", "0"))  # -1 = model default
     max_follow_ups: int = int(os.getenv("MAX_FOLLOW_UPS", "2"))

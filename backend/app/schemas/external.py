@@ -31,6 +31,7 @@ class Location(BaseModel):
 class Turn(BaseModel):
     role: Literal["user", "assistant"]
     content: str = ""
+    kind: Optional[Literal["follow_up", "recommendation", "emergency"]] = None
 
     @model_validator(mode="before")
     @classmethod
@@ -92,6 +93,9 @@ class TriageResponse(BaseModel):
     matched_caregivers: list[MatchedCaregiver] = Field(default_factory=list)
     # Non-contract convenience for the UI; omitted from the wire when None.
     answer_options: Optional[list[str]] = None
+    response_source: Optional[Literal["gemini", "rules", "safety_rules"]] = None
+    service_notice: Optional[str] = None
+    response_language: Optional[Literal["en", "hi", "hinglish"]] = None
 
     @model_validator(mode="after")
     def _invariants(self) -> "TriageResponse":

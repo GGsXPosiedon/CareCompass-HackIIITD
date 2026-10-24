@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import logging
+import time
 from typing import TypeVar
 
 import httpx
@@ -41,7 +42,10 @@ class GeminiClient:
             "responseSchema": gemini_schema(schema),
             "maxOutputTokens": max_tokens,
         }
-        if self.s.gemini_thinking_budget >= 0:
+        if self.model.startswith("gemini-3"):
+            gen["thinkingConfig"] = {"thinkingLevel": self.s.gemini_thinking_level}
+            gen["maxOutputTokens"] = max(4096, max_tokens)
+        elif self.s.gemini_thinking_budget >= 0:
             gen["thinkingConfig"] = {"thinkingBudget": self.s.gemini_thinking_budget}
         body = {
             "systemInstruction": {"parts": [{"text": system}]},
@@ -51,6 +55,9 @@ class GeminiClient:
         try:
             with httpx.Client(timeout=self.s.gemini_timeout_s, transport=self._transport) as c:
                 r = c.post(self.URL.format(model=self.model), json=body, headers={"x-goog-api-key": self.s.gemini_api_key})
+                if r.status_code in (502, 503, 504):
+                    time.sleep(0.3)
+                    r = c.post(self.URL.format(model=self.model), json=body, headers={"x-goog-api-key": self.s.gemini_api_key})
             r.raise_for_status()
             payload = r.json()
             cand = (payload.get("candidates") or [None])[0]
@@ -62,5 +69,7 @@ class GeminiClient:
             raise
         except ValidationError as e:
             raise LLMError(f"schema:{e.error_count()} errors") from e
+        except httpx.HTTPStatusError as e:
+            raise LLMError(f"HTTP {e.response.status_code}") from e
         except (httpx.HTTPError, KeyError, IndexError, ValueError, TypeError) as e:
             raise LLMError(type(e).__name__) from e  # never include body/key

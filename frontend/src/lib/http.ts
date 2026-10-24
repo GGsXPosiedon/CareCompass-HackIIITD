@@ -4,12 +4,12 @@ export class ApiError extends Error {
 }
 
 export function createJsonRequest(base: string, fetcher: typeof fetch = fetch) {
-  return async (path: string, body?: unknown): Promise<unknown> => {
+  return async (path: string, body?: unknown, signal?: AbortSignal): Promise<unknown> => {
     const response = await fetcher(`${base.replace(/\/$/, '')}${path}`, {
       method: body === undefined ? 'GET' : 'POST',
       headers: { 'Content-Type': 'application/json' },
       ...(body === undefined ? {} : { body: JSON.stringify(body) }),
-      signal: AbortSignal.timeout(45000),
+      signal: signal ? AbortSignal.any([signal, AbortSignal.timeout(45000)]) : AbortSignal.timeout(45000),
     });
     if (!response.ok) throw new ApiError(response.status);
     return response.json();

@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import math
 from datetime import date as Date
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Callable, Optional
 from zoneinfo import ZoneInfo
 
@@ -135,6 +135,9 @@ class Matcher:
             return None
         wait = self._availability(cg, urgency)
         if wait is None:
+            return None
+        on = self.now().date() + timedelta(days=1 if urgency == "scheduled" else 0)
+        if not self.slots_for(cg, on):
             return None
         dist: Optional[float] = None
         if care_type != "teleconsultation" and loc is not None:
