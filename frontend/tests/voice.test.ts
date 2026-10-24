@@ -6,6 +6,7 @@ import voiceFunction from '../api/voice.mjs';
 import { recordStream, registerVoiceStop, stopAllVoice } from '../src/voice/client.ts';
 import { voicePlugin } from '../server/voice-plugin.mjs';
 import { createServer } from 'node:http';
+import { primeVoicePlayback, scheduleResponseVoice, voicePlaybackContext } from '../src/voice/playback.ts';
 
 const env = { SARVAM_API_KEY: 'unit-test-secret-not-a-real-key' };
 let sequence = 0;
@@ -137,4 +138,46 @@ test('the Vite voice middleware serves config, transcription and audio before th
     assert.equal(audio.headers.get('content-type'), 'audio/wav');
     assert.equal((await audio.arrayBuffer()).byteLength, 3244);
   } finally { server.closeAllConnections(); await new Promise<void>((resolve, reject) => server.close(error => error ? reject(error) : resolve())); }
+});
+
+
+test('automatic voice survives discarded effects, speaks each response once, and cancels before unmount', async () => {
+  const first = {}, second = {}, removed = {};
+  const spoken: object[] = [];
+  const discard = scheduleResponseVoice(first, () => spoken.push(first));
+  discard(); // React StrictMode discards its first setup.
+  scheduleResponseVoice(first, () => spoken.push(first));
+  await Promise.resolve();
+  scheduleResponseVoice(first, () => spoken.push(first)); // Rerender or return to an old response.
+  scheduleResponseVoice(second, () => spoken.push(second));
+  const unmount = scheduleResponseVoice(removed, () => spoken.push(removed));
+  unmount();
+  await Promise.resolve();
+  assert.deepEqual(spoken, [first, second]);
+});
+
+test('the send gesture resumes one shared audio context reused by later responses', () => {
+  const previous = Object.getOwnPropertyDescriptor(globalThis, 'window');
+  let contexts = 0, resumes = 0;
+  class FakeContext {
+    state = 'suspended';
+    constructor() { contexts++; }
+    resume() { resumes++; this.state = 'running'; return Promise.resolve(); }
+  }
+  Object.defineProperty(globalThis, 'window', { configurable: true, value: { AudioContext: FakeContext } });
+  try {
+    const first = primeVoicePlayback();
+    assert.equal(voicePlaybackContext(), first);
+    assert.equal(primeVoicePlayback(), first);
+    assert.equal(contexts, 1); assert.equal(resumes, 1);
+    (first as unknown as FakeContext).state = 'suspended';
+    primeVoicePlayback();
+    assert.equal(resumes, 2);
+    (first as unknown as FakeContext).state = 'closed';
+    assert.notEqual(primeVoicePlayback(), first);
+    assert.equal(contexts, 2);
+  } finally {
+    if (previous) Object.defineProperty(globalThis, 'window', previous);
+    else Reflect.deleteProperty(globalThis, 'window');
+  }
 });

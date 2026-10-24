@@ -1,9 +1,10 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { Mic, Square, Volume2 } from 'lucide-react';
 import type { Copy } from '../i18n';
-import { VoiceLanguageContext } from '../voice/language';
+import { VoiceLanguageContext, VoiceResponseContext } from '../voice/language';
 import { recordStream, registerVoiceStop, stopAllVoice, supportsRecording, synthesize, transcribe, voiceConfig } from '../voice/client';
 import type { Recording, VoiceConfig } from '../voice/client';
+import { primeVoicePlayback, scheduleResponseVoice, voicePlaybackContext } from '../voice/playback';
 
 interface Recognition {
   lang: string; continuous: boolean; interimResults: boolean;
@@ -98,17 +99,17 @@ export function VoiceInput({ copy, hindi, disabled, onTranscript }: { copy: Copy
 }
 
 export function ReadAloud({ text, copy, hindi }: { text: string; copy: Copy; hindi: boolean }) {
+  const response = useContext(VoiceResponseContext);
   const selectedLanguage = useContext(VoiceLanguageContext);
   const language = hindi ? 'hi' : selectedLanguage;
   const [phase, setPhase] = useState<'idle' | 'loading' | 'playing'>('idle');
   const [notice, setNotice] = useState('');
   const request = useRef<AbortController | null>(null), generation = useRef(0), mounted = useRef(false);
-  const context = useRef<AudioContext | null>(null), source = useRef<AudioBufferSourceNode | null>(null);
+  const source = useRef<AudioBufferSourceNode | null>(null);
   const utterance = useRef<SpeechSynthesisUtterance | null>(null);
   function cancel() {
     generation.current++; request.current?.abort(); request.current = null;
     if (source.current) { source.current.onended = null; try { source.current.stop(); } catch { /* Already ended. */ } source.current = null; }
-    if (context.current) { void context.current.close().catch(() => {}); context.current = null; }
     if (utterance.current) { utterance.current.onend = utterance.current.onerror = null; window.speechSynthesis?.cancel(); utterance.current = null; }
     if (mounted.current) setPhase('idle');
   }
@@ -122,28 +123,25 @@ export function ReadAloud({ text, copy, hindi }: { text: string; copy: Copy; hin
     const speech = new SpeechSynthesisUtterance(text); utterance.current = speech;
     speech.lang = language === 'hi' || language === 'hinglish' || /[\u0900-\u097f]/.test(text) ? 'hi-IN' : 'en-IN'; speech.rate = .95;
     speech.onend = () => { if (id === generation.current) { utterance.current = null; setPhase('idle'); } };
-    speech.onerror = () => { if (id === generation.current) { setPhase('idle'); setNotice(copy.readUnsupported); } };
+    speech.onerror = () => { if (id === generation.current) { setPhase('idle'); setNotice(copy.voiceAutoplayBlocked); } };
     setNotice(fallback ? copy.voiceFallback : copy.voiceBrowserShort); setPhase('playing'); window.speechSynthesis.speak(speech);
   }
-  async function read() {
-    if (phase !== 'idle') { cancel(); return; }
+  async function read(automatic = false) {
+    if (!automatic && phase !== 'idle') { cancel(); return; }
+    if (!automatic) primeVoicePlayback();
     stopAllVoice(); setNotice('');
     const id = ++generation.current; setPhase('loading');
-    // Resume within the user's gesture, before fetching audio (including iOS).
-    let audioContext: AudioContext | null = null;
+    const audioContext = voicePlaybackContext();
     try {
-      audioContext = window.AudioContext ? new AudioContext() : null; context.current = audioContext;
-      const resumed = audioContext?.resume().catch(() => {});
       const config = await voiceConfig();
       if (id !== generation.current) return;
       if (config.provider !== 'sarvam' || !audioContext) {
-        if (audioContext) { await audioContext.close(); context.current = null; }
         browserVoice(id); return;
       }
       const controller = new AbortController(); request.current = controller;
       const audio = await synthesize(text, language, controller.signal);
       if (id !== generation.current) return;
-      const buffer = await audioContext.decodeAudioData(audio); await resumed;
+      const buffer = await audioContext.decodeAudioData(audio);
       if (id !== generation.current) return;
       if (audioContext.state !== 'running') throw new Error('PLAYBACK_BLOCKED');
       const player = audioContext.createBufferSource(); player.buffer = buffer; player.connect(audioContext.destination);
@@ -151,10 +149,16 @@ export function ReadAloud({ text, copy, hindi }: { text: string; copy: Copy; hin
       player.start(); setNotice(copy.voiceSarvam); setPhase('playing');
     } catch {
       if (id !== generation.current) return;
-      if (audioContext && audioContext.state !== 'closed') await audioContext.close().catch(() => {});
-      context.current = null; browserVoice(id, true);
+      if (audioContext?.state === 'suspended') { setPhase('idle'); setNotice(copy.voiceAutoplayBlocked); return; }
+      browserVoice(id, true);
     }
   }
+  const playResponse = useRef(() => {});
+  playResponse.current = () => { if (!document.hidden) void read(true); };
+  useEffect(() => {
+    if (!response || !text.trim()) return;
+    return scheduleResponseVoice(response, () => playResponse.current());
+  }, [response, text, language]);
   return <span className="read-aloud"><button type="button" className="text-button" onClick={() => void read()} aria-pressed={phase !== 'idle'}>
     {phase === 'idle' ? <Volume2 size={17}/> : <Square size={17}/>} {phase === 'loading' ? copy.voicePreparing : phase === 'playing' ? copy.voiceStopPlayback : copy.readAloud}
   </button>{notice ? <span role="status" className="small muted voice-output-notice">{notice}</span> : null}</span>;

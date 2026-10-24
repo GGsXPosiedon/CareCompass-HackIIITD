@@ -1,6 +1,6 @@
 # Sarvam voice input and output
 
-CareCompass follows GD Arena's short-recording → server transcription → editable text pattern, with server-generated audio for Read aloud. The existing Python care backend is unchanged.
+CareCompass follows GD Arena's short-recording → server transcription → editable text pattern, with server-generated audio that plays automatically after each new assistant response. The existing Python care backend is unchanged.
 
 ## Enable locally
 
@@ -17,7 +17,7 @@ CareCompass follows GD Arena's short-recording → server transcription → edit
 
 4. Restart `npm run dev` and reload the browser. `/api/voice` should return `{"provider":"sarvam","maxSeconds":25}`. It never returns the key.
 5. Use **Speak instead**, grant microphone access, speak for up to 25 seconds and press Stop. Check/edit the resulting text before sending it through the care flow. Recording stops automatically at the limit.
-6. Use **Read aloud** on questions, recommendations or the emergency screen. Press **Stop playback** to interrupt it. Audio never starts automatically.
+6. Send your message or answer. Each new assistant question, recommendation or emergency response plays automatically using Sarvam when configured (browser speech otherwise). Press **Stop playback** to interrupt it. Sending another answer, recording, changing pages or hiding the tab stops playback. Reopening an old response does not replay it. If your browser blocks automatic audio, press **Read aloud** once to enable playback; it also remains available for replay.
 
 The Sarvam key covers speech input/output only. It does not enable Gemini or change the backend's care-routing model. No Sarvam key is included in the repository or browser bundle.
 
