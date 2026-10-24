@@ -91,6 +91,9 @@ textarea:disabled { background: #f6f8f6; }
 .composer-bottom { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 5px 13px 13px; }
 .character-count { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; align-self: flex-end; padding-bottom: 6px; }
 .voice-wrap { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.read-aloud { display:inline-flex; flex-direction:column; align-items:flex-start; gap:4px; max-width:100%; vertical-align:top; }
+.voice-output-notice { display:block; max-width:30ch; line-height:1.5; overflow-wrap:anywhere; }
+.ask-head, .ask-head-actions { flex-wrap:wrap; }
 .voice-button { display: inline-flex; gap: 7px; align-items: center; min-height: 40px; border-radius: 100px; padding: 7px 12px; background: #f1f4f1; font-size: 13px; font-weight: 500; }
 .voice-button:hover { background: #e5ece7; }
 .voice-button.is-listening { color: var(--danger); background: #fcefed; }

@@ -169,6 +169,12 @@ The **deterministic classifier slot** is rules today. A trained model plugs in t
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+### Sarvam voice
+
+**To activate Sarvam:** add `SARVAM_API_KEY` to the prepared, git-ignored `frontend/.env.local`, restart the frontend, and reload.
+
+For a fresh clone, copy `frontend/.env.example` to `frontend/.env.local` first. See [voice setup](frontend/VOICE.md) for local and Vercel configuration. The key stays server-side; no Python backend speech changes are required.
+
 <!-- USAGE -->
 ## Usage
 

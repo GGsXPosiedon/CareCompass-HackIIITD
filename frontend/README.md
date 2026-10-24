@@ -32,6 +32,10 @@ Health state is provided once around the app in `src/health/Store.tsx`. `src/hea
 
 ## Run locally
 
+Sarvam speech input and read-aloud setup is documented in [VOICE.md](VOICE.md). The subscription key stays server-side; the Python care backend does not need speech changes.
+
+**To activate Sarvam:** add `SARVAM_API_KEY` to the prepared, git-ignored `frontend/.env.local`, restart the frontend, and reload.
+
 Requires **Node.js 24 LTS** (the native TypeScript Vite configuration requires Node 22.18+ or 24+).
 
 ```powershell
@@ -56,7 +60,7 @@ For an offline UI demonstration, explicitly set `VITE_DEMO_MODE=true` in `.env.l
 
 - Symptom intake with editable text, synthetic example prompts and patient-relation context.
 - English and Hindi interface copy; English, Hindi, Hinglish and automatic language request modes.
-- Browser speech recognition when supported, editable transcripts, text fallback, and optional read-aloud.
+- Sarvam microphone transcription and read-aloud when configured, editable transcripts, explicit browser-voice fallback and typing support.
 - One follow-up question at a time with server-supplied answer options and conversation history.
 - Care type, urgency and explanations, followed by ranked caregiver cards and language filtering.
 - Caregiver selection, available time slots, appointment review and demo confirmation.
@@ -70,7 +74,7 @@ For an offline UI demonstration, explicitly set `VITE_DEMO_MODE=true` in `.env.l
 
 **This is a frontend prototype, not a clinical triage engine.** All cases, provider names, ratings, reviews, distances, availability and bookings are synthetic. `frontend/src/lib/mock.ts` deliberately returns preset outcomes to demonstrate screens. It is not a medically validated classifier, and arbitrary input must not be treated as assessed or safe.
 
-Use only made-up examples. No real patient data should be entered. Requests and bookings are held in this tab's memory, with no localStorage or analytics. Refreshing clears them. Browser voice recognition may send audio to the browser vendor's service; do not speak real patient information.
+Use only made-up examples. No real patient data should be entered. Requests and bookings are held in this tab's memory, with no localStorage or analytics. Refreshing clears them. Configured Sarvam voice sends recorded audio and read-aloud text to Sarvam; browser fallback may use the browser vendor's speech service. See [VOICE.md](VOICE.md).
 
 The emergency button is a `tel:112` link and opens the device dialler only after a user selects it. It never calls automatically. The number is for India, verified against the [Government of India's Emergency Response Support System](https://112.gov.in/). Adapt emergency destinations before extending the demo to another country.
 

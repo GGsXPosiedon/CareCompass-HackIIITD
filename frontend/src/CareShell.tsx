@@ -5,6 +5,8 @@ import { getCopy } from './i18n';
 import type { Language } from './types';
 import { HealthProvider, useHealth } from './health/Store';
 import { buildPatientContext } from './health/context';
+import { VoiceLanguageContext } from './voice/language';
+import { stopAllVoice } from './voice/client';
 const Briefcase = lazy(() => import('./health/Briefcase'));
 const Profile = lazy(() => import('./health/Profile'));
 const Services = lazy(() => import('./health/Services').then(module => ({ default: module.Services })));
@@ -31,6 +33,12 @@ function Shell() {
   function newRequest() { setPage('care'); setResetKey(n => n + 1); setDrawer(false); }
   function navigate(next: Page) { if (next === 'briefcase') setBriefcaseVisited(true); if (next === 'services') setServicesVisited(true); if (next === 'profile') setProfileVisited(true); setPage(next); setDrawer(false); window.scrollTo({top:0,behavior:'instant'}); }
   useEffect(() => { document.documentElement.lang = hi ? 'hi' : 'en'; }, [hi, page]);
+  useEffect(() => { stopAllVoice(); }, [page, resetKey, language, drawer]);
+  useEffect(() => {
+    const pause = () => { if (document.hidden) stopAllVoice(); };
+    document.addEventListener('visibilitychange', pause);
+    return () => { document.removeEventListener('visibilitychange', pause); stopAllVoice(); };
+  }, []);
   useEffect(() => {
     document.documentElement.dataset.careMotion = 'full';
     return () => { delete document.documentElement.dataset.careMotion; };
@@ -56,7 +64,7 @@ function Shell() {
     return () => { document.body.style.overflow = previousOverflow; document.removeEventListener('keydown', handleKey); menuButton.current?.focus(); };
   }, [drawer]);
 
-  return <div className={`care-shell theme-${theme} ${collapsed ? 'sidebar-collapsed' : ''}`}>
+  return <VoiceLanguageContext.Provider value={language}><div className={`care-shell theme-${theme} ${collapsed ? 'sidebar-collapsed' : ''}`}>
     <a className="skip-link" href="#care-main">{copy.skip}</a>
     {drawer ? <button className="care-drawer-backdrop" tabIndex={-1} aria-label={copy.close} onClick={() => setDrawer(false)} /> : null}
     <aside ref={sidebar} role={drawer ? 'dialog' : undefined} aria-modal={drawer ? true : undefined} className={`care-sidebar ${drawer ? 'is-open' : ''}`} aria-label={t('Care navigation', 'देखभाल नेविगेशन')} inert={collapsed && !drawer}>
@@ -80,7 +88,7 @@ function Shell() {
         {servicesVisited ? <div className="care-support-page" hidden={page !== 'services'}><div className="health-portal services-content"><button className="text-button services-back" onClick={() => navigate('bookings')}><ArrowLeft size={17}/>{t('Back to my bookings', 'मेरी बुकिंग पर लौटें')}</button><Suspense fallback={<p role="status">{t('Opening health services…', 'स्वास्थ्य सेवाएँ खोल रहे हैं…')}</p>}><Services hi={hi} onCare={newRequest}/></Suspense></div></div> : null}
       </div>
     </div>
-  </div>;
+  </div></VoiceLanguageContext.Provider>;
 }
 
 export default function CareShell(){return <HealthProvider><Shell/></HealthProvider>;}

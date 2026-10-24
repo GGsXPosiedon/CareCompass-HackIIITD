@@ -1,5 +1,14 @@
 # Frontend verification
 
+## Sarvam voice checkpoint — 24 October 2026
+
+- `VOICE.md` documents the GD Arena reference, short PCM16 WAV transcription, English/Hindi/Hinglish/Auto language mapping, server-only key setup, local/Vercel routes and limitations.
+- `/api/voice` is owned by the frontend server adapter; no Python backend file changed. Missing-key config reports browser fallback, never a false Sarvam status.
+- All 37 frontend tests pass, including mocked Sarvam STT/TTS payloads, returned WAV decoding, silence/size checks, sanitized provider errors, recorder track cleanup and a local HTTP middleware integration check. No paid requests are made by tests.
+- TypeScript/Vite production build passes. Subscription-header/key names are absent from compiled browser JS.
+- Read aloud → Stop playback and explicit browser provider status were exercised in the connected care flow. Mobile light mode was inspected at 390px with no horizontal overflow; the controls use shared theme colors.
+- A blank, git-ignored `.env.local` is prepared for `SARVAM_API_KEY`. Live Sarvam calls and physical microphone capture require the user's key and device verification; neither is claimed completed.
+
 ## API-connected booking checkpoint — 24 October 2026
 
 - Frontend changes only; no tracked backend files or dependencies changed.
