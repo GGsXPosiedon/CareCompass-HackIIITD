@@ -16,6 +16,7 @@ import math
 import os
 import re
 import unicodedata
+import zlib
 from collections import Counter
 from dataclasses import dataclass
 from functools import lru_cache
@@ -43,7 +44,7 @@ def _grams(t: str) -> Counter:
         w = f" {w} "
         for n in (3, 4, 5):
             for i in range(len(w) - n + 1):
-                out[hash(w[i:i + n]) % DIM] += 1
+                out[zlib.crc32(w[i:i + n].encode('utf-8')) % DIM] += 1  # crc32, NOT hash(): hash() is randomised per process
     return out
 
 
@@ -88,6 +89,21 @@ class E5Embedder:
         return float(sum(x * y for x, y in zip(a, b)))
 
 
+# Similarity alone is not enough: the text must also contain a hallmark word for the flag (typo-tolerant stems), so that
+# shared function words / Devanagari suffixes ("हो रही है") or one shared word ("very weak") can never raise a 112 by themselves.
+_ANCHORS = {
+    "chest_pain": re.compile(r"chest|chet|seene|seena|chhati|chati|heart|hart|\bdil\b|pressure|tight|jalan|pasina|sweat|left arm|jabda|सीने|छाती|दिल|पसीना"),
+    "breathlessness": re.compile(r"breat|brea|saans|sans\b|saas|saa?ns|\bair\b|gasp|gaasp|chok|\bdam\b|blue|neele|neela|सांस|साँस|दम"),
+    "unconsciousness": re.compile(r"faint|conscious|behosh|hosh|respond|wake|collaps|passed out|pass out|unresp|limp|jawab|aankhen|बेहोश|होश|जवाब"),
+    "severe_bleeding": re.compile(r"blood|bleed|blee|khoon|khun|gushing|pouring|wound|ghav|खून|घाव"),
+    "stroke_symptoms": re.compile(r"face|chehra|mouth|muh|speech|slur|bol|speak|arm|haath|hand|leg|pair|one side|ek taraf|paraly|lakw|droop|tedha|numb|चेहरा|मुँह|मुह|बोल|हाथ|लकवा|तरफ"),
+    "seizure": re.compile(r"seiz|\bfit|fits\b|daura|mirgi|jhaag|jhag|foam|convuls|jerk|jhatke|akad|दौरा|झाग|मिर्गी|झटके"),
+    "high_fever_infant": re.compile(r"baby|babe|infant|newborn|bachch|bacch|shishu|month|mahine|mahina|नवजात|बच्च|शिशु|महीन"),
+    "suicidal_ideation": re.compile(r"\bdie\b|death|marn|\bmar\b|jeen|jina|suicid|kill|\blife\b|zindagi|jindagi|khatam|end it|मर|जीना|जीने|ज़िंदगी|ज़िन्दगी|आत्म"),
+    "severe_dehydration": re.compile(r"no urine|not passed|without urine|peshab nahi|pesab nahi|sunken|dhans|dehydr|can'?t (?:drink|keep)|cannot (?:drink|keep)|पेशाब नहीं|धँस"),
+}
+
+
 @dataclass
 class SemanticHit:
     flag: str
@@ -105,7 +121,7 @@ def _segments(text: str) -> list[str]:
 
 
 class SemanticSafety:
-    def __init__(self, threshold: float = 0.40, margin: float = 0.06, embedder: str | None = None, path: Path = EXEMPLARS):
+    def __init__(self, threshold: float = 0.42, margin: float = 0.07, embedder: str | None = None, path: Path = EXEMPLARS):
         spec = json.loads(path.read_text(encoding="utf-8"))
         self.pos = [(f, t) for f, ts in spec["positive"].items() for t in ts]
         self.neg = list(spec["negative"])
@@ -130,6 +146,9 @@ class SemanticSafety:
             neg = max((self.emb.cos(v, n) for n in self.nv), default=0.0)
             for (flag, ex), p in zip(self.pos, self.pv):
                 s = self.emb.cos(v, p)
+                anchor = _ANCHORS.get(flag)
+                if anchor and not anchor.search(_norm(seg)):
+                    continue
                 if s >= self.threshold and s - neg >= self.margin and (best is None or s > best.score):
                     best = SemanticHit(flag, round(s, 3), round(s - neg, 3), ex)
         return best

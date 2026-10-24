@@ -41,12 +41,14 @@ def test_casual_turns_do_not_use_up_the_question_budget(client):
 
 
 # ---------------------------------------------------------------- adaptive follow-ups -----------------
-def test_fever_flow_asks_duration_then_temperature_then_routes(client):
-    r = chat(client, ["mujhe bukhar hai", "2 din se", "101"])
+def test_fever_flow_asks_duration_then_temperature_then_timing_then_routes(client, pipeline):
+    pipeline.settings = dataclasses.replace(pipeline.settings, timing_question=True)  # optional: off by default
+    r = chat(client, ["mujhe bukhar hai", "2 din se", "101", "Abhi"])
     assert "kab se" in r[0]["follow_up_question"] and r[0]["answer_options"]
     assert "temperature" in r[1]["follow_up_question"].lower() and r[1]["care_type"] is None
-    assert r[2]["care_type"] == "paramedic_home_visit" and r[2]["follow_up_question"] is None
-    assert 1 <= len(r[2]["matched_caregivers"]) <= 3
+    assert "Visit kab chahiye" in r[2]["follow_up_question"] and r[2]["answer_options"][0] == "Abhi" and r[2]["care_type"] is None
+    assert r[3]["care_type"] == "paramedic_home_visit" and r[3]["urgency"] == "same_day" and r[3]["follow_up_question"] is None
+    assert 1 <= len(r[3]["matched_caregivers"]) <= 3
 
 
 def test_question_is_about_the_users_symptom(client):
@@ -283,3 +285,51 @@ def test_hinglish_chat_keeps_language_and_context(client):
         hist += [{"role": "user", "content": m}] + ([{"role": "assistant", "content": q}] if q else [])
     assert "kab se" in qs[0] and "kuch aur" in qs[1]          # fatigue is health, Hinglish stays Hinglish, no repeated duration
     assert "How long" not in " ".join(qs) and "kab se" not in qs[2]
+
+
+def test_timing_is_inferred_not_asked_by_default(client):
+    r = chat(client, ["mujhe bukhar hai", "2 din se", "101"])
+    assert r[2]["care_type"] == "paramedic_home_visit" and r[2]["follow_up_question"] is None
+    t = client.post("/triage/trace", json=req("mujhe bahut tez bukhar hai, 2 din se")).json()["trace"]
+    assert any("availability=now (severity)" in x["detail"] for x in t if x["node"] == "match")
+    t = client.post("/triage/trace", json=req("mujhe 2 din se bukhar hai")).json()["trace"]
+    assert any("availability=today (default)" in x["detail"] for x in t if x["node"] == "match")
+
+
+def test_timing_never_changes_the_organiser_labels(client, pipeline):
+    pipeline.settings = dataclasses.replace(pipeline.settings, timing_question=True)
+    for answer in ("Abhi", "Aaj baad mein", "Kal / schedule"):
+        r = chat(client, ["mujhe bukhar hai", "2 din se", "101", answer])[3]
+        assert (r["care_type"], r["urgency"]) == ("paramedic_home_visit", "same_day"), answer
+
+
+def test_timing_stated_up_front_is_not_asked_again(client):
+    r = chat(client, ["mujhe abhi bukhar hai"])
+    assert r[0]["care_type"] == "paramedic_home_visit" and r[0]["follow_up_question"] is None
+
+
+def test_headache_chat_is_not_an_emergency(client):
+    r = chat(client, ["sar me dard hora hai", "1–2 din se"])
+    assert r[1]["care_type"] != "emergency_112" and not r[1]["red_flags"]
+
+
+def test_semantic_net_is_deterministic_across_processes():
+    import subprocess, sys
+    code = ("from app.services.semantic_safety import SemanticSafety;"
+            "print(SemanticSafety().check('sar me dard hora hai 1 2 din se'), SemanticSafety().check('uski saans nahi aa rahi'))")
+    outs = {subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, env={**__import__("os").environ, "PYTHONHASHSEED": str(s)}).stdout
+            for s in (1, 7, 23, 42)}
+    assert len(outs) == 1, outs  # was hash()-seeded: same text escalated in some processes only
+
+
+def test_mild_wording_does_not_make_it_urgent(client):
+    t = client.post("/triage/trace", json=req("mujhe halka bukhar hai, 2 din se")).json()["trace"]
+    assert any("availability=today (default)" in x["detail"] for x in t if x["node"] == "match")
+
+
+def test_reasoning_names_the_real_symptoms_and_a_symptom_specific_safety_line(client):
+    r = chat(client, ["sar me dard hai", "1–2 din se", "dhundhla"])[2]
+    assert "sir dard" in r["reasoning"] and "dhundhla" in r["reasoning"] and "Saans mein taklif" not in r["reasoning"]
+    assert "warning sign" in r["reasoning"] and r["care_type"] != "emergency_112"
+    k = chat(client, ["knee pain", "a week", "swelling"])[2]
+    assert "knee pain" in k["reasoning"] and "swelling" in k["reasoning"]

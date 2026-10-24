@@ -190,6 +190,15 @@ class Nodes:
                 return {"decision": d, **_t("fuse", f"not enough detail -> one follow-up question ({src}); policy={policy}")}
             ct, basis = st.fallback_care_type, "fallback"
 
+        a = f.analysis
+        if (st.timing_question and ct in ("paramedic_home_visit", "home_nursing") and a is not None and a.asked_slots
+                and "timing" not in a.asked_slots and dialogue.timing_of(a) is None and "timing" not in a.known_slots
+                and "unknown" not in a.known_slots.values()   # the user is not engaging ("pata nahi"): do not push another question
+                and f.n_follow_ups_asked <= st.max_follow_ups):
+            q = dialogue.timing_question(a)
+            d = {"outcome": "follow_up", "question": q.message, "options": q.options, "basis": "ask_timing"}
+            return {"decision": d, **_t("fuse", f"{ct} is a visit and timing is unknown -> one question about when it is needed")}
+
         d = {"outcome": "route", "care_type": ct, "basis": basis, "policy": policy, "agreement": agreement,
              "llm": {"care_type": llm_ct, "confidence": tr.confidence if tr else None},
              "model": {"care_type": det_ct, "confidence": round(det_conf, 2), "source": det.source}}
@@ -222,6 +231,7 @@ class Nodes:
         tr: TriageAssessment | None = s.get("llm_triage")
         ct = d["care_type"]
         urgency = urgency_for(ct)
+        timing, timing_src = dialogue.effective_timing(f.analysis)  # stated, else inferred from severity words, else today
         required = [g for c in f.concepts if f.present(c) for g in REQUIRED_SKILLS.get(c, [])]
         if ct == "teleconsultation":
             required = [{"teleconsultation"}]
@@ -236,12 +246,12 @@ class Nodes:
         relaxed = False
         cands = []
         if llm_skills and ct in ("home_nursing", "paramedic_home_visit"):
-            cands = self.p.matcher.match(ct, urgency, required + [llm_skills], hints | llm_skills, f.language, req.location)
+            cands = self.p.matcher.match(ct, urgency, required + [llm_skills], hints | llm_skills, f.language, req.location, timing)
         if not cands:
             relaxed = bool(llm_skills)
-            cands = self.p.matcher.match(ct, urgency, required, hints | llm_skills, f.language, req.location)
+            cands = self.p.matcher.match(ct, urgency, required, hints | llm_skills, f.language, req.location, timing)
         return {"candidates": cands, **_t("match", f"{len(cands)} eligible; required={[sorted(g) for g in required]} "
-                                                    f"preferred={sorted(llm_skills)}{' (relaxed)' if relaxed else ''}",
+                                                    f"preferred={sorted(llm_skills)}{' (relaxed)' if relaxed else ''}; availability={timing} ({timing_src})",
                                          ranking=[{"id": c.caregiver_id, "score": c.score, **c.components} for c in cands])}
 
     def respond(self, s: TriageState) -> dict:

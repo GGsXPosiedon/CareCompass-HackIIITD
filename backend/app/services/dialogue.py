@@ -54,6 +54,9 @@ CORRECTION = _rx(r"\b(sorry|actually|wait|galat|i meant|mera matlab|correction|m
 RESUME = _rx(r"\b(ok|okay|theek hai|thik hai|chalo|changed my mind|mann badal|mind change|book it|book kar|bhej do|haan chahiye)\b",
              r"ठीक है|चलो|मन बदल")
 CONTINUING = _rx(r"\b(aur|also|and|bhi|saath|along|plus|ab bhi|still)\b", r"और|भी|साथ")
+TIMING_NOW = re.compile(r"\bright now\b|\bnow\b|\bimmediate\w*|\bright away\b|\basap\b|\burgent\w*|\babhi\b(?! se)|\bturant\b|\bjaldi\b|\bfauran\b|अभी|तुरंत|जल्दी", re.I)
+TIMING_TODAY = re.compile(r"\blater today\b|(?<!since )\btoday\b|\baaj\b(?! se)|\bshaam\b|\bevening\b|\bafternoon\b|\bdopahar\b|\btonight\b|\braat\b|in a few hours|aaj baad|आज(?! से)|शाम|दोपहर", re.I)
+TIMING_LATER = re.compile(r"\btomorrow\b|\bkal\b(?! se)|\bparso\b|\bschedul\w*|next week|later this week|कल(?! से)|परसों|शेड्यूल", re.I)
 UNSURE = _rx(r"pata nahi", r"not sure", r"don't know", r"dont know", r"पता नहीं")
 YES = _rx(r"^(yes|yeah|yep|haan|han|ha|haa|हाँ|हां)\b")
 NO = _rx(r"^(no|nope|nahi|नहीं|नही)\b")
@@ -82,10 +85,38 @@ URGENT_WORDS = re.compile(
     r"suicid\w*|kill\w*|paralys\w*|stroke|swell\w*|vomit\w*|ulti|fell|fall|gir|help|bachao|marr?\w*|sans)\b"
     r"|\u0938\u093e\u0901?\u0938|\u0938\u093e\u0902\u0938|\u092c\u0947\u0939\u094b\u0936|\u0916\u0942\u0928|\u0926\u0930\u094d\u0926", re.I)
 
+# Broad everyday-complaint vocabulary (en / Hinglish / Hindi): recognises that someone is describing a health problem even
+# when no routing concept exists for it (dizziness, sore throat, rash, urine burning...). Used for recognition + naming only.
+GENERAL_SYMPTOMS = re.compile(
+    r"\b(dizz\w*|chakkar|lightheaded|vertigo|throat|gala|gale|sardi|zukam|zukaam|cold|runny nose|sneez\w*|chheenk\w*|rash|itch\w*|khujli|khujlee|daane|skin|"
+    r"allerg\w*|tooth\w*|dant|kaan|ear|eye|eyes|aankh|aankhon|urin\w*|peshab|burning|jalan|constipat\w*|kabz|acidity|heartburn|nausea|mitli|swell\w*|"
+    r"sujan|cramp\w*|period|periods|bp|sugar|diabetes|thyroid|joint|joints|jodon|jodo|kandhe|shoulder|neck|gardan|leg|legs|pair|haath|hand|ankle|sprain\w*|"
+    r"injur\w*|chot|cut|wound|ghav|fractur\w*|ache|aches|hurts?|hurting|dukh\w*|tired|fatigue|weak\w*|kamzor\w*|sick|bimar\w*|unwell|"
+    r"naak|nose|nostril|fever|bukhar|cough|khansi|breathless\w*|insomnia|neend|anxiety|ghabrahat|stress|palpitation\w*|dhadkan)\b"
+    r"|चक्कर|गला|गले|सर्दी|जुकाम|खुजली|त्वचा|दांत|कान|आंख|आँख|पेशाब|जलन|कब्ज|सूजन|जोड़ों|कंधे|गर्दन|पैर|हाथ|चोट|घाव|कमज़ोर|कमजोर|थक|बीमार|बुखार|खांसी|घबराहट|धड़कन|नाक", re.I)
+
+OTHER_NAMES = [  # (stem regex, names per language) - readable names for complaints that have no routing concept
+    (re.compile(r"throat|gala|gale|गला|गले"), {"en": "sore throat", "hi": "गले की तकलीफ़", "hinglish": "gale ki taklif"}),
+    (re.compile(r"dizz|chakkar|lightheaded|vertigo|चक्कर"), {"en": "dizziness", "hi": "चक्कर", "hinglish": "chakkar"}),
+    (re.compile(r"skin|rash|itch|khujli|khujlee|daane|allerg|त्वचा|खुजली"), {"en": "skin problem", "hi": "त्वचा की परेशानी", "hinglish": "skin ki pareshani"}),
+    (re.compile(r"sardi|zukam|zukaam|runny|sneez|chheenk|naak|nose|नाक|सर्दी|जुकाम"), {"en": "cold / runny nose", "hi": "सर्दी-जुकाम", "hinglish": "sardi-zukam"}),
+    (re.compile(r"urin|peshab|jalan|burning|पेशाब|जलन"), {"en": "urinary problem", "hi": "पेशाब की परेशानी", "hinglish": "peshab ki taklif"}),
+    (re.compile(r"tooth|dant|दांत"), {"en": "toothache", "hi": "दांत का दर्द", "hinglish": "dant ka dard"}),
+    (re.compile(r"\bear\b|kaan|कान"), {"en": "ear problem", "hi": "कान की तकलीफ़", "hinglish": "kaan ki taklif"}),
+    (re.compile(r"eye|aankh|आंख|आँख"), {"en": "eye problem", "hi": "आँख की तकलीफ़", "hinglish": "aankh ki taklif"}),
+    (re.compile(r"joint|jodo|जोड़ों|shoulder|kandhe|कंधे|neck|gardan|गर्दन|\bleg|pair|पैर|haath|hand|हाथ|ankle"), {"en": "joint / limb pain", "hi": "जोड़ों/अंगों का दर्द", "hinglish": "jodon/ang ka dard"}),
+    (re.compile(r"injur|chot|cut|wound|ghav|fractur|sprain|चोट|घाव"), {"en": "injury", "hi": "चोट", "hinglish": "chot"}),
+]
+_COVERED_BY_CONCEPTS = {"ache", "aches", "hurt", "hurts", "hurting", "tired", "fatigue", "sick", "unwell", "fever", "bukhar", "cough", "khansi", "pain", "dard",
+                        "bimar", "kamzor", "weak", "weakness", "dukh", "bimaar"}
+
+# things people ask to have CHECKED or tested, not complaints: never turned into 'how long have you had the bp?'
+_CHECK_WORDS = {"bp", "sugar", "diabetes", "thyroid", "period", "periods", "cold"}
+
 BODY_PAIN = {
     "knee_pain": re.compile(r"\bknee|ghutn|घुटन"),
-    "back_pain": re.compile(r"\bback ?(pain|ache)|backache|peeth|kamar|पीठ|कमर"),
-    "headache": re.compile(r"headache|head ache|\bsir (dard|me dard)|\bsar (dard|me dard)|सिरदर्द|सिर दर्द|सर दर्द"),
+    "back_pain": re.compile(r"\bback ?(pain|ache)|\bback (?:hurts?|is (?:hurting|paining|sore))|backache|peeth|kamar|पीठ|कमर"),
+    "headache": re.compile(r"headache|head ache|head (?:hurts?|pain|is (?:hurting|paining)|is aching)|migraine|\bsir (dard|me dard)|\bsar (dard|me dard)|सिरदर्द|(?:सिर|सर) (?:में )?दर्द"),
     "stomach_pain": re.compile(r"stomach|abdom|belly|tummy|\bpet (dard|me dard)|पेट"),
     "bleeding": re.compile(r"nose ?bleed|\bbleed\w*|\bkhoon\b|\bblood\b|\u0916\u0942\u0928|\bcut\b"),
 }
@@ -117,6 +148,9 @@ QUESTIONS = {
     "bleed_check": {"en": "How heavy is the bleeding? Has it slowed or stopped, or is it still heavy after 10 minutes of pressing?",
                     "hi": "खून कितना बह रहा है? क्या वह कम हुआ या रुक गया, या 10 मिनट दबाने के बाद भी तेज़ है?",
                     "hinglish": "Khoon kitna beh raha hai? Kya kam hua ya ruk gaya, ya 10 minute dabane ke baad bhi tez hai?"},
+    "timing": {"en": "When do you need the visit? Right now, later today, or can it be scheduled?",
+               "hi": "विज़िट कब चाहिए? अभी, आज बाद में, या कल/शेड्यूल कर सकते हैं?",
+               "hinglish": "Visit kab chahiye? Abhi, aaj baad mein, ya kal/schedule kar sakte hain?"},
     "associated": {"en": "Is there anything else along with it, such as {hints}?", "hi": "क्या इसके साथ कुछ और भी है, जैसे {hints}?",
                    "hinglish": "Kya iske saath kuch aur bhi hai, jaise {hints}?"},
 }
@@ -124,6 +158,8 @@ DURATION_OPTIONS = {"en": ["Since today", "1–2 days", "3 days or more"], "hi":
                     "hinglish": ["Aaj se", "1–2 din se", "3 din ya zyada"]}
 BLEED_OPTIONS = {"en": ["Slow / stopped", "Still heavy", "Not sure"], "hi": ["कम / रुक गया", "अभी भी तेज़", "पता नहीं"],
                  "hinglish": ["Kam / ruk gaya", "Abhi bhi tez", "Pata nahi"]}
+TIMING_OPTIONS = {"en": ["Right now", "Later today", "Tomorrow / schedule it"], "hi": ["अभी", "आज बाद में", "कल / शेड्यूल"],
+                  "hinglish": ["Abhi", "Aaj baad mein", "Kal / schedule"]}
 SLOT_ORDER = {"bleeding": ["bleed_check"], "fever": ["duration", "temperature"], "pain": ["duration", "associated"], "default": ["duration", "associated"]}
 
 REPLIES = {
@@ -211,7 +247,7 @@ def _segments(hist: list[tuple[str, str]]) -> list[list[tuple[str, str]]]:
 def classify_turn(text: str, awaiting_answer: bool, concepts: dict) -> tuple[str, bool]:
     t = _n(text)
     present = {c for c, s in concepts.items() if s == FactStatus.PRESENT}
-    has_health = bool(present - {"home_visit_request"}) or any(rx.search(t) for rx in BODY_PAIN.values()) or bool(CARE_REQUEST.search(t)) or bool(URGENT_WORDS.search(t))
+    has_health = bool(present - {"home_visit_request"}) or any(rx.search(t) for rx in BODY_PAIN.values()) or bool(CARE_REQUEST.search(t)) or bool(URGENT_WORDS.search(t)) or bool(GENERAL_SYMPTOMS.search(t))
     service = any(group_of(c) in SERVICE_GROUPS for c in present)
     correction = bool(CORRECTION.search(t))
     if has_health and service and REFUSAL.search(t):
@@ -249,6 +285,15 @@ def _symptoms(text_norm_turns: list[str], concepts: dict) -> list[str]:
     for c in ("fever", "cough", "stomach_upset", "weakness", "pain"):
         if concepts.get(c) == FactStatus.PRESENT and c not in out and not (c == "pain" and out):
             out.append(c)
+    for t in text_norm_turns:  # an everyday complaint with no routing concept: keep it, named in readable words
+        m = next((x for x in GENERAL_SYMPTOMS.finditer(t)
+                  if x.group(0).lower() not in _CHECK_WORDS and not any(x.group(0).lower().startswith(c) for c in _COVERED_BY_CONCEPTS)), None)
+        if m:
+            nm = next((n for rx, n in OTHER_NAMES if rx.search(m.group(0))), None)
+            key = "other:" + (m.group(0))
+            if nm is not None and key not in out and not any(k.startswith("other:") for k in out):
+                out.append(key)
+            break
     return out
 
 
@@ -264,6 +309,9 @@ def _fill_slots(messages: list[tuple[str, str]]) -> dict:
             known["temperature"] = TEMP.search(t).group(0)
         if DURATION.search(t):
             known["duration"] = DURATION.search(t).group(0)
+        tm = "now" if TIMING_NOW.search(t) else "today" if TIMING_TODAY.search(t) else "later" if TIMING_LATER.search(t) else None
+        if tm and pending != "duration":   # "Abhi"/"Aaj" answering "how long?" is a duration, not a visit time
+            known["timing"] = tm
         if SEVERITY.search(t):
             known["severity"] = SEVERITY.search(t).group(0)
         if pending and UNSURE.search(t):
@@ -346,6 +394,9 @@ class DialogueDecision:
 
 
 def _symptom_text(key: str, lang: str) -> str:
+    if key.startswith("other:"):
+        w = key[6:]
+        return next((n[lang] for rx, n in OTHER_NAMES if rx.search(w)), w)
     return NAMES.get(key, NAMES["pain"])[lang]
 
 
@@ -376,3 +427,28 @@ def decide(a: Analysis, max_questions: int, adaptive: bool = True) -> DialogueDe
         if q:
             return q
     return DialogueDecision("proceed", reason=f"intent={a.act}")
+
+
+def timing_of(a) -> str | None:
+    """User-stated urgency of the visit: 'now' | 'today' | 'later', or None when unstated/unsure."""
+    v = (a.known_slots or {}).get("timing") if a is not None else None
+    return v if v in ("now", "today", "later") else None
+
+
+def timing_question(a: Analysis) -> DialogueDecision:
+    lang = a.language
+    return DialogueDecision("ask", QUESTIONS["timing"][lang], TIMING_OPTIONS[lang], "timing", "visit timing unknown")
+
+
+def effective_timing(a) -> tuple[str, str]:
+    """(timing, source). The user's own words win. Otherwise we do not ask: a visit is assumed 'today' (that is what the
+    organiser's same_day label means), and 'now' when the user describes the problem as severe/unbearable. Criticalness
+    here only decides WHO IS AVAILABLE, never the care type or urgency label, and it never lowers anything."""
+    stated = timing_of(a)
+    if stated:
+        return stated, "stated"
+    sev = str((a.known_slots or {}).get("severity", "")) if a is not None else ""
+    m = re.match(r"(\d{1,2}) ?(?:/|out of) ?10", sev)
+    if sev and ((m and int(m.group(1)) >= 7) or re.search(r"severe|tez|bahut|zyada|unbearable|तेज|बहुत", sev)):
+        return "now", "severity"
+    return "today", "default"

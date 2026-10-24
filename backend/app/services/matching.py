@@ -21,6 +21,9 @@ PHRASES = {
         "lang": lambda l: f"{l}-speaking",
         "dist": lambda d: f"{d:.1f} km away",
         "avail": lambda a, b: f"free {a}–{b}",
+        "now": lambda e: f"free now until {e}",
+        "later_today": lambda t: f"free from {t} today",
+        "tomorrow": lambda t: f"free tomorrow from {t}",
         "rating": lambda r: f"rated {r:.1f}/5",
         "skill": lambda s: f"skilled in {s}",
     },
@@ -28,6 +31,9 @@ PHRASES = {
         "lang": lambda l: f"{LANG_NAMES_HI.get(l, l)} बोलते हैं",
         "dist": lambda d: f"{d:.1f} किमी दूर",
         "avail": lambda a, b: f"{a}–{b} उपलब्ध",
+        "now": lambda e: f"अभी उपलब्ध ({e} तक)",
+        "later_today": lambda t: f"आज {t} से उपलब्ध",
+        "tomorrow": lambda t: f"कल {t} से उपलब्ध",
         "rating": lambda r: f"रेटिंग {r:.1f}/5",
         "skill": lambda s: f"{s} में दक्ष",
     },
@@ -35,6 +41,9 @@ PHRASES = {
         "lang": lambda l: f"{l} bolte hain",
         "dist": lambda d: f"{d:.1f} km door",
         "avail": lambda a, b: f"{a}–{b} free",
+        "now": lambda e: f"abhi free ({e} tak)",
+        "later_today": lambda t: f"aaj {t} se free",
+        "tomorrow": lambda t: f"kal {t} se free",
         "rating": lambda r: f"rating {r:.1f}/5",
         "skill": lambda s: f"{s} mein skilled",
     },
@@ -161,10 +170,15 @@ class Matcher:
         hint_skills: set[str],
         language: str,
         loc: Optional[Location],
+        timing: Optional[str] = None,
     ) -> list[Candidate]:
+        """timing is the user's own statement of when the visit is needed ('now' | 'today' | 'later'). It never changes
+        the care type or urgency label; it only decides who is available: 'later' accepts anyone with a working window
+        (tomorrow is fine), 'today' needs a slot left today, 'now' prefers people free right now (falls back to soonest)."""
         out: list[tuple[Candidate, int]] = []
+        avail_urgency = "scheduled" if timing == "later" and urgency != "emergency" else urgency
         for cg in self.repo.all():
-            ok = self._eligible(cg, care_type, urgency, required, loc)
+            ok = self._eligible(cg, care_type, avail_urgency, required, loc)
             if ok is None:
                 continue
             dist, wait = ok
@@ -175,6 +189,8 @@ class Matcher:
             out.append(
                 (Candidate(cg.caregiver_id, round(score, 4), self._reason(cg, comps, weights, dist, lang_name, language, hint_skills, wait), comps), wait)
             )
+        if timing == "now" and any(w == 0 for _, w in out):
+            out = [(c, w) for c, w in out if w == 0]  # someone is free right now: only offer those
         # Ties broken by who is free sooner, then id (deterministic).
         out.sort(key=lambda cw: (-cw[0].score, cw[1], cw[0].caregiver_id))
         return [c for c, _ in out[: self.settings.top_k]]
@@ -201,5 +217,11 @@ class Matcher:
         }
         ranked = sorted(weights, key=lambda k: -(comps[k] * weights[k]))
         chosen = [parts[k] for k in ranked if parts.get(k)][:2]
-        chosen.append(ph["avail"](cg.free_from, cg.free_until))
+        cur = self.now().hour * 60 + self.now().minute
+        if wait == 0:
+            chosen.append(ph["now"](cg.free_until))
+        elif cur + wait >= 24 * 60:
+            chosen.append(ph["tomorrow"](cg.free_from))
+        else:
+            chosen.append(ph["later_today"](_hhmm(cur + wait)))
         return ", ".join(chosen)

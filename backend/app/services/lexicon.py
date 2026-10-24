@@ -43,10 +43,17 @@ def normalize(text: str) -> str:
     return " ".join(tokens)
 
 
+# Unambiguous Hindi words: one of them is enough ("kamzori hai", "dast lage hain" must not be read as English).
+HINGLISH_STRONG = {"hai", "hain", "nahi", "dard", "bukhar", "khansi", "ulti", "dast", "kamzor", "kamzori", "lage", "lagi", "lag", "mujhe", "pet", "peeth",
+                   "kamar", "ghutne", "ghutna", "thak", "saans", "seene", "khoon", "chakkar", "sujan", "bimar", "kharab", "gaya", "gayi", "hora", "hoon", "hu"}
+
+
 def detect_language(text: str) -> str:
     if DEVANAGARI.search(text):
         return "hi"
     tokens = set(normalize(text).split())
+    if tokens & HINGLISH_STRONG:
+        return "hinglish"
     if len(tokens & HINGLISH_MARKERS) >= 2 or ("ghar" in tokens) or ("chahiye" in tokens):
         return "hinglish"
     return "en"
@@ -83,7 +90,7 @@ CONCEPTS: dict[str, tuple[str, str]] = {
     "cough": ("symptom", r"\bcough|\bkhansi\b|खांसी|खाँसी|खासी"),
     "weakness": ("symptom", r"\bweak(?:ness)?\b|\bkamzor(?:i)?\b|\bthak(?:a|aan|an|aavat|gaya|gayi|gaye)?\b|\btired(?:ness)?\b|\bfatigue\b|कमज़?ोर|कमज़?ोरी|थका|थकान|थक"),
     "pain": ("symptom", r"\bpain\b|\bdard\b|दर्द"),
-    "stomach_upset": ("symptom", r"vomit|\bulti\b|उल्टी|diarrh?oea|loose motion|\bdast\b|दस्त|acidity|\bgas\b|एसिडिटी|गैस"),
+    "stomach_upset": ("symptom", r"vomit|\bulti\b|उल्टी|diarrh?oea|loose motion|\bdast\b|दस्त|acidity|\bgas\b|एसिडिटी|गैस|pet (?:kharab|kharaab|upset)|upset stomach|stomach upset|nausea|mitli|मिचली|पेट खराब|\bdast (?:lage|lag)"),
     "bp_sugar_check": ("symptom", r"\bbp\b|blood pressure|बीपी|बी पी"),
     "home_visit_request": ("context", r"\bghar\b|\bat home\b|\bhome (?:visit|check|collection|sample)\b|\bhome\b|घर"),
     # nursing procedures
