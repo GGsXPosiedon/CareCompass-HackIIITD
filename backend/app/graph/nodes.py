@@ -18,7 +18,7 @@ from ..prompts import load, render_case
 from ..schemas.external import MatchedCaregiver, TriageResponse
 from ..schemas.internal import RouteDecision, SafetyResult
 from ..schemas.llm import SafetyReview, TriageAssessment
-from ..services import explain, follow_up, intake
+from ..services import dialogue, explain, follow_up, intake
 from ..services.gemini import LLMError
 from ..services.lexicon import REQUIRED_SKILLS
 from ..services.routing import urgency_for
@@ -53,10 +53,46 @@ class Nodes:
         return {"rule_safety": r, **_t("rules_safety", f"{msg} (ruleset {r.ruleset_version})")}
 
     @staticmethod
-    def after_rules(s: TriageState) -> list[str] | str:
-        if s["rule_safety"].requires_emergency:
-            return "emergency"
+    def after_rules(s: TriageState) -> str:
+        return "emergency" if s["rule_safety"].requires_emergency else "converse"
+
+    # -- 2b. intent + dialogue management (only reached when no red-flag rule fired) ----------------
+    def converse(self, s: TriageState) -> dict:
+        a = s["facts"].analysis
+        d = dialogue.decide(a, self.p.settings.max_follow_ups, self.p.settings.adaptive_slot_questions)
+        return {"dialogue": d, **_t("converse", f"intent={a.act}{' +correction' if a.correction else ''}; new_topic={a.new_topic}; "
+                                                f"questions asked={a.questions_asked}; decision={d.kind}"
+                                                f"{' (' + d.reason + ')' if d.reason else ''}")}
+
+    @staticmethod
+    def after_converse(s: TriageState) -> list[str] | str:
+        if s["dialogue"].kind in ("reply", "ask"):
+            return "reply_guard"
         return ["classify", "llm_safety", "llm_triage"]  # parallel fan-out
+
+    def reply_guard(self, s: TriageState) -> dict:
+        """Chit-chat / refusal / slot-question turns still get the LLM safety screen, so wording the
+        rules and the dialogue lexicon do not know can never skip safety. Rules remain the floor."""
+        out = self.llm_safety(s)
+        sr = out.get("llm_safety")
+        present = [x.flag for x in (sr.findings if sr else []) if x.status == "present" and x.flag in RED_FLAGS]
+        possible = [x.flag for x in (sr.findings if sr else []) if x.status == "possible" and x.flag in RED_FLAGS]
+        if present:
+            out["decision"] = {"outcome": "emergency", "flags": present, "basis": "model_guard", "escalated_by": ["llm_reply_guard"]}
+        elif possible and sr and sr.screening_question:
+            out["decision"] = {"outcome": "follow_up", "question": sr.screening_question, "options": sr.screening_options or None,
+                               "basis": "safety_screen", "possible": possible}
+        return out
+
+    @staticmethod
+    def after_guard(s: TriageState) -> str:
+        d = s.get("decision")
+        return {"emergency": "emergency", "follow_up": "follow_up"}.get(d["outcome"], "dialogue_reply") if d else "dialogue_reply"
+
+    def dialogue_reply(self, s: TriageState) -> dict:
+        d = s["dialogue"]
+        resp = TriageResponse(follow_up_question=d.message, reasoning="", answer_options=d.options)
+        return {"response": resp, **_t("dialogue_reply", f"{d.kind}: {d.slot or s['facts'].analysis.act}")}
 
     # -- 3a. deterministic classifier slot ---------------------------------
     def classify(self, s: TriageState) -> dict:

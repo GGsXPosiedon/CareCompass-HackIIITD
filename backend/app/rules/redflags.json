@@ -1,5 +1,5 @@
 {
-  "version": "0.2.0-draft",
+  "version": "0.2.1-draft",
   "status": "DRAFT - not clinically validated. Must be reviewed by clinical mentors before any real use.",
   "rules": [
     {
@@ -14,7 +14,12 @@
         "dil ka daura",
         "सीने (?:\\S+ ){0,3}दर्द",
         "छाती (?:\\S+ ){0,3}दर्द",
-        "दिल का दौरा"
+        "दिल का दौरा",
+        "pressure (?:in|on) (?:my |his |her |the )?chest",
+        "tight(?:ness)? in (?:my |his |her |the )?chest",
+        "chest (?:feels? )?(?:tight|heavy)",
+        "dil (?:\\S+ ){0,3}dard",
+        "दिल (?:\\S+ ){0,3}दर्द"
       ]
     },
     {
@@ -40,7 +45,23 @@
         "दम (?:घुट|फूल)",
         "sans (?:\\S+ ){0,4}(?:dikkat|taklif|phool)",
         "(?:lips|face) (?:\\S+ ){0,2}(?:blue|neela)",
-        "breathing (?:very )?fast"
+        "breathing (?:very )?fast",
+        "\\bnot breathing\\b",
+        "(?:isn'?t|aren'?t|wasn'?t|is not|are not|was not|am not) breathing",
+        "(?:stopped|stops|stop|stopping) breathing",
+        "\\bno breathing\\b(?! (?:difficulty|trouble|problem))",
+        "(?:barely|hardly|not even) breathing",
+        "\\bchoking\\b",
+        "(?:can'?t|cannot|can not) get (?:any )?(?:air|breath)",
+        "not able to breathe",
+        "saans (?:band|bandh|ruk)",
+        "saans nahi chal",
+        "breathing nahi",
+        "breath nahi",
+        "(?:सांस|साँस) (?:बंद|बन्द)",
+        "(?:hardly|barely|scarcely) (?:\\S+ )?(?:get|take|catch) (?:\\S+ )?(?:air|breath)",
+        "(?:not|un)able to (?:take|catch) (?:a |any )?breath",
+        "\\bgasp\\w*"
       ]
     },
     {
@@ -63,7 +84,10 @@
         "बेहोशी",
         "अचानक (?:\\S+ ){0,2}गिर",
         "जवाब नहीं दे",
-        "होश नहीं"
+        "होश नहीं",
+        "(?:won'?t|will not|wouldn'?t|would not|can'?t|cannot|can not|unable to|not able to) (?:be )?(?:wake|woken)",
+        "nahi (?:uth|jag) (?:raha|rahi|rahe)",
+        "उठ नहीं रहा|उठ नहीं रही|जाग नहीं रहा|जाग नहीं रही"
       ]
     },
     {
@@ -79,7 +103,22 @@
         "bahut khoon",
         "खून (?:नहीं )?(?:रुक|बह)",
         "बहुत खून",
-        "ब्लीडिंग (?:नहीं )?रुक"
+        "ब्लीडिंग (?:नहीं )?रुक",
+        "bleeding (?:heavily|a lot|badly|profusely)",
+        "(?:lot|lots|loss) of blood",
+        "blood (?:is )?(?:not|won'?t) (?:stopping|stop)",
+        "(?:vomit(?:ing|ed)?|coughing up|cough(?:ing)? up|throwing up|spitting) blood",
+        "khoon ki ulti",
+        "ulti (?:me|mein) khoon",
+        "खून की उल्टी",
+        "उल्टी (?:में|मे) खून",
+        "khoon (?:\\S+ ){0,2}(?:ruk|band) nahi",
+        "(?:bahut|zyada|bohot|kaafi) (?:\\S+ )?khoon",
+        "still (?:bleeding )?heavy",
+        "abhi bhi tez",
+        "bleeding (?:is )?(?:not|won'?t) (?:stop|slow)",
+        "(?:khoon|blood|bleed\\w*) (?:\\S+ ){0,12}(?:bahut|bohot|zyada|tez|still heavy|heavy|jyada)(?! nahi)",
+        "(?:bahut|bohot|zyada|tez|heavy|jyada) (?:\\S+ ){0,6}(?:khoon|blood|bleeding)"
       ]
     },
     {
@@ -108,7 +147,11 @@
         "(?:haath|hath|pair) (?:\\S+ ){0,2}(?:sunn|kaam nahi kar)",
         "(?:sudden|achanak) (?:\\S+ ){0,3}(?:confus|blurr|dikhna band)",
         "एक तरफ (?:\\S+ ){0,3}(?:कमज़ोर|कमजोर|सुन्न|काम नहीं)",
-        "(?:हाथ|पैर) (?:\\S+ ){0,2}(?:सुन्न|काम नहीं)"
+        "(?:हाथ|पैर) (?:\\S+ ){0,2}(?:सुन्न|काम नहीं)",
+        "(?:can'?t|cannot|can not|unable to|not able to) (?:move|lift|use) (?:his |her |my |the |an? )?(?:arm|leg|hand|face)",
+        "weakness on one side",
+        "(?:sudden|suddenly) (?:\\S+ ){0,3}(?:weak|weakness|numb)(?:\\S* ){0,4}(?:one side|arm|leg|face)",
+        "\\bmouth (?:\\S+ ){0,2}(?:crooked|twisted|tedha|tirchha|latak)"
       ]
     },
     {
@@ -125,7 +168,10 @@
         "daura pad",
         "मिर्गी",
         "झटके",
-        "दौरा पड़"
+        "दौरा पड़",
+        "foaming",
+        "jerking",
+        "(?:shak(?:ing)?|jerk(?:ing)?) (?:\\S+ ){0,3}(?:uncontrollably|all over)"
       ]
     },
     {
@@ -169,7 +215,14 @@
         "आत्महत्या",
         "मरना चाह",
         "जीना नहीं",
-        "जीने की इच्छा नहीं"
+        "जीने की इच्छा नहीं",
+        "(?:thinking|think|thoughts?|plan(?:ning)?) (?:of|about|to) (?:ending|killing|hurting) (?:\\S+ ){0,2}(?:life|myself|himself|herself)",
+        "end it all",
+        "don'?t want to (?:live|be alive)",
+        "no reason to live",
+        "(?:hurt|harm) myself",
+        "zindagi khatam",
+        "jeene ka mann nahi"
       ]
     },
     {
@@ -177,7 +230,9 @@
       "flag": "severe_dehydration",
       "patterns": [
         "severe dehydration",
-        "extreme dehydration"
+        "extreme dehydration",
+        "no urine (?:since|for|in)",
+        "pe(?:s|sh)ab nahi (?:aaya|aa raha|hua)"
       ],
       "all_of": [
         [

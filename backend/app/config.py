@@ -95,6 +95,9 @@ class Settings:
     gemini_timeout_s: float = float(os.getenv("GEMINI_TIMEOUT_S", "15"))
     gemini_thinking_budget: int = int(os.getenv("GEMINI_THINKING_BUDGET", "0"))  # -1 = model default
     max_follow_ups: int = int(os.getenv("MAX_FOLLOW_UPS", "2"))
+    # Ask symptom-specific questions (duration, temperature, ...) before routing a bare symptom message.
+    # Set ADAPTIVE_SLOT_QUESTIONS=off to route such messages immediately (older behaviour).
+    adaptive_slot_questions: bool = os.getenv("ADAPTIVE_SLOT_QUESTIONS", "on").lower() not in ("off", "0", "false")
     fallback_care_type: str = os.getenv("FALLBACK_CARE_TYPE", "paramedic_home_visit")
     top_k: int = int(os.getenv("TOP_K", "3"))
     timezone: str = os.getenv("SERVICE_TZ", "Asia/Kolkata")
