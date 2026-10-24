@@ -1,202 +1,340 @@
-# CareCompass
+<a id="readme-top"></a>
 
-A minimal, responsive patient-facing frontend for the Hack IIITD care-navigation challenge. The app opens directly into a conversational care request: describe the need → answer follow-ups → review a recommendation → choose a caregiver and time → confirm a demo booking. The dark, spacious layout follows the user's ChatGPT screenshot, with locally bundled Lora serif headings inspired by Claude's typographic feel. CareCompass retains its own name and compass mark.
+<!-- PROJECT SHIELDS -->
+<div align="center">
 
-## Start here: find care
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
+[![Tests][tests-shield]][tests-url]
+[![Emergency recall][recall-shield]][eval-url]
 
-The header's sun/moon button switches the **entire app** between dark and light mode. Find care, My bookings, Briefcase, health services, inputs and dialogs always share the selected mode. Dark mode is the initial state; the current choice is retained while navigating in this tab. No patient data is written to local storage.
+</div>
 
-Open **Find care**, then choose **Fever & cough** (or switch to Hindi/Hinglish first).
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/dipesh4000/CareCompass-HackIIITD">
+    <img src="frontend/public/compass.svg" alt="CareCompass logo" width="80" height="80">
+  </a>
 
-1. Select **Find the right care**, which appears in the composer after a message is entered. You can also press Enter; Shift+Enter adds a new line.
-2. Answer the age question and select **Continue**. Then choose **No** for the synthetic emergency question and select **Continue** again.
-3. Review the preset recommendation and select **See available caregivers**.
-4. Choose a caregiver with remaining slots, select **Choose a time**, pick a time and select **Confirm demo booking**.
-5. View the confirmation, select **Download summary**, then open **My bookings**.
+  <h3 align="center">CareCompass</h3>
 
-The message box also includes **Speak instead**, with an editable transcript and typing fallback. The sidebar contains **Find care**, **My bookings**, **Briefcase** and **New request**. **My bookings** includes **Explore health services**. On mobile, open the menu to reach them. A new request keeps completed bookings in this tab; refreshing clears them.
+  <p align="center">
+    Describe a health need in English, Hindi or Hinglish. Get the right kind of care, how urgent it is, and a caregiver who can actually come.
+    <br />
+    Built for <b>HACK IIITD</b> (CAI, IIIT-Delhi)
+    <br />
+    <br />
+    <a href="backend/README.md"><strong>Explore the docs »</strong></a>
+    ·
+    <a href="https://github.com/dipesh4000/CareCompass-HackIIITD/issues/new?labels=bug">Report Bug</a>
+    ·
+    <a href="https://github.com/dipesh4000/CareCompass-HackIIITD/issues/new?labels=enhancement">Request Feature</a>
+  </p>
+</div>
 
-## Briefcase and health services
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#caregiver-scoring">Caregiver Scoring</a></li>
+    <li><a href="#evaluation">Evaluation</a></li>
+    <li><a href="#api">API</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
+  </ol>
+</details>
 
-The main sidebar has three destinations: **Find care**, **My bookings**, and **Briefcase**. The chat-first landing layout and fonts are retained, with one shared dark/light theme across all sections.
+<!-- ABOUT THE PROJECT -->
+## About The Project
 
-**Briefcase** opens the document list directly. Its internal navigation contains **Home**, **Records**, **Health summary**, and **Labs**. Home provides record upload and recent documents; Records includes local PDF/image selection, camera-input affordance, sample insertion, search, category/date sorting, document previews, consent previews and metadata downloads. Health summary organizes the current synthetic patient's records and timeline; Labs links categories to documents and the lab-upload workflow.
+<table>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/01-follow-up-question.png" alt="Follow-up question, dark mode"></td>
+    <td width="50%"><img src="docs/screenshots/01-follow-up-question-light.png" alt="Follow-up question, light mode"></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center"><sub>One clear question when the message is vague. Dark and light themes.</sub></td>
+  </tr>
+</table>
 
-**My bookings → Explore health services** opens the fictional hospital/service directory, hospital linking, request/token previews and their cancellation/history. It has a return action to My bookings. These previews do not contact hospitals, reserve queue positions or create real appointments.
+A family types something like *"mummy theek nahi hai, kal raat se bukhar hai"*. CareCompass:
 
-The family-workspace page and its separate sidebar/header have been removed. Family profiles, ABHA preview, Messages & updates, Workspace settings and Care appointments are no longer app sections. The earlier assistant, profile-management, ABHA, messaging, settings and reminder UI files have been removed. Seed data and internal record-isolation helpers remain for synthetic fixtures and tests; no profile-management UI is exposed.
+1. **Checks for emergencies first.** Chest pain, trouble breathing, collapse, heavy bleeding and similar red flags go straight to **112**. No home visit, no caregivers.
+2. **Asks one clear question** when the message is vague ("I need help"), instead of guessing.
+3. **Picks the care type and urgency**: paramedic home visit, home nursing, lab test at home, teleconsultation or 112.
+4. **Matches caregivers** who speak the family's language, live nearby, are free and have the right skill.
+5. **Explains every decision** in plain words.
 
-The record and hospital flows take inspiration from Roojh's documented patient experience. This is a local frontend demonstration, with no OCR, clinical verification, authentication, government integration, real sharing, live AI, payments or hospital backend. Record uploads and document URLs stay in this tab; object URLs are released when the application unmounts. State survives navigation between Briefcase, services and care booking, but clears on refresh.
+**Safety contract**
 
-Health state is provided once around the app in `src/health/Store.tsx`. `src/health/Briefcase.tsx` owns the four internal sections; `src/health/Services.tsx` is reached only from My bookings. The care API adapter remains separate in `src/lib/api.ts` and never receives Briefcase files.
+- Deterministic rules run **first** and cannot be overridden.
+- Any source (rules, your model, Gemini) can escalate to 112. **None can de-escalate.**
+- A *possible* red flag triggers one danger-sign question, or escalates when the question budget (2) is spent.
+- If Gemini fails, times out or breaks the schema, the rules answer instead.
 
-## Run locally
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-Requires **Node.js 24 LTS** (the native TypeScript Vite configuration requires Node 22.18+ or 24+).
+### Built With
 
-```powershell
-cd frontend
-npm install
-npm run dev
+[![React][react-shield]][react-url]
+[![Vite][vite-shield]][vite-url]
+[![TypeScript][ts-shield]][ts-url]
+[![FastAPI][fastapi-shield]][fastapi-url]
+[![LangGraph][langgraph-shield]][langgraph-url]
+[![Pydantic][pydantic-shield]][pydantic-url]
+[![Gemini][gemini-shield]][gemini-url]
+[![uv][uv-shield]][uv-url]
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### How It Works
+
+```mermaid
+flowchart LR
+    A[intake] --> B[rules_safety]
+    B -- red flag --> E[emergency · 112]
+    B --> C[classify<br/>your model slot]
+    B --> D[llm_safety<br/>Gemini]
+    B --> F[llm_triage<br/>Gemini]
+    C --> G{fuse}
+    D --> G
+    F --> G
+    G -- danger --> E
+    G -- unclear --> Q[follow_up question]
+    G -- clear --> M[match caregivers] --> R[respond]
 ```
 
-Open **http://127.0.0.1:5173/**. On PowerShell systems that block npm.ps1, use `npm.cmd` in place of `npm`.
+A **LangGraph** pipeline with two versioned system prompts (`backend/app/prompts/`): a *safety screener* that only hunts for red flags, and a *triage analyst* that picks the service, skills and plain-language reasoning. Both treat the user's text and profile as untrusted input.
 
-```powershell
-npm test
-npm run build
-npm run preview
-```
+The **deterministic classifier slot** is rules today. A trained model plugs in through the same interface (`ROUTER_BACKEND`), and Gemini stays as the second opinion. How the two are weighed is a setting (`FUSION_POLICY`: `llm_first`, `model_first`, `agree_or_ask`).
 
-The production build is in `frontend/dist`. Serve it over HTTP; do not open its index.html directly from the file system. The app does not need backend services or API keys to run in demo mode. Briefcase and health services are always synthetic local demos; `VITE_API_BASE_URL` only switches the care-navigation adapter.
+**Schemas are enforced both ways.** Gemini output is validated by strict Pydantic models (closed enums, no unknown keys) and anything invalid falls back to rules. API responses are checked against the organiser contract before they leave the server.
 
-## What is implemented
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-- Symptom intake with editable text, synthetic example prompts and patient-relation context.
-- English and Hindi interface copy; English, Hindi, Hinglish and automatic language request modes.
-- Browser speech recognition when supported, editable transcripts, text fallback, and optional read-aloud.
-- One follow-up question at a time with server-supplied answer options and conversation history.
-- Care type, urgency and explanations, followed by ranked caregiver cards and language filtering.
-- Caregiver selection, available time slots, appointment review and demo confirmation.
-- Session-only booking history and downloadable text summaries.
-- Emergency escalation that bypasses follow-ups, matching and booking when a response contains red flags, immediate urgency or emergency referral.
-- Empty availability, network failure, validation, disabled, loading and retry states.
-- Mobile navigation, native accessible dialogs, keyboard focus, labels, live announcements and reduced-motion support.
-- Locally bundled Lora, Instrument Sans and Noto Sans Devanagari; no external font requests.
+<!-- GETTING STARTED -->
+## Getting Started
 
-## Important demo boundary
+### Prerequisites
 
-**This is a frontend prototype, not a clinical triage engine.** All cases, provider names, ratings, reviews, distances, availability and bookings are synthetic. `frontend/src/lib/mock.ts` deliberately returns preset outcomes to demonstrate screens. It is not a medically validated classifier, and arbitrary input must not be treated as assessed or safe.
+* [uv](https://docs.astral.sh/uv/) for the backend
+  ```sh
+  # macOS / Linux
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+  # Windows (PowerShell)
+  powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+  ```
+* Node.js 24 LTS for the frontend
 
-Use only made-up examples. No real patient data should be entered. Requests and bookings are held in this tab's memory, with no localStorage or analytics. Refreshing clears them. Browser voice recognition may send audio to the browser vendor's service; do not speak real patient information.
+### Installation
 
-The emergency button is a `tel:112` link and opens the device dialler only after a user selects it. It never calls automatically. The number is for India, verified against the [Government of India's Emergency Response Support System](https://112.gov.in/). Adapt emergency destinations before extending the demo to another country.
+1. Clone the repo
+   ```sh
+   git clone https://github.com/dipesh4000/CareCompass-HackIIITD.git
+   cd CareCompass-HackIIITD
+   ```
+2. Start the backend
+   ```sh
+   cd backend
+   uv sync
+   cp .env.example .env     # optional: add GEMINI_API_KEY, otherwise the rules path runs
+   uv run uvicorn app.main:app --reload
+   ```
+   API docs are at http://127.0.0.1:8000/docs
+3. Start the frontend in a second terminal
+   ```sh
+   cd frontend
+   npm install
+   VITE_API_BASE_URL=http://127.0.0.1:8000 npm run dev
+   ```
+   On PowerShell: `$env:VITE_API_BASE_URL="http://127.0.0.1:8000"; npm run dev`. Leave the variable unset for the offline demo. The app opens at http://127.0.0.1:5173
+4. Run the tests (89, no network)
+   ```sh
+   cd backend && uv run pytest -q
+   ```
 
-## Connect the team's backend
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-Copy `frontend/.env.example` to `frontend/.env.local`, set `VITE_API_BASE_URL`, and restart Vite. With a base URL set, the app stops using the synthetic API fixtures. It does **not** silently fall back to demo results on live API failures.
+<!-- USAGE -->
+## Usage
 
-All network access is isolated in **`frontend/src/lib/api.ts`**. The triage contract comes from the problem statement, which explicitly says its final schema is still to be supplied. The profile and booking endpoints below are proposed integration contracts, not organiser-supplied APIs. Adapt this one file when the team finalises names and shapes.
+Type a request, answer at most a couple of questions (press `1`–`5`, or choose *Something else…*), then pick a caregiver. Every screen below is shown in dark and light mode.
 
-### `POST /triage`
+<table>
+  <tr>
+    <th width="50%">Dark</th>
+    <th width="50%">Light</th>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/02-recommendation.png" alt="Recommendation, dark"></td>
+    <td><img src="docs/screenshots/02-recommendation-light.png" alt="Recommendation, light"></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center"><sub><b>A recommendation with the reason behind it</b>, in the language the family wrote in.</sub></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/03-caregivers.png" alt="Caregivers, dark"></td>
+    <td><img src="docs/screenshots/03-caregivers-light.png" alt="Caregivers, light"></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center"><sub><b>Caregivers ranked and explained</b>: language, distance, free slot and skills.</sub></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/04-emergency.png" alt="Emergency, dark"></td>
+    <td><img src="docs/screenshots/04-emergency-light.png" alt="Emergency, light"></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center"><sub><b>Emergencies never reach a booking.</b> The red flags found are listed and matching is skipped.</sub></td>
+  </tr>
+</table>
 
-Request:
+The frontend walkthrough (Briefcase, health services, profile) is in [`frontend/README.md`](frontend/README.md).
 
-```json
-{
-  "user_input": "A family member: Papa ko do din se bukhar hai aur khansi bhi.",
-  "language": "hinglish",
-  "location": { "lat": 28.54, "lng": 77.27 },
-  "conversation_history": []
-}
-```
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-The first input includes the selected patient relation as natural-language context. Later inputs contain the latest answer. Conversation history contains prior user/assistant messages as `{ "role": "user" | "assistant", "content": "..." }`. The current user input is not duplicated in history.
+<!-- SCORING -->
+## Caregiver Scoring
 
-Response:
+Hard filters first. Anyone who fails one is never shown: active, right role, has every required skill, within their service radius, free in the needed window.
 
-```json
-{
-  "follow_up_question": null,
-  "care_type": "paramedic_home_visit",
-  "urgency": "same_day",
-  "red_flags": [],
-  "reasoning": "Backend-provided plain-language explanation",
-  "matched_caregivers": [
-    { "caregiver_id": "CG_014", "score": 0.92, "reason": "Backend-provided matching reason" }
-  ]
-}
-```
+Then a weighted score, using the organiser's baseline weights so results are comparable:
 
-For follow-ups, return a non-empty `follow_up_question`, with `care_type` and `urgency` nullable. Optional `answer_options: string[]` supplies quick answers. The frontend never invents clinical follow-up questions in live mode. Return translated questions, reasons and answer options for the requested language.
+| Factor | Weight | How it is computed |
+|---|---|---|
+| Language | 0.35 | 1 if they speak the family's language |
+| Proximity | 0.30 | 1 − distance ÷ service radius (skipped for teleconsultation) |
+| Skill | 0.20 | 0.85 × share of needed skills covered + 0.15 × tier |
+| Rating | 0.15 | rating ÷ 5 |
 
-Currently supported care-type values: `paramedic_home_visit`, `nurse_home_visit`, `gp_teleconsult`, `specialist_consult`, `emergency_referral`. Supported urgency: `routine`, `same_day`, `immediate`. Confirm these enums against the final care taxonomy. Responses are validated at runtime; invalid non-emergency output produces a retry error rather than a made-up recommendation.
+Ties go to whoever is free sooner.
 
-Emergency fields are checked before normal-response validation, and caregiver matches are discarded on that path—even when the payload is incomplete or conflicting. The frontend does not independently diagnose symptoms. The backend owns clinically validated red-flag detection, negation handling, triage and ranking.
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### `GET /caregivers?ids=CG_014%2CCG_022`
+<!-- EVALUATION -->
+## Evaluation
 
-Returns a JSON array of complete profiles. See the **`Caregiver`** interface in `frontend/src/types.ts` and the synthetic examples in `frontend/src/data.ts`. Required fields:
+52 hand-written cases across English, Hindi and Hinglish, rules only (no LLM). Run `uv run python -m eval.run_eval` in `backend/`. It exits with an error if any emergency is missed.
 
-```json
-{
-  "id": "CG_014",
-  "name": "Aarav Mehta",
-  "initials": "AM",
-  "role": "Paramedic",
-  "roleHi": "पैरामेडिक",
-  "careType": "paramedic_home_visit",
-  "experience": 6,
-  "distance": 2.4,
-  "languages": ["Hindi", "English"],
-  "rating": 4.9,
-  "reviews": 128,
-  "skills": ["Home assessments"],
-  "skillsHi": ["घर पर मूल्यांकन"],
-  "slots": ["14:00", "16:30"],
-  "tint": "sage"
-}
-```
+| Metric | Result |
+|---|---|
+| Emergency recall | **100%** (21/21) |
+| False alarms | 3.2% |
+| Care-type accuracy | 97.9% |
+| Asked a question on vague input | 4/4 |
+| Picks with the required skill | 100% (organiser baseline 87.5%) |
+| Picks free at 8:45 pm | 100% (organiser baseline 85.7%) |
 
-Distances are kilometres, ratings are out of five, and slots use 24-hour `HH:mm` in the device's local time. The UI preserves triage ranking; it does not re-sort by rating. Missing or incompatible profiles block booking and show an error. Never hydrate live IDs from synthetic profiles.
+> These cases were written and tuned by the team, so read the numbers as a regression check, not proof of real-world accuracy. The red-flag list, the 112 number and the Tele-MANAS helpline still need confirming with the mentors.
 
-The current demo reuses provider slot templates for today/tomorrow, filters past slots, and restricts same-day recommendations to today. Before real scheduling, replace this with backend-owned, date-specific slot IDs, a defined service timezone, and atomic availability validation.
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### `POST /bookings`
+<!-- API -->
+## API
 
-```json
-{
-  "caregiver_id": "CG_014",
-  "slot": "16:30",
-  "date": "2026-10-24",
-  "location": { "lat": 28.54, "lng": 77.27 }
-}
-```
+| Endpoint | Purpose |
+|---|---|
+| `POST /api/v1/triage` | Organiser contract: `{user_input, language, location, conversation_history}` → care type, urgency, red flags, reasoning, matched caregivers |
+| `POST /api/v1/triage/trace` | Same decision, plus a plain-words trace of every graph step |
+| `GET /api/v1/caregivers` | Browse caregivers, filterable by `care_type` |
+| `GET /api/v1/graph` | The LangGraph flow as Mermaid |
+| `GET /health` | Classifier, LLM, ruleset and fusion policy in use |
 
-Return `{ "id": "SERVER_BOOKING_REFERENCE" }` only after success. Confirmation never appears before this completes. The UI prevents duplicate in-flight submissions; production booking still needs server-side idempotency and slot reservation. A real backend also needs authentication, authorisation, input validation and an approved data-handling policy. No client-side API secrets belong in `VITE_*` variables.
+Config, fusion policy, prompts and schema enforcement are covered in [`backend/README.md`](backend/README.md).
 
-Configure CORS to allow the frontend origin. Endpoint failures and 20-second timeouts leave the user's current answers intact. Location selection currently uses fixed synthetic demo areas; replace that control when a real service-area contract exists.
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Demo walkthrough
+<!-- ROADMAP -->
+## Roadmap
 
-Follow the **Start here: find care** steps above. The landing screen starts this same care-navigation flow; it does not route the request through the separate scripted health-record assistant.
+- [x] Organiser-contract API with strict schemas
+- [x] LangGraph pipeline with safety-first fusion and a Gemini fallback
+- [x] Hindi / Hinglish red-flag rules and a 52-case evaluation set
+- [x] Chat-style follow-up questions
+- [x] Dark and light themes
+- [ ] Plug in our own trained classifier at the deterministic slot
+- [ ] Verify the live Gemini path end to end
+- [ ] Confirm red-flag rules and helpline numbers with clinicians or mentors
+- [ ] A larger, independently written evaluation set
+- [ ] Real caregiver and booking data
 
-The **Explore demo scenarios** disclosure shows emergency escalation, outside-coverage empty availability and a simulated connection error. These controls are absent when a backend URL is configured. Alternatively answer **Yes** or **Not sure** to the demo's emergency follow-up to test escalation mid-conversation.
+See the [open issues](https://github.com/dipesh4000/CareCompass-HackIIITD/issues) for the full list.
 
-## Structure
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-```text
-frontend/
-  src/
-    App.tsx              # Original care-flow state and API orchestration
-    CareShell.tsx        # Three-destination sidebar, shared health state and services access
-    care-shell.css       # Chat-first shell, navigation and responsive layout
-    themes.css           # Shared dark/light tokens for every section and dialog
-    health/              # Briefcase, records, health summaries, labs, services and synthetic state
-    health.css           # Light record/service module styles
-    components/          # Intake, questions, results, providers, booking, emergency, dialogs
-    lib/api.ts           # Single network boundary and demo/live switch
-    lib/contracts.ts     # Runtime response validation and emergency priority
-    lib/mock.ts          # Scripted synthetic demo responses
-    lib/flow.ts          # Routing and date/time helpers
-    data.ts              # Synthetic providers, areas and examples
-    i18n.ts              # English/Hindi interface copy and care labels
-    types.ts             # Shared API and UI types
-    styles.css           # Responsive visual system
-  tests/flow.test.ts      # Safety, schema, fixture and scheduling checks
-  tests/health.test.ts    # Profile isolation, dose history, readings, assistant and reset checks
-```
+<!-- CONTRIBUTING -->
+## Contributing
 
-## Validation and known limits
+Contributions are welcome.
 
-`npm test` covers red-flag priority, sparse/conflicting emergency payloads, malformed responses, invalid rankings and profiles, multilingual demo escalation, two-question intake, no availability and past-slot exclusion. `npm run build` checks TypeScript and generates the production bundle.
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a pull request
 
-Browser QA covers the full synthetic booking flow, English/Hindi layouts at 1440, 768 and 390 pixels, emergency escalation during follow-up, booking validation/history, empty availability, location changes and the simulated failure state. See `frontend/QA.md` for the final verification notes.
+Please run `uv run pytest -q` and `uv run python -m eval.run_eval` in `backend/` first. A change that makes the evaluation miss an emergency will not be merged.
 
-Actual microphone capture, speech quality and permission-denial dialogs require manual verification on the target device. The real backend is not present in this repository and has not been validated. This frontend does not implement the team's model training, hidden-test prediction CSV, production dispatch, authentication, payments, or real medical decision support.
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Design and attribution
+<!-- LICENSE -->
+## License
 
-Design reference: [Urban Company](https://www.urbancompany.com/) for service clarity and [Uber](https://www.uber.com/in/en/) for the compact request/selection/confirmation pattern. No logos, photos, text or proprietary components from either site are used. The CareCompass mark is an original SVG; caregiver identities are initials, not stock doctor portraits.
+Distributed under the MIT License. See [`LICENSE`](LICENSE) for more information.
 
-React, Vite, TypeScript, Lucide icons and Fontsource fonts are declared in `frontend/package.json`; their licences remain with their packages. The app follows the Editorial greeting direction (seed `174117051`), adapted to a patient flow with sage surfaces and a custom care-journey rail. The dependency-free SVG chart helper in `frontend/public/health-charts.js` comes from the local frontend-design skill, with observer cleanup added. No model or external AI API is used by this frontend.
+CareCompass is care navigation, not diagnosis or prescription. All caregivers and bookings are synthetic demo data. In a real emergency in India, call **112**.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- ACKNOWLEDGMENTS -->
+## Acknowledgments
+
+* [HACK IIITD](https://www.iiitd.ac.in/) and the CAI team at IIIT-Delhi for the problem statement and baseline scoring recipe
+* [Best-README-Template](https://github.com/othneildrew/Best-README-Template)
+* [Shields.io](https://shields.io)
+* [LangGraph](https://langchain-ai.github.io/langgraph/) and [FastAPI](https://fastapi.tiangolo.com/)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- MARKDOWN LINKS & IMAGES -->
+[issues-shield]: https://img.shields.io/github/issues/dipesh4000/CareCompass-HackIIITD.svg?style=for-the-badge&color=0b6bb5
+[issues-url]: https://github.com/dipesh4000/CareCompass-HackIIITD/issues
+[license-shield]: https://img.shields.io/github/license/dipesh4000/CareCompass-HackIIITD.svg?style=for-the-badge&color=0b6bb5
+[license-url]: LICENSE
+[tests-shield]: https://img.shields.io/badge/tests-89_passing-2e7d32?style=for-the-badge
+[tests-url]: backend/tests
+[recall-shield]: https://img.shields.io/badge/emergency_recall-100%25-2e7d32?style=for-the-badge
+[eval-url]: backend/eval
+[react-shield]: https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
+[react-url]: https://react.dev/
+[vite-shield]: https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white
+[vite-url]: https://vite.dev/
+[ts-shield]: https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white
+[ts-url]: https://www.typescriptlang.org/
+[fastapi-shield]: https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white
+[fastapi-url]: https://fastapi.tiangolo.com/
+[langgraph-shield]: https://img.shields.io/badge/LangGraph-1C3C3C?style=for-the-badge
+[langgraph-url]: https://langchain-ai.github.io/langgraph/
+[pydantic-shield]: https://img.shields.io/badge/Pydantic_v2-E92063?style=for-the-badge&logo=pydantic&logoColor=white
+[pydantic-url]: https://docs.pydantic.dev/
+[gemini-shield]: https://img.shields.io/badge/Gemini-8E75B2?style=for-the-badge&logo=googlegemini&logoColor=white
+[gemini-url]: https://ai.google.dev/
+[uv-shield]: https://img.shields.io/badge/uv-DE5FE9?style=for-the-badge&logo=astral&logoColor=white
+[uv-url]: https://docs.astral.sh/uv/
