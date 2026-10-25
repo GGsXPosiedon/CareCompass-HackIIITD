@@ -22,6 +22,7 @@ Pipeline (`pipeline/`): LOFO protocol over the 66 unique CareCompass texts / 20 
 - Distilling the e5 head into a lexical model failed (F1 0.35 vs 0.68): the unlabeled pools carry no care-type signal. Care-type logic must come from pathway content.
 - e5 head LOFO macro-F1 0.680 (optimistic: C chosen on the same folds); tau_ask 0.15, tau_emergency 0.65, tau_margin 0.0181 (all from held-out scores; only 9 emergency texts). Fine-tune hyper-parameters were never searched.
 - Known false alarm: "wound dressing and fever check at home" -> 112 via the semantic safety net (acceptable by policy; a pathway question should resolve it).
+- Rules-layer target to beat on LOFO: macro-F1 ~0.64-0.68 with emergency recall 100% (e5 frozen yardstick).
 - 3 older tests fail only because the Gemini fallback banner is commented out in `pipeline.py` (`test_failure_log_records_generic_replies`, `test_gemini_failure_is_visible_in_response`, `test_llm_off_is_logged_and_shows_in_health`): not caused by recent work. `FAILURE_LOG=off` for the rest.
 - `.env` has `ROUTER_BACKEND=trained`, `ENCODER_PATH` (Windows path), `EMERGENCY_TAU_*`. Tests must not depend on them (the fake-encoder tests set thresholds explicitly). On a machine without the encoder, `build_router` silently falls back to rules.
 
@@ -35,7 +36,8 @@ Pipeline (`pipeline/`): LOFO protocol over the 66 unique CareCompass texts / 20 
 7. Re-run `python pipeline/scripts/export_router.py --model-dir <multilingual-e5-base>` only if the heads need to change (CPU, ONNX; no torch needed). GPU work is optional and cannot run on this machine.
 8. Update `progress.md` (overwrite) and this file's status; list changed files for the owner's commit.
 
-## 6. If the owner later runs the GPU job (his Windows PC, RTX 4060)
+## 6. GPU job: DONE (2026-10-25). Do not repeat it
+Results are in `progress.md` section 3b, `pipeline/reports/10_gpu_multilingual.md`, `06b_*`, `pipeline/results/`. Headline: nothing beat the frozen e5 head (F1 0.64-0.68); Stage A multilingual adaptation learned disease naming (acc 0.94-1.0) but did not help care-type/emergency routing; fine-tuning on ~60 texts is unstable (MuRIL collapses to all-112). Script "ADOPT" rows are artefacts of collapsed baselines: ignore. No GPU is needed for any remaining task. Original instructions for re-running (only if a much larger labelled set appears):
 `powershell -ExecutionPolicy Bypass -File pipeline\scripts\run_gpu_windows.ps1` -> commit `pipeline/results/*`, `pipeline/reports/06b_*.md`, `09_*.md`, `10_*.md`, `backend/app/rules/dataset_vocab.json`; never `pipeline/models_ft/`. The torch half of `gpu_finetune_multilingual.py` has never been executed: if it errors, fix it from the traceback. Decision rule is inside the report; use it only as a yardstick for the rules layer.
 
 ## 7. Environment notes

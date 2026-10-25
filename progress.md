@@ -72,6 +72,35 @@ The encoder never lowers a rules or LLM decision. The RED_FLAGS enum is part of 
 
 End-to-end gold check in trained mode: emergency recall 21/21, care-type accuracy 91.7%. Test suite: 272 passed, 1 skipped (3 older tests that depend on the commented-out Gemini banner are deselected; not caused by this work).
 
+## 3b. GPU fine-tuning: what was run and what it achieved (2026-10-25, RTX 4060 Laptop, torch 2.11+cu128, transformers 5.20.2)
+
+**Run:** `run_gpu_windows.ps1`: (1) dataset audit, (2) baseline frozen and fine-tuned encoders on the 66 CareCompass texts, (3) two-stage run: Stage A teaches each encoder to name the disease from 1,779 multilingual complaints (7 scripts), Stage B re-tests on CareCompass, leave-one-family-out. Fixed recipe, never tuned: Stage A 2 epochs, lr 2e-5, batch 32; Stage B 12 epochs, lr 3e-5, batch 16, emergency class weight x3, 3 seeds. Raw files: `pipeline/results/*`, reports `06b_*`, `10_gpu_multilingual.md`.
+
+| Encoder | Variant | Mode | Macro-F1 | Emergency recall | Over-triage (of 57) |
+|---|---|---|---|---|---|
+| e5-base | base | frozen + LR | **0.641** | 0.667 | 5 |
+| e5-base | adapted (stage A) | frozen + LR | 0.632 | 0.444 | 4 |
+| e5-base | base | fine-tuned | 0.603 | 0.778 | 5.7 |
+| e5-base | adapted | fine-tuned | 0.518 | 0.630 | 5.7 |
+| MuRIL | base | frozen | 0.551 | 0.778 | 3 |
+| MuRIL | adapted | frozen | 0.402 | 0.778 | 7 |
+| MuRIL | base / adapted | fine-tuned | 0.056 / 0.219 | 1.0 / 1.0 | 52 / 24 |
+| XLM-R | base | frozen | 0.511 | 0.556 | 6 |
+| XLM-R | adapted | frozen | 0.359 | 0.333 | 3 |
+| XLM-R | base / adapted | fine-tuned | 0.318 / 0.529 | 1.0 / 1.0 | 17 / 3.7 |
+
+Reference (CPU, shipped heads): e5 frozen head macro-F1 0.680 (optimistic, C tuned on the same folds); char n-grams 0.416.
+
+**What was achieved**
+1. **Stage A worked as a learning task**: held-out disease accuracy e5 1.000, MuRIL 0.954, XLM-R 0.944. The encoders do map Hindi/Hinglish/Marathi/Bengali/Telugu/Gujarati symptom wording onto shared disease concepts.
+2. **It did not transfer to care-type or emergency routing.** Adapted e5 frozen: F1 0.632 vs 0.641 (no gain) and emergency recall fell 0.667 -> 0.444. Adapted MuRIL/XLM-R frozen are worse than their bases. Reason: the external data teaches *what illness*, while our labels are *which service and how urgent*; the two are nearly unrelated.
+3. **Full fine-tuning on 57-60 training texts per fold is unstable and should not be used.** MuRIL base collapses to "everything is an emergency" (recall 1.0 but 52 of 57 false alarms, F1 0.056). XLM-R fine-tuned swings 0.24-0.43 across seeds. e5 fine-tuned (0.60) stays below e5 frozen (0.64). The x3 emergency weight with so little data pushes models to over-call 112.
+4. **The script's "ADOPT" rows (MuRIL, XLM-R fine-tuned) are not real wins**: they only improve on a collapsed baseline and stay below the frozen e5 head (0.64-0.68). Do not adopt them.
+5. **Ranking by this evidence:** frozen e5 + logistic head (0.64-0.68) > e5 fine-tuned (0.60) > MuRIL frozen (0.55) > XLM-R frozen (0.51). Nothing beat the e5 head already in `backend/app/models/router_e5_lr.json`. XLM-R adapted + fine-tuned had recall 1.0 with only 3.7 false alarms, but with 9 emergency texts in 3 families this is anecdote, not a result.
+6. **Practical conclusions:** (a) keep the frozen e5 head as the offline yardstick; (b) the deployed layer must be rules/pathways with no weights, so the target to reach or beat on this LOFO is macro-F1 ~0.64-0.68 with emergency recall 100%; (c) more labelled CareCompass-style data (not more symptom data) is what would move the numbers; (d) the external dataset's lasting value is the 232-token multilingual symptom vocabulary (`dataset_vocab.json`), already in the intent gate.
+
+**Limits:** 66 texts, 20 families, 9 emergency texts (3 families): intervals are wide (e.g. e5 frozen CI 0.44-0.75). Hyper-parameters were not searched. Adapted weights are in `pipeline/models_ft/` (not committed, not needed).
+
 ## 4. How much the weights were researched (honest account)
 
 | Setting | Value | How it was set | Strength of evidence |
@@ -95,7 +124,7 @@ The runner does three things in order:
    - **Stage A** (external data): encoder + linear head learns to name the disease from the 1,976 complaints in 7 scripts (2 epochs, lr 2e-5). 10% of complaints (grouped by text) are held out and the disease accuracy is printed. Saved to `pipeline\models_ft\<name>-mlt`.
    - **Stage B** (CareCompass): leave-one-family-out for base-frozen, adapted-frozen, base-finetuned, adapted-finetuned (3 seeds for fine-tuned).
    - **Decision rule** written to `pipeline\reports\10_gpu_multilingual.md`: adopt the adapted encoder only if mean macro-F1 beats base AND emergency recall is not lower; otherwise keep the frozen e5 head.
-Status: the data side was run (dry-run OK); the torch side has not been executed anywhere yet. If it errors, send the traceback.
+Status: EXECUTED on 2026-10-25 (RTX 4060 Laptop); results in section 3b.
 After a winner is chosen, exporting it to ONNX and re-fitting the heads is the next step (`export_router.py` with the new model dir).
 
 ## 6. Open work (next)
@@ -106,7 +135,7 @@ After a winner is chosen, exporting it to ONNX and re-fitting the heads is the n
 4. Delhi data: localities -> PIN -> service area, emergency numbers, hospitals, seasonal flags.
 5. Follow-up selection from DDXPlus evidence statistics, severity as auxiliary prior (approved), feeding the pathway question order.
 6. Hindi/Hinglish names missing from all datasets: one-off LLM translation into a reviewable file (approved).
-7. GPU runs (`run_gpu_windows.ps1`) are now optional diagnostics for item 2; not on the critical path.
+7. GPU runs are done (section 3b) and are not on the critical path any more. Only worth repeating if a much larger labelled CareCompass-style set appears.
 8. Product: session storage and the "briefcase" of earlier documents (API is stateless today).
 9. Known false alarm: "wound dressing and fever check at home" returns 112 (semantic safety net matches bleeding exemplars). Acceptable by policy, but a pathway layer should resolve it with one question.
 

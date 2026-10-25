@@ -1,0 +1,41 @@
+{
+ "finished_at": "2026-10-25 09:18:25",
+ "device": "NVIDIA GeForce RTX 4060 Laptop GPU",
+ "torch": "2.11.0+cu128",
+ "transformers": "5.20.2",
+ "python": "3.13.6",
+ "os": "Windows-11-10.0.26200-SP0",
+ "args": {
+  "models": [
+   "multilingual-e5-base",
+   "muril-base-cased",
+   "xlm-roberta-base"
+  ],
+  "models_dir": "C:\\Users\\Lenovo\\Desktop\\HackIIITD\\prototype\\models",
+  "complaints": "C:\\Users\\Lenovo\\Desktop\\HackIIITD\\prototype\\CareCompass-HackIIITD\\pipeline\\data\\processed\\mlt_complaints.jsonl",
+  "gpu_name": "4060",
+  "seeds": 3,
+  "stage_a_epochs": 2,
+  "emergency_weight": 3.0,
+  "skip_finetune": false,
+  "dry_run": false
+ },
+ "gold_texts": 66,
+ "external_complaints": 1976,
+ "adapted_weights_dir": "C:\\Users\\Lenovo\\Desktop\\HackIIITD\\prototype\\CareCompass-HackIIITD\\pipeline\\models_ft",
+ "recipe": {
+  "stage_a": {
+   "epochs": 2,
+   "lr": 2e-05,
+   "batch": 32,
+   "max_len": 64,
+   "head": "linear on mean-pool, 10 disease classes"
+  },
+  "stage_b_finetune": {
+   "epochs": 12,
+   "lr": 3e-05,
+   "batch": 16,
+   "emergency_weight": 3.0
+  }
+ }
+}
