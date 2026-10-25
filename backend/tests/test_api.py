@@ -140,7 +140,7 @@ def test_trace_and_graph_endpoints(client):
 
 def test_openapi_documents_contract(client):
     spec = client.get("/openapi.json").json()
-    assert "TriageResponse" in spec["components"]["schemas"] and "PatientContext" in spec["components"]["schemas"]
+    assert "TriageResponse" in spec["components"]["schemas"] and "PatientContext" not in spec["components"]["schemas"]
 
 
 def test_invalid_caregiver_filters_are_validation_errors(client):

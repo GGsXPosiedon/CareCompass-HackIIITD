@@ -23,7 +23,6 @@ class CaseFacts:
     n_follow_ups_asked: int = 0
     latest_input: str = ""
     history: list = field(default_factory=list)  # [{'role','content'}]
-    patient_context: Optional[dict] = None  # sanitised, client-supplied profile data
     safety_text_norm: str = ""  # ALL user text; the red-flag rules read this, never the scoped text
     analysis: Optional[object] = None  # dialogue.Analysis (intent, scoped context, slots)
 
@@ -53,7 +52,6 @@ class RouteDecision:
     required_skills: list[str] = field(default_factory=list)
     reasoning: str = ""
     emergency_score: Optional[float] = None  # trained binary head (EncoderModels); None when no encoder is configured
-    profile_used: bool = False
     runner_up: Optional[str] = None  # second-best care type of the trained head (None for rules)
     margin: Optional[float] = None   # log(p_top1 / p_top2); small = the head cannot tell the two apart
 

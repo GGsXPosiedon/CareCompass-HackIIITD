@@ -5,7 +5,7 @@ import type { CareConversation } from '../src/lib/history.ts';
 import type { Message } from '../src/types.ts';
 
 const entry: CareConversation = {
-  id: 'one', title: 'Original request', input: 'Original request', person: 'me', language: 'en',
+  id: 'one', title: 'Original request', input: 'Original request', language: 'en',
   location: { lat: 28.54, lng: 77.27, label: 'Delhi' }, updatedAt: '2026-10-24T12:00:00Z',
   messages: [{ role: 'user', content: 'Original request' }, { role: 'assistant', content: 'What care?', kind: 'follow_up' }],
   result: { follow_up_question: 'What care?', care_type: null, urgency: null, red_flags: [], reasoning: '', matched_caregivers: [] },

@@ -95,6 +95,6 @@ def test_llm_off_is_logged_and_shows_in_health(tmp_path, monkeypatch):
     monkeypatch.delenv("FAILURE_LOG", raising=False)
     off = LLMRouter({}, {"safety": [], "triage": []})
     resp, state = Pipeline(llm=off).run(TriageRequest(user_input="stomachache"))
-    assert resp.service_notice  # the banner appears...
+    assert resp.service_notice is None  # intentionally disabled providers are not a request failure
     row = json.loads((tmp_path / "f.jsonl").read_text(encoding="utf-8").splitlines()[-1])
-    assert "llm_off" in row["why"] and any("skipped" in e for e in row["llm_errors"])  # ...and now leaves a trace in the log
+    assert "llm_off" in row["why"] and any("skipped" in e for e in row["llm_errors"])  # still visible in diagnostics

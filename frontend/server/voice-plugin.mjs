@@ -12,7 +12,9 @@ export function voicePlugin(env, fetcher = fetch) {
         if (size > MAX_AUDIO_BYTES) { res.statusCode = 413; res.end('{"error":"VOICE_TOO_LONG"}'); return; }
         chunks.push(chunk);
       }
-      const request = new Request(`http://${req.headers.host}${req.url}`, { method: req.method, headers: req.headers,
+      // Behind HTTPS termination, use the configured public origin for the same-origin check.
+      const origin = env.VOICE_PUBLIC_ORIGIN || `http://${req.headers.host}`;
+      const request = new Request(new URL(req.url, origin), { method: req.method, headers: req.headers,
         ...(size ? { body: Buffer.concat(chunks) } : {}), signal: controller.signal });
       const response = await handleVoice(request, env, fetcher);
       res.statusCode = response.status;

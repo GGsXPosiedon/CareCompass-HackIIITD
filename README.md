@@ -52,6 +52,7 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
+    <li><a href="#deployment">Deployment</a></li>
     <li><a href="#caregiver-scoring">Caregiver Scoring</a></li>
     <li><a href="#evaluation">Evaluation</a></li>
     <li><a href="#api">API</a></li>
@@ -118,7 +119,7 @@ flowchart LR
     G -- clear --> M[match caregivers] --> R[respond]
 ```
 
-A **LangGraph** pipeline with two versioned system prompts (`backend/app/prompts/`): a *safety screener* that only hunts for red flags, and a *triage analyst* that picks the service, skills and plain-language reasoning. Both treat the user's text and profile as untrusted input.
+A **LangGraph** pipeline with two versioned system prompts (`backend/app/prompts/`): a *safety screener* that only hunts for red flags, and a *triage analyst* that picks the service, skills and plain-language reasoning. Both treat the user's conversation as untrusted input.
 
 The **deterministic classifier slot** is rules today. A trained model plugs in through the same interface (`ROUTER_BACKEND`), and Gemini stays as the second opinion. How the two are weighed is a setting (`FUSION_POLICY`: `llm_first`, `model_first`, `agree_or_ask`).
 
@@ -147,11 +148,28 @@ On Windows, double-click [`start.cmd`](start.cmd) (or run `.\start.cmd` in Power
 
 To start each server manually:
 
+```sh
+cd backend
+uv sync --locked
+# Copy .env.example to .env and configure server-side provider keys.
+uv run uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+In a separate terminal:
+
+```sh
+cd frontend
+npm ci
+npm run dev
+```
+
+Open http://127.0.0.1:5173. On Windows, use `npm.cmd` if PowerShell blocks `npm.ps1`.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Sarvam voice
 
-**To activate Sarvam:** add `SARVAM_API_KEY` to the prepared, git-ignored `frontend/.env.local`, restart the frontend, and reload.
+**To activate Sarvam locally:** copy `frontend/.env.example` to `frontend/.env.local`, add `SARVAM_API_KEY`, restart the frontend, and reload. Local environment files are ignored.
 
 For a fresh clone, copy `frontend/.env.example` to `frontend/.env.local` first. See [voice setup](frontend/VOICE.md) for local and Vercel configuration. The key stays server-side; no Python backend speech changes are required.
 
@@ -164,13 +182,13 @@ For a fresh clone, copy `frontend/.env.example` to `frontend/.env.local` first. 
 
 The existing care backend supplies the answers; Sarvam provides speech recognition and speech synthesis. This is turn-based care conversation, with the microphone off during replies. Supported browsers provide speech fallback when Sarvam is not configured. Typed chat replies stay silent until **Read aloud** is selected; voice conversation mode speaks automatically.
 
-The frontend build and **64 automated tests** pass, including turn sequencing, interruption, microphone cleanup, silence handling, emergency termination and late-reply cancellation. Live Sarvam recognition accuracy and audio quality still require a configured key and microphone test. See the [frontend guide](frontend/README.md#voice-conversation) and [full voice setup](frontend/VOICE.md).
+The latest local deployment review passed the frontend build and **60 frontend tests**. Backend checks passed with **267 passed and 1 skipped**, excluding `test_encoder_router.py` because the base environment lacks optional NumPy. These counts are a review snapshot, not a CI result. Live provider calls, phone installation and microphone behavior still need testing on the deployed domain. See the [frontend guide](frontend/README.md#voice-conversation) and [full voice setup](frontend/VOICE.md).
 
 
 <!-- USAGE -->
 ## Usage
 
-Type a request, answer at most a couple of questions (press `1`–`5`, or choose *Something else…*), then pick a caregiver. The app also has a dark theme, switched from the header.
+Type a request, answer follow-up questions, then pick a caregiver. Theme controls are available through **Settings** at the bottom of the sidebar.
 
 <table>
   <tr>
@@ -189,11 +207,19 @@ Type a request, answer at most a couple of questions (press `1`–`5`, or choose
   <sub><b>Emergencies never reach a booking.</b> The red flags found are listed and matching is skipped.</sub>
 </p>
 
-The frontend walkthrough (Briefcase, health services, profile) is in [`frontend/README.md`](frontend/README.md).
+The frontend walkthrough (Briefcase and health services) is in [`frontend/README.md`](frontend/README.md).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- SCORING -->
+## Deployment
+
+- **One server:** follow [the deployment guide](docs/DEPLOYMENT.md) and use [`deploy/Caddyfile`](deploy/Caddyfile) for HTTPS, frontend deep links and API/voice routing.
+- **Vercel:** set **Root Directory** to `frontend`. [`frontend/vercel.json`](frontend/vercel.json) builds the Vite app, keeps `/api/voice` as a function and supports direct page links. Set `VITE_API_BASE_URL` to your separately hosted Python API's HTTPS base URL, `VITE_DEMO_MODE=false`, and `SARVAM_API_KEY` as a server-only variable. Configure `CORS_ORIGINS` on Python for the exact frontend origin. See [Vercel setup](docs/DEPLOYMENT.md#vercel-frontend-and-voice).
+- **Phone shortcut/app:** on the HTTPS site, use Android's **Install app / Add to Home screen**, or Safari's **Share → Add to Home Screen**. The app includes a manifest and phone icons; care requests and voice require internet.
+
+This remains a hackathon prototype: backend bookings are in memory, so use one Python worker and expect reservations to disappear on restart. Documents and frontend bookings clear on refresh; chats are saved only in the current browser. Public paid API access needs quotas/access controls. Model fine-tuning is still in progress.
+
 ## Caregiver Scoring
 
 Hard filters first. Anyone who fails one is never shown: active, right role, has every required skill, within their service radius, free in the needed window.
@@ -214,16 +240,16 @@ Ties go to whoever is free sooner.
 <!-- EVALUATION -->
 ## Evaluation
 
-52 hand-written cases across English, Hindi and Hinglish, rules only (no LLM). Run `uv run python -m eval.run_eval` in `backend/`. It exits with an error if any emergency is missed.
+The checked-in [evaluation report](backend/eval/report.md) covers 52 hand-written cases across English, Hindi and Hinglish. Its recorded responses came from rules and safety rules, although Gemini was configured. Run `uv run python -m eval.run_eval` in `backend/` to regenerate it using your current configuration. It exits with an error if any emergency is missed. The figures below describe that saved report and were not regenerated during the deployment review.
 
 | Metric | Result |
 |---|---|
 | Emergency recall | **100%** (21/21) |
 | False alarms | 3.2% |
-| Care-type accuracy | 97.9% |
+| Care-type accuracy | 91.7% (44/48) |
 | Asked a question on vague input | 4/4 |
-| Picks with the required skill | 100% (organiser baseline 87.5%) |
-| Picks free at 8:45 pm | 100% (organiser baseline 85.7%) |
+| Picks with the required skill | 100% (organiser baseline 95.7%) |
+| Picks free in the needed window | 100% (organiser baseline 100%) |
 
 > These cases were written and tuned by the team, so read the numbers as a regression check, not proof of real-world accuracy. The red-flag list, the 112 number and the Tele-MANAS helpline still need confirming with the mentors.
 
@@ -236,7 +262,8 @@ Ties go to whoever is free sooner.
 |---|---|
 | `POST /api/v1/triage` | Organiser contract: `{user_input, language, location, conversation_history}` → care type, urgency, red flags, reasoning, matched caregivers |
 | `POST /api/v1/triage/trace` | Same decision, plus a plain-words trace of every graph step |
-| `GET /api/v1/caregivers` | Browse caregivers, filterable by `care_type` |
+| `GET /api/v1/caregivers?ids=CG_014&care_type=home_nursing` | Fetch matched profiles by required comma-separated IDs, with optional care type, date and location |
+| `POST /api/v1/bookings` | Reserve an available caregiver/date/slot; conflicts return 409 |
 | `GET /api/v1/graph` | The LangGraph flow as Mermaid |
 | `GET /health` | Classifier, LLM, ruleset and fusion policy in use |
 
@@ -252,6 +279,7 @@ Config, fusion policy, prompts and schema enforcement are covered in [`backend/R
 - [x] Hindi / Hinglish red-flag rules and a 52-case evaluation set
 - [x] Chat-style follow-up questions
 - [x] Light and dark themes
+- [x] Phone install manifest/icons and deployment configuration
 - [ ] Plug in our own trained classifier at the deterministic slot
 - [ ] Verify the live Gemini path end to end
 - [ ] Confirm red-flag rules and helpline numbers with clinicians or mentors
@@ -301,7 +329,7 @@ CareCompass is care navigation, not diagnosis or prescription. All caregivers an
 [issues-url]: https://github.com/dipesh4000/CareCompass-HackIIITD/issues
 [license-shield]: https://img.shields.io/github/license/dipesh4000/CareCompass-HackIIITD.svg?style=for-the-badge&color=0b6bb5
 [license-url]: LICENSE
-[tests-shield]: https://img.shields.io/badge/tests-89_passing-2e7d32?style=for-the-badge
+[tests-shield]: https://img.shields.io/badge/tests-local_review-2e7d32?style=for-the-badge
 [tests-url]: backend/tests
 [recall-shield]: https://img.shields.io/badge/emergency_recall-100%25-2e7d32?style=for-the-badge
 [eval-url]: backend/eval

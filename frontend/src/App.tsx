@@ -5,7 +5,7 @@ import { emergencyExample, locations, scenarios } from './data';
 import { createBooking, DEMO_MODE, getCaregivers, intake } from './lib/api';
 import { bookingSlots, bookingDate, nextView } from './lib/flow';
 import { ApiError } from './lib/http';
-import type { PatientContext, Booking, Caregiver, IntakeRequest, Language, Location, Message, TriageResponse } from './types';
+import type { Booking, Caregiver, IntakeRequest, Language, Location, Message, TriageResponse } from './types';
 import { Intake } from './components/Intake';
 import { FollowUps } from './components/FollowUps';
 import { CareChat } from './components/CareChat';
@@ -25,7 +25,7 @@ import type { CareConversation } from './lib/history';
 
 type View = 'intake' | 'questions' | 'recommendation' | 'caregivers' | 'booking' | 'confirmation' | 'bookings' | 'emergency';
 type ModalView = 'location' | 'help' | 'how' | null;
-export default function App({ active = true, embedded = false, chatLayout = false, resetRequest = 0, externalLanguage, patientName, patientContext, externalBookings, restoredConversation, onConversation, onStartCare, onViewBookings, onExploreServices, onProfile }: { active?: boolean; embedded?: boolean; chatLayout?: boolean; resetRequest?: number; externalLanguage?: Language; patientName?: string; patientContext?: PatientContext; externalBookings?: boolean; restoredConversation?: { entry: CareConversation }; onConversation?: (entry: CareConversation) => void; onStartCare?: () => void; onViewBookings?: () => void; onExploreServices?: () => void; onProfile?: () => void }) {
+export default function App({ active = true, embedded = false, chatLayout = false, resetRequest = 0, externalLanguage, externalBookings, restoredConversation, onConversation, onStartCare, onViewBookings, onExploreServices }: { active?: boolean; embedded?: boolean; chatLayout?: boolean; resetRequest?: number; externalLanguage?: Language; externalBookings?: boolean; restoredConversation?: { entry: CareConversation }; onConversation?: (entry: CareConversation) => void; onStartCare?: () => void; onViewBookings?: () => void; onExploreServices?: () => void }) {
   const [view, setView] = useState<View>('intake');
   const [voiceOpen, setVoiceOpen] = useState(false);
   const [voiceHost, setVoiceHost] = useState<HTMLDivElement | null>(null);
@@ -34,7 +34,6 @@ export default function App({ active = true, embedded = false, chatLayout = fals
   const hindi = language === 'hi'; const copy = getCopy(hindi);
   const [input, setInput] = useState('');
   const [answer, setAnswer] = useState('');
-  const [person, setPerson] = useState('family');
   const [location, setLocation] = useState<Location>(locations[0]);
   const [draftLocation, setDraftLocation] = useState<Location>(locations[0]);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -71,7 +70,7 @@ export default function App({ active = true, embedded = false, chatLayout = fals
     const entry = restoredConversation.entry;
     stopAllVoice(); intakeController.current?.abort(); setPendingText(null); generation.current++; locked.current = false; conversationId.current = entry.id;
     suppressResponseVoice(entry.result);
-    setVoiceOpen(false); setBusy(false); setError(''); setLanguage(entry.language); setInput(entry.input); setPerson(entry.person);
+    setVoiceOpen(false); setBusy(false); setError(''); setLanguage(entry.language); setInput(entry.input);
     setLocation(entry.location); setMessages(entry.messages); setResult(entry.result); setAnswer('');
     setProfiles([]); setSelected(null); setSlot(''); setView(nextView(entry.result));
   }, [restoredConversation]);
@@ -122,8 +121,7 @@ export default function App({ active = true, embedded = false, chatLayout = fals
     primeVoicePlayback(); // Unlock audio in the send gesture before awaiting the API.
     const history = followUp ? requestHistory(messages) : [];
     const requestLocation = override?.location ?? location;
-    const relation = `${patientName ? `${patientName} (demo) · ` : ''}${person === 'me' ? copy.me : copy.family}`;
-    const payload: IntakeRequest = { user_input: followUp || chatLayout ? text : `${relation}: ${text}`, language, location: { lat: requestLocation.lat, lng: requestLocation.lng }, conversation_history: history, ...(patientContext ? { patient_context: patientContext } : {}) };
+    const payload: IntakeRequest = { user_input: text, language, location: { lat: requestLocation.lat, lng: requestLocation.lng }, conversation_history: history };
     const current = ++generation.current; locked.current = true; setBusy(true); setError('');
     const controller = new AbortController(); intakeController.current = controller;
     const signal = override?.signal ? AbortSignal.any([controller.signal, override.signal]) : controller.signal;
@@ -140,7 +138,7 @@ export default function App({ active = true, embedded = false, chatLayout = fals
       if (response.follow_up_question) nextMessages.push({ role: 'assistant', content: response.follow_up_question, kind: 'follow_up' });
       else nextMessages.push({ role: 'assistant', kind: nextView(response) === 'emergency' ? 'emergency' : 'recommendation', content: nextView(response) === 'emergency' ? `${copy.emergencyTitle} ${response.reasoning} ${copy.emergencyBody}` : response.reasoning });
       setMessages(nextMessages); setResult(response); setView(nextView(response));
-      onConversation?.({ id: conversationId.current, title: (followUp ? input : text).slice(0, 100), input: followUp ? input : text, person, language, location: requestLocation, messages: nextMessages, result: response, updatedAt: new Date().toISOString() });
+      onConversation?.({ id: conversationId.current, title: (followUp ? input : text).slice(0, 100), input: followUp ? input : text, language, location: requestLocation, messages: nextMessages, result: response, updatedAt: new Date().toISOString() });
       return response;
     } catch (cause) { if (current === generation.current) setError(signal.aborted ? (hindi ? 'जवाब रोक दिया गया। फिर कोशिश करें।' : 'Response stopped. You can retry or send another message.') : !DEMO_MODE && (cause instanceof TypeError || cause instanceof DOMException || (cause instanceof ApiError && cause.status >= 500)) ? copy.connectionError : copy.genericError); }
     finally { if (current === generation.current) { setBusy(false); locked.current = false; intakeController.current = null; } }
@@ -219,7 +217,7 @@ export default function App({ active = true, embedded = false, chatLayout = fals
   </div>{menu ? <nav className="mobile-nav" aria-label="Mobile"><button onClick={() => { reset(); setMenu(false); }} disabled={busy}>{copy.findCare}</button><button onClick={showBookings} disabled={busy}>{copy.bookings}</button><button onClick={showLocation} disabled={busy}>{copy.location}</button><button onClick={() => { setModal('how'); setMenu(false); }}>{copy.howItWorks}</button><button onClick={() => { setModal('help'); setMenu(false); }}>{copy.help}</button></nav> : null}</header>
   <VoiceComposerHostContext.Provider value={setVoiceHost}><VoiceSessionActiveContext.Provider value={voiceOpen}><VoiceConversationContext.Provider value={() => { stopAllVoice(); primeVoicePlayback(); setVoiceOpen(true); }}><VoiceResponseContext.Provider value={result}><MainTag id={embedded ? undefined : 'main'} className={`main-container${chatLayout ? ` focused-care focused-${view}${chatActive ? ' chat-active' : ''}` : ''}`} ref={main}>
     <div className="context-bar">{displayProgress ? <ol className="progress" aria-label={hindi ? 'देखभाल की प्रगति' : 'Care progress'}>{[copy.describe, copy.recommendation, copy.book].map((step, index) => <li key={index} className={index === progress ? 'current' : index < progress ? 'complete' : ''} aria-current={index === progress ? 'step' : undefined}><span className="progress-mark">{index < progress ? <Check size={12} /> : <span />}</span>{step}{index < 2 ? <span className="progress-line" aria-hidden="true" /> : null}</li>)}</ol> : <span />}{DEMO_MODE ? <span className="demo-label"><span />{copy.demo}</span> : null}</div>
-    {view === 'intake' && !chatActive ? <Intake compact={chatLayout} onLocation={showLocation} onProfile={onProfile} copy={copy} hindi={hindi} language={language} input={input} setInput={value => { setInput(value); setError(''); }} person={person} setPerson={setPerson} location={location} busy={busy} error={error} onSubmit={() => void submit()} /> : null}
+    {view === 'intake' && !chatActive ? <Intake compact={chatLayout} onLocation={showLocation} copy={copy} hindi={hindi} language={language} input={input} setInput={value => { setInput(value); setError(''); }} location={location} busy={busy} error={error} onSubmit={() => void submit()} /> : null}
     {chatActive ? <CareChat key={conversationId.current ?? 'new'} copy={copy} hindi={hindi} result={result} messages={messages} pendingText={pendingText} onStop={stopReply} onRetry={() => { if (pendingText) void submit({ text: pendingText, answer: messages.length > 0 }); }} input={answer} setInput={value => { setAnswer(value); setError(''); }} onSend={text => void submit({ text, answer: true })} onContinue={loadProfiles} onLocation={showLocation} onEdit={edit} busy={busy} error={error}/> : null}
     {view === 'questions' && result && !chatLayout ? <FollowUps copy={copy} hindi={hindi} result={result} messages={messages} input={answer} setInput={value => { setAnswer(value); setError(''); }} onSubmit={() => void submit()} onBack={edit} busy={busy} error={error} symptom={input} location={location} /> : null}
     {view === 'recommendation' && result && !chatLayout ? <Recommendation copy={copy} hindi={hindi} result={result} symptom={input} location={location} answers={Math.max(0, messages.filter(m => m.role === 'user').length - 1)} busy={busy} error={error} onContinue={loadProfiles} onBack={edit} onLocation={showLocation} /> : null}

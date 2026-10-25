@@ -1,9 +1,8 @@
 import { ArrowRight, FileText, ShieldCheck } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
-import type { HealthPage, Member } from './types';
+import type { HealthPage } from './types';
 export function words(hi: boolean) { return (english: string, hindi: string) => hi ? hindi : english; }
-export function MemberAvatar({ member, small = false }: { member: Member; small?: boolean }) { return <span className={`avatar ${member.tint} ${small ? 'small-avatar' : ''}`} aria-hidden="true">{member.initials}</span>; }
 export function HealthHeading({ title, description, action }: { title: string; description: string; action?: ReactNode }) {
   const heading = useRef<HTMLHeadingElement>(null);
   useEffect(() => { if (heading.current?.getClientRects().length) heading.current.focus({preventScroll:true}); }, [title]);

@@ -4,7 +4,7 @@ CareCompass builds on GD Arena's short-recording → server transcription → ge
 
 ## Enable locally
 
-1. Open `frontend/.env.local` (git-ignored; a blank template is prepared locally). If it does not exist after cloning, copy `.env.example` to `.env.local`.
+1. Copy `frontend/.env.example` to `frontend/.env.local` if needed. Local environment files are ignored.
 2. Set the **server-only** variable `SARVAM_API_KEY` to your Sarvam subscription key. Never use a `VITE_` prefix for a credential.
 3. Keep the default matching models/voice, or configure compatible values:
 
@@ -50,7 +50,7 @@ The browser calls only these same-origin routes. The adapter forwards validated 
 
 **Vite dev/preview:** `server/voice-plugin.mjs` registers the voice route before the existing `/api` care-backend proxy. Both services use the same frontend origin, and no Python speech route is needed.
 
-**Vercel:** deploy with **Root Directory `frontend`**. `api/voice.mjs` serves the same adapter as a Node function. Set `SARVAM_API_KEY` and optional model/voice variables in the project's server environment, then redeploy. Keep `/api/voice` out of any catch-all rewrite to the care backend. Care API hosting remains configured separately as described in [README.md](README.md).
+**Vercel:** deploy with **Root Directory `frontend`** to use the included `vercel.json`. `api/voice.mjs` serves the adapter as a Node function. Set `SARVAM_API_KEY` and optional model/voice variables in the project's server environment, then redeploy. The SPA rewrite excludes `/api`. Configure the separately hosted care API through `VITE_API_BASE_URL` and Python CORS as described in [the deployment guide](../docs/DEPLOYMENT.md#vercel-frontend-and-voice).
 
 **Other/static hosts:** uploading only `dist` does not deploy the adapter. Host the voice function separately behind the same-origin `/api/voice` route. Without a working route/key, supported browsers use their speech APIs instead and identify browser voice as the fallback. The UI does not claim to use Sarvam when it is unavailable. In conversation mode, Sarvam failures pause the session with a retry control; typing remains available. Standalone read-aloud can fall back to browser speech with an explicit notice.
 

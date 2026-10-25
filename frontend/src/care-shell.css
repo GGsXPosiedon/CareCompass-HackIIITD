@@ -353,34 +353,14 @@ body:has(.care-shell) { min-width:0; background:#20201e; }
 .care-support-page .health-heading > div { min-width:0; }
 .care-support-page .health-heading p { max-width:680px; line-height:1.6; }
 .care-support-page .health-heading > .button { margin-top:2px; }
-.care-support-page .profile-share { align-items:center; gap:12px; padding:16px 20px; margin-bottom:24px; }
-.care-support-page .profile-share > div { min-width:0; }
-.care-support-page .profile-share > svg { align-self:flex-start; }
-.care-support-page .profile-share p { line-height:1.6; }
-.care-support-page .profile-layout { grid-template-columns:230px minmax(0,1fr); gap:24px; }
-.care-support-page .profile-detail { min-width:0; padding:24px; gap:24px; }
-.care-support-page .profile-summary > div:not(.profile-actions) { min-width:0; flex:1; }
-.care-support-page .profile-actions { margin-left:0; gap:12px; }
-.care-support-page .profile-facts div { grid-template-columns:140px minmax(0,1fr); }
-.care-support-page .profile-facts dd,.care-support-page .profile-list li > span { overflow-wrap:anywhere; }
 .care-route-missing { max-width:850px; margin:auto; padding:40px 32px; }
 .care-route-missing p { margin:12px 0 24px; color:var(--muted); }
 @media(max-width:1100px) {
   .care-support-page > .health-portal,.care-topbar { padding-inline:28px; }
-  .care-support-page .profile-layout { grid-template-columns:200px minmax(0,1fr); gap:20px; }
-  .care-support-page .profile-summary { align-items:flex-start; }
-  .care-support-page .profile-actions { flex-basis:100%; }
 }
 @media(max-width:767px) {
   .care-support-page > .health-portal { padding:20px 20px 32px; }
   .care-topbar { padding-inline:16px; }
-  .care-support-page .profile-layout { grid-template-columns:minmax(0,1fr); gap:20px; }
-  .care-support-page .profile-members { grid-auto-flow:column; grid-auto-columns:minmax(180px,1fr); overflow-x:auto; padding:1px 1px 6px; }
-  .care-support-page .profile-detail { padding:20px; gap:20px; }
-  .care-support-page .profile-share { padding:16px; }
-  .care-support-page .profile-facts div { grid-template-columns:1fr; gap:4px; }
-  .care-support-page .profile-list li { grid-template-columns:minmax(0,1fr) auto; gap:6px 12px; }
-  .care-support-page .profile-list small { grid-column:1 / -1; }
 }
 /* A fixed conversation viewport keeps the composer visible without overlapping messages. */
 .care-shell:has(.care-shell-flow:not([hidden]) .chat-active) { height:100dvh; overflow:hidden; }
@@ -448,11 +428,6 @@ body:has(.care-shell) { min-width:0; background:#20201e; }
 .settings-section { padding:24px 0; border-top:1px solid var(--border); }
 .settings-section h2 { font-size:16px; font-weight:600; margin-bottom:12px; }
 .settings-section > p { color:var(--muted); font-size:14px; margin-bottom:18px; }
-.settings-profile-link { display:flex; align-items:center; gap:16px; width:100%; padding:18px; border:1px solid var(--border); border-radius:12px; text-align:left; background:var(--care-raised); }
-.settings-profile-link > span { flex:1; min-width:0; }
-.settings-profile-link strong { display:block; font-weight:500; font-size:15px; }
-.settings-profile-link small { display:block; color:var(--muted); margin-top:5px; font-size:13px; line-height:1.5; }
-.settings-profile-link:hover { background:var(--care-hover); }
 .settings-theme-options { display:flex; gap:12px; }
 .settings-theme-options button { display:flex; align-items:center; gap:10px; min-width:120px; padding:14px 20px; border:1px solid var(--control); border-radius:10px; }
 .settings-theme-options button.selected { color:var(--choice-ink); background:var(--choice); border-color:var(--choice-border); }
@@ -507,19 +482,10 @@ body:has(.care-shell) { min-width:0; background:#20201e; }
 /* Who is this request for: picker in the + menu and the small indicator beside it */
 .care-attachment-menu { width:min(300px,calc(100vw - 72px)); max-height:min(70vh,460px); overflow-y:auto; }
 .care-attach-group { display:flex; align-items:center; gap:8px; min-width:0; }
-.care-for-chip { display:inline-flex; align-items:center; gap:5px; max-width:150px; padding:5px 10px; border:1px solid var(--control); border-radius:999px; color:var(--muted); font-size:12px; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.care-for-chip[data-kind="other"] { border-style:dashed; }
 .care-chat-meta { display:flex; align-items:center; gap:10px; min-width:0; flex-wrap:wrap; }
 .care-menu-heading { padding:7px 10px 4px !important; font-size:11px !important; font-weight:600; letter-spacing:.04em; text-transform:uppercase; }
-.care-for-list { display:flex; flex-direction:column; }
-.care-for-option { display:flex; align-items:center; gap:10px; width:100%; min-height:44px; padding:8px 10px; text-align:left; font-size:13px; border-radius:7px; }
-.care-for-option > span { flex:1; min-width:0; display:flex; flex-direction:column; }
-.care-for-option small { color:var(--muted); font-size:11px; line-height:1.35; }
-.care-for-option:hover { background:var(--care-hover); }
-.care-for-option[aria-pressed="true"] { background:var(--care-hover); }
-.care-for-add { color:var(--muted); }
 .care-menu-divider { border:0; border-top:1px solid var(--control); margin:6px 4px; }
-@media(max-width:600px) { .care-attach-group { flex-wrap:wrap; } .care-for-chip { max-width:120px; } }
+@media(max-width:600px) { .care-attach-group { flex-wrap:wrap; } }
 
 /* Numbered follow-up card inside the chat layout */
 .care-conversation .care-ask-wrap .ask-card { position:static; margin:0; box-shadow:0 2px 12px #0003; }

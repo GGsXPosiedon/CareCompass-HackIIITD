@@ -7,7 +7,6 @@ import { isNearBottom } from '../lib/chat-scroll';
 import { VoiceSessionActiveContext } from '../voice/language';
 import { VoiceComposerSlot } from './VoiceComposerSlot';
 import { ReadAloud, VoiceInput } from './Voice';
-import { CareForChip } from './CareFor';
 import { AskCard } from './ChatQuestion';
 
 export function CareChat({ copy, hindi, messages, result, pendingText, input, setInput, onSend, onContinue, onLocation, onStop, onRetry, onEdit, busy, error }: {
@@ -81,7 +80,7 @@ export function CareChat({ copy, hindi, messages, result, pendingText, input, se
         <label className="sr-only" htmlFor={inputId}>{copy.followLabel}</label>
         <textarea ref={textarea} id={inputId} rows={1} maxLength={2000} value={input} onChange={event => setInput(event.target.value)} placeholder={t('Reply to CareCompass…', 'CareCompass को जवाब दें…')}
           onKeyDown={event => { if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); if (input.trim() && !busy) onSend(input.trim()); } }}/>
-        <div className="care-chat-actions"><span className="care-chat-meta"><CareForChip hindi={hindi}/><span className="small muted">{t('English, हिंदी or Hinglish', 'English, हिंदी या Hinglish')}</span></span><div className="care-send-actions"><VoiceInput copy={copy} hindi={hindi} disabled={busy} onTranscript={setInput}/>{busy ? <button type="button" className="care-send care-stop" onClick={onStop} aria-label={t('Stop response', 'जवाब रोकें')}><Square size={15} fill="currentColor"/></button> : <button type="submit" className="care-send" disabled={!input.trim()} aria-label={t('Send message', 'संदेश भेजें')}><ArrowUp size={20}/></button>}</div></div>
+        <div className="care-chat-actions"><span className="care-chat-meta"><span className="small muted">{t('English, हिंदी or Hinglish', 'English, हिंदी या Hinglish')}</span></span><div className="care-send-actions"><VoiceInput copy={copy} hindi={hindi} disabled={busy} onTranscript={setInput}/>{busy ? <button type="button" className="care-send care-stop" onClick={onStop} aria-label={t('Stop response', 'जवाब रोकें')}><Square size={15} fill="currentColor"/></button> : <button type="submit" className="care-send" disabled={!input.trim()} aria-label={t('Send message', 'संदेश भेजें')}><ArrowUp size={20}/></button>}</div></div>
       </>}</div>
       <p className="care-chat-footnote">{t('Care navigation, not a diagnosis. Review the recommendation before booking.', 'यह देखभाल का मार्गदर्शन है, निदान नहीं। बुकिंग से पहले सुझाव देखें।')}</p>
     </form>}

@@ -4,8 +4,7 @@ import { ArrowLeft, BriefcaseMedical, CalendarDays, ChevronRight, Globe2, Histor
 import App from './App';
 import { getCopy } from './i18n';
 import type { Language } from './types';
-import { HealthProvider, useHealth } from './health/Store';
-import { buildPatientContext } from './health/context';
+import { HealthProvider } from './health/Store';
 import { VoiceLanguageContext } from './voice/language';
 import { stopAllVoice } from './voice/client';
 import { ChatHistory } from './components/ChatHistory';
@@ -14,7 +13,6 @@ import { ConversationSidebar } from './components/ConversationSidebar';
 import { Settings } from './components/Settings';
 import type { CareConversation } from './lib/history';
 const Briefcase = lazy(() => import('./health/Briefcase'));
-const Profile = lazy(() => import('./health/Profile'));
 const Services = lazy(() => import('./health/Services').then(module => ({ default: module.Services })));
 import { conversationPath, pagePaths, parentPath, resolveRoute } from './lib/routes';
 import type { Page } from './lib/routes';
@@ -36,9 +34,6 @@ function Shell() {
   const [guide, setGuide] = useState(false);
   const [briefcaseVisited, setBriefcaseVisited] = useState(false);
   const [servicesVisited, setServicesVisited] = useState(false);
-  const [profileVisited, setProfileVisited] = useState(false);
-  const { state } = useHealth();
-  const patientContext = buildPatientContext(state);
   const sidebar = useRef<HTMLElement>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
   const hi = language === 'hi';
@@ -76,7 +71,6 @@ function Shell() {
   useEffect(() => {
     if (page === 'briefcase') setBriefcaseVisited(true);
     if (page === 'services') setServicesVisited(true);
-    if (page === 'profile') setProfileVisited(true);
     if (page !== 'care') return;
     if (route.conversationId) {
       const entry = history.find(item => item.id === route.conversationId);
@@ -143,17 +137,16 @@ function Shell() {
       <ConversationSidebar history={history} activeId={activeId} hindi={hi} onOpen={openConversation} onRename={(id, title) => setHistory(previous => previous.map(entry => entry.id === id ? { ...entry, title, customTitle: title } : entry))} onDelete={deleteConversation}/>
       {storageError ? <p className="sidebar-history-note" role="status">{t('Storage is unavailable or full. Chats are kept in this tab only.', 'स्टोरेज उपलब्ध नहीं या भरा हुआ है। चैट सिर्फ़ इस टैब में हैं।')}</p> : null}
       <div className="care-sidebar-help"><button className="care-guide-toggle" onClick={() => setGuide(!guide)} aria-expanded={guide}>{copy.howItWorks}<ChevronRight size={16} className={guide ? 'rotated' : ''}/></button>{guide ? <ol><li>{t('Describe the need.', 'ज़रूरत बताएँ।')}</li><li>{t('Answer a few questions.', 'कुछ सवालों के जवाब दें।')}</li><li>{t('Review the care recommendation.', 'देखभाल का सुझाव देखें।')}</li><li>{t('Choose a caregiver and time.', 'देखभालकर्ता और समय चुनें।')}</li><li>{t('Confirm a demo booking.', 'डेमो बुकिंग पक्की करें।')}</li></ol> : null}</div>
-      <div className="care-sidebar-bottom"><a className={`care-settings-link ${page === 'settings' || page === 'profile' ? 'active' : ''}`} href={pagePaths.settings} onClick={event => followLink(event, 'settings')} aria-label={t('Settings', 'सेटिंग्स')} title={t('Settings', 'सेटिंग्स')} aria-current={page === 'settings' || page === 'profile' ? 'page' : undefined}><SettingsIcon size={18}/><span className="sidebar-label">{t('Settings', 'सेटिंग्स')}</span></a><div className="care-demo-note"><span/>{t('Demo · no real appointments', 'डेमो · कोई वास्तविक बुकिंग नहीं')}</div></div>
+      <div className="care-sidebar-bottom"><a className={`care-settings-link ${page === 'settings' ? 'active' : ''}`} href={pagePaths.settings} onClick={event => followLink(event, 'settings')} aria-label={t('Settings', 'सेटिंग्स')} title={t('Settings', 'सेटिंग्स')} aria-current={page === 'settings' ? 'page' : undefined}><SettingsIcon size={18}/><span className="sidebar-label">{t('Settings', 'सेटिंग्स')}</span></a><div className="care-demo-note"><span/>{t('Demo · no real appointments', 'डेमो · कोई वास्तविक बुकिंग नहीं')}</div></div>
     </aside>
     <div className="care-stage" inert={drawer}>
-      <header className="care-topbar"><div>{page !== 'care' ? <button type="button" className="care-back-button" onClick={goBack} aria-label={t('Go back', 'वापस जाएँ')}><ArrowLeft size={17}/><span>{t('Back', 'वापस')}</span></button> : null}<button ref={menuButton} className="icon-button care-mobile-menu" aria-label={t('Open navigation', 'नेविगेशन खोलें')} aria-expanded={drawer} onClick={() => setDrawer(true)}><Menu size={21}/></button><span className="care-mobile-brand">CareCompass</span><span className="care-topbar-name">{page === 'bookings' ? copy.bookings : page === 'briefcase' ? t('Briefcase', 'ब्रीफ़केस') : page === 'services' ? t('Health services', 'स्वास्थ्य सेवाएँ') : page === 'history' ? t('Chat history', 'बातचीत का इतिहास') : page === 'settings' ? t('Settings', 'सेटिंग्स') : page === 'profile' ? t('Profile', 'प्रोफ़ाइल') : copy.findCare}</span></div><div><span className="care-demo-badge">{t('Demo', 'डेमो')}</span><label className="language-control"><Globe2 size={16}/><select aria-label={copy.language} value={language} onChange={e => setLanguage(e.target.value as Language)}><option value="en">English</option><option value="hi">हिंदी</option><option value="hinglish">Hinglish</option><option value="auto">Auto</option></select></label></div></header>
+      <header className="care-topbar"><div>{page !== 'care' ? <button type="button" className="care-back-button" onClick={goBack} aria-label={t('Go back', 'वापस जाएँ')}><ArrowLeft size={17}/><span>{t('Back', 'वापस')}</span></button> : null}<button ref={menuButton} className="icon-button care-mobile-menu" aria-label={t('Open navigation', 'नेविगेशन खोलें')} aria-expanded={drawer} onClick={() => setDrawer(true)}><Menu size={21}/></button><span className="care-mobile-brand">CareCompass</span><span className="care-topbar-name">{page === 'bookings' ? copy.bookings : page === 'briefcase' ? t('Briefcase', 'ब्रीफ़केस') : page === 'services' ? t('Health services', 'स्वास्थ्य सेवाएँ') : page === 'history' ? t('Chat history', 'बातचीत का इतिहास') : page === 'settings' ? t('Settings', 'सेटिंग्स') : copy.findCare}</span></div><div><span className="care-demo-badge">{t('Demo', 'डेमो')}</span><label className="language-control"><Globe2 size={16}/><select aria-label={copy.language} value={language} onChange={e => setLanguage(e.target.value as Language)}><option value="en">English</option><option value="hi">हिंदी</option><option value="hinglish">Hinglish</option><option value="auto">Auto</option></select></label></div></header>
       <div id="care-main" role="main" className="care-main">
         {page === 'not-found' || (route.conversationId && !history.some(entry => entry.id === route.conversationId)) ? <section className="care-route-missing"><h1>{t('Page not found', 'पेज नहीं मिला')}</h1><p>{t('This page or saved conversation is unavailable on this device.', 'यह पेज या सहेजी गई बातचीत इस डिवाइस पर उपलब्ध नहीं है।')}</p><button className="button primary" onClick={newRequest}>{t('Start a new conversation', 'नई बातचीत शुरू करें')}</button></section> : null}
-        <div className="care-shell-flow" hidden={(page !== 'care' && page !== 'bookings') || !!(route.conversationId && !history.some(entry => entry.id === route.conversationId))}><App active={page === 'care'} embedded chatLayout restoredConversation={restoredConversation} onConversation={entry => { setActiveId(entry.id); setHistory(previous => saveConversation(previous, entry)); if (window.location.pathname !== conversationPath(entry.id)) changeRoute(conversationPath(entry.id)); }} patientContext={patientContext} externalLanguage={language} externalBookings={page === 'bookings'} resetRequest={resetKey} onStartCare={() => navigate('care')} onViewBookings={() => navigate('bookings')} onExploreServices={() => navigate('services')} onProfile={() => navigate('profile')}/></div>
-        {page === 'settings' ? <Settings hindi={hi} theme={theme} onTheme={setTheme} onProfile={() => navigate('profile')}/> : null}
+        <div className="care-shell-flow" hidden={(page !== 'care' && page !== 'bookings') || !!(route.conversationId && !history.some(entry => entry.id === route.conversationId))}><App active={page === 'care'} embedded chatLayout restoredConversation={restoredConversation} onConversation={entry => { setActiveId(entry.id); setHistory(previous => saveConversation(previous, entry)); if (window.location.pathname !== conversationPath(entry.id)) changeRoute(conversationPath(entry.id)); }} externalLanguage={language} externalBookings={page === 'bookings'} resetRequest={resetKey} onStartCare={() => navigate('care')} onViewBookings={() => navigate('bookings')} onExploreServices={() => navigate('services')}/></div>
+        {page === 'settings' ? <Settings hindi={hi} theme={theme} onTheme={setTheme}/> : null}
         {page === 'history' ? <ChatHistory history={history} hindi={hi} onNew={newRequest} onOpen={openConversation} onRename={(id, title) => setHistory(previous => previous.map(entry => entry.id === id ? { ...entry, title, customTitle: title } : entry))} onDelete={deleteConversation}/> : null}
         {briefcaseVisited || page === 'briefcase' ? <div className="care-support-page" hidden={page !== 'briefcase'}><Suspense fallback={<p className="workspace-loading" role="status">{t('Opening your briefcase…', 'ब्रीफ़केस खोल रहे हैं…')}</p>}><Briefcase hi={hi}/></Suspense></div> : null}
-        {profileVisited || page === 'profile' ? <div className="care-support-page" hidden={page !== 'profile'}><Suspense fallback={<p className="workspace-loading" role="status">{t('Opening your profile…', 'प्रोफ़ाइल खोल रहे हैं…')}</p>}><Profile hi={hi}/></Suspense></div> : null}
         {servicesVisited || page === 'services' ? <div className="care-support-page" hidden={page !== 'services'}><div className="health-portal services-content"><Suspense fallback={<p role="status">{t('Opening health services…', 'स्वास्थ्य सेवाएँ खोल रहे हैं…')}</p>}><Services hi={hi} onCare={newRequest}/></Suspense></div></div> : null}
       </div>
     </div>

@@ -62,10 +62,7 @@ class TriageAssessment(_Strict):
     follow_up_question: Optional[Text(220)] = None
     answer_options: Annotated[list[Text(40)], Capped(4)] = Field(default_factory=list)
     required_skills: Annotated[list[Skill], Capped(6)] = Field(default_factory=list)
-    patient_member_id: Optional[Text(40)] = Field(default=None,
-                                             description="id from PROFILE of the person who needs care, if identifiable")
     key_facts: Annotated[list[Text(80)], Capped(6)] = Field(default_factory=list, description="short facts from the message that drove the decision")
-    profile_facts_used: Annotated[list[Text(80)], Capped(6)] = Field(default_factory=list)
     reasoning: Text(420) = Field(description="1-2 plain sentences for the family, in their language; no diagnosis")
 
 

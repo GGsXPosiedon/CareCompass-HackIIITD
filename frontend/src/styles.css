@@ -76,8 +76,6 @@ svg { flex-shrink: 0; vertical-align: middle; }
 .request-panel { border: 1px solid var(--border); border-radius: 20px; padding: 24px; min-width: 0; }
 fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
 legend, .field-label { display: block; font-weight: 500; margin-bottom: 11px; font-size: 16px; }
-.person-field { margin-bottom: 22px; }
-.person-field legend { float: left; padding-top: 12px; margin-right: 18px; font-size: 14px; }
 .segmented { display: inline-flex; background: #f2f4f2; border-radius: 100px; padding: 4px; }
 .segmented button { border-radius: 100px; min-height: 43px; padding: 8px 21px; font-size: 14px; color: #5c665e; }
 .segmented button.active { background: white; color: var(--ink); }
@@ -346,8 +344,6 @@ summary { cursor: pointer; font-size: 14px; color: var(--muted); min-height: 36p
   .page-heading { margin-bottom: 24px; }
   .page-heading > p, .page-heading > div > p { font-size: 16px; line-height: 1.6; margin-top: 10px; }
   .request-panel { padding: 20px; border-radius: 16px; }
-  .person-field { margin-bottom: 23px; }
-  .person-field legend { float: none; padding-top: 0; margin-right: 0; font-size: 15px; }
   .segmented { width: 100%; }
   .segmented button { flex: 1; font-size: 12px; padding: 8px 10px; min-height: 44px; }
   .field-label, legend { font-size: 15px; }

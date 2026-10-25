@@ -1,9 +1,38 @@
+# Local dependencies and build output
 node_modules/
 frontend/dist/
-frontend/.env.local
 *.tsbuildinfo
+.venv/
+.venv-*/
+.vercel/
+
+# Credentials and local environment overrides (keep the blank examples)
+*.env
+.env
+.env.*
+!.env.example
+
+# Python/test caches and runtime state
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage/
+logs/
+*.log
+*.tmp
+
+# Local inspection snapshots and scratch work
 .taste-skill/inspect/
 .taste-skill/before/
 .taste-skill/after/
 work/
-*.env
+
+# Operating-system metadata
+.DS_Store
+Thumbs.db
+Desktop.ini

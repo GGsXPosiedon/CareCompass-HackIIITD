@@ -129,7 +129,7 @@ class Nodes:
     def _case(self, s: TriageState) -> str:
         f = s["facts"]
         return render_case(language=f.language, history=f.history, message=f.latest_input,
-                           profile=f.patient_context, follow_ups_asked=f.n_follow_ups_asked)
+                           follow_ups_asked=f.n_follow_ups_asked)
 
     def _llm(self, role: str):
         llm = self.p.llm

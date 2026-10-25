@@ -21,7 +21,7 @@ SAFE = {"findings": [], "screening_question": None, "screening_options": []}
 
 def triage(**kw):
     base = {"care_type": None, "confidence": "medium", "red_flags": [], "follow_up_question": None, "answer_options": [],
-            "required_skills": [], "patient_member_id": None, "key_facts": [], "profile_facts_used": [], "reasoning": "LLM reasoning."}
+            "required_skills": [], "key_facts": [], "reasoning": "LLM reasoning."}
     return {**base, **kw}
 
 
@@ -187,6 +187,30 @@ def test_gemini_failure_is_visible_in_response():
     assert result.response_source == "rules" and result.service_notice
 
 
+@pytest.mark.parametrize("text", ["hello", "mujhe bukhar hai", "need a blood test"])
+def test_successful_checks_do_not_show_notice_when_triage_is_skipped(text):
+    p = make(tri=triage(care_type="lab_test_home", confidence="high"))
+    response, state = p.run(TriageRequest(**req(text)))
+    assert state.get("llm_safety") is not None
+    if text != "need a blood test":
+        assert "llm_triage" not in state
+    assert response.service_notice is None
+
+
+def test_notice_clears_after_provider_recovers():
+    p = make(status=500)
+    assert run(p, "need a blood test").service_notice
+    p.llm = make(tri=triage(care_type="lab_test_home", confidence="high")).llm
+    assert run(p, "need a blood test").service_notice is None
+
+
+def test_failed_safety_check_still_shows_notice_when_triage_succeeds():
+    p = make(safety="not json", tri=triage(care_type="lab_test_home", confidence="high"))
+    response, state = p.run(TriageRequest(**req("need a blood test")))
+    assert state["llm_triage"] is not None and state["llm_safety"] is None
+    assert response.service_notice
+
+
 def test_gemini3_uses_thinking_level_and_retries_temporary_server_failure():
     settings = dataclasses.replace(get_settings(), gemini_api_key="test", gemini_model="gemini-3.5-flash")
     requests = []
@@ -237,7 +261,7 @@ def test_follow_up_cap_forces_safe_default():
     assert r.follow_up_question is None and r.care_type == "paramedic_home_visit"
 
 
-def test_profile_is_sent_inside_fenced_case():
+def test_legacy_profile_is_ignored_and_never_sent_to_models():
     cap = []
     p = make(tri=triage(care_type="paramedic_home_visit", confidence="high"), capture=cap)
     body = req("papa ko do din se bukhar hai")
@@ -245,7 +269,9 @@ def test_profile_is_sent_inside_fenced_case():
         {"id": "m1", "name": "Ramesh", "relation": "Father", "age": 68, "conditions": ["Type 2 diabetes"], "allergies": ["Penicillin"]}]}
     p.triage(TriageRequest(**body))
     sent = cap[0][1]["contents"][0]["parts"][0]["text"]
-    assert "Type 2 diabetes" in sent and "<user_message>" in sent and "PROFILE:" in sent
+    assert "<user_message>" in sent
+    assert "Type 2 diabetes" not in sent and "Ramesh" not in sent and "PROFILE:" not in sent
+    assert "patient_context" not in TriageRequest(**body).model_dump()
 
 
 def test_trace_explains_every_step():

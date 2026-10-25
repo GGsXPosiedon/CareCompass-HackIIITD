@@ -43,29 +43,6 @@ class Turn(BaseModel):
         return v
 
 
-class Medication(BaseModel):
-    name: str = Field(max_length=80)
-    dose: Optional[str] = Field(default=None, max_length=60)
-
-
-class MemberProfile(BaseModel):
-    """What the user has already saved about a person (client-held; the API is stateless)."""
-
-    id: str = Field(max_length=40)
-    name: str = Field(max_length=60)
-    relation: str = Field(default="", max_length=30)
-    age: Optional[int] = Field(default=None, ge=0, le=120)
-    sex: Optional[str] = Field(default=None, max_length=20)
-    conditions: list[str] = Field(default_factory=list, max_length=20)
-    allergies: list[str] = Field(default_factory=list, max_length=20)
-    medications: list[Medication] = Field(default_factory=list, max_length=20)
-    notes: list[str] = Field(default_factory=list, max_length=10)  # recent history / records summary
-
-
-class PatientContext(BaseModel):
-    active_member_id: Optional[str] = None
-    members: list[MemberProfile] = Field(default_factory=list, max_length=12)
-
 
 class TriageRequest(BaseModel):
     # Unknown keys are ignored (the organiser harness may send extras); types/ranges are enforced.
@@ -74,7 +51,6 @@ class TriageRequest(BaseModel):
     language: LanguageMode = "auto"
     location: Optional[Location] = None
     conversation_history: list[Turn] = Field(default_factory=list, max_length=40)
-    patient_context: Optional[PatientContext] = None
 
 
 class MatchedCaregiver(BaseModel):

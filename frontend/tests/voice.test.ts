@@ -128,7 +128,7 @@ test('recorder cancellation releases every microphone track without decoding or 
 
 test('the Vite voice middleware serves config, transcription and audio before the care API proxy', async () => {
   let middleware;
-  const plugin = voicePlugin(env, async url => url.endsWith('speech-to-text')
+  const plugin = voicePlugin({ ...env, VOICE_PUBLIC_ORIGIN: 'https://care.example' }, async url => url.endsWith('speech-to-text')
     ? Response.json({ transcript: 'Need a sample collection tomorrow' })
     : Response.json({ audios: [Buffer.from(wave(.1)).toString('base64')] }));
   assert.equal(plugin.configureServer({ middlewares: { use: fn => { middleware = fn; return {}; } } }), undefined);
@@ -139,8 +139,10 @@ test('the Vite voice middleware serves config, transcription and audio before th
   const base = `http://127.0.0.1:${address.port}/api/voice`;
   try {
     assert.equal((await (await fetch(base)).json()).provider, 'sarvam');
+    assert.equal((await fetch(base, { headers: { origin: 'https://care.example' } })).status, 200);
+    assert.equal((await fetch(base, { headers: { origin: 'https://other.example' } })).status, 403);
     const result = await fetch(`${base}?action=transcribe&language=hinglish`, { method: 'POST',
-      headers: { 'content-type': 'audio/wav', 'x-carecompass-voice': '1' }, body: wave() });
+      headers: { origin: 'https://care.example', 'content-type': 'audio/wav', 'x-carecompass-voice': '1' }, body: wave() });
     assert.equal((await result.json()).text, 'Need a sample collection tomorrow');
     const audio = await fetch(`${base}?action=speak&language=en`, { method: 'POST',
       headers: { 'content-type': 'application/json', 'x-carecompass-voice': '1' }, body: JSON.stringify({ text: 'Please review this recommendation.' }) });

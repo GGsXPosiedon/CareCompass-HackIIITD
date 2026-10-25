@@ -43,7 +43,7 @@ html[data-care-motion="full"] {
     animation: care-reveal var(--motion-panel) var(--motion-settle);
   }
   .care-support-page:not([hidden]) { animation: care-reveal var(--motion-panel) var(--motion-settle); }
-  .briefcase-content > :not(.briefcase-tabs), .profile-detail > * {
+  .briefcase-content > :not(.briefcase-tabs) {
     animation: care-reveal 200ms ease-out;
   }
   .care-sidebar-help ol { animation: care-reveal 180ms ease-out; }

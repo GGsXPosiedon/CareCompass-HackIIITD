@@ -23,7 +23,7 @@ from app.schemas.llm import SafetyReview, TriageAssessment  # noqa: E402
 from app.services.gemini import LLMError  # noqa: E402
 from app.services.llm_router import build_llm  # noqa: E402
 
-CASE = render_case(language="hinglish", history=[], message="sar dard hora h", profile=None, follow_ups_asked=0)
+CASE = render_case(language="hinglish", history=[], message="sar dard hora h", follow_ups_asked=0)
 
 
 def check_models(router, s) -> None:

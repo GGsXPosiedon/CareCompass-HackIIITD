@@ -8,7 +8,6 @@ export interface IntakeRequest {
   language: Language;
   location: { lat: number; lng: number };
   conversation_history: Message[];
-  patient_context?: PatientContext;
 }
 export interface Match { caregiver_id: string; score: number; reason: string }
 export interface TriageResponse {
@@ -51,10 +50,3 @@ export interface Booking {
 }
 export interface BookingRequest { caregiver_id: string; slot: string; date: string; location: { lat: number; lng: number } }
 
-export interface PatientContext {
-  active_member_id: string | null;
-  members: Array<{
-    id: string; name: string; relation: string; age?: number; sex?: string;
-    conditions: string[]; allergies: string[]; medications: Array<{ name: string; dose?: string }>; notes: string[];
-  }>;
-}

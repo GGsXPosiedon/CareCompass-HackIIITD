@@ -53,12 +53,13 @@ class Pipeline:
             resp.response_source = "safety_rules"
         else:
             resp.response_source = "gemini" if state.get("llm_triage") is not None else "rules"
-            # if state.get("llm_triage") is None or state.get("llm_safety") is None:
-            #     resp.service_notice = {
-            #         "en": "Gemini could not complete all checks. Limited fallback rules were used for this reply.",
-            #         "hi": "Gemini उपलब्ध नहीं है या उत्तर सही नहीं था। यह जवाब सीमित वैकल्पिक नियमों पर आधारित है।",
-            #         "hinglish": "Gemini available nahi hai ya response sahi nahi tha. Yeh reply limited fallback rules se hai.",
-            #     }[state["facts"].language]
+            # Dialogue turns can intentionally skip triage; missing output is not a failed call.
+            if self.llm.enabled and any(node in state and state[node] is None for node in ("llm_triage", "llm_safety")):
+                resp.service_notice = {
+                    "en": "Some AI checks are temporarily unavailable, so this reply may be limited.",
+                    "hi": "AI की कुछ जाँच अभी उपलब्ध नहीं हैं, इसलिए यह जवाब अधूरा हो सकता है।",
+                    "hinglish": "AI ki kuch checks abhi nahi ho paayi, isliye is jawab mein jaankari kam ho sakti hai.",
+                }[state["facts"].language]
         h = hashlib.sha256(state["facts"].text_norm.encode()).hexdigest()[:10]  # no raw text in logs
         log.info("case=%s care_type=%s flags=%s path=%s", h, resp.care_type, resp.red_flags, [t["node"] for t in state["trace"]])
         from .failure_log import record

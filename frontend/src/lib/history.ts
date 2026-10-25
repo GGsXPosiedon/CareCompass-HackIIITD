@@ -1,7 +1,7 @@
 import type { Language, Location, Message, TriageResponse } from '../types.ts';
 import { validateTriage } from './contracts.ts';
 export interface CareConversation {
-  id: string; title: string; input: string; person: string; language: Language;
+  id: string; title: string; input: string; language: Language;
   location: Location; messages: Message[]; result: TriageResponse; updatedAt: string; customTitle?: string;
 }
 export const HISTORY_KEY = 'carecompass.conversations.v1';
@@ -18,7 +18,7 @@ export function readHistory(storage: Pick<Storage, 'getItem'>): CareConversation
     if (!Array.isArray(value)) return [];
     return value.filter((entry): entry is CareConversation => {
       try {
-        if (!entry || typeof entry.id !== 'string' || typeof entry.title !== 'string' || typeof entry.input !== 'string' || typeof entry.person !== 'string' || !['en', 'hi', 'hinglish', 'auto'].includes(entry.language) || !Number.isFinite(Date.parse(entry.updatedAt)) || !entry.location || typeof entry.location.label !== 'string' || !Number.isFinite(entry.location.lat) || !Number.isFinite(entry.location.lng) || !Array.isArray(entry.messages) || !entry.messages.every((m: Message) => m && ['user', 'assistant'].includes(m.role) && typeof m.content === 'string')) return false;
+        if (!entry || typeof entry.id !== 'string' || typeof entry.title !== 'string' || typeof entry.input !== 'string' || !['en', 'hi', 'hinglish', 'auto'].includes(entry.language) || !Number.isFinite(Date.parse(entry.updatedAt)) || !entry.location || typeof entry.location.label !== 'string' || !Number.isFinite(entry.location.lat) || !Number.isFinite(entry.location.lng) || !Array.isArray(entry.messages) || !entry.messages.every((m: Message) => m && ['user', 'assistant'].includes(m.role) && typeof m.content === 'string')) return false;
         validateTriage(entry.result);
         return true;
       } catch { return false; }

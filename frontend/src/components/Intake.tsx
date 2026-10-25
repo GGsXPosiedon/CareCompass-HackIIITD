@@ -8,11 +8,11 @@ import { ChatIntake } from './ChatIntake';
 
 export interface IntakeProps {
   copy: Copy; hindi: boolean; language: Language; input: string; setInput: (input: string) => void;
-  person: string; setPerson: (person: string) => void; location: Location; busy: boolean; error: string; onSubmit: () => void;
-  onLocation?: () => void; onProfile?: () => void; compact?: boolean;
+  location: Location; busy: boolean; error: string; onSubmit: () => void;
+  onLocation?: () => void; compact?: boolean;
 }
 export function Intake(props: IntakeProps) {
-  const { copy, hindi, language, input, setInput, person, setPerson, location, busy, error, onSubmit } = props;
+  const { copy, hindi, language, input, setInput, location, busy, error, onSubmit } = props;
   if (props.compact) return <ChatIntake {...props}/>;
   const services = [
     { title: copy.serviceParamedic, description: copy.serviceParamedicDesc, Icon: House },
@@ -25,7 +25,6 @@ export function Intake(props: IntakeProps) {
     <div className="care-grid">
       <section className="request-panel" aria-label={copy.findCare}>
         <form onSubmit={e => { e.preventDefault(); onSubmit(); }}>
-          <fieldset className="person-field"><legend>{copy.person}</legend><div className="segmented">{[['me', copy.me], ['family', copy.family]].map(([id, label]) => <button key={id} type="button" aria-pressed={person === id} className={person === id ? 'active' : ''} onClick={() => setPerson(id)} disabled={busy}>{label}</button>)}</div></fieldset>
           <label className="field-label" htmlFor="symptoms">{copy.inputLabel}</label>
           <div className="symptom-composer"><textarea id="symptoms" value={input} onChange={e => setInput(e.target.value)} placeholder={copy.placeholder} rows={3} maxLength={2000} disabled={busy} aria-describedby={`input-hint${error ? ' intake-error' : ''}`} aria-invalid={!!error} />
             <div className="composer-bottom"><VoiceInput copy={copy} hindi={hindi} disabled={busy} onTranscript={text => setInput(`${input}${input ? ' ' : ''}${text}`.slice(0, 2000))} /><span className="character-count" aria-hidden="true">{input.length}/2000</span></div>

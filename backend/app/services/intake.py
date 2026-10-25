@@ -23,7 +23,6 @@ def build_facts(req: TriageRequest) -> CaseFacts:
         n_follow_ups_asked=a.questions_asked,
         latest_input=strip_prefix(req.user_input),
         history=a.scoped_history,
-        patient_context=req.patient_context.model_dump() if req.patient_context else None,
         safety_text_norm=normalize(" . ".join(all_user)),
         analysis=a,
     )

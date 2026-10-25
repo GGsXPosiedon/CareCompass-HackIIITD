@@ -4,18 +4,18 @@ import { Modal } from '../components/Modal';
 import { formatDate, localDate } from '../lib/flow';
 import { categories, categoryHi } from './data';
 import { useHealth } from './Store';
-import { downloadText, profileData } from './logic';
+import { downloadText } from './logic';
 import { DemoNote, Empty, HealthHeading, words } from './ui';
 import type { HealthRecord, RecordCategory } from './types';
 
 export function Records({ hi, openUpload, onUploadClosed, onSummary }: { hi: boolean; openUpload: boolean; onUploadClosed: () => void; onSummary: () => void }) {
-  const { state, setState, registerUrl } = useHealth(); const t = words(hi); const active = state.members.find(m=>m.id===state.activeId)!;
+  const { state, setState, registerUrl } = useHealth(); const t = words(hi);
   const [uploading, setUploading] = useState(false); const [viewing, setViewing] = useState<HealthRecord | null>(null); const [sharing, setSharing] = useState(false);
   const [search, setSearch] = useState(''); const [category, setCategory] = useState('all'); const [sort, setSort] = useState('newest');
   const [files, setFiles] = useState<File[]>([]); const [uploadCategory, setUploadCategory] = useState<RecordCategory>('Lab report'); const [date, setDate] = useState(localDate()); const [error, setError] = useState('');
   const [shareIds, setShareIds] = useState<string[]>([]); const [doctor, setDoctor] = useState('Demo clinician'); const [days, setDays] = useState('7'); const [consent, setConsent] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null); const cameraRef = useRef<HTMLInputElement>(null);
-  const data = profileData(state, state.activeId);
+  const data = state;
   const records = data.records.filter(r => (category === 'all' || r.category === category) && `${r.title} ${r.source} ${r.tags.join(' ')}`.toLowerCase().includes(search.toLowerCase())).sort((a,b) => sort === 'newest' ? b.date.localeCompare(a.date) : a.date.localeCompare(b.date));
   const uploadVisible = openUpload || uploading;
   function closeUpload() { setUploading(false); onUploadClosed(); setFiles([]); setError(''); }
@@ -26,19 +26,19 @@ export function Records({ hi, openUpload, onUploadClosed, onSummary }: { hi: boo
   }
   function saveFiles() {
     if (!files.length || !date || date > localDate()) { setError(t('Choose a file and a valid record date.', 'फ़ाइल और मान्य तारीख़ चुनें।')); return; }
-    const added: HealthRecord[] = files.map(file => { const url=URL.createObjectURL(file); registerUrl(url); return { id: crypto.randomUUID(), memberId: state.activeId, title: file.name, category: uploadCategory, date, source: 'Local demo upload', status: 'Awaiting extraction', description: t('Stored in this tab only. OCR, AI extraction and doctor review are not connected. Add a sample report to explore structured demo data.', 'केवल इस टैब में रखा गया। OCR, AI और डॉक्टर समीक्षा नहीं जुड़े हैं। संरचित डेटा देखने के लिए नमूना रिपोर्ट जोड़ें।'), url, fileType: file.type, tags: [uploadCategory] }; });
+    const added: HealthRecord[] = files.map(file => { const url=URL.createObjectURL(file); registerUrl(url); return { id: crypto.randomUUID(), title: file.name, category: uploadCategory, date, source: 'Local demo upload', status: 'Awaiting extraction', description: t('Stored in this tab only. OCR, AI extraction and doctor review are not connected. Add a sample report to explore structured demo data.', 'केवल इस टैब में रखा गया। OCR, AI और डॉक्टर समीक्षा नहीं जुड़े हैं। संरचित डेटा देखने के लिए नमूना रिपोर्ट जोड़ें।'), url, fileType: file.type, tags: [uploadCategory] }; });
     setState(s=>({...s, records:[...added,...s.records], notices:[{id:crypto.randomUUID(), title:t('Records added','रिकॉर्ड जोड़े गए'), body:t(`${added.length} local file(s) await a connected extraction service.`, `${added.length} स्थानीय फ़ाइलों के लिए एक्सट्रैक्शन सेवा चाहिए।`),read:false,page:'records'},...s.notices]})); closeUpload();
   }
   function addSample() {
-    const sample: HealthRecord = { id:crypto.randomUUID(),memberId:state.activeId,title:'Sample radiology report',category:'Radiology',date:localDate(),source:'Compass Demo Diagnostics',status:'Sample reviewed',description:'Synthetic radiology record for demonstrating indexing, summaries and consent. No actual scan has been interpreted. No diagnosis is included.',tags:['Radiology','Synthetic sample'] };
+    const sample: HealthRecord = { id:crypto.randomUUID(),title:'Sample radiology report',category:'Radiology',date:localDate(),source:'Compass Demo Diagnostics',status:'Sample reviewed',description:'Synthetic radiology record for demonstrating indexing, summaries and consent. No actual scan has been interpreted. No diagnosis is included.',tags:['Radiology','Synthetic sample'] };
     setState(s=>({...s,records:[sample,...s.records]})); closeUpload();
   }
   function packageRecord(record: HealthRecord) { downloadText(`${record.id}-demo-record.txt`, ['SYNTHETIC CARECOMPASS RECORD',record.title,record.category,record.date,record.source,record.description,'No clinical review has been performed.'].join('\n')); }
   function createGrant() {
     if (!consent || !shareIds.length || !doctor.trim()) { setError(t('Choose records, name the demo recipient and confirm consent.', 'रिकॉर्ड चुनें, डेमो प्राप्तकर्ता बताएँ और सहमति दें।')); return; }
-    setState(s=>({...s,grants:[{id:crypto.randomUUID(),memberId:state.activeId,doctor:doctor.trim(),recordIds:shareIds,expires:localDate(Number(days)),active:true},...s.grants]})); setSharing(false); setError('');
+    setState(s=>({...s,grants:[{id:crypto.randomUUID(),doctor:doctor.trim(),recordIds:shareIds,expires:localDate(Number(days)),active:true},...s.grants]})); setSharing(false); setError('');
   }
-  return <><HealthHeading title={t('Your health briefcase.', 'आपका स्वास्थ्य ब्रीफ़केस।')} description={t(`Reports, prescriptions and memories of care for ${active.name}.`, `${active.name} की रिपोर्ट, प्रिस्क्रिप्शन और देखभाल का इतिहास।`)} action={<button className="button primary" onClick={()=>{setUploading(true);setError('');}}><Upload size={17}/>{t('Add records','रिकॉर्ड जोड़ें')}</button>} />
+  return <><HealthHeading title={t('Your health briefcase.', 'आपका स्वास्थ्य ब्रीफ़केस।')} description={t('Reports, prescriptions and care documents in one place.', 'रिपोर्ट, प्रिस्क्रिप्शन और देखभाल के दस्तावेज़ एक जगह।')} action={<button className="button primary" onClick={()=>{setUploading(true);setError('');}}><Upload size={17}/>{t('Add records','रिकॉर्ड जोड़ें')}</button>} />
     <div className="health-toolbar"><label className="search-field"><Search size={18}/><span className="sr-only">{t('Search records','रिकॉर्ड खोजें')}</span><input value={search} onChange={e=>setSearch(e.target.value)} placeholder={t('Search your records','अपने रिकॉर्ड खोजें')}/></label><label className="health-select">{t('Sort','क्रम')}<select value={sort} onChange={e=>setSort(e.target.value)}><option value="newest">{t('Newest first','नए पहले')}</option><option value="oldest">{t('Oldest first','पुराने पहले')}</option></select></label><button className="button secondary" onClick={()=>{setSharing(true);setShareIds(data.records.map(r=>r.id));setConsent(false);setError('');}}><Share2 size={16}/>{t('Share preview','शेयर प्रीव्यू')}</button></div>
     <div className="health-tabs" role="group" aria-label={t('Record category','रिकॉर्ड प्रकार')}>{['all',...categories].map(c=><button key={c} className={category===c?'active':''} aria-pressed={category===c} onClick={()=>setCategory(c)}>{c==='all'?t('All records','सभी रिकॉर्ड'):hi?categoryHi[c as RecordCategory]:c}</button>)}</div>
     <button className="record-summary-link" onClick={onSummary}><div><strong>{t('CareCompass health summary','CareCompass स्वास्थ्य सारांश')}</strong><p>{t('See your records as one health story.','सभी रिकॉर्ड को एक स्वास्थ्य इतिहास की तरह देखें।')}</p></div><ArrowRight size={20}/></button>

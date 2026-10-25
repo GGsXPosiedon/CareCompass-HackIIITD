@@ -9,18 +9,20 @@ organiser contract: `care_type`, `urgency`, `red_flags`, an optional single `fol
 uv sync                              # creates .venv with the locked deps (Python 3.12 via .python-version)
 cp .env.example .env                 # add GEMINI_API_KEY (optional: without it the deterministic path runs)
 uv run uvicorn app.main:app --reload # http://127.0.0.1:8000/docs
-uv run pytest -q                     # 105 tests, no network
+uv run pytest -q                     # mocked provider tests; encoder tests need optional NumPy
 uv run python -m eval.run_eval       # judging metrics -> eval/report.md (exit 1 if any emergency is missed)
 ```
 
 Dependencies live in `pyproject.toml` and are pinned in `uv.lock` (commit both). Add a package with
 `uv add <pkg>`, a dev-only one with `uv add --dev <pkg>`.
 
+The deployment review passed 267 checks with 1 skipped after excluding `tests/test_encoder_router.py`, which imports NumPy not installed by the base dependency set. Install the encoder extras (`uv sync --extra encoder`) for full encoder test collection. Hosting instructions and the in-memory booking limitation are in [the deployment guide](../docs/DEPLOYMENT.md).
+
 ## Endpoints
 
 | Method & path | Purpose |
 |---|---|
-| `POST /triage` (also `/api/v1/triage`, `/api/v1/route`) | Organiser contract. Accepts optional `patient_context` (saved family profile). |
+| `POST /triage` (also `/api/v1/triage`, `/api/v1/route`) | Organiser contract. Uses conversation text only; legacy `patient_context` fields are ignored. |
 | `POST /api/v1/triage/trace` | Same decision + a plain-language trace of every graph node and the caregiver score breakdown ("why did it decide this?"). |
 | `GET /api/v1/graph` | Mermaid source of the triage graph. |
 | `GET /caregivers?ids=&care_type=&lat=&lng=&date=` | Profiles + free slots for the matched ids. |
@@ -48,7 +50,7 @@ START → intake → rules_safety ──fired──▶ emergency (112, no caregi
 | `rules_safety` | Versioned regex red-flag engine (`app/rules/redflags.json`, EN/HI/Hinglish, negation-aware). If it fires, **no model is consulted**. |
 | `classify` | **Your model slot.** Today: transparent rules (`RuleRouter`). Later: your trained classifier, same `predict(facts) -> RouteDecision` interface, `ROUTER_BACKEND=<name>`. |
 | `llm_safety` | Gemini with the *safety screener* prompt: only red flags, `present` vs `possible`, recall over precision. |
-| `llm_triage` | Gemini with the *triage analyst* prompt: service, skills, one follow-up question if needed, reasoning, uses the saved profile. |
+| `llm_triage` | Gemini with the *triage analyst* prompt: service, skills, one follow-up question if needed, reasoning, based only on the conversation. |
 | `fuse` | Safety guard + combination policy (below). |
 | `match` / `respond` | Caregiver ranking, then the contract response (validated before it leaves). |
 
@@ -69,7 +71,7 @@ Agreement between the two is logged in the trace for analysis.
 ## System prompts (`app/prompts/`)
 Versioned Markdown files with a front-matter header (`id`, `version`, `node`, `output_schema`):
 - `safety_screener.md`: red-flag definitions with Hindi/Hinglish cues, present-vs-possible rules, negation and history handling, screening question, examples.
-- `triage_analyst.md`: service definitions and tie-breaks, follow-up policy, skills vocabulary, how to use the family profile, language/tone rules, examples.
+- `triage_analyst.md`: service definitions and tie-breaks, follow-up policy, skills vocabulary, avoid assuming who the patient is, language/tone rules, examples.
 
 Both prompts treat `<history>`, `<user_message>` and `PROFILE` as untrusted data (prompt-injection guard). Prompt tags (`triage_analyst@1.2.0`) appear in the trace.
 
@@ -99,7 +101,7 @@ Ties go to whoever is free sooner. Every Gemini-required skill is enforced indep
 
 ## Configuration
 See `.env.example`. Key settings: `GEMINI_API_KEY`, `GEMINI_MODEL`, `LLM_BACKEND`, `ROUTER_BACKEND`, `FUSION_POLICY`, `MODEL_TRUST_THRESHOLD`, `MAX_FOLLOW_UPS`, `CAREGIVERS_PATH`.
-Health data from the Profile is sent to Gemini only when the user leaves "Share with the care assistant" on.
+Saved patient profiles are not accepted or sent to providers. The assistant uses only conversation text and asks when the identity of the person needing care matters.
 
 ## Conversational development setup
 
