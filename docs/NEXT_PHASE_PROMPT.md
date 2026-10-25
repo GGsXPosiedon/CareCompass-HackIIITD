@@ -1,0 +1,42 @@
+# Handoff prompt for the next assistant (new machine: datasets present, NO GPU)
+
+Paste everything below the line into the new assistant. Read `progress.md` first: it is the current-state document and is overwritten, not appended.
+
+---
+
+You are continuing **CareCompass** (HACK IIITD / CAI IIIT-Delhi): home-healthcare navigation for India, Delhi first. Owner: Aryan (B.Tech IT, 3rd year). Reply in English. Never print or commit API keys; never edit `backend/.env`. The owner commits and merges himself: do not run git write commands unless asked.
+
+## 1. The product rule that overrides older plans
+**Production uses no model weights.** An LLM chat handles intent, mood and conversation; underneath it a **deterministic layer** (rules, lexicons, question pathways, fixed disposition levels, small JSON tables) decides the disposition, in the spirit of NHS 111: fixed pathways, every outcome explained. Encoders (e5, MuRIL, XLM-R) are **offline tools** only: to build and check assets and to measure how far the rules lag a learned model. `ROUTER_BACKEND=rules` is the deployment default; `trained` (e5 head, needs onnxruntime + a model folder) is optional.
+
+## 2. Hard requirements (problem statement)
+Right care type + urgency incl. Hinglish/Hindi; **never miss an emergency** (chest pain, breathing, collapse, heavy bleeding -> 112; false alarms acceptable); sensible caregiver matching; know when to ask (converge in <=4 questions; more only if the user cannot answer); explain every decision; route, do not diagnose. Interface is fixed: care types `emergency_112, paramedic_home_visit, home_nursing, lab_test_home, teleconsultation`; urgency `emergency | same_day | scheduled`; `RED_FLAGS` enum is part of the API schema (do not add values). Self-care advice goes in the response text only, with a backing source; keep the interface unchanged. Demo may ship unreviewed content if it is marked UNREVIEWED.
+
+## 3. What exists (all in the repo)
+Backend FastAPI + LangGraph (`backend/app/graph/{builder,nodes,state}.py`): intake -> rules_safety -> parallel [classify | llm_safety | llm_triage] -> fuse -> follow_up | match -> respond. Key services: `safety.py` (9 red flags + explicit 112 words), `dialogue.py` (intent acts, slot questions, danger question, ambiguity question), `conditions.py` (named-condition gate + dataset vocabulary), `routing.py` (RuleRouter, TrainedRouter), `encoder_models.py` + `onnx_embed.py` (optional e5 heads), `intent_llm.py` (LLM may only widen `general` -> `health`), `llm_router.py`, `follow_up.py`.
+**New, tested, NOT wired into the graph yet:** `services/pathways.py` + `rules/pathways.json`, `services/mood.py`, `rules/delhi.json`.
+Pipeline (`pipeline/`): LOFO protocol over the 66 unique CareCompass texts / 20 families; scripts `export_router.py`, `train_router_embed.py`, `calibrate_ambiguity.py`, `distill_lexical.py` (negative result), `prepare_multilingual_triage.py`, `build_pathways.py`, `build_delhi_assets.py`, `gpu_encoder_eval.py`, `gpu_finetune_multilingual.py`, `run_gpu_windows.ps1`. Reports `pipeline/reports/06*.md, 08, 09, 10(after GPU run)`. Small committed results go to `pipeline/results/`.
+
+## 4. Facts you must not rediscover the hard way
+- The external dataset `Tulsiandhare/Multilingual_medical_symptom_triage` has **random urgency/severity labels** (accuracy 0.348 vs 0.366 majority) and wrong `language` labels; it is useful only for multilingual symptom wording (disease is fully predictable). Never use its urgency as a label. Details: `pipeline/reports/09_multilingual_dataset.md`.
+- Distilling the e5 head into a lexical model failed (F1 0.35 vs 0.68): the unlabeled pools carry no care-type signal. Care-type logic must come from pathway content.
+- e5 head LOFO macro-F1 0.680 (optimistic: C chosen on the same folds); tau_ask 0.15, tau_emergency 0.65, tau_margin 0.0181 (all from held-out scores; only 9 emergency texts). Fine-tune hyper-parameters were never searched.
+- Known false alarm: "wound dressing and fever check at home" -> 112 via the semantic safety net (acceptable by policy; a pathway question should resolve it).
+- 3 older tests fail only because the Gemini fallback banner is commented out in `pipeline.py` (`test_failure_log_records_generic_replies`, `test_gemini_failure_is_visible_in_response`, `test_llm_off_is_logged_and_shows_in_health`): not caused by recent work. `FAILURE_LOG=off` for the rest.
+- `.env` has `ROUTER_BACKEND=trained`, `ENCODER_PATH` (Windows path), `EMERGENCY_TAU_*`. Tests must not depend on them (the fake-encoder tests set thresholds explicitly). On a machine without the encoder, `build_router` silently falls back to rules.
+
+## 5. Your task list, in order
+1. **Wire pathways + mood + Delhi into the graph.** Suggested: in `converse`, run `mood.detect(latest)`; if `pathways.select(text)` hits and the dialogue is `health`, switch to a pathway sub-flow: ask `pathways.evaluate(...)` questions through the existing follow-up response (`answer_options` = option labels; recognise answers with `pathways.parse_answer`, track pathway state via the conversation history like the existing `slot_of` templates: register pathway question texts as slots so replies are not treated as new topics), then map the Step to the response: `care_type`, `urgency`, `reasoning = why (+ advice)`. Pass age/pregnancy from `patient_context` when present (the briefcase is NOT used yet). Emergency disposition must still go through the existing emergency path (red flags, 112 text). Mood: panic -> danger-first + unsure=yes; anger -> one question, human call-back text; never lower urgency. Keep rules/safety in front; the LLM only rewords.
+2. Add API-level tests (stateless: every request carries `conversation_history`). Run the whole suite; keep emergency recall 100% on `backend/eval/gold_cases.jsonl` (`python -m eval.run_eval`, currently care-type 91.7%, recall 21/21).
+3. Use `delhi.json`: map Hinglish area names/aliases in the text or `location` to a service area; use the seasonal notes only to reorder/emphasise questions (never to downgrade).
+4. Extend pathways (pregnancy, child fever, UTI, skin/rash, headache, abdominal pain, mental-health crisis -> helpline wording) in `pipeline/scripts/build_pathways.py`; keep each <=4 questions; mark UNREVIEWED; cite the public source in the file header. Do not invent drug doses.
+5. Hindi/Hinglish disease and symptom names that no dataset has: translate once with the LLM into a reviewable file (`backend/app/rules/translated_terms.json`, field `machine_translated: true`); use it in `conditions.py`.
+6. Data-driven question ordering from DDXPlus evidence statistics (`datasets/ddx`); severity is allowed only as an auxiliary prior for question relevance and emergency prior, never as a care-type label.
+7. Re-run `python pipeline/scripts/export_router.py --model-dir <multilingual-e5-base>` only if the heads need to change (CPU, ONNX; no torch needed). GPU work is optional and cannot run on this machine.
+8. Update `progress.md` (overwrite) and this file's status; list changed files for the owner's commit.
+
+## 6. If the owner later runs the GPU job (his Windows PC, RTX 4060)
+`powershell -ExecutionPolicy Bypass -File pipeline\scripts\run_gpu_windows.ps1` -> commit `pipeline/results/*`, `pipeline/reports/06b_*.md`, `09_*.md`, `10_*.md`, `backend/app/rules/dataset_vocab.json`; never `pipeline/models_ft/`. The torch half of `gpu_finetune_multilingual.py` has never been executed: if it errors, fix it from the traceback. Decision rule is inside the report; use it only as a yardstick for the rules layer.
+
+## 7. Environment notes
+Linux dev VM used `export UV_PROJECT_ENVIRONMENT=$HOME/venv-cc` before `uv run` (so the Windows `.venv` is untouched); a data/ML venv with numpy/pandas/sklearn/onnxruntime/tokenizers was used for pipeline scripts. Hugging Face and pytorch.org are not reachable from the VM; PyPI is. Datasets (not in git): `SYNAPSE_*.csv`, `ddx/`, `triage_dataset*.{jsonl,csv}`, `multi_turn_examples.jsonl`, `caregivers.csv`, `multilingual_triage/`. Models folder (not in git): `multilingual-e5-base`, `muril-base-cased`, `xlm-roberta-base`. Regenerate processed data with `pipeline/scripts/prepare_multilingual_triage.py --csv <path>`.

@@ -18,7 +18,8 @@ from ..prompts import load, render_case
 from ..schemas.external import MatchedCaregiver, TriageResponse
 from ..schemas.internal import RouteDecision, SafetyResult
 from ..schemas.llm import SafetyReview, TriageAssessment
-from ..services import dialogue, explain, follow_up, intake
+from ..services import dialogue, explain, follow_up, intake, intent_llm
+from ..services.conditions import NON_HEALTH_TASK
 from ..services.gemini import LLMError
 from ..services.lexicon import REQUIRED_SKILLS
 from ..services.routing import urgency_for
@@ -48,9 +49,23 @@ class Nodes:
 
     # -- 2. deterministic red-flag rules -------------------------------------
     def rules_safety(self, s: TriageState) -> dict:
-        r = self.p.safety.evaluate(s["facts"])
+        f = s["facts"]
+        r = self.p.safety.evaluate(f)
+        a = f.analysis
+        extra = ""
+        es = None
+        if not r.requires_emergency and a is not None and a.danger_answer == "yes":
+            # the user confirmed the danger-sign question we asked: that is an emergency, whatever else was said
+            r = SafetyResult(True, [], ["DANGER-CONFIRMED"], r.ruleset_version, "rules")
+            extra = "; user confirmed the danger-sign question"
+        enc = getattr(self.p, "encoder", None)
+        if enc is not None and not r.requires_emergency and (a is None or a.act in ("health", "answer")):
+            es = enc.emergency_score(f.latest_input or f.text_norm, f.safety_text_norm or f.text_norm)
+            extra += f"; emergency score {es:.2f} (ask>={enc.tau_ask}, escalate>={enc.tau_emergency})"
+            if es >= enc.tau_emergency:
+                r = SafetyResult(True, [], ["ENC-EMERGENCY"], r.ruleset_version, "model_guard")
         msg = f"rules fired {r.rule_ids} -> {r.flags}" if r.requires_emergency else "no red-flag rule fired"
-        return {"rule_safety": r, **_t("rules_safety", f"{msg} (ruleset {r.ruleset_version})")}
+        return {"rule_safety": r, "emergency_score": es, **_t("rules_safety", f"{msg} (ruleset {r.ruleset_version}){extra}")}
 
     @staticmethod
     def after_rules(s: TriageState) -> str:
@@ -60,8 +75,19 @@ class Nodes:
     def converse(self, s: TriageState) -> dict:
         a = s["facts"].analysis
         d = dialogue.decide(a, self.p.settings.max_follow_ups, self.p.settings.adaptive_slot_questions)
+        widened = ""
+        if a.act == "general" and d.kind == "reply" and self.p.llm and not NON_HEALTH_TASK.search(s["facts"].latest_input or ""):
+            verdict = intent_llm.looks_health_request(self._llm("triage"), s["facts"].latest_input or "")
+            if verdict:
+                a.act, widened = "health", " (LLM intent fallback: health request)"
+                d = dialogue.decide(a, self.p.settings.max_follow_ups, self.p.settings.adaptive_slot_questions)
+        enc, es = getattr(self.p, "encoder", None), s.get("emergency_score")
+        if (enc is not None and es is not None and es >= enc.tau_ask and d.kind in ("ask", "proceed") and a.act in ("health", "answer")
+                and "danger" not in a.asked_slots and a.danger_answer is None and a.questions_asked < self.p.settings.max_follow_ups + 1
+                and not self.p.safety.denied_flags(s["facts"].safety_text_norm or s["facts"].text_norm)):
+            d = dialogue.danger_decision(a.language)   # grey-zone score: one danger-sign question before anything else
         return {"dialogue": d, **_t("converse", f"intent={a.act}{' +correction' if a.correction else ''}; new_topic={a.new_topic}; "
-                                                f"questions asked={a.questions_asked}; decision={d.kind}"
+                                                f"questions asked={a.questions_asked}; decision={d.kind}{widened}"
                                                 f"{' (' + d.reason + ')' if d.reason else ''}")}
 
     @staticmethod
@@ -105,23 +131,27 @@ class Nodes:
         return render_case(language=f.language, history=f.history, message=f.latest_input,
                            profile=f.patient_context, follow_ups_asked=f.n_follow_ups_asked)
 
+    def _llm(self, role: str):
+        llm = self.p.llm
+        return llm.for_role(role) if hasattr(llm, "for_role") else llm
+
     def llm_safety(self, s: TriageState) -> dict:
-        if not self.p.llm or not self.p.llm.enabled:
+        if not self.p.llm or not self._llm("safety").enabled:
             return {"llm_safety": None, **_t("llm_safety", "skipped (LLM off)")}
         pr = load(SAFETY_PROMPT)
         try:
-            out = self.p.llm.structured(pr.text, self._case(s), SafetyReview, max_tokens=600)
+            out = self._llm("safety").structured(pr.text, self._case(s), SafetyReview, max_tokens=600)
             return {"llm_safety": out, **_t("llm_safety", f"{pr.tag}: " + (", ".join(f"{x.flag}:{x.status}" for x in out.findings) or "no findings"))}
         except LLMError as e:
             log.warning("llm_safety failed: %s", e)
             return {"llm_safety": None, **_t("llm_safety", f"{pr.tag} failed ({e}); rules remain the safety floor")}
 
     def llm_triage(self, s: TriageState) -> dict:
-        if not self.p.llm or not self.p.llm.enabled:
+        if not self.p.llm or not self._llm("triage").enabled:
             return {"llm_triage": None, **_t("llm_triage", "skipped (LLM off)")}
         pr = load(TRIAGE_PROMPT)
         try:
-            out = self.p.llm.structured(pr.text, self._case(s), TriageAssessment)
+            out = self._llm("triage").structured(pr.text, self._case(s), TriageAssessment)
             return {"llm_triage": out, **_t("llm_triage", f"{pr.tag}: {out.care_type} ({out.confidence}) flags={out.red_flags}")}
         except LLMError as e:
             log.warning("llm_triage failed: %s", e)
@@ -195,6 +225,14 @@ class Nodes:
                 d = {"outcome": "follow_up", "question": q, "options": opts, "basis": f"ask_{src}"}
                 return {"decision": d, **_t("fuse", f"not enough detail -> one follow-up question ({src}); policy={policy}")}
             ct, basis = st.fallback_care_type, "fallback"
+
+        enc = getattr(self.p, "encoder", None)
+        if (ct and budget_left and enc is not None and enc.tau_margin > 0 and det.source == "encoder" and det.margin is not None
+                and det.runner_up and det.margin < enc.tau_margin and (tr is None or llm_ct != det_ct or llm_ct is None)):
+            aq = follow_up.ambiguity_question(f, det_ct, det.runner_up) if det_ct == ct else None
+            if aq and "ambiguity" not in (f.analysis.asked_slots if f.analysis is not None else []):
+                d = {"outcome": "follow_up", "question": aq[0], "options": aq[1], "basis": "ask_ambiguity"}
+                return {"decision": d, **_t("fuse", f"encoder cannot separate {det_ct} from {det.runner_up} (log-ratio {det.margin:.3f} < {enc.tau_margin}) -> one two-option question")}
 
         a = f.analysis
         if (st.timing_question and ct in ("paramedic_home_visit", "home_nursing") and a is not None and a.asked_slots

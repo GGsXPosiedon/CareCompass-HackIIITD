@@ -1,0 +1,271 @@
+{"text": "mere aids h", "label": "health", "group": "condition"}
+{"text": "mujhe aids hai", "label": "health", "group": "condition"}
+{"text": "I have AIDS", "label": "health", "group": "condition"}
+{"text": "I am HIV positive and feel weak", "label": "health", "group": "condition"}
+{"text": "mujhe hiv hai", "label": "health", "group": "condition"}
+{"text": "papa ko hiv h", "label": "health", "group": "condition"}
+{"text": "my brother has HIV", "label": "health", "group": "condition"}
+{"text": "mujhe cancer hai", "label": "health", "group": "condition"}
+{"text": "mummy ko cancer h", "label": "health", "group": "condition"}
+{"text": "my father has lung cancer", "label": "health", "group": "condition"}
+{"text": "breast cancer ka treatment chahiye", "label": "health", "group": "condition"}
+{"text": "blood cancer", "label": "health", "group": "condition"}
+{"text": "chemo ke baad kamzori", "label": "health", "group": "condition"}
+{"text": "papa ko TB hai", "label": "health", "group": "condition"}
+{"text": "mujhe tb h", "label": "health", "group": "condition"}
+{"text": "dada ji ko tuberculosis hai", "label": "health", "group": "condition"}
+{"text": "meri maa ko mirgi ke daure aate hain", "label": "health", "group": "condition"}
+{"text": "bete ko epilepsy hai", "label": "health", "group": "condition"}
+{"text": "seizures aate hain", "label": "health", "group": "condition"}
+{"text": "mujhe dengue ho gaya", "label": "health", "group": "condition"}
+{"text": "dengue h shayad", "label": "health", "group": "condition"}
+{"text": "malaria ho gaya hai", "label": "health", "group": "condition"}
+{"text": "typhoid hai mujhe", "label": "health", "group": "condition"}
+{"text": "papa ko jaundice h", "label": "health", "group": "condition"}
+{"text": "piliya ho gaya", "label": "health", "group": "condition"}
+{"text": "hepatitis B hai", "label": "health", "group": "condition"}
+{"text": "hepatitis c positive", "label": "health", "group": "condition"}
+{"text": "mujhe asthma hai", "label": "health", "group": "condition"}
+{"text": "dama ki problem h", "label": "health", "group": "condition"}
+{"text": "papa ko dialysis chahiye", "label": "health", "group": "condition"}
+{"text": "kidney failure hai", "label": "health", "group": "condition"}
+{"text": "kidney stone hai mujhe", "label": "health", "group": "condition"}
+{"text": "pathri ka dard", "label": "health", "group": "condition"}
+{"text": "mujhe diabetes h", "label": "health", "group": "condition"}
+{"text": "sugar ki bimari", "label": "health", "group": "condition"}
+{"text": "thyroid ki dikkat", "label": "health", "group": "condition"}
+{"text": "high bp hai", "label": "health", "group": "condition"}
+{"text": "hypertension ka patient", "label": "health", "group": "condition"}
+{"text": "heart patient hai papa", "label": "health", "group": "condition"}
+{"text": "dil ki bimari hai", "label": "health", "group": "condition"}
+{"text": "mummy ko stroke aaya tha", "label": "health", "group": "condition"}
+{"text": "lakwa maar gaya", "label": "health", "group": "condition"}
+{"text": "paralysis ho gaya", "label": "health", "group": "condition"}
+{"text": "parkinson ki bimari", "label": "health", "group": "condition"}
+{"text": "dadi ko alzheimer hai", "label": "health", "group": "condition"}
+{"text": "dementia hai nana ko", "label": "health", "group": "condition"}
+{"text": "I'm pregnant and bleeding", "label": "health", "group": "condition"}
+{"text": "pregnancy me dikkat h", "label": "health", "group": "condition"}
+{"text": "miscarriage ho gaya", "label": "health", "group": "condition"}
+{"text": "PCOS hai mujhe", "label": "health", "group": "condition"}
+{"text": "endometriosis", "label": "health", "group": "condition"}
+{"text": "mujhe depression hai", "label": "health", "group": "condition"}
+{"text": "anxiety attacks aate hain", "label": "health", "group": "condition"}
+{"text": "suicidal thoughts aa rahe hain", "label": "health", "group": "condition"}
+{"text": "bipolar disorder", "label": "health", "group": "condition"}
+{"text": "schizophrenia ka patient", "label": "health", "group": "condition"}
+{"text": "mujhe std ho gaya", "label": "health", "group": "condition"}
+{"text": "I think I have an STD", "label": "health", "group": "condition"}
+{"text": "syphilis", "label": "health", "group": "condition"}
+{"text": "gonorrhea", "label": "health", "group": "condition"}
+{"text": "covid positive aaya", "label": "health", "group": "condition"}
+{"text": "corona ho gaya", "label": "health", "group": "condition"}
+{"text": "swine flu", "label": "health", "group": "condition"}
+{"text": "chikungunya", "label": "health", "group": "condition"}
+{"text": "chickenpox hai bete ko", "label": "health", "group": "condition"}
+{"text": "chicken pox", "label": "health", "group": "condition"}
+{"text": "measles", "label": "health", "group": "condition"}
+{"text": "mumps ho gaya", "label": "health", "group": "condition"}
+{"text": "cholera", "label": "health", "group": "condition"}
+{"text": "leprosy kusht rog", "label": "health", "group": "condition"}
+{"text": "sickle cell anemia", "label": "health", "group": "condition"}
+{"text": "thalassemia hai bachche ko", "label": "health", "group": "condition"}
+{"text": "hemophilia", "label": "health", "group": "condition"}
+{"text": "lupus", "label": "health", "group": "condition"}
+{"text": "multiple sclerosis", "label": "health", "group": "condition"}
+{"text": "cystic fibrosis", "label": "health", "group": "condition"}
+{"text": "muscular dystrophy", "label": "health", "group": "condition"}
+{"text": "rare genetic disorder", "label": "health", "group": "condition"}
+{"text": "cirrhosis of liver", "label": "health", "group": "condition"}
+{"text": "fatty liver hai", "label": "health", "group": "condition"}
+{"text": "pancreatitis", "label": "health", "group": "condition"}
+{"text": "appendicitis lag raha h", "label": "health", "group": "condition"}
+{"text": "gallstone", "label": "health", "group": "condition"}
+{"text": "piles hai", "label": "health", "group": "condition"}
+{"text": "bawasir", "label": "health", "group": "condition"}
+{"text": "fistula", "label": "health", "group": "condition"}
+{"text": "hernia hai", "label": "health", "group": "condition"}
+{"text": "slip disc", "label": "health", "group": "condition"}
+{"text": "arthritis ka dard", "label": "health", "group": "condition"}
+{"text": "gout", "label": "health", "group": "condition"}
+{"text": "osteoporosis", "label": "health", "group": "condition"}
+{"text": "spondylitis", "label": "health", "group": "condition"}
+{"text": "migraine", "label": "health", "group": "condition"}
+{"text": "brain tumor", "label": "health", "group": "condition"}
+{"text": "tumor nikla hai", "label": "health", "group": "condition"}
+{"text": "cataract operation", "label": "health", "group": "condition"}
+{"text": "glaucoma", "label": "health", "group": "condition"}
+{"text": "dengu", "label": "health", "group": "condition"}
+{"text": "tuburculosis", "label": "health", "group": "condition"}
+{"text": "canser", "label": "health", "group": "condition"}
+{"text": "diabtes", "label": "health", "group": "condition"}
+{"text": "asma", "label": "health", "group": "condition"}
+{"text": "hiv aids ka test", "label": "health", "group": "condition"}
+{"text": "mujhe kuch bimari h pata nahi kya", "label": "health", "group": "condition"}
+{"text": "papa bimar hain", "label": "health", "group": "condition"}
+{"text": "I feel sick", "label": "health", "group": "condition"}
+{"text": "aids", "label": "health", "group": "condition"}
+{"text": "cancer", "label": "health", "group": "condition"}
+{"text": "tb", "label": "health", "group": "condition"}
+{"text": "hiv", "label": "health", "group": "condition"}
+{"text": "dengue fever", "label": "health", "group": "condition"}
+{"text": "mera bacha bimar hai", "label": "health", "group": "condition"}
+{"text": "nani ko bukhar hai", "label": "health", "group": "condition"}
+{"text": "I need a nurse for my mother with dementia", "label": "health", "group": "condition"}
+{"text": "chemo patient ke liye nurse chahiye", "label": "health", "group": "condition"}
+{"text": "dialysis ke liye ghar par nurse", "label": "health", "group": "condition"}
+{"text": "mujhe kuch ho gaya hai", "label": "health", "group": "condition"}
+{"text": "epilepsy medicine khatam ho gayi", "label": "health", "group": "condition"}
+{"text": "insulin lagwani hai papa ko", "label": "health", "group": "condition"}
+{"text": "bp ki dawai", "label": "health", "group": "condition"}
+{"text": "need doctor for HIV treatment", "label": "health", "group": "condition"}
+{"text": "ART center kahan hai", "label": "health", "group": "condition"}
+{"text": "मुझे एड्स है", "label": "health", "group": "condition"}
+{"text": "मुझे कैंसर है", "label": "health", "group": "condition"}
+{"text": "पापा को टीबी है", "label": "health", "group": "condition"}
+{"text": "मुझे डेंगू हो गया", "label": "health", "group": "condition"}
+{"text": "माँ को मिर्गी के दौरे आते हैं", "label": "health", "group": "condition"}
+{"text": "मुझे डायबिटीज है", "label": "health", "group": "condition"}
+{"text": "दादी को लकवा मार गया", "label": "health", "group": "condition"}
+{"text": "मुझे पीलिया हो गया", "label": "health", "group": "condition"}
+{"text": "need a nurse tomorrow", "label": "health", "group": "care_request"}
+{"text": "doctor ko ghar bulana hai", "label": "health", "group": "care_request"}
+{"text": "book an appointment", "label": "health", "group": "care_request"}
+{"text": "caregiver chahiye", "label": "health", "group": "care_request"}
+{"text": "ambulance chahiye", "label": "health", "group": "care_request"}
+{"text": "nurse for elderly mother", "label": "health", "group": "care_request"}
+{"text": "physiotherapist needed", "label": "health", "group": "care_request"}
+{"text": "lab test at home", "label": "health", "group": "care_request"}
+{"text": "blood test ghar par karwana hai", "label": "health", "group": "care_request"}
+{"text": "doctor visit book karo", "label": "health", "group": "care_request"}
+{"text": "hello", "label": "non_health", "group": "chatter"}
+{"text": "hi", "label": "non_health", "group": "chatter"}
+{"text": "hey", "label": "non_health", "group": "chatter"}
+{"text": "good morning", "label": "non_health", "group": "chatter"}
+{"text": "namaste", "label": "non_health", "group": "chatter"}
+{"text": "thanks", "label": "non_health", "group": "chatter"}
+{"text": "thank you so much", "label": "non_health", "group": "chatter"}
+{"text": "ok", "label": "non_health", "group": "chatter"}
+{"text": "okay", "label": "non_health", "group": "chatter"}
+{"text": "bye", "label": "non_health", "group": "chatter"}
+{"text": "kya haal hai", "label": "non_health", "group": "chatter"}
+{"text": "what's the weather", "label": "non_health", "group": "chatter"}
+{"text": "who are you", "label": "non_health", "group": "chatter"}
+{"text": "tell me a joke", "label": "non_health", "group": "chatter"}
+{"text": "what is the capital of France", "label": "non_health", "group": "chatter"}
+{"text": "how do I cook rice", "label": "non_health", "group": "chatter"}
+{"text": "cricket score kya hai", "label": "non_health", "group": "chatter"}
+{"text": "india vs australia", "label": "non_health", "group": "chatter"}
+{"text": "book a flight to goa", "label": "non_health", "group": "chatter"}
+{"text": "recommend a movie", "label": "non_health", "group": "chatter"}
+{"text": "what time is it", "label": "non_health", "group": "chatter"}
+{"text": "mera naam aryan hai", "label": "non_health", "group": "chatter"}
+{"text": "who made you", "label": "non_health", "group": "chatter"}
+{"text": "are you a bot", "label": "non_health", "group": "chatter"}
+{"text": "can you speak hindi", "label": "non_health", "group": "chatter"}
+{"text": "kaise ho", "label": "non_health", "group": "chatter"}
+{"text": "how are you", "label": "non_health", "group": "chatter"}
+{"text": "nice", "label": "non_health", "group": "chatter"}
+{"text": "great", "label": "non_health", "group": "chatter"}
+{"text": "lol", "label": "non_health", "group": "chatter"}
+{"text": "hmm", "label": "non_health", "group": "chatter"}
+{"text": "sahi hai", "label": "non_health", "group": "chatter"}
+{"text": "theek hai", "label": "non_health", "group": "chatter"}
+{"text": "how to invest in stocks", "label": "non_health", "group": "chatter"}
+{"text": "bitcoin price", "label": "non_health", "group": "chatter"}
+{"text": "write a poem", "label": "non_health", "group": "chatter"}
+{"text": "translate this to french", "label": "non_health", "group": "chatter"}
+{"text": "help me with my homework", "label": "non_health", "group": "chatter"}
+{"text": "mujhe pizza chahiye", "label": "non_health", "group": "chatter"}
+{"text": "weather kaisa hai", "label": "non_health", "group": "chatter"}
+{"text": "gaana sunao", "label": "non_health", "group": "chatter"}
+{"text": "tell me about delhi", "label": "non_health", "group": "chatter"}
+{"text": "what is machine learning", "label": "non_health", "group": "chatter"}
+{"text": "kitne baje hain", "label": "non_health", "group": "chatter"}
+{"text": "mera phone kharab hai", "label": "non_health", "group": "chatter"}
+{"text": "wifi nahi chal raha", "label": "non_health", "group": "chatter"}
+{"text": "traffic bahut hai", "label": "non_health", "group": "chatter"}
+{"text": "how much does a taxi cost", "label": "non_health", "group": "chatter"}
+{"text": "good night", "label": "non_health", "group": "chatter"}
+{"text": "see you", "label": "non_health", "group": "chatter"}
+{"text": "nothing", "label": "non_health", "group": "chatter"}
+{"text": "yes", "label": "non_health", "group": "chatter"}
+{"text": "no", "label": "non_health", "group": "chatter"}
+{"text": "maybe", "label": "non_health", "group": "chatter"}
+{"text": "kuch nahi", "label": "non_health", "group": "chatter"}
+{"text": "aaj holi hai", "label": "non_health", "group": "chatter"}
+{"text": "diwali kab hai", "label": "non_health", "group": "chatter"}
+{"text": "new year wishes", "label": "non_health", "group": "chatter"}
+{"text": "who won the match", "label": "non_health", "group": "chatter"}
+{"text": "open the website", "label": "non_health", "group": "chatter"}
+{"text": "send an email", "label": "non_health", "group": "chatter"}
+{"text": "what is your name", "label": "non_health", "group": "chatter"}
+{"text": "kya kar sakte ho", "label": "non_health", "group": "chatter"}
+{"text": "what can you do", "label": "non_health", "group": "chatter"}
+{"text": "namaskar", "label": "non_health", "group": "chatter"}
+{"text": "hii", "label": "non_health", "group": "chatter"}
+{"text": "heyy", "label": "non_health", "group": "chatter"}
+{"text": "sup", "label": "non_health", "group": "chatter"}
+{"text": "thx", "label": "non_health", "group": "chatter"}
+{"text": "cool", "label": "non_health", "group": "chatter"}
+{"text": "wow", "label": "non_health", "group": "chatter"}
+{"text": "haha", "label": "non_health", "group": "chatter"}
+{"text": "accha", "label": "non_health", "group": "chatter"}
+{"text": "pata nahi", "label": "non_health", "group": "chatter"}
+{"text": "mujhe ghutne ka operation karwana hai", "label": "health", "group": "heldout_condition"}
+{"text": "dada ji ko parkinson hai", "label": "health", "group": "heldout_condition"}
+{"text": "baby ko jaundice hai", "label": "health", "group": "heldout_condition"}
+{"text": "meri sister ko leukemia hai", "label": "health", "group": "heldout_condition"}
+{"text": "uncle ko liver cirrhosis hai", "label": "health", "group": "heldout_condition"}
+{"text": "bhabhi ko cesarean ke baad care chahiye", "label": "health", "group": "heldout_condition"}
+{"text": "papa ka angioplasty hua tha", "label": "health", "group": "heldout_condition"}
+{"text": "nana ko bedsore ho gaye", "label": "health", "group": "heldout_condition"}
+{"text": "mujhe sleep apnea hai", "label": "health", "group": "heldout_condition"}
+{"text": "meri beti ko autism hai", "label": "health", "group": "heldout_condition"}
+{"text": "dost ko bipolar hai", "label": "health", "group": "heldout_condition"}
+{"text": "kya main ghar par chemotherapy kara sakta hu", "label": "health", "group": "heldout_condition"}
+{"text": "ayurvedic ilaj chahiye diabetes ke liye", "label": "health", "group": "heldout_condition"}
+{"text": "Mom has Alzheimer's", "label": "health", "group": "heldout_condition"}
+{"text": "I was diagnosed with lupus", "label": "health", "group": "heldout_condition"}
+{"text": "my son has ADHD", "label": "health", "group": "heldout_condition"}
+{"text": "gallbladder stone operation", "label": "health", "group": "heldout_condition"}
+{"text": "mujhe cataract ka operation karwana hai", "label": "health", "group": "heldout_condition"}
+{"text": "mera bhai nashe ki lat se pareshan hai", "label": "health", "group": "heldout_condition"}
+{"text": "dadi ko stroke ke baad physiotherapy chahiye", "label": "health", "group": "heldout_condition"}
+{"text": "uncle ko heart ka operation hua hai, ghar par nurse chahiye", "label": "health", "group": "heldout_condition"}
+{"text": "I have stage 3 breast cancer", "label": "health", "group": "heldout_condition"}
+{"text": "pita ji ko prostate ki dikkat hai", "label": "health", "group": "heldout_condition"}
+{"text": "meri wife ko PCOD hai", "label": "health", "group": "heldout_condition"}
+{"text": "bachche ko autism ki therapy chahiye", "label": "health", "group": "heldout_condition"}
+{"text": "mujhe bahut tension rehti hai aur neend nahi aati", "label": "health", "group": "heldout_condition"}
+{"text": "my mother is bedridden", "label": "health", "group": "heldout_condition"}
+{"text": "patient ko ryles tube lagi hai", "label": "health", "group": "heldout_condition"}
+{"text": "need oxygen cylinder for papa", "label": "health", "group": "heldout_condition"}
+{"text": "insulin injection lagane wala chahiye", "label": "health", "group": "heldout_condition"}
+{"text": "sugar 450 aa gayi", "label": "health", "group": "heldout_condition"}
+{"text": "mere platelets gir gaye hain", "label": "health", "group": "heldout_condition"}
+{"text": "HbA1c high aaya hai", "label": "health", "group": "heldout_condition"}
+{"text": "cholesterol badha hua hai", "label": "health", "group": "heldout_condition"}
+{"text": "uric acid high hai", "label": "health", "group": "heldout_condition"}
+{"text": "TSH report dikhani hai doctor ko", "label": "health", "group": "heldout_condition"}
+{"text": "main apna business band kar raha hu", "label": "non_health", "group": "hard_negative"}
+{"text": "the doctor strange movie was great", "label": "non_health", "group": "hard_negative"}
+{"text": "dr. strange ka trailer", "label": "non_health", "group": "hard_negative"}
+{"text": "kidney bean recipe", "label": "non_health", "group": "hard_negative"}
+{"text": "heart emoji kaise banaye", "label": "non_health", "group": "hard_negative"}
+{"text": "cancer zodiac sign today", "label": "non_health", "group": "hard_negative"}
+{"text": "cancer rashi ka horoscope", "label": "non_health", "group": "hard_negative"}
+{"text": "aids for studying maths", "label": "non_health", "group": "hard_negative"}
+{"text": "stress test of the server", "label": "non_health", "group": "hard_negative"}
+{"text": "my laptop has a virus", "label": "non_health", "group": "hard_negative"}
+{"text": "computer virus remove kaise kare", "label": "non_health", "group": "hard_negative"}
+{"text": "python code has a bug", "label": "non_health", "group": "hard_negative"}
+{"text": "mera exam kal hai", "label": "non_health", "group": "hard_negative"}
+{"text": "bank loan ka interest rate", "label": "non_health", "group": "hard_negative"}
+{"text": "gold price today", "label": "non_health", "group": "hard_negative"}
+{"text": "bus kab aayegi", "label": "non_health", "group": "hard_negative"}
+{"text": "train ticket book karo", "label": "non_health", "group": "hard_negative"}
+{"text": "hospital management system project ideas", "label": "non_health", "group": "hard_negative"}
+{"text": "build a clinic website", "label": "non_health", "group": "hard_negative"}
+{"text": "doctor appointment app ka UI design", "label": "non_health", "group": "hard_negative"}
+{"text": "medical store ka logo banao", "label": "non_health", "group": "hard_negative"}

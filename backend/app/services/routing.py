@@ -6,6 +6,8 @@ by implementing the same interface and setting ROUTER_BACKEND.
 """
 from __future__ import annotations
 
+import math
+
 from typing import Protocol
 
 from ..config import URGENCY_BY_CARE_TYPE, get_settings
@@ -51,7 +53,44 @@ class RuleRouter:
         if symptoms or ("consult" in present and home):
             # BP/sugar check and general complaints -> Medic visit
             return RouteDecision("paramedic_home_visit", 0.75 if home else 0.65, sorted(symptoms), self.name)
+        if "named_condition" in present:
+            # a known condition with no symptom, procedure or request named: a doctor consultation is the safe, routine default
+            return RouteDecision("teleconsultation", 0.6, ["named_condition"], self.name)
         return RouteDecision(None, 0.0, [], self.name)
+
+
+class TrainedRouter:
+    """Classifier slot, trained: explicit rule evidence (procedure / lab / consult words) first, the e5 head for everything else.
+
+    The e5 head never returns emergency_112 by itself (its argmax over-triages 4 of 57 non-emergencies); it only hands an
+    emergency score to the graph, which turns a high score into a danger-sign question or, very high, the 112 path."""
+
+    name = "trained"
+
+    def __init__(self, models, fallback: Router | None = None):
+        self.models, self.rules = models, fallback or RuleRouter()
+
+    def predict(self, facts: CaseFacts) -> RouteDecision:
+        text = facts.text_norm or facts.latest_input
+        whole = facts.safety_text_norm or text
+        es = self.models.emergency_score(facts.latest_input or text, whole)
+        rd = self.rules.predict(facts)
+        if rd.care_type and rd.confidence >= 0.75:
+            rd.emergency_score, rd.source = es, "rules+encoder"
+            return rd
+        sc = self.models.scores(text)
+        ranked = sorted(((p, c) for c, p in sc.probs.items() if c != "emergency_112"), reverse=True)
+        p, c = ranked[0]
+        care = None if c == "ask_followup" else c
+        ev = [f"e5 head {c}={p:.2f}", f"emergency score {es:.2f}"]
+        # runner-up among real care types (same definition as scripts/calibrate_ambiguity.py)
+        real = [(q, k) for q, k in ranked if k != "ask_followup"]
+        runner = margin = None
+        if care and len(real) >= 2 and real[1][0] > 0:
+            runner, margin = real[1][1], math.log(real[0][0] / real[1][0])
+        if rd.care_type and care and rd.care_type != care:
+            return RouteDecision(rd.care_type, rd.confidence, rd.evidence + ev, "rules+encoder", emergency_score=es)
+        return RouteDecision(care, p, ev, "encoder", emergency_score=es, runner_up=runner, margin=margin)
 
 
 class _NotImplementedRouter:
@@ -72,4 +111,9 @@ def build_router(name: str | None = None) -> Router:
     name = name or get_settings().router_backend
     if name in ("rules", "auto"):  # "auto" kept for older .env files
         return RuleRouter()
+    if name == "trained":
+        from .encoder_models import EncoderModels
+
+        models = EncoderModels.maybe(get_settings().encoder_path)
+        return TrainedRouter(models) if models else RuleRouter()
     return _NotImplementedRouter(name)

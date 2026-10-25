@@ -1,0 +1,1399 @@
+{
+"source": "Tulsiandhare/Multilingual_medical_symptom_triage",
+"lift_min": 1.6,
+"df_min": 15,
+"tokens": {
+"chills": {
+"df": 22,
+"lift": 9.64,
+"disease": "Malaria",
+"lang": "english"
+},
+"cough": {
+"df": 43,
+"lift": 4.41,
+"disease": "Influenza",
+"lang": "english"
+},
+"dry": {
+"df": 19,
+"lift": 8.34,
+"disease": "COVID-19",
+"lang": "english"
+},
+"fever": {
+"df": 91,
+"lift": 2.46,
+"disease": "Dengue",
+"lang": "english"
+},
+"headache": {
+"df": 60,
+"lift": 5.36,
+"disease": "Dengue",
+"lang": "english"
+},
+"high": {
+"df": 25,
+"lift": 8.94,
+"disease": "Dengue",
+"lang": "english"
+},
+"joint": {
+"df": 42,
+"lift": 8.94,
+"disease": "Dengue",
+"lang": "english"
+},
+"loss": {
+"df": 19,
+"lift": 8.34,
+"disease": "COVID-19",
+"lang": "english"
+},
+"pain": {
+"df": 71,
+"lift": 5.79,
+"disease": "Dengue",
+"lang": "english"
+},
+"sweating": {
+"df": 22,
+"lift": 9.64,
+"disease": "Malaria",
+"lang": "english"
+},
+"taste": {
+"df": 19,
+"lift": 8.34,
+"disease": "COVID-19",
+"lang": "english"
+},
+"wheezing": {
+"df": 21,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "english"
+},
+"अंगदुखी": {
+"df": 21,
+"lift": 15.81,
+"disease": "Influenza",
+"lang": "devanagari"
+},
+"अडचण": {
+"df": 17,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "devanagari"
+},
+"अशक्तपणा": {
+"df": 21,
+"lift": 15.68,
+"disease": "Typhoid",
+"lang": "devanagari"
+},
+"अस्पष्ट": {
+"df": 28,
+"lift": 6.12,
+"disease": "Hypertension",
+"lang": "devanagari"
+},
+"आवाज": {
+"df": 79,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "devanagari"
+},
+"आहेत": {
+"df": 84,
+"lift": 1.95,
+"disease": "Malaria",
+"lang": "devanagari"
+},
+"कापणे": {
+"df": 41,
+"lift": 9.64,
+"disease": "Malaria",
+"lang": "devanagari"
+},
+"कोरडा": {
+"df": 72,
+"lift": 8.34,
+"disease": "COVID-19",
+"lang": "devanagari"
+},
+"खोकला": {
+"df": 142,
+"lift": 5.34,
+"disease": "Common Cold",
+"lang": "devanagari"
+},
+"घट्टपणा": {
+"df": 64,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "devanagari"
+},
+"घाम": {
+"df": 71,
+"lift": 9.64,
+"disease": "Malaria",
+"lang": "devanagari"
+},
+"घुटघुट": {
+"df": 20,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "devanagari"
+},
+"घेण्यास": {
+"df": 114,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "devanagari"
+},
+"चक्कर": {
+"df": 96,
+"lift": 6.12,
+"disease": "Hypertension",
+"lang": "devanagari"
+},
+"चवीचा": {
+"df": 24,
+"lift": 8.34,
+"disease": "COVID-19",
+"lang": "devanagari"
+},
+"छातीत": {
+"df": 113,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "devanagari"
+},
+"जाणवत": {
+"df": 152,
+"lift": 3.03,
+"disease": "Asthma",
+"lang": "devanagari"
+},
+"डोकदुखी": {
+"df": 20,
+"lift": 4.92,
+"disease": "Dengue",
+"lang": "devanagari"
+},
+"डोकेदुखी": {
+"df": 125,
+"lift": 3.33,
+"disease": "Hypertension",
+"lang": "devanagari"
+},
+"डोकेदुखीसोबत": {
+"df": 21,
+"lift": 4.95,
+"disease": "Hypertension",
+"lang": "devanagari"
+},
+"तहान": {
+"df": 17,
+"lift": 15.94,
+"disease": "Diabetes",
+"lang": "devanagari"
+},
+"ताण": {
+"df": 26,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "devanagari"
+},
+"ताप": {
+"df": 222,
+"lift": 2.87,
+"disease": "Malaria",
+"lang": "devanagari"
+},
+"त्यासोबत": {
+"df": 24,
+"lift": 4.18,
+"disease": "Asthma",
+"lang": "devanagari"
+},
+"त्रास": {
+"df": 173,
+"lift": 3.31,
+"disease": "Asthma",
+"lang": "devanagari"
+},
+"थंडी": {
+"df": 26,
+"lift": 9.64,
+"disease": "Malaria",
+"lang": "devanagari"
+},
+"थकवा": {
+"df": 21,
+"lift": 15.94,
+"disease": "Diabetes",
+"lang": "devanagari"
+},
+"थरथर": {
+"df": 43,
+"lift": 9.64,
+"disease": "Malaria",
+"lang": "devanagari"
+},
+"दिसणे": {
+"df": 58,
+"lift": 6.12,
+"disease": "Hypertension",
+"lang": "devanagari"
+},
+"दुखणे": {
+"df": 30,
+"lift": 14.11,
+"disease": "Typhoid",
+"lang": "devanagari"
+},
+"दृष्टी": {
+"df": 37,
+"lift": 6.12,
+"disease": "Hypertension",
+"lang": "devanagari"
+},
+"दोन": {
+"df": 71,
+"lift": 1.7,
+"disease": "Migraine",
+"lang": "devanagari"
+},
+"धुंद": {
+"df": 15,
+"lift": 6.12,
+"disease": "Hypertension",
+"lang": "devanagari"
+},
+"धुसर": {
+"df": 19,
+"lift": 6.12,
+"disease": "Hypertension",
+"lang": "devanagari"
+},
+"धूसर": {
+"df": 26,
+"lift": 6.12,
+"disease": "Hypertension",
+"lang": "devanagari"
+},
+"नाक": {
+"df": 29,
+"lift": 14.86,
+"disease": "Common Cold",
+"lang": "devanagari"
+},
+"नाकातून": {
+"df": 28,
+"lift": 14.86,
+"disease": "Common Cold",
+"lang": "devanagari"
+},
+"पाणी": {
+"df": 28,
+"lift": 14.86,
+"disease": "Common Cold",
+"lang": "devanagari"
+},
+"पोटात": {
+"df": 29,
+"lift": 15.68,
+"disease": "Typhoid",
+"lang": "devanagari"
+},
+"प्रकाश": {
+"df": 22,
+"lift": 13.44,
+"disease": "Migraine",
+"lang": "devanagari"
+},
+"मला": {
+"df": 348,
+"lift": 1.79,
+"disease": "Common Cold",
+"lang": "devanagari"
+},
+"मळमळ": {
+"df": 35,
+"lift": 13.44,
+"disease": "Migraine",
+"lang": "devanagari"
+},
+"यांचा": {
+"df": 26,
+"lift": 5.71,
+"disease": "Common Cold",
+"lang": "devanagari"
+},
+"येणे": {
+"df": 212,
+"lift": 2.68,
+"disease": "Hypertension",
+"lang": "devanagari"
+},
+"येत": {
+"df": 124,
+"lift": 2.95,
+"disease": "Asthma",
+"lang": "devanagari"
+},
+"लघवी": {
+"df": 21,
+"lift": 15.94,
+"disease": "Diabetes",
+"lang": "devanagari"
+},
+"लागणे": {
+"df": 23,
+"lift": 8.34,
+"disease": "COVID-19",
+"lang": "devanagari"
+},
+"वाजून": {
+"df": 18,
+"lift": 9.64,
+"disease": "Malaria",
+"lang": "devanagari"
+},
+"वारंवार": {
+"df": 21,
+"lift": 15.94,
+"disease": "Diabetes",
+"lang": "devanagari"
+},
+"वाहणे": {
+"df": 40,
+"lift": 14.86,
+"disease": "Common Cold",
+"lang": "devanagari"
+},
+"व्हिझिंग": {
+"df": 15,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "devanagari"
+},
+"शिंक": {
+"df": 29,
+"lift": 14.86,
+"disease": "Common Cold",
+"lang": "devanagari"
+},
+"शिट्टी": {
+"df": 17,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "devanagari"
+},
+"शिट्टीसारखा": {
+"df": 17,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "devanagari"
+},
+"श्वास": {
+"df": 114,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "devanagari"
+},
+"श्वासात": {
+"df": 40,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "devanagari"
+},
+"श्वासोच्छ्वासात": {
+"df": 23,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "devanagari"
+},
+"संवेदनशीलता": {
+"df": 29,
+"lift": 13.44,
+"disease": "Migraine",
+"lang": "devanagari"
+},
+"समस्या": {
+"df": 23,
+"lift": 2.39,
+"disease": "Hypertension",
+"lang": "devanagari"
+},
+"सांधेदुखी": {
+"df": 49,
+"lift": 8.94,
+"disease": "Dengue",
+"lang": "devanagari"
+},
+"होत": {
+"df": 265,
+"lift": 1.94,
+"disease": "Asthma",
+"lang": "devanagari"
+},
+"অনুভব": {
+"df": 77,
+"lift": 3.14,
+"disease": "Asthma",
+"lang": "bengali"
+},
+"অনুভূতি": {
+"df": 40,
+"lift": 7.5,
+"disease": "COVID-19",
+"lang": "bengali"
+},
+"আমার": {
+"df": 223,
+"lift": 1.96,
+"disease": "Dengue",
+"lang": "bengali"
+},
+"আমি": {
+"df": 63,
+"lift": 2.53,
+"disease": "Diabetes",
+"lang": "bengali"
+},
+"আলোর": {
+"df": 27,
+"lift": 13.44,
+"disease": "Migraine",
+"lang": "bengali"
+},
+"উচ্চ": {
+"df": 48,
+"lift": 8.94,
+"disease": "Dengue",
+"lang": "bengali"
+},
+"এবং": {
+"df": 406,
+"lift": 2.07,
+"disease": "Dengue",
+"lang": "bengali"
+},
+"কাঁপুনি": {
+"df": 20,
+"lift": 9.64,
+"disease": "Malaria",
+"lang": "bengali"
+},
+"কাশি": {
+"df": 93,
+"lift": 5.83,
+"disease": "COVID-19",
+"lang": "bengali"
+},
+"ক্লান্তি": {
+"df": 35,
+"lift": 15.94,
+"disease": "Diabetes",
+"lang": "bengali"
+},
+"গতকাল": {
+"df": 93,
+"lift": 1.73,
+"disease": "Dengue",
+"lang": "bengali"
+},
+"ঘনঘন": {
+"df": 20,
+"lift": 15.14,
+"disease": "Diabetes",
+"lang": "bengali"
+},
+"ঘাম": {
+"df": 17,
+"lift": 9.64,
+"disease": "Malaria",
+"lang": "bengali"
+},
+"ঘোরা": {
+"df": 30,
+"lift": 6.12,
+"disease": "Hypertension",
+"lang": "bengali"
+},
+"চাপ": {
+"df": 54,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "bengali"
+},
+"জoints": {
+"df": 21,
+"lift": 8.94,
+"disease": "Dengue",
+"lang": "bengali"
+},
+"জ্বর": {
+"df": 190,
+"lift": 3.53,
+"disease": "Dengue",
+"lang": "bengali"
+},
+"জ্বরের": {
+"df": 38,
+"lift": 4.0,
+"disease": "Dengue",
+"lang": "bengali"
+},
+"ঝাপসা": {
+"df": 33,
+"lift": 6.12,
+"disease": "Hypertension",
+"lang": "bengali"
+},
+"তৃষ্ণা": {
+"df": 31,
+"lift": 15.94,
+"disease": "Diabetes",
+"lang": "bengali"
+},
+"থেকে": {
+"df": 154,
+"lift": 1.66,
+"disease": "Diabetes",
+"lang": "bengali"
+},
+"দিন": {
+"df": 112,
+"lift": 1.84,
+"disease": "Dengue",
+"lang": "bengali"
+},
+"দুই": {
+"df": 69,
+"lift": 1.95,
+"disease": "Migraine",
+"lang": "bengali"
+},
+"দুর্বলতা": {
+"df": 21,
+"lift": 15.68,
+"disease": "Typhoid",
+"lang": "bengali"
+},
+"ধরে": {
+"df": 56,
+"lift": 2.24,
+"disease": "Dengue",
+"lang": "bengali"
+},
+"পেটে": {
+"df": 26,
+"lift": 15.68,
+"disease": "Typhoid",
+"lang": "bengali"
+},
+"প্রতি": {
+"df": 27,
+"lift": 13.44,
+"disease": "Migraine",
+"lang": "bengali"
+},
+"প্রধান": {
+"df": 32,
+"lift": 2.51,
+"disease": "Dengue",
+"lang": "bengali"
+},
+"প্রস্রাব": {
+"df": 24,
+"lift": 15.94,
+"disease": "Diabetes",
+"lang": "bengali"
+},
+"বমি": {
+"df": 36,
+"lift": 13.44,
+"disease": "Migraine",
+"lang": "bengali"
+},
+"বুকে": {
+"df": 54,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "bengali"
+},
+"ব্যথা": {
+"df": 115,
+"lift": 4.98,
+"disease": "Dengue",
+"lang": "bengali"
+},
+"ভাব": {
+"df": 36,
+"lift": 13.44,
+"disease": "Migraine",
+"lang": "bengali"
+},
+"ভুগছি": {
+"df": 32,
+"lift": 3.07,
+"disease": "Dengue",
+"lang": "bengali"
+},
+"মাথা": {
+"df": 31,
+"lift": 5.92,
+"disease": "Hypertension",
+"lang": "bengali"
+},
+"মাথাব্যথা": {
+"df": 108,
+"lift": 4.11,
+"disease": "Migraine",
+"lang": "bengali"
+},
+"রয়েছে": {
+"df": 38,
+"lift": 2.83,
+"disease": "Migraine",
+"lang": "bengali"
+},
+"লক্ষণগুলো": {
+"df": 31,
+"lift": 2.6,
+"disease": "Dengue",
+"lang": "bengali"
+},
+"শব্দ": {
+"df": 28,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "bengali"
+},
+"শরীর": {
+"df": 16,
+"lift": 13.83,
+"disease": "Influenza",
+"lang": "bengali"
+},
+"শরীরে": {
+"df": 16,
+"lift": 10.87,
+"disease": "Influenza",
+"lang": "bengali"
+},
+"শুকনো": {
+"df": 65,
+"lift": 8.34,
+"disease": "COVID-19",
+"lang": "bengali"
+},
+"শ্বাসকষ্ট": {
+"df": 49,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "bengali"
+},
+"শ্বাসনালিতে": {
+"df": 20,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "bengali"
+},
+"সংবেদনশীলতা": {
+"df": 29,
+"lift": 13.44,
+"disease": "Migraine",
+"lang": "bengali"
+},
+"সাথে": {
+"df": 75,
+"lift": 2.5,
+"disease": "Dengue",
+"lang": "bengali"
+},
+"স্বাদ": {
+"df": 19,
+"lift": 8.34,
+"disease": "COVID-19",
+"lang": "bengali"
+},
+"স্বাদের": {
+"df": 33,
+"lift": 8.34,
+"disease": "COVID-19",
+"lang": "bengali"
+},
+"হচ্ছে": {
+"df": 225,
+"lift": 2.19,
+"disease": "Dengue",
+"lang": "bengali"
+},
+"হলো": {
+"df": 32,
+"lift": 2.51,
+"disease": "Dengue",
+"lang": "bengali"
+},
+"হুইজিং": {
+"df": 26,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "bengali"
+},
+"અનુભવાઈ": {
+"df": 24,
+"lift": 4.18,
+"disease": "Asthma",
+"lang": "gujarati"
+},
+"અનુભૂતિ": {
+"df": 44,
+"lift": 5.87,
+"disease": "COVID-19",
+"lang": "gujarati"
+},
+"અવાજ": {
+"df": 40,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "gujarati"
+},
+"આવવા": {
+"df": 39,
+"lift": 6.12,
+"disease": "Hypertension",
+"lang": "gujarati"
+},
+"આવવાની": {
+"df": 50,
+"lift": 7.01,
+"disease": "Diabetes",
+"lang": "gujarati"
+},
+"આવવી": {
+"df": 18,
+"lift": 12.38,
+"disease": "Common Cold",
+"lang": "gujarati"
+},
+"ઉધરસ": {
+"df": 25,
+"lift": 8.91,
+"disease": "Common Cold",
+"lang": "gujarati"
+},
+"ઉલટી": {
+"df": 20,
+"lift": 13.44,
+"disease": "Migraine",
+"lang": "gujarati"
+},
+"ખાંસી": {
+"df": 87,
+"lift": 5.27,
+"disease": "COVID-19",
+"lang": "gujarati"
+},
+"ગઈકાલથી": {
+"df": 72,
+"lift": 1.86,
+"disease": "Common Cold",
+"lang": "gujarati"
+},
+"ચક્કર": {
+"df": 71,
+"lift": 6.12,
+"disease": "Hypertension",
+"lang": "gujarati"
+},
+"છાતીમાં": {
+"df": 88,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "gujarati"
+},
+"છીંક": {
+"df": 36,
+"lift": 14.86,
+"disease": "Common Cold",
+"lang": "gujarati"
+},
+"છેલ્લા": {
+"df": 118,
+"lift": 1.63,
+"disease": "Malaria",
+"lang": "gujarati"
+},
+"જકડાઈ": {
+"df": 71,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "gujarati"
+},
+"જેવું": {
+"df": 25,
+"lift": 13.44,
+"disease": "Migraine",
+"lang": "gujarati"
+},
+"ઠંડી": {
+"df": 57,
+"lift": 9.64,
+"disease": "Malaria",
+"lang": "gujarati"
+},
+"તકલીફ": {
+"df": 156,
+"lift": 3.29,
+"disease": "Asthma",
+"lang": "gujarati"
+},
+"તરસ": {
+"df": 30,
+"lift": 15.94,
+"disease": "Diabetes",
+"lang": "gujarati"
+},
+"તાવ": {
+"df": 208,
+"lift": 2.87,
+"disease": "Typhoid",
+"lang": "gujarati"
+},
+"થવાની": {
+"df": 22,
+"lift": 4.38,
+"disease": "Malaria",
+"lang": "gujarati"
+},
+"થવો": {
+"df": 26,
+"lift": 9.64,
+"disease": "Malaria",
+"lang": "gujarati"
+},
+"થાક": {
+"df": 30,
+"lift": 15.94,
+"disease": "Diabetes",
+"lang": "gujarati"
+},
+"દિવસથી": {
+"df": 119,
+"lift": 1.62,
+"disease": "Malaria",
+"lang": "gujarati"
+},
+"દુખાવો": {
+"df": 195,
+"lift": 2.98,
+"disease": "Typhoid",
+"lang": "gujarati"
+},
+"દેખાવાની": {
+"df": 34,
+"lift": 6.12,
+"disease": "Hypertension",
+"lang": "gujarati"
+},
+"દેખાવું": {
+"df": 21,
+"lift": 6.12,
+"disease": "Hypertension",
+"lang": "gujarati"
+},
+"ધુંધળું": {
+"df": 52,
+"lift": 6.12,
+"disease": "Hypertension",
+"lang": "gujarati"
+},
+"નબળાઈ": {
+"df": 30,
+"lift": 15.68,
+"disease": "Typhoid",
+"lang": "gujarati"
+},
+"નાકમાંથી": {
+"df": 37,
+"lift": 14.86,
+"disease": "Common Cold",
+"lang": "gujarati"
+},
+"પરસેવો": {
+"df": 37,
+"lift": 9.64,
+"disease": "Malaria",
+"lang": "gujarati"
+},
+"પસીનો": {
+"df": 20,
+"lift": 9.64,
+"disease": "Malaria",
+"lang": "gujarati"
+},
+"પાણી": {
+"df": 37,
+"lift": 14.86,
+"disease": "Common Cold",
+"lang": "gujarati"
+},
+"પેટમાં": {
+"df": 31,
+"lift": 15.68,
+"disease": "Typhoid",
+"lang": "gujarati"
+},
+"પેશાબ": {
+"df": 29,
+"lift": 15.94,
+"disease": "Diabetes",
+"lang": "gujarati"
+},
+"પ્રકાશ": {
+"df": 30,
+"lift": 13.44,
+"disease": "Migraine",
+"lang": "gujarati"
+},
+"પ્રત્યે": {
+"df": 30,
+"lift": 13.44,
+"disease": "Migraine",
+"lang": "gujarati"
+},
+"માથાનો": {
+"df": 127,
+"lift": 3.23,
+"disease": "Hypertension",
+"lang": "gujarati"
+},
+"રહી": {
+"df": 138,
+"lift": 2.05,
+"disease": "Typhoid",
+"lang": "gujarati"
+},
+"રહ્યું": {
+"df": 33,
+"lift": 2.63,
+"disease": "Malaria",
+"lang": "gujarati"
+},
+"રહ્યો": {
+"df": 37,
+"lift": 3.62,
+"disease": "Dengue",
+"lang": "gujarati"
+},
+"લાગવી": {
+"df": 42,
+"lift": 9.64,
+"disease": "Malaria",
+"lang": "gujarati"
+},
+"લાગવું": {
+"df": 22,
+"lift": 12.83,
+"disease": "Migraine",
+"lang": "gujarati"
+},
+"લેવામાં": {
+"df": 88,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "gujarati"
+},
+"વહેવું": {
+"df": 33,
+"lift": 14.86,
+"disease": "Common Cold",
+"lang": "gujarati"
+},
+"વારંવાર": {
+"df": 30,
+"lift": 15.94,
+"disease": "Diabetes",
+"lang": "gujarati"
+},
+"વ્હીઝિંગ": {
+"df": 36,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "gujarati"
+},
+"શરીરમાં": {
+"df": 29,
+"lift": 15.81,
+"disease": "Influenza",
+"lang": "gujarati"
+},
+"શ્વાસ": {
+"df": 88,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "gujarati"
+},
+"શ્વાસમાંથી": {
+"df": 26,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "gujarati"
+},
+"સંવેદનશીલતા": {
+"df": 26,
+"lift": 13.44,
+"disease": "Migraine",
+"lang": "gujarati"
+},
+"સમસ્યા": {
+"df": 75,
+"lift": 2.55,
+"disease": "Diabetes",
+"lang": "gujarati"
+},
+"સાંધાનો": {
+"df": 26,
+"lift": 8.94,
+"disease": "Dengue",
+"lang": "gujarati"
+},
+"સીટીનો": {
+"df": 24,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "gujarati"
+},
+"સૂકી": {
+"df": 55,
+"lift": 8.34,
+"disease": "COVID-19",
+"lang": "gujarati"
+},
+"સ્વાદની": {
+"df": 44,
+"lift": 8.34,
+"disease": "COVID-19",
+"lang": "gujarati"
+},
+"అధిక": {
+"df": 21,
+"lift": 8.94,
+"disease": "Dengue",
+"lang": "telugu"
+},
+"అలసట": {
+"df": 26,
+"lift": 15.94,
+"disease": "Diabetes",
+"lang": "telugu"
+},
+"అస్పష్టమైన": {
+"df": 19,
+"lift": 6.12,
+"disease": "Hypertension",
+"lang": "telugu"
+},
+"ఇబ్బంది": {
+"df": 62,
+"lift": 5.42,
+"disease": "Asthma",
+"lang": "telugu"
+},
+"ఉండటం": {
+"df": 44,
+"lift": 5.09,
+"disease": "Asthma",
+"lang": "telugu"
+},
+"ఉంది": {
+"df": 68,
+"lift": 2.34,
+"disease": "Hypertension",
+"lang": "telugu"
+},
+"ఉన్నాయి": {
+"df": 95,
+"lift": 2.0,
+"disease": "Influenza",
+"lang": "telugu"
+},
+"ఊపిరి": {
+"df": 23,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "telugu"
+},
+"కడుపు": {
+"df": 19,
+"lift": 15.68,
+"disease": "Typhoid",
+"lang": "telugu"
+},
+"కనిపించడం": {
+"df": 40,
+"lift": 6.12,
+"disease": "Hypertension",
+"lang": "telugu"
+},
+"కాంతి": {
+"df": 24,
+"lift": 13.44,
+"disease": "Migraine",
+"lang": "telugu"
+},
+"కీళ్ల": {
+"df": 27,
+"lift": 8.94,
+"disease": "Dengue",
+"lang": "telugu"
+},
+"కూడా": {
+"df": 50,
+"lift": 1.84,
+"disease": "Hypertension",
+"lang": "telugu"
+},
+"కోల్పోవడం": {
+"df": 20,
+"lift": 8.34,
+"disease": "COVID-19",
+"lang": "telugu"
+},
+"చక్కిలిగింత": {
+"df": 23,
+"lift": 6.12,
+"disease": "Hypertension",
+"lang": "telugu"
+},
+"చక్కెర": {
+"df": 38,
+"lift": 6.12,
+"disease": "Hypertension",
+"lang": "telugu"
+},
+"చెమట": {
+"df": 15,
+"lift": 9.64,
+"disease": "Malaria",
+"lang": "telugu"
+},
+"చెమటలు": {
+"df": 16,
+"lift": 9.64,
+"disease": "Malaria",
+"lang": "telugu"
+},
+"ఛాతీ": {
+"df": 66,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "telugu"
+},
+"జరుగుతోంది": {
+"df": 48,
+"lift": 3.31,
+"disease": "Hypertension",
+"lang": "telugu"
+},
+"జ్వరం": {
+"df": 105,
+"lift": 3.46,
+"disease": "Influenza",
+"lang": "telugu"
+},
+"జ్వరంతో": {
+"df": 30,
+"lift": 4.18,
+"disease": "Malaria",
+"lang": "telugu"
+},
+"తరచుగా": {
+"df": 26,
+"lift": 15.94,
+"disease": "Diabetes",
+"lang": "telugu"
+},
+"తలనొప్పి": {
+"df": 123,
+"lift": 4.13,
+"disease": "Hypertension",
+"lang": "telugu"
+},
+"తలనొప్పితో": {
+"df": 35,
+"lift": 4.89,
+"disease": "Hypertension",
+"lang": "telugu"
+},
+"తిరగడం": {
+"df": 27,
+"lift": 6.12,
+"disease": "Hypertension",
+"lang": "telugu"
+},
+"తీసుకోవడంలో": {
+"df": 48,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "telugu"
+},
+"దగ్గు": {
+"df": 54,
+"lift": 5.85,
+"disease": "Influenza",
+"lang": "telugu"
+},
+"దాహం": {
+"df": 22,
+"lift": 15.94,
+"disease": "Diabetes",
+"lang": "telugu"
+},
+"దృష్టి": {
+"df": 67,
+"lift": 6.12,
+"disease": "Hypertension",
+"lang": "telugu"
+},
+"నాకు": {
+"df": 243,
+"lift": 1.84,
+"disease": "Hypertension",
+"lang": "telugu"
+},
+"నిన్నటి": {
+"df": 81,
+"lift": 1.76,
+"disease": "Influenza",
+"lang": "telugu"
+},
+"నుండి": {
+"df": 86,
+"lift": 1.65,
+"disease": "Influenza",
+"lang": "telugu"
+},
+"నొప్పి": {
+"df": 57,
+"lift": 5.23,
+"disease": "Typhoid",
+"lang": "telugu"
+},
+"నొప్పులు": {
+"df": 18,
+"lift": 14.93,
+"disease": "Influenza",
+"lang": "telugu"
+},
+"పాటు": {
+"df": 83,
+"lift": 2.06,
+"disease": "Hypertension",
+"lang": "telugu"
+},
+"పొడి": {
+"df": 26,
+"lift": 8.34,
+"disease": "COVID-19",
+"lang": "telugu"
+},
+"ప్రధాన": {
+"df": 28,
+"lift": 2.4,
+"disease": "Hypertension",
+"lang": "telugu"
+},
+"బిగుతుగా": {
+"df": 49,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "telugu"
+},
+"మరియు": {
+"df": 380,
+"lift": 1.79,
+"disease": "Hypertension",
+"lang": "telugu"
+},
+"మసకబారడం": {
+"df": 32,
+"lift": 6.12,
+"disease": "Hypertension",
+"lang": "telugu"
+},
+"మూత్రవిసర్జన": {
+"df": 24,
+"lift": 15.94,
+"disease": "Diabetes",
+"lang": "telugu"
+},
+"రుచి": {
+"df": 26,
+"lift": 8.34,
+"disease": "COVID-19",
+"lang": "telugu"
+},
+"రెండు": {
+"df": 53,
+"lift": 1.96,
+"disease": "Hypertension",
+"lang": "telugu"
+},
+"రోజులుగా": {
+"df": 95,
+"lift": 2.0,
+"disease": "Hypertension",
+"lang": "telugu"
+},
+"లక్షణాలు": {
+"df": 37,
+"lift": 2.15,
+"disease": "Hypertension",
+"lang": "telugu"
+},
+"వణుకు": {
+"df": 31,
+"lift": 9.64,
+"disease": "Malaria",
+"lang": "telugu"
+},
+"వికారం": {
+"df": 17,
+"lift": 13.44,
+"disease": "Migraine",
+"lang": "telugu"
+},
+"వీజింగ్": {
+"df": 55,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "telugu"
+},
+"శరీర": {
+"df": 29,
+"lift": 15.81,
+"disease": "Influenza",
+"lang": "telugu"
+},
+"శ్వాస": {
+"df": 41,
+"lift": 5.9,
+"disease": "Asthma",
+"lang": "telugu"
+},
+"సున్నితత్వం": {
+"df": 22,
+"lift": 13.44,
+"disease": "Migraine",
+"lang": "telugu"
+}
+}
+}

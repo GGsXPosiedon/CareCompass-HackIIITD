@@ -14,5 +14,5 @@ pip install transformers sentence-transformers scikit-learn scipy pandas pyyaml 
 $env:PYTHONPATH = "src"
 $env:HF_HUB_OFFLINE = "1"
 python -c "import torch; print('torch', torch.__version__, 'cuda', torch.cuda.is_available(), [torch.cuda.get_device_name(i) for i in range(torch.cuda.device_count())])"
-python scripts\gpu_retrieval_eval.py --gpu-name 4060 --models-dir ..\models --models intfloat/multilingual-e5-base google/muril-base-cased xlm-roberta-base
+python scripts\gpu_retrieval_eval.py --gpu-name 4060 --models-dir (Join-Path $PSScriptRoot "..\..\..\models") --models intfloat/multilingual-e5-base google/muril-base-cased xlm-roberta-base
 Write-Host "Done. See pipeline\reports\07_retrieval.md"

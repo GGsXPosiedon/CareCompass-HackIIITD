@@ -13,6 +13,7 @@ from ..config import Settings, get_settings
 from ..db.repository import CaregiverRepository, get_repository
 from ..schemas.external import TriageRequest, TriageResponse
 from .gemini import GeminiClient
+from .llm_router import build_llm
 from .matching import Matcher
 from .routing import Router, build_router
 from .safety import SafetyEngine, get_safety_engine
@@ -28,14 +29,19 @@ class Pipeline:
         safety: SafetyEngine | None = None,
         repo: CaregiverRepository | None = None,
         matcher: Matcher | None = None,
-        llm: Optional[GeminiClient] = None,
+        llm: Optional[object] = None,
     ):
         self.settings = settings or get_settings()
         self.router = router or build_router(self.settings.router_backend)  # deterministic model slot
+        self.encoder = getattr(self.router, "models", None)  # EncoderModels when ROUTER_BACKEND=trained and the model folder is usable
         self.safety = safety or get_safety_engine()
         self.repo = repo or get_repository()
         self.matcher = matcher or Matcher(self.repo, self.settings)
-        self.llm = llm if llm is not None else GeminiClient(self.settings)
+        self.llm = llm if llm is not None else build_llm(self.settings)
+        chains = getattr(self.llm, "chains", None)
+        if chains is not None:  # one line at startup so the server console shows what the LLM layer will actually use
+            log.warning("LLM providers: %s", chains if getattr(self.llm, "enabled", False) else
+                        "NONE ENABLED - replies use fallback rules (check backend/.env keys and LLM_BACKEND, and Windows environment variables that override it)")
         from ..graph import TriageGraph  # local import: graph imports this module for typing
 
         self.graph = TriageGraph(self)
@@ -47,12 +53,12 @@ class Pipeline:
             resp.response_source = "safety_rules"
         else:
             resp.response_source = "gemini" if state.get("llm_triage") is not None else "rules"
-            if state.get("llm_triage") is None or state.get("llm_safety") is None:
-                resp.service_notice = {
-                    "en": "Gemini could not complete all checks. Limited fallback rules were used for this reply.",
-                    "hi": "Gemini उपलब्ध नहीं है या उत्तर सही नहीं था। यह जवाब सीमित वैकल्पिक नियमों पर आधारित है।",
-                    "hinglish": "Gemini available nahi hai ya response sahi nahi tha. Yeh reply limited fallback rules se hai.",
-                }[state["facts"].language]
+            # if state.get("llm_triage") is None or state.get("llm_safety") is None:
+            #     resp.service_notice = {
+            #         "en": "Gemini could not complete all checks. Limited fallback rules were used for this reply.",
+            #         "hi": "Gemini उपलब्ध नहीं है या उत्तर सही नहीं था। यह जवाब सीमित वैकल्पिक नियमों पर आधारित है।",
+            #         "hinglish": "Gemini available nahi hai ya response sahi nahi tha. Yeh reply limited fallback rules se hai.",
+            #     }[state["facts"].language]
         h = hashlib.sha256(state["facts"].text_norm.encode()).hexdigest()[:10]  # no raw text in logs
         log.info("case=%s care_type=%s flags=%s path=%s", h, resp.care_type, resp.red_flags, [t["node"] for t in state["trace"]])
         from .failure_log import record

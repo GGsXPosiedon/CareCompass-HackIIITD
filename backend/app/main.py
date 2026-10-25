@@ -121,8 +121,13 @@ def create_app() -> FastAPI:
     @app.get("/health")
     def health():
         p = get_pipeline()
+        st = p.settings
         return {"status": "ok", "classifier": p.router.name, "llm": p.llm.model if p.llm.enabled else "off",
-                "ruleset": p.safety.version, "fusion_policy": p.settings.fusion_policy}
+                "ruleset": p.safety.version, "fusion_policy": p.settings.fusion_policy,
+                # Diagnostics for "Gemini could not complete all checks": presence flags only, never key values.
+                "llm_backend": st.llm_backend,
+                "llm_keys_set": {"gemini": bool(st.gemini_api_key), "gemini2": bool(st.gemini_api_key_2), "groq": bool(st.groq_api_key), "compat": bool(st.compat_api_key)},
+                "llm_chains": getattr(p.llm, "chains", None)}
 
     return app
 

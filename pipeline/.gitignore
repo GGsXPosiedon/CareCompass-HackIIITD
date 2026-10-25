@@ -3,3 +3,6 @@ __pycache__/
 .pytest_cache/
 data/interim/
 data/processed/
+
+models_ft/
+.venv-gpu/

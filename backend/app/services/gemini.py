@@ -16,6 +16,13 @@ log = logging.getLogger("carecompass.llm")
 T = TypeVar("T", bound=BaseModel)
 
 
+def _retry_after(r: httpx.Response) -> float:
+    try:
+        return min(max(float(r.headers.get("retry-after", "0.4")), 0.2), 2.0)
+    except ValueError:
+        return 0.4
+
+
 class LLMError(RuntimeError):
     """Any failure (network, HTTP, safety block, bad JSON, schema violation). Callers fall back."""
 
@@ -55,8 +62,8 @@ class GeminiClient:
         try:
             with httpx.Client(timeout=self.s.gemini_timeout_s, transport=self._transport) as c:
                 r = c.post(self.URL.format(model=self.model), json=body, headers={"x-goog-api-key": self.s.gemini_api_key})
-                if r.status_code in (502, 503, 504):
-                    time.sleep(0.3)
+                if r.status_code in (429, 502, 503, 504):
+                    time.sleep(_retry_after(r))
                     r = c.post(self.URL.format(model=self.model), json=body, headers={"x-goog-api-key": self.s.gemini_api_key})
             r.raise_for_status()
             payload = r.json()

@@ -45,7 +45,8 @@ def normalize(text: str) -> str:
 
 # Unambiguous Hindi words: one of them is enough ("kamzori hai", "dast lage hain" must not be read as English).
 HINGLISH_STRONG = {"hai", "hain", "nahi", "dard", "bukhar", "khansi", "ulti", "dast", "kamzor", "kamzori", "lage", "lagi", "lag", "mujhe", "pet", "peeth",
-                   "kamar", "ghutne", "ghutna", "thak", "saans", "seene", "khoon", "chakkar", "sujan", "bimar", "kharab", "gaya", "gayi", "hora", "hoon", "hu"}
+                   "kamar", "ghutne", "ghutna", "thak", "saans", "seene", "khoon", "chakkar", "sujan", "bimar", "kharab", "gaya", "gayi", "hora", "hoon", "hu",
+                   "mera", "meri", "mere", "mujhko", "humko", "hamein", "unhe", "unko", "bimari", "bimaar", "tabiyat", "tabiat", "dawai", "dawa", "ilaj"}
 
 
 def detect_language(text: str) -> str:
@@ -104,6 +105,10 @@ CONCEPTS: dict[str, tuple[str, str]] = {
     # consult
     "consult": ("consult", r"consult|\bsalah\b|सलाह|opinion|ओपिनियन|talk to (?:a |the |my )?doctor|speak to (?:a |the )?doctor|doctor (?:se|ko) (?:baat|bat)|doctor se consult|doctor online|online doctor|online|video (?:call|consult)|teleconsult|baat karni|बात करनी|ऑनलाइन|डॉक्टर से (?:\S+ )?(?:बात|सलाह)|doctor ko (?:\S+ )?dikha|show (?:\S+ ){0,2}to (?:a |the )?doctor|डॉक्टर को (?:\S+ )?दिखा"),
     "report_review": ("consult", r"\breports?\b|रिपोर्ट|prescription"),
+    # a nurse / attendant asked for in general terms (no specific procedure named)
+    "nurse_request": ("nursing", r"\bnurses?\b|\bnursing\b|\bcaregivers?\b|\battendant\b|\bayah\b|\bcare at home\b|नर्स|देखभाल"),
+    # set by the dialogue layer when a condition (AIDS, TB, cancer ...) is named; never matches text by itself
+    "named_condition": ("condition", r"(?!)"),
 }
 _COMPILED = {k: (g, re.compile(unicodedata.normalize("NFKC", p))) for k, (g, p) in CONCEPTS.items()}
 
@@ -122,15 +127,18 @@ LABELS = {  # human-readable concept names for explanations
     "en": {"fever": "fever", "cough": "cough", "weakness": "weakness", "pain": "pain", "stomach_upset": "stomach upset",
            "bp_sugar_check": "BP/sugar check", "injection": "an injection", "dressing": "wound dressing",
            "catheter": "catheter care", "iv_drip": "an IV drip", "nebulization": "nebulization", "lab_test": "a lab test",
-           "consult": "a doctor consultation", "report_review": "a report review"},
+           "consult": "a doctor consultation", "report_review": "a report review",
+           "nurse_request": "a nurse at home", "named_condition": "a health condition you mentioned"},
     "hi": {"fever": "बुखार", "cough": "खांसी", "weakness": "कमजोरी", "pain": "दर्द", "stomach_upset": "पेट की परेशानी",
            "bp_sugar_check": "बीपी/शुगर जांच", "injection": "इंजेक्शन", "dressing": "घाव की ड्रेसिंग",
            "catheter": "कैथेटर देखभाल", "iv_drip": "आईवी ड्रिप", "nebulization": "नेबुलाइज़ेशन", "lab_test": "लैब टेस्ट",
-           "consult": "डॉक्टर से सलाह", "report_review": "रिपोर्ट की समीक्षा"},
+           "consult": "डॉक्टर से सलाह", "report_review": "रिपोर्ट की समीक्षा",
+           "nurse_request": "घर पर नर्स", "named_condition": "आपके बताए स्वास्थ्य कारण"},
     "hinglish": {"fever": "bukhar", "cough": "khansi", "weakness": "kamzori", "pain": "dard", "stomach_upset": "pet ki pareshani",
                  "bp_sugar_check": "BP/sugar check", "injection": "injection", "dressing": "wound dressing",
                  "catheter": "catheter care", "iv_drip": "IV drip", "nebulization": "nebulization", "lab_test": "lab test",
-                 "consult": "doctor se salah", "report_review": "report review"},
+                 "consult": "doctor se salah", "report_review": "report review",
+                 "nurse_request": "ghar par nurse", "named_condition": "aapki batayi health condition"},
 }
 
 

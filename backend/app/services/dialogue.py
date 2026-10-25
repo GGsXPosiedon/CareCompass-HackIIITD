@@ -19,6 +19,7 @@ from typing import Optional
 
 from ..schemas.external import TriageRequest
 from ..schemas.internal import FactStatus
+from .conditions import _PERSON_CUE, NON_HEALTH_TASK, find_conditions, health_signal
 from .lexicon import detect_language, extract_concepts, group_of, normalize, resolve_language, strip_prefix
 
 _RUNS = re.compile(r"(.)\1{2,}")
@@ -82,7 +83,7 @@ SERVICE_GROUPS = {"nursing", "lab", "consult"}
 URGENT_WORDS = re.compile(
     r"\b(breath\w*|saans|pulse|heart|dil|blood|khoon|bleed\w*|unconscious|behosh|faint\w*|collaps\w*|seizure|fits?|choking|chok\w+|poison\w*|"
     r"overdose|ambulance|emergency|dying|die|dead|burn\w*|drown\w*|accident|sick|ill|hurt|injur\w*|pain|dard|wound|unwell|"
-    r"suicid\w*|kill\w*|paralys\w*|stroke|swell\w*|vomit\w*|ulti|fell|fall|gir|help|bachao|marr?\w*|sans)\b"
+    r"suicid\w*|kill\w*|paralys\w*|stroke|swell\w*|vomit\w*|ulti|fell|fall|gir|help|bachao|maar\w*|marn\w*|mar (?:gay\w*|jay\w*|raha\w*|rahi\w*)|sans)\b"
     r"|\u0938\u093e\u0901?\u0938|\u0938\u093e\u0902\u0938|\u092c\u0947\u0939\u094b\u0936|\u0916\u0942\u0928|\u0926\u0930\u094d\u0926", re.I)
 
 # Broad everyday-complaint vocabulary (en / Hinglish / Hindi): recognises that someone is describing a health problem even
@@ -142,6 +143,18 @@ HINTS = {
     "default": {"en": "fever, vomiting or breathing trouble", "hi": "बुखार, उल्टी या साँस में तकलीफ़", "hinglish": "bukhar, ulti ya saans mein taklif"},
 }
 QUESTIONS = {
+    # Danger-sign screen. The wording lists the official red-flag symptoms (chest pain, breathing, bleeding, fainting, seizure,
+    # stroke signs); it is asked when the trained emergency score is in the grey zone.
+    "danger": {"en": "Right now, is there chest pain, trouble breathing, heavy bleeding, fainting, a seizure, or sudden weakness or confusion?",
+               "hi": "क्या अभी सीने में दर्द, साँस लेने में तकलीफ़, तेज़ खून बहना, बेहोशी, दौरा या अचानक कमज़ोरी/उलझन है?",
+               "hinglish": "Kya abhi seene mein dard, saans lene mein taklif, tez khoon behna, behoshi, daura ya achanak kamzori/uljhan hai?"},
+    # Two-option question between the two care types the trained head cannot separate (services/follow_up.py::ambiguity_question).
+    "ambiguity": {"en": "To pick the right service, which of these is closer to what you need?",
+                  "hi": "सही सेवा चुनने के लिए बताइए, इनमें से कौन सा आपकी ज़रूरत के ज़्यादा करीब है?",
+                  "hinglish": "Sahi service chunne ke liye bataiye, inme se kaunsa aapki zaroorat ke zyada kareeb hai?"},
+    "condition_need": {"en": "I'm sorry you are going through this. What kind of help do you need right now?",
+                       "hi": "यह सुनकर दुख हुआ। अभी आपको किस तरह की मदद चाहिए?",
+                       "hinglish": "Yeh sunkar dukh hua. Abhi aapko kis tarah ki madad chahiye?"},
     "duration": {"en": "How long have you had the {symptom}?", "hi": "{symptom} कब से है?", "hinglish": "{symptom} kab se hai?"},
     "temperature": {"en": "Have you checked the temperature? If yes, what does it show?", "hi": "क्या आपने तापमान नापा? अगर हाँ, तो कितना है?",
                     "hinglish": "Kya aapne temperature naapa? Agar haan, to kitna hai?"},
@@ -154,6 +167,10 @@ QUESTIONS = {
     "associated": {"en": "Is there anything else along with it, such as {hints}?", "hi": "क्या इसके साथ कुछ और भी है, जैसे {hints}?",
                    "hinglish": "Kya iske saath kuch aur bhi hai, jaise {hints}?"},
 }
+DANGER_OPTIONS = {"en": ["Yes, right now", "No"], "hi": ["हाँ, अभी", "नहीं"], "hinglish": ["Haan, abhi", "Nahi"]}
+NEED_OPTIONS = {"en": ["Talk to a doctor online", "Nurse at home", "Lab test at home", "Emergency, need help now"],
+                "hi": ["डॉक्टर से ऑनलाइन बात", "घर पर नर्स", "घर पर लैब टेस्ट", "इमरजेंसी, अभी मदद चाहिए"],
+                "hinglish": ["Doctor se online baat", "Ghar par nurse", "Ghar par lab test", "Emergency, abhi madad chahiye"]}
 DURATION_OPTIONS = {"en": ["Since today", "1–2 days", "3 days or more"], "hi": ["आज से", "1–2 दिन से", "3 दिन या ज़्यादा"],
                     "hinglish": ["Aaj se", "1–2 din se", "3 din ya zyada"]}
 BLEED_OPTIONS = {"en": ["Slow / stopped", "Still heavy", "Not sure"], "hi": ["कम / रुक गया", "अभी भी तेज़", "पता नहीं"],
@@ -230,6 +247,8 @@ class Analysis:
     known_slots: dict = field(default_factory=dict)
     symptoms: list = field(default_factory=list)          # ordered symptom keys (body pain names first)
     service_request: bool = False
+    danger_answer: Optional[str] = None                  # 'yes' | 'no' | None: reply to our danger-sign question
+    conditions: list = field(default_factory=list)       # named conditions found in the scoped user turns (AIDS, TB, cancer ...)
     language: str = "en"
 
 
@@ -247,7 +266,12 @@ def _segments(hist: list[tuple[str, str]]) -> list[list[tuple[str, str]]]:
 def classify_turn(text: str, awaiting_answer: bool, concepts: dict) -> tuple[str, bool]:
     t = _n(text)
     present = {c for c, s in concepts.items() if s == FactStatus.PRESENT}
-    has_health = bool(present - {"home_visit_request"}) or any(rx.search(t) for rx in BODY_PAIN.values()) or bool(CARE_REQUEST.search(t)) or bool(URGENT_WORDS.search(t)) or bool(GENERAL_SYMPTOMS.search(t))
+    sig, _why, _conds = health_signal(text)
+    strong = bool(present - {"home_visit_request"}) or any(rx.search(t) for rx in BODY_PAIN.values()) or bool(GENERAL_SYMPTOMS.search(t)) or sig
+    weak = bool(CARE_REQUEST.search(t)) or bool(URGENT_WORDS.search(t))
+    has_health = strong or (weak and not NON_HEALTH_TASK.search(t))
+    if has_health and NON_HEALTH_TASK.search(t) and not _PERSON_CUE.search(t) and not (present - {"home_visit_request"}):
+        has_health = False  # an everyday task that merely contains a health-looking word ("stress test of the server")
     service = any(group_of(c) in SERVICE_GROUPS for c in present)
     correction = bool(CORRECTION.search(t))
     if has_health and service and REFUSAL.search(t):
@@ -264,6 +288,11 @@ def classify_turn(text: str, awaiting_answer: bool, concepts: dict) -> tuple[str
         return "answer", correction
     if GREETING.search(t):
         return "greeting", correction
+    from .semantic_intent import get_semantic_intent
+
+    net = get_semantic_intent()
+    if net is not None and not NON_HEALTH_TASK.search(t) and len(t.split()) >= 2 and net.is_health(text):
+        return "health", correction  # meaning-based net: an unusual way of describing a health need
     return "general", correction
 
 
@@ -348,7 +377,7 @@ def analyze(req: TriageRequest) -> Analysis:
         scope = next((sg for sg in reversed(segs[:-1]) if _health_concepts([c for r, c in sg if r == "user"])), [])
         act = "health" if scope else act
     elif act in ("health", "answer") and not CONTINUING.search(n_latest):
-        if awaiting and slot_of(hist[-1][1]) in ("associated", "bleed_check"):
+        if awaiting and slot_of(hist[-1][1]) in ("associated", "bleed_check", "ambiguity"):
             scope = current  # a reply to OUR slot question, even one that names another symptom ("ulti bhi hai")
         elif awaiting:
             earlier = _health_concepts([c for r, c in current if r == "user"])
@@ -359,6 +388,9 @@ def analyze(req: TriageRequest) -> Analysis:
             scope, new_topic = [], bool(current)   # a fresh report: earlier episodes must not bleed into this one
     else:
         scope = current
+    danger_answer = None
+    if awaiting and slot_of(hist[-1][1]) == "danger":
+        danger_answer = "yes" if YES.search(n_latest) else "no" if NO.search(n_latest) else None
     messages = list(scope) + [("user", latest)]
     user_turns = [c for r, c in messages if r == "user"]
 
@@ -368,6 +400,15 @@ def analyze(req: TriageRequest) -> Analysis:
         c, e = extract_concepts(_n(turn))
         merged.update(c)
         evidence.update(e)
+    conds = []
+    if act in ("health", "answer"):
+        for turn in user_turns:
+            for m in find_conditions(turn):
+                if m.key not in {c.key for c in conds}:
+                    conds.append(m)
+        if conds:
+            merged["named_condition"] = FactStatus.PRESENT
+            evidence["named_condition"] = conds[0].matched
     norm_turns = [_n(t) for t in user_turns]
     symptoms = _symptoms(norm_turns, merged)
     present = {c for c, s in merged.items() if s == FactStatus.PRESENT}
@@ -379,7 +420,7 @@ def analyze(req: TriageRequest) -> Analysis:
         concepts=merged, evidence=evidence, questions_asked=len(asked),
         asked_slots=[s for s in (slot_of(c) for c in asked) if s],
         known_slots=_fill_slots(messages), symptoms=symptoms,
-        service_request=any(group_of(c) in SERVICE_GROUPS for c in present), language=lang,
+        service_request=any(group_of(c) in SERVICE_GROUPS for c in present), language=lang, conditions=conds, danger_answer=danger_answer,
     )
 
 
@@ -421,12 +462,20 @@ def decide(a: Analysis, max_questions: int, adaptive: bool = True) -> DialogueDe
     # Start asking only when the message lacks the basics (how long) and nothing was asked yet; once OUR slot question is open,
     # finish the core slots. An answer to the generic 'what care do you need?' question goes straight to routing.
     # A message that already says how long ("papa ko do din se bukhar hai aur khansi bhi") is specific enough to route.
+    if (adaptive and a.conditions and not a.symptoms and not a.service_request and "condition_need" not in a.asked_slots
+            and a.questions_asked < max_questions):
+        # a named condition and nothing else: ask ONE open question about the help needed, never about the condition itself
+        return DialogueDecision("ask", QUESTIONS["condition_need"][lang], NEED_OPTIONS[lang], "condition_need", "named condition, need unknown")
     started = bool(a.asked_slots) or (a.questions_asked == 0 and "duration" not in a.known_slots)
     if adaptive and started and not a.service_request and a.questions_asked < max_questions:
         q = next_slot_question(a)
         if q:
             return q
     return DialogueDecision("proceed", reason=f"intent={a.act}")
+
+
+def danger_decision(lang: str) -> DialogueDecision:
+    return DialogueDecision("ask", QUESTIONS["danger"][lang], DANGER_OPTIONS[lang], "danger", "emergency score in the grey zone: one danger-sign question")
 
 
 def timing_of(a) -> str | None:

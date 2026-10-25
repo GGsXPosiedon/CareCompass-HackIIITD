@@ -7,11 +7,13 @@ import { isNearBottom } from '../lib/chat-scroll';
 import { VoiceSessionActiveContext } from '../voice/language';
 import { VoiceComposerSlot } from './VoiceComposerSlot';
 import { ReadAloud, VoiceInput } from './Voice';
+import { CareForChip } from './CareFor';
+import { AskCard } from './ChatQuestion';
 
-export function CareChat({ copy, hindi, messages, result, pendingText, input, setInput, onSend, onContinue, onLocation, onStop, onRetry, busy, error }: {
+export function CareChat({ copy, hindi, messages, result, pendingText, input, setInput, onSend, onContinue, onLocation, onStop, onRetry, onEdit, busy, error }: {
   copy: Copy; hindi: boolean; messages: Message[]; result: TriageResponse | null; pendingText: string | null; input: string;
   setInput: (value: string) => void; onSend: (text: string) => void; onContinue: () => void;
-  onLocation: () => void; onStop: () => void; onRetry: () => void; busy: boolean; error: string;
+  onLocation: () => void; onStop: () => void; onRetry: () => void; onEdit: () => void; busy: boolean; error: string;
 }) {
   const voiceActive = useContext(VoiceSessionActiveContext);
   const viewport = useRef<HTMLDivElement>(null), content = useRef<HTMLDivElement>(null), textarea = useRef<HTMLTextAreaElement>(null);
@@ -47,12 +49,15 @@ export function CareChat({ copy, hindi, messages, result, pendingText, input, se
   }, [input, voiceActive]);
   useEffect(() => { if (!voiceActive) textarea.current?.focus({ preventScroll: true }); }, [voiceActive]);
   const latestReply = messages.at(-1)?.role === 'assistant' && !pendingText;
+  // An open follow-up question is answered in the numbered card, so the question is not repeated in the thread.
+  const asking = !pendingText && !!result?.follow_up_question && messages.at(-1)?.role === 'assistant';
+  const shown = asking ? messages.slice(0, -1) : messages;
   return <section className="care-conversation" aria-label={copy.conversation}>
     <div ref={viewport} className="care-chat-scroll" role="region" aria-label={t('Conversation messages', 'बातचीत के संदेश')} tabIndex={0}
       onScroll={() => { if (!viewport.current) return; const near = isNearBottom(viewport.current); following.current = near; setShowJump(!near); }}>
       <div ref={content} className="care-chat-content">
         <ol className="chat-thread" role="log" aria-label={copy.conversation} aria-live="polite" aria-relevant="additions" aria-busy={busy}>
-          {messages.map((message, index) => <ChatMessage key={index} message={message} copy={copy} hindi={hindi} animate={index >= initialCount.current} latest={!!latestReply && index === messages.length - 1}/>)}
+          {shown.map((message, index) => <ChatMessage key={index} message={message} copy={copy} hindi={hindi} animate={index >= initialCount.current} latest={!!latestReply && !asking && index === messages.length - 1}/>)}
           {pendingText ? <li className="chat-bubble user pending-message"><span className="chat-bubble-from">{t('You', 'आप')}</span><p>{pendingText}</p></li> : null}
         </ol>
         {busy ? <div className="care-chat-thinking" role="status"><span className="care-thinking-mark" aria-hidden="true"><i/><i/><i/></span><span>{t('Thinking', 'सोच रहे हैं')}<span className="thinking-ellipsis" aria-hidden="true">…</span></span></div> : null}
@@ -65,17 +70,21 @@ export function CareChat({ copy, hindi, messages, result, pendingText, input, se
         {error ? <div className="care-chat-error" role="alert"><p>{error}</p>{pendingText ? <button type="button" className="text-button" onClick={onRetry} disabled={busy}><RotateCcw size={15}/>{t('Retry response', 'फिर कोशिश करें')}</button> : null}</div> : null}
       </div>
     </div>
-    <form className="care-chat-reply" onSubmit={event => { event.preventDefault(); if (input.trim() && !busy) onSend(input.trim()); }}>
+    {asking ? <div className="care-chat-reply care-ask-wrap">
+      {showJump ? <button className="care-jump-latest" type="button" onClick={followLatest} aria-label={t('Scroll to latest message', 'नए संदेश पर जाएँ')}><ArrowDown size={18}/></button> : null}
+      <AskCard key={result?.follow_up_question ?? ''} copy={copy} hindi={hindi} question={result?.follow_up_question ?? ''} answerOptions={result?.answer_options ?? []} asked={messages.filter(m => m.role === 'assistant').length}
+        input={input} setInput={setInput} onAnswer={onSend} onBack={onEdit} busy={busy} error={error}/>
+    </div> : <form className="care-chat-reply" onSubmit={event => { event.preventDefault(); if (input.trim() && !busy) onSend(input.trim()); }}>
       {showJump ? <button className="care-jump-latest" type="button" onClick={followLatest} aria-label={t('Scroll to latest message', 'नए संदेश पर जाएँ')}><ArrowDown size={18}/></button> : null}
       {!pendingText && result?.follow_up_question && result.answer_options?.length && !voiceActive ? <div className="care-chat-options" aria-label={t('Suggested replies', 'सुझाए गए जवाब')}>{result.answer_options.map(option => <button type="button" key={option} disabled={busy} onClick={() => onSend(option)}>{option}</button>)}</div> : null}
       <div className="care-chat-composer">{voiceActive ? <VoiceComposerSlot/> : <>
         <label className="sr-only" htmlFor={inputId}>{copy.followLabel}</label>
         <textarea ref={textarea} id={inputId} rows={1} maxLength={2000} value={input} onChange={event => setInput(event.target.value)} placeholder={t('Reply to CareCompass…', 'CareCompass को जवाब दें…')}
           onKeyDown={event => { if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); if (input.trim() && !busy) onSend(input.trim()); } }}/>
-        <div className="care-chat-actions"><span className="small muted">{t('English, हिंदी or Hinglish', 'English, हिंदी या Hinglish')}</span><div className="care-send-actions"><VoiceInput copy={copy} hindi={hindi} disabled={busy} onTranscript={setInput}/>{busy ? <button type="button" className="care-send care-stop" onClick={onStop} aria-label={t('Stop response', 'जवाब रोकें')}><Square size={15} fill="currentColor"/></button> : <button type="submit" className="care-send" disabled={!input.trim()} aria-label={t('Send message', 'संदेश भेजें')}><ArrowUp size={20}/></button>}</div></div>
+        <div className="care-chat-actions"><span className="care-chat-meta"><CareForChip hindi={hindi}/><span className="small muted">{t('English, हिंदी or Hinglish', 'English, हिंदी या Hinglish')}</span></span><div className="care-send-actions"><VoiceInput copy={copy} hindi={hindi} disabled={busy} onTranscript={setInput}/>{busy ? <button type="button" className="care-send care-stop" onClick={onStop} aria-label={t('Stop response', 'जवाब रोकें')}><Square size={15} fill="currentColor"/></button> : <button type="submit" className="care-send" disabled={!input.trim()} aria-label={t('Send message', 'संदेश भेजें')}><ArrowUp size={20}/></button>}</div></div>
       </>}</div>
       <p className="care-chat-footnote">{t('Care navigation, not a diagnosis. Review the recommendation before booking.', 'यह देखभाल का मार्गदर्शन है, निदान नहीं। बुकिंग से पहले सुझाव देखें।')}</p>
-    </form>
+    </form>}
   </section>;
 }
 

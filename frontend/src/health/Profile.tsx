@@ -42,11 +42,11 @@ export default function Profile({ hi }: { hi: boolean }) {
   const metrics = [...new Set(state.readings.filter(r => r.memberId === member?.id).map(r => r.metric))];
   const latest = metrics.map(metric => [...state.readings].filter(r => r.memberId === member?.id && r.metric === metric).sort((a, b) => b.date.localeCompare(a.date) || b.time.localeCompare(a.time))[0]);
 
-  function select(id: string) { setState(s => ({ ...s, activeId: id })); setMode('view'); }
+  function select(id: string) { setState(s => ({ ...s, activeId: id, careForOther: false })); setMode('view'); }
   function save(values: Omit<Member, 'id' | 'initials' | 'tint'>) {
     if (mode === 'add') {
       const id = `P_${Date.now().toString(36)}`;
-      setState(s => ({ ...s, members: [...s.members, { ...values, id, initials: initialsOf(values.name), tint: TINTS[s.members.length % TINTS.length] }], activeId: id }));
+      setState(s => ({ ...s, members: [...s.members, { ...values, id, initials: initialsOf(values.name), tint: TINTS[s.members.length % TINTS.length] }], activeId: id, careForOther: false }));
     } else if (member) {
       setState(s => ({ ...s, members: s.members.map(m => m.id === member.id ? { ...m, ...values, initials: initialsOf(values.name) } : m) }));
     }
@@ -54,7 +54,7 @@ export default function Profile({ hi }: { hi: boolean }) {
   }
   function remove() {
     if (!member || state.members.length < 2) return;
-    setState(s => { const members = s.members.filter(m => m.id !== member.id); return { ...s, members, activeId: members[0].id }; });
+    setState(s => { const members = s.members.filter(m => m.id !== member.id); return { ...s, members, activeId: members[0].id, careForOther: false }; });
   }
 
   return <div className="health-portal profile-content">

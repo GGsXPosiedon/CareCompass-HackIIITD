@@ -13,6 +13,9 @@ dependencies = [
     "tzdata; sys_platform == 'win32'",
 ]
 
+[project.optional-dependencies]
+encoder = ["onnxruntime>=1.17", "tokenizers>=0.15", "numpy>=1.26"]
+
 [dependency-groups]
 dev = [
     "pytest>=8",

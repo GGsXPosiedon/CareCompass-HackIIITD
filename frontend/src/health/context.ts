@@ -7,6 +7,8 @@ const clip = (value: string, max: number) => value.replace(/\s+/g, ' ').trim().s
 // Sent per request (the API is stateless). Returns undefined when the user turned sharing off.
 export function buildPatientContext(state: HealthState): PatientContext | undefined {
   if (state.shareProfile === false) return undefined;
+  // "Someone else": the patient is not in the family profile, so no saved member data may be attributed to them.
+  if (state.careForOther) return { active_member_id: null, members: [] };
   const members = state.members.slice(0, 12).map(m => {
     const meds = state.medications.filter(x => x.memberId === m.id && x.active).slice(0, 10).map(x => ({ name: clip(x.name, 80) }));
     const records = [...state.records].filter(r => r.memberId === m.id).sort((a, b) => b.date.localeCompare(a.date)).slice(0, 4)

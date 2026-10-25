@@ -503,3 +503,24 @@ body:has(.care-shell) { min-width:0; background:#20201e; }
   .care-stage::before { opacity:.05; -webkit-mask-size:448px 352px; mask-size:448px 352px; }
   .care-stage::after { background:linear-gradient(90deg,transparent,var(--care-ground) 18%,var(--care-ground) 82%,transparent); opacity:.82; }
 }
+
+/* Who is this request for: picker in the + menu and the small indicator beside it */
+.care-attachment-menu { width:min(300px,calc(100vw - 72px)); max-height:min(70vh,460px); overflow-y:auto; }
+.care-attach-group { display:flex; align-items:center; gap:8px; min-width:0; }
+.care-for-chip { display:inline-flex; align-items:center; gap:5px; max-width:150px; padding:5px 10px; border:1px solid var(--control); border-radius:999px; color:var(--muted); font-size:12px; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.care-for-chip[data-kind="other"] { border-style:dashed; }
+.care-chat-meta { display:flex; align-items:center; gap:10px; min-width:0; flex-wrap:wrap; }
+.care-menu-heading { padding:7px 10px 4px !important; font-size:11px !important; font-weight:600; letter-spacing:.04em; text-transform:uppercase; }
+.care-for-list { display:flex; flex-direction:column; }
+.care-for-option { display:flex; align-items:center; gap:10px; width:100%; min-height:44px; padding:8px 10px; text-align:left; font-size:13px; border-radius:7px; }
+.care-for-option > span { flex:1; min-width:0; display:flex; flex-direction:column; }
+.care-for-option small { color:var(--muted); font-size:11px; line-height:1.35; }
+.care-for-option:hover { background:var(--care-hover); }
+.care-for-option[aria-pressed="true"] { background:var(--care-hover); }
+.care-for-add { color:var(--muted); }
+.care-menu-divider { border:0; border-top:1px solid var(--control); margin:6px 4px; }
+@media(max-width:600px) { .care-attach-group { flex-wrap:wrap; } .care-for-chip { max-width:120px; } }
+
+/* Numbered follow-up card inside the chat layout */
+.care-conversation .care-ask-wrap .ask-card { position:static; margin:0; box-shadow:0 2px 12px #0003; }
+.care-conversation .care-ask-wrap .ask-question { font-size:19px; }

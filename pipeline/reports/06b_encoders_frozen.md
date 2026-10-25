@@ -1,0 +1,7 @@
+# 06b — Pretrained encoders (LOFO, same protocol as 06_triage.md)
+
+| model | mode | seed | macro_f1 | accuracy | emergency_recall | emergency_fn | over_triage | macro_f1_ci | seconds |
+|---|---|---|---|---|---|---|---|---|---|
+| intfloat/multilingual-e5-base | frozen | 0 | 0.6410358917392166 | 0.6666666666666666 | 0.6666666666666666 | 3 | 5 | 0.44-0.75 | 28 |
+| google/muril-base-cased | frozen | 0 | 0.5507732566710896 | 0.5606060606060606 | 0.7777777777777778 | 2 | 3 | 0.38-0.65 | 13 |
+| xlm-roberta-base | frozen | 0 | 0.5108005521048999 | 0.5151515151515151 | 0.5555555555555556 | 4 | 6 | 0.33-0.62 | 19 |

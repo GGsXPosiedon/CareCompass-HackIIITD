@@ -10,6 +10,14 @@ APP_DIR = Path(__file__).resolve().parent
 DATA_DIR = APP_DIR / "data"
 RULES_DIR = APP_DIR / "rules"
 
+def _clean_value(raw: str) -> str:
+    """Quoted values are taken as-is; unquoted ones lose a trailing ' # comment' (a pasted comment must not become part of a key)."""
+    v = raw.strip()
+    if v[:1] in ("'", '"') and v.count(v[0]) >= 2:
+        return v[1:v.index(v[0], 1)]
+    return v.split(" #", 1)[0].split("\t#", 1)[0].strip().strip("\"'")
+
+
 def _load_dotenv() -> None:
     """Tiny .env loader (backend/.env). Real environment variables win. The file is git-ignored."""
     f = APP_DIR.parent / ".env"
@@ -19,7 +27,7 @@ def _load_dotenv() -> None:
         line = line.strip()
         if line and not line.startswith("#") and "=" in line:
             k, v = line.split("=", 1)
-            os.environ.setdefault(k.strip(), v.strip().strip("\"'"))
+            os.environ.setdefault(k.strip(), _clean_value(v))
 
 
 _load_dotenv()
@@ -82,7 +90,8 @@ MENTAL_HEALTH_HELPLINE = "14416"  # Tele-MANAS; verify before relying on it
 @dataclass(frozen=True)
 class Settings:
     # Deterministic classifier slot (your trained model plugs in here later): rules | <your model>
-    router_backend: str = os.getenv("ROUTER_BACKEND", "rules")
+    router_backend: str = os.getenv("ROUTER_BACKEND", "rules")   # rules | trained (rules first, e5 head for the rest)
+    encoder_path: str = os.getenv("ENCODER_PATH", os.getenv("INTENT_ENCODER_PATH", ""))  # local multilingual-e5-base folder
     # LLM layer: auto = Gemini when GEMINI_API_KEY is set, otherwise off. Values: auto | gemini | off
     llm_backend: str = os.getenv("LLM_BACKEND", "auto")
     # How the deterministic classifier and the LLM are combined (see app/graph/nodes.py::fuse)
@@ -93,6 +102,16 @@ class Settings:
     gemini_api_key: str = field(default_factory=lambda: os.getenv("GEMINI_API_KEY", ""), repr=False)
     gemini_model: str = os.getenv("GEMINI_MODEL", "gemini-3.5-flash")
     gemini_thinking_level: str = os.getenv("GEMINI_THINKING_LEVEL", "low")
+    # Optional extra providers. Chains are comma lists of: gemini, gemini2, groq, compat (default: every configured one).
+    gemini_api_key_2: str = field(default_factory=lambda: os.getenv("GEMINI_API_KEY_2", ""), repr=False)
+    groq_api_key: str = field(default_factory=lambda: os.getenv("GROQ_API_KEY", ""), repr=False)
+    groq_model: str = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+    groq_base_url: str = os.getenv("GROQ_BASE_URL", "https://api.groq.com/openai/v1")
+    compat_api_key: str = field(default_factory=lambda: os.getenv("COMPAT_API_KEY", ""), repr=False)  # any OpenAI-compatible API
+    compat_base_url: str = os.getenv("COMPAT_BASE_URL", "")
+    compat_model: str = os.getenv("COMPAT_MODEL", "")
+    llm_safety_chain: str = os.getenv("LLM_SAFETY_CHAIN", "")
+    llm_triage_chain: str = os.getenv("LLM_TRIAGE_CHAIN", "")
     gemini_timeout_s: float = float(os.getenv("GEMINI_TIMEOUT_S", "15"))
     gemini_thinking_budget: int = int(os.getenv("GEMINI_THINKING_BUDGET", "0"))  # -1 = model default
     max_follow_ups: int = int(os.getenv("MAX_FOLLOW_UPS", "2"))

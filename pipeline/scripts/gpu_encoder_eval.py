@@ -222,6 +222,8 @@ def main() -> None:
     PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
     tag = f"{args.mode}{'_dry' if args.dry_run else ''}"
     out.to_csv(PROCESSED_DIR / f"triage_encoders_{tag}.csv", index=False)
+    (PROCESSED_DIR.parent.parent / "results").mkdir(parents=True, exist_ok=True)
+    out.to_csv(PROCESSED_DIR.parent.parent / "results" / f"triage_encoders_{tag}.csv", index=False)  # small, committed copy
     (PROCESSED_DIR / f"triage_encoders_{tag}_preds.json").write_text(json.dumps(preds), encoding="utf-8")
     if not args.dry_run:
         lines = ["# 06b — Pretrained encoders (LOFO, same protocol as 06_triage.md)", "", "\n".join(["| " + " | ".join(out.columns) + " |", "|" + "---|" * len(out.columns)] + ["| " + " | ".join(str(v) for v in r) + " |" for r in out.itertuples(index=False)]), ""]

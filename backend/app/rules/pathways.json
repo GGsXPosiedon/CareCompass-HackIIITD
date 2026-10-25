@@ -1,0 +1,1479 @@
+{
+ "status": "UNREVIEWED (demo): drafted from public, general guidance (WHO IMCI-style danger signs, NHS 111-style pathway structure, MoHFW dengue warning signs). Not clinician-reviewed. Thresholds such as sugar 300/70 and BP 180/110 must be checked by a clinician.",
+ "dispositions": {
+  "emergency": "care_type emergency_112, urgency emergency",
+  "urgent": "urgency same_day",
+  "routine": "urgency scheduled",
+  "self_care": "urgency scheduled, plus `advice`; the care type stays bookable"
+ },
+ "strictness": {
+  "age_groups": {
+   "infant": {
+    "max_years": 1
+   },
+   "child": {
+    "max_years": 5
+   },
+   "elder": {
+    "min_years": 65
+   }
+  },
+  "raise": {
+   "infant": {
+    "self_care": "urgent",
+    "routine": "urgent"
+   },
+   "child": {
+    "self_care": "routine"
+   },
+   "pregnant": {
+    "self_care": "urgent",
+    "routine": "urgent"
+   },
+   "elder": {
+    "self_care": "routine"
+   }
+  },
+  "note": "Infants and pregnant women never get self-care or routine from these pathways; they are raised to a same-day review. Children under 5 and over-65s never get self-care."
+ },
+ "unknown_policy": "On a danger question, 'unsure' counts as 'yes' (false alarms are acceptable, misses are not).",
+ "max_questions": 4,
+ "pathways": [
+  {
+   "id": "fever",
+   "title": {
+    "en": "Fever",
+    "hinglish": "Bukhar",
+    "hi": "बुखार"
+   },
+   "cues": [
+    "\\bfever\\b",
+    "\\btemperature\\b",
+    "\\bbukh[ae]r\\b",
+    "\\btaap\\b",
+    "बुखार",
+    "ज्वर",
+    "\\bchills\\b",
+    "\\bdengue\\b",
+    "\\bmalaria\\b",
+    "\\btyphoid\\b"
+   ],
+   "questions": [
+    {
+     "id": "danger",
+     "text": {
+      "en": "Is there trouble breathing, confusion or unusual sleepiness, a stiff neck, a seizure, bluish lips, or a rash that does not fade when pressed?",
+      "hinglish": "Kya saans lene mein taklif, uljhan ya bahut neend, gardan akadna, daura, hoth neele ya aisa daane hain jo dabane par nahi jaate?",
+      "hi": "क्या साँस लेने में तकलीफ़, उलझन या बहुत नींद, गर्दन अकड़ना, दौरा, नीले होंठ या दबाने पर न मिटने वाले दाने हैं?"
+     },
+     "danger": true,
+     "options": [
+      {
+       "id": "yes",
+       "label": {
+        "en": "Yes",
+        "hinglish": "Haan",
+        "hi": "हाँ"
+       }
+      },
+      {
+       "id": "no",
+       "label": {
+        "en": "No",
+        "hinglish": "Nahi",
+        "hi": "नहीं"
+       }
+      },
+      {
+       "id": "unsure",
+       "label": {
+        "en": "Not sure",
+        "hinglish": "Pata nahi",
+        "hi": "पता नहीं"
+       }
+      }
+     ]
+    },
+    {
+     "id": "bleed",
+     "text": {
+      "en": "Any bleeding (gums, nose, black stool), severe belly pain, or repeated vomiting?",
+      "hinglish": "Kya khoon aana (masoodhe, naak, kala potty), pet mein tez dard ya baar-baar ulti hai?",
+      "hi": "क्या खून आना (मसूड़े, नाक, काला मल), पेट में तेज़ दर्द या बार-बार उल्टी है?"
+     },
+     "danger": false,
+     "options": [
+      {
+       "id": "yes",
+       "label": {
+        "en": "Yes",
+        "hinglish": "Haan",
+        "hi": "हाँ"
+       }
+      },
+      {
+       "id": "no",
+       "label": {
+        "en": "No",
+        "hinglish": "Nahi",
+        "hi": "नहीं"
+       }
+      },
+      {
+       "id": "unsure",
+       "label": {
+        "en": "Not sure",
+        "hinglish": "Pata nahi",
+        "hi": "पता नहीं"
+       }
+      }
+     ]
+    },
+    {
+     "id": "duration",
+     "text": {
+      "en": "How many days has the fever lasted?",
+      "hinglish": "Bukhar kitne din se hai?",
+      "hi": "बुखार कितने दिन से है?"
+     },
+     "danger": false,
+     "options": [
+      {
+       "id": "short",
+       "label": {
+        "en": "Less than 2 days",
+        "hinglish": "2 din se kam",
+        "hi": "2 दिन से कम"
+       }
+      },
+      {
+       "id": "mid",
+       "label": {
+        "en": "2 to 4 days",
+        "hinglish": "2 se 4 din",
+        "hi": "2 से 4 दिन"
+       }
+      },
+      {
+       "id": "long",
+       "label": {
+        "en": "5 days or more",
+        "hinglish": "5 din ya zyada",
+        "hi": "5 दिन या ज़्यादा"
+       }
+      }
+     ]
+    },
+    {
+     "id": "fluids",
+     "text": {
+      "en": "Is the person drinking fluids and passing urine normally?",
+      "hinglish": "Kya paani pi rahe hain aur peshab normal hai?",
+      "hi": "क्या पानी पी रहे हैं और पेशाब सामान्य है?"
+     },
+     "danger": false,
+     "options": [
+      {
+       "id": "yes",
+       "label": {
+        "en": "Yes",
+        "hinglish": "Haan",
+        "hi": "हाँ"
+       }
+      },
+      {
+       "id": "no",
+       "label": {
+        "en": "No",
+        "hinglish": "Nahi",
+        "hi": "नहीं"
+       }
+      },
+      {
+       "id": "unsure",
+       "label": {
+        "en": "Not sure",
+        "hinglish": "Pata nahi",
+        "hi": "पता नहीं"
+       }
+      }
+     ]
+    }
+   ],
+   "rules": [
+    {
+     "when": {
+      "danger": [
+       "yes",
+       "unsure"
+      ]
+     },
+     "disposition": "emergency",
+     "care_type": "emergency_112",
+     "urgency": "emergency",
+     "why": {
+      "en": "Fever with a danger sign can be meningitis, sepsis or severe infection.",
+      "hinglish": "Bukhar ke saath khatre ka lakshan gambhir sankraman ho sakta hai.",
+      "hi": "बुखार के साथ खतरे का लक्षण गंभीर संक्रमण हो सकता है।"
+     }
+    },
+    {
+     "when": {
+      "bleed": [
+       "yes",
+       "unsure"
+      ]
+     },
+     "disposition": "urgent",
+     "care_type": "paramedic_home_visit",
+     "urgency": "same_day",
+     "why": {
+      "en": "Fever with bleeding or severe belly pain needs same-day examination (dengue warning signs).",
+      "hinglish": "Bukhar ke saath khoon ya tez pet dard ka aaj hi check zaroori hai (dengue ke warning signs).",
+      "hi": "बुखार के साथ खून या तेज़ पेट दर्द की आज ही जाँच ज़रूरी है (डेंगू के चेतावनी संकेत)।"
+     }
+    },
+    {
+     "when": {
+      "fluids": [
+       "no"
+      ]
+     },
+     "disposition": "urgent",
+     "care_type": "paramedic_home_visit",
+     "urgency": "same_day",
+     "why": {
+      "en": "Not drinking or passing urine risks dehydration.",
+      "hinglish": "Paani na peena ya peshab kam hona dehydration ka khatra hai.",
+      "hi": "पानी न पीना या पेशाब कम होना निर्जलीकरण का खतरा है।"
+     }
+    },
+    {
+     "when": {
+      "duration": [
+       "long"
+      ]
+     },
+     "disposition": "urgent",
+     "care_type": "teleconsultation",
+     "urgency": "same_day",
+     "why": {
+      "en": "Fever for 5 days or more needs a doctor and usually blood tests.",
+      "hinglish": "5 din ya zyada ka bukhar doctor aur aksar blood test maangta hai.",
+      "hi": "5 दिन या ज़्यादा का बुखार डॉक्टर और अक्सर ब्लड टेस्ट माँगता है।"
+     }
+    },
+    {
+     "when": {
+      "duration": [
+       "mid"
+      ]
+     },
+     "disposition": "routine",
+     "care_type": "teleconsultation",
+     "urgency": "scheduled",
+     "why": {
+      "en": "Fever for 2-4 days: book a doctor consult within a day or two.",
+      "hinglish": "2-4 din ka bukhar: ek-do din mein doctor se consult lein.",
+      "hi": "2-4 दिन का बुखार: एक-दो दिन में डॉक्टर से परामर्श लें।"
+     }
+    },
+    {
+     "when": {
+      "duration": [
+       "short"
+      ]
+     },
+     "disposition": "self_care",
+     "care_type": "teleconsultation",
+     "urgency": "scheduled",
+     "why": {
+      "en": "Short fever with no warning signs can usually be managed at home.",
+      "hinglish": "Kam din ka bukhar bina warning signs ke aam taur par ghar par sambhal sakte hain.",
+      "hi": "कम दिन का बुखार बिना चेतावनी संकेत के आम तौर पर घर पर संभाला जा सकता है।"
+     },
+     "advice": {
+      "en": "Rest, drink plenty of fluids, light cotton clothing, take paracetamol only as per the label or your doctor. Seek care if fever passes 3 days or any warning sign appears.",
+      "hinglish": "Aaram karein, khoob paani/ORS piyen, halke kapde. Paracetamol sirf label ya doctor ke anusaar. 3 din se zyada ya koi warning sign ho to doctor dikhayen.",
+      "hi": "आराम करें, खूब पानी/ORS पिएँ, हल्के कपड़े। पैरासिटामोल केवल लेबल या डॉक्टर के अनुसार। 3 दिन से ज़्यादा या कोई चेतावनी संकेत हो तो डॉक्टर को दिखाएँ।"
+     }
+    }
+   ]
+  },
+  {
+   "id": "cough_breathing",
+   "title": {
+    "en": "Cough or breathing",
+    "hinglish": "Khansi ya saans",
+    "hi": "खाँसी या साँस"
+   },
+   "cues": [
+    "\\bcough\\b",
+    "\\bkhansi\\b",
+    "खांसी",
+    "खाँसी",
+    "\\bbreath",
+    "\\bsaans\\b",
+    "साँस",
+    "सांस",
+    "\\bwheez",
+    "\\basthma\\b",
+    "\\bdama\\b"
+   ],
+   "questions": [
+    {
+     "id": "danger",
+     "text": {
+      "en": "Is the person struggling to breathe, unable to speak a full sentence, with blue lips, or chest pain?",
+      "hinglish": "Kya saans lene mein bahut mushkil, poora vaakya nahi bol pa rahe, hoth neele ya seene mein dard hai?",
+      "hi": "क्या साँस लेने में बहुत मुश्किल, पूरा वाक्य नहीं बोल पा रहे, होंठ नीले या सीने में दर्द है?"
+     },
+     "danger": true,
+     "options": [
+      {
+       "id": "yes",
+       "label": {
+        "en": "Yes",
+        "hinglish": "Haan",
+        "hi": "हाँ"
+       }
+      },
+      {
+       "id": "no",
+       "label": {
+        "en": "No",
+        "hinglish": "Nahi",
+        "hi": "नहीं"
+       }
+      },
+      {
+       "id": "unsure",
+       "label": {
+        "en": "Not sure",
+        "hinglish": "Pata nahi",
+        "hi": "पता नहीं"
+       }
+      }
+     ]
+    },
+    {
+     "id": "blood",
+     "text": {
+      "en": "Coughing up blood, or a known lung/heart condition getting worse?",
+      "hinglish": "Khansi mein khoon ya pehle se phephde/dil ki bimari badh rahi hai?",
+      "hi": "खाँसी में खून या पहले से फेफड़ों/दिल की बीमारी बढ़ रही है?"
+     },
+     "danger": false,
+     "options": [
+      {
+       "id": "yes",
+       "label": {
+        "en": "Yes",
+        "hinglish": "Haan",
+        "hi": "हाँ"
+       }
+      },
+      {
+       "id": "no",
+       "label": {
+        "en": "No",
+        "hinglish": "Nahi",
+        "hi": "नहीं"
+       }
+      },
+      {
+       "id": "unsure",
+       "label": {
+        "en": "Not sure",
+        "hinglish": "Pata nahi",
+        "hi": "पता नहीं"
+       }
+      }
+     ]
+    },
+    {
+     "id": "duration",
+     "text": {
+      "en": "How long has the cough lasted?",
+      "hinglish": "Khansi kitne samay se hai?",
+      "hi": "खाँसी कितने समय से है?"
+     },
+     "danger": false,
+     "options": [
+      {
+       "id": "short",
+       "label": {
+        "en": "Under a week",
+        "hinglish": "Ek hafte se kam",
+        "hi": "एक हफ्ते से कम"
+       }
+      },
+      {
+       "id": "mid",
+       "label": {
+        "en": "1 to 3 weeks",
+        "hinglish": "1 se 3 hafte",
+        "hi": "1 से 3 हफ्ते"
+       }
+      },
+      {
+       "id": "long",
+       "label": {
+        "en": "More than 3 weeks",
+        "hinglish": "3 hafte se zyada",
+        "hi": "3 हफ्ते से ज़्यादा"
+       }
+      }
+     ]
+    }
+   ],
+   "rules": [
+    {
+     "when": {
+      "danger": [
+       "yes",
+       "unsure"
+      ]
+     },
+     "disposition": "emergency",
+     "care_type": "emergency_112",
+     "urgency": "emergency",
+     "why": {
+      "en": "Severe breathlessness or chest pain is an emergency.",
+      "hinglish": "Bahut saans phoolna ya seene ka dard emergency hai.",
+      "hi": "बहुत साँस फूलना या सीने का दर्द इमरजेंसी है।"
+     }
+    },
+    {
+     "when": {
+      "blood": [
+       "yes",
+       "unsure"
+      ]
+     },
+     "disposition": "urgent",
+     "care_type": "paramedic_home_visit",
+     "urgency": "same_day",
+     "why": {
+      "en": "Blood in cough or a worsening chronic condition needs same-day examination.",
+      "hinglish": "Khansi mein khoon ya purani bimari badhna aaj hi check maangta hai.",
+      "hi": "खाँसी में खून या पुरानी बीमारी बढ़ना आज ही जाँच माँगता है।"
+     }
+    },
+    {
+     "when": {
+      "duration": [
+       "long"
+      ]
+     },
+     "disposition": "routine",
+     "care_type": "teleconsultation",
+     "urgency": "scheduled",
+     "why": {
+      "en": "A cough over 3 weeks needs a doctor and tests (including TB screening).",
+      "hinglish": "3 hafte se lambi khansi mein doctor aur jaanch (TB screening sahit) zaroori hai.",
+      "hi": "3 हफ्ते से लंबी खाँसी में डॉक्टर और जाँच (TB स्क्रीनिंग सहित) ज़रूरी है।"
+     }
+    },
+    {
+     "when": {
+      "duration": [
+       "mid"
+      ]
+     },
+     "disposition": "routine",
+     "care_type": "teleconsultation",
+     "urgency": "scheduled",
+     "why": {
+      "en": "A cough of 1-3 weeks: book a doctor consult.",
+      "hinglish": "1-3 hafte ki khansi: doctor se consult lein.",
+      "hi": "1-3 हफ्ते की खाँसी: डॉक्टर से परामर्श लें।"
+     }
+    },
+    {
+     "when": {
+      "duration": [
+       "short"
+      ]
+     },
+     "disposition": "self_care",
+     "care_type": "teleconsultation",
+     "urgency": "scheduled",
+     "why": {
+      "en": "A short cough with no warning signs can be managed at home.",
+      "hinglish": "Kam din ki khansi bina warning signs ke ghar par sambhal sakte hain.",
+      "hi": "कम दिन की खाँसी बिना चेतावनी संकेत के घर पर संभाली जा सकती है।"
+     },
+     "advice": {
+      "en": "Warm fluids, rest, avoid smoke and dust (Delhi smog season: stay indoors, mask outdoors). See a doctor if it lasts over a week or breathing worsens.",
+      "hinglish": "Garam paani/kaadha, aaram, dhuen aur dhool se bachein (smog mein ghar ke andar rahein, bahar mask). Ek hafte se zyada ya saans bigde to doctor dikhayen.",
+      "hi": "गुनगुना पानी, आराम, धुएँ-धूल से बचें (स्मॉग में घर के अंदर रहें, बाहर मास्क)। एक हफ्ते से ज़्यादा या साँस बिगड़े तो डॉक्टर को दिखाएँ।"
+     }
+    }
+   ]
+  },
+  {
+   "id": "vomit_diarrhoea",
+   "title": {
+    "en": "Vomiting or loose motions",
+    "hinglish": "Ulti ya dast",
+    "hi": "उल्टी या दस्त"
+   },
+   "cues": [
+    "\\bvomit",
+    "\\bulti\\b",
+    "उल्टी",
+    "\\bdiarrh",
+    "\\bloose motion",
+    "\\bdast\\b",
+    "दस्त",
+    "\\bstomach (?:bug|upset)",
+    "\\bfood poison"
+   ],
+   "questions": [
+    {
+     "id": "danger",
+     "text": {
+      "en": "Is there blood in vomit or stool (or black stool), severe constant belly pain, or is the person very drowsy or hard to wake?",
+      "hinglish": "Kya ulti ya potty mein khoon (ya kala potty), pet mein lagatar tez dard, ya bahut neend/jagana mushkil hai?",
+      "hi": "क्या उल्टी या मल में खून (या काला मल), पेट में लगातार तेज़ दर्द, या बहुत नींद/जगाना मुश्किल है?"
+     },
+     "danger": true,
+     "options": [
+      {
+       "id": "yes",
+       "label": {
+        "en": "Yes",
+        "hinglish": "Haan",
+        "hi": "हाँ"
+       }
+      },
+      {
+       "id": "no",
+       "label": {
+        "en": "No",
+        "hinglish": "Nahi",
+        "hi": "नहीं"
+       }
+      },
+      {
+       "id": "unsure",
+       "label": {
+        "en": "Not sure",
+        "hinglish": "Pata nahi",
+        "hi": "पता नहीं"
+       }
+      }
+     ]
+    },
+    {
+     "id": "dehydration",
+     "text": {
+      "en": "Very dry mouth, no urine for 8 hours, sunken eyes, or dizziness on standing?",
+      "hinglish": "Munh bahut sookha, 8 ghante se peshab nahi, aankhein dhansi ya khade hone par chakkar?",
+      "hi": "मुँह बहुत सूखा, 8 घंटे से पेशाब नहीं, आँखें धँसी या खड़े होने पर चक्कर?"
+     },
+     "danger": false,
+     "options": [
+      {
+       "id": "yes",
+       "label": {
+        "en": "Yes",
+        "hinglish": "Haan",
+        "hi": "हाँ"
+       }
+      },
+      {
+       "id": "no",
+       "label": {
+        "en": "No",
+        "hinglish": "Nahi",
+        "hi": "नहीं"
+       }
+      },
+      {
+       "id": "unsure",
+       "label": {
+        "en": "Not sure",
+        "hinglish": "Pata nahi",
+        "hi": "पता नहीं"
+       }
+      }
+     ]
+    },
+    {
+     "id": "duration",
+     "text": {
+      "en": "For how long?",
+      "hinglish": "Kitne samay se?",
+      "hi": "कितने समय से?"
+     },
+     "danger": false,
+     "options": [
+      {
+       "id": "short",
+       "label": {
+        "en": "Under 2 days",
+        "hinglish": "2 din se kam",
+        "hi": "2 दिन से कम"
+       }
+      },
+      {
+       "id": "long",
+       "label": {
+        "en": "2 days or more",
+        "hinglish": "2 din ya zyada",
+        "hi": "2 दिन या ज़्यादा"
+       }
+      }
+     ]
+    }
+   ],
+   "rules": [
+    {
+     "when": {
+      "danger": [
+       "yes",
+       "unsure"
+      ]
+     },
+     "disposition": "emergency",
+     "care_type": "emergency_112",
+     "urgency": "emergency",
+     "why": {
+      "en": "Blood, severe pain or drowsiness is an emergency.",
+      "hinglish": "Khoon, tez dard ya behoshi jaisi neend emergency hai.",
+      "hi": "खून, तेज़ दर्द या बेहोशी जैसी नींद इमरजेंसी है।"
+     }
+    },
+    {
+     "when": {
+      "dehydration": [
+       "yes",
+       "unsure"
+      ]
+     },
+     "disposition": "urgent",
+     "care_type": "paramedic_home_visit",
+     "urgency": "same_day",
+     "why": {
+      "en": "Signs of dehydration need same-day care (possible drip).",
+      "hinglish": "Dehydration ke lakshan mein aaj hi care chahiye (drip lag sakti hai).",
+      "hi": "निर्जलीकरण के लक्षणों में आज ही देखभाल चाहिए (ड्रिप लग सकती है)।"
+     }
+    },
+    {
+     "when": {
+      "duration": [
+       "long"
+      ]
+     },
+     "disposition": "routine",
+     "care_type": "teleconsultation",
+     "urgency": "scheduled",
+     "why": {
+      "en": "Symptoms for 2 days or more: book a doctor consult.",
+      "hinglish": "2 din ya zyada: doctor se consult lein.",
+      "hi": "2 दिन या ज़्यादा: डॉक्टर से परामर्श लें।"
+     }
+    },
+    {
+     "when": {
+      "duration": [
+       "short"
+      ]
+     },
+     "disposition": "self_care",
+     "care_type": "teleconsultation",
+     "urgency": "scheduled",
+     "why": {
+      "en": "Short illness without dehydration can be managed at home.",
+      "hinglish": "Kam din ki bimari bina dehydration ke ghar par sambhal sakte hain.",
+      "hi": "कम दिन की बीमारी बिना निर्जलीकरण के घर पर संभाली जा सकती है।"
+     },
+     "advice": {
+      "en": "Sip ORS or clean fluids often, small light meals, wash hands, no self-started antibiotics. Seek care if you cannot keep fluids down.",
+      "hinglish": "ORS ya saaf paani thoda-thoda baar-baar piyen, halka khana, haath dhoyen, bina doctor ke antibiotic nahi. Paani na tik paye to doctor dikhayen.",
+      "hi": "ORS या साफ़ पानी थोड़ा-थोड़ा बार-बार पिएँ, हल्का खाना, हाथ धोएँ, बिना डॉक्टर के एंटीबायोटिक नहीं। पानी न टिके तो डॉक्टर को दिखाएँ।"
+     }
+    }
+   ]
+  },
+  {
+   "id": "chest_pain",
+   "title": {
+    "en": "Chest pain",
+    "hinglish": "Seene mein dard",
+    "hi": "सीने में दर्द"
+   },
+   "cues": [
+    "\\bchest pain\\b",
+    "\\bchest (?:tight|pressure|heav)",
+    "seene (?:me|mein) dard",
+    "सीने में दर्द",
+    "सीने में जकड़न",
+    "\\bheart attack\\b",
+    "\\bpalpitation"
+   ],
+   "questions": [
+    {
+     "id": "now",
+     "text": {
+      "en": "Is the pain present now, or did it happen in the last hour?",
+      "hinglish": "Kya dard abhi hai ya pichhle ek ghante mein hua?",
+      "hi": "क्या दर्द अभी है या पिछले एक घंटे में हुआ?"
+     },
+     "danger": true,
+     "options": [
+      {
+       "id": "yes",
+       "label": {
+        "en": "Yes",
+        "hinglish": "Haan",
+        "hi": "हाँ"
+       }
+      },
+      {
+       "id": "no",
+       "label": {
+        "en": "No",
+        "hinglish": "Nahi",
+        "hi": "नहीं"
+       }
+      },
+      {
+       "id": "unsure",
+       "label": {
+        "en": "Not sure",
+        "hinglish": "Pata nahi",
+        "hi": "पता नहीं"
+       }
+      }
+     ]
+    },
+    {
+     "id": "spread",
+     "text": {
+      "en": "Does it spread to the arm, jaw or back, or come with sweating, breathlessness or nausea?",
+      "hinglish": "Kya dard haath, jabde ya peeth tak jaata hai, ya paseena, saans phoolna, ji machlana hai?",
+      "hi": "क्या दर्द हाथ, जबड़े या पीठ तक जाता है, या पसीना, साँस फूलना, जी मचलना है?"
+     },
+     "danger": true,
+     "options": [
+      {
+       "id": "yes",
+       "label": {
+        "en": "Yes",
+        "hinglish": "Haan",
+        "hi": "हाँ"
+       }
+      },
+      {
+       "id": "no",
+       "label": {
+        "en": "No",
+        "hinglish": "Nahi",
+        "hi": "नहीं"
+       }
+      },
+      {
+       "id": "unsure",
+       "label": {
+        "en": "Not sure",
+        "hinglish": "Pata nahi",
+        "hi": "पता नहीं"
+       }
+      }
+     ]
+    },
+    {
+     "id": "risk",
+     "text": {
+      "en": "Known heart disease, diabetes or high BP, or age 40 or above?",
+      "hinglish": "Dil ki bimari, sugar ya BP hai, ya umar 40 ya zyada?",
+      "hi": "दिल की बीमारी, शुगर या BP है, या उम्र 40 या ज़्यादा?"
+     },
+     "danger": false,
+     "options": [
+      {
+       "id": "yes",
+       "label": {
+        "en": "Yes",
+        "hinglish": "Haan",
+        "hi": "हाँ"
+       }
+      },
+      {
+       "id": "no",
+       "label": {
+        "en": "No",
+        "hinglish": "Nahi",
+        "hi": "नहीं"
+       }
+      },
+      {
+       "id": "unsure",
+       "label": {
+        "en": "Not sure",
+        "hinglish": "Pata nahi",
+        "hi": "पता नहीं"
+       }
+      }
+     ]
+    }
+   ],
+   "rules": [
+    {
+     "when": {
+      "now": [
+       "yes",
+       "unsure"
+      ]
+     },
+     "disposition": "emergency",
+     "care_type": "emergency_112",
+     "urgency": "emergency",
+     "why": {
+      "en": "Chest pain happening now or within the hour is treated as a possible heart attack.",
+      "hinglish": "Abhi ya ek ghante ke andar ka seene ka dard possible heart attack maana jaata hai.",
+      "hi": "अभी या एक घंटे के भीतर का सीने का दर्द संभावित हार्ट अटैक माना जाता है।"
+     }
+    },
+    {
+     "when": {
+      "spread": [
+       "yes",
+       "unsure"
+      ]
+     },
+     "disposition": "emergency",
+     "care_type": "emergency_112",
+     "urgency": "emergency",
+     "why": {
+      "en": "Pain spreading with sweating or breathlessness is a heart-attack warning.",
+      "hinglish": "Dard failna, paseena ya saans phoolna heart attack ki chetavni hai.",
+      "hi": "दर्द फैलना, पसीना या साँस फूलना हार्ट अटैक की चेतावनी है।"
+     }
+    },
+    {
+     "when": {
+      "risk": [
+       "yes",
+       "unsure"
+      ]
+     },
+     "disposition": "urgent",
+     "care_type": "teleconsultation",
+     "urgency": "same_day",
+     "why": {
+      "en": "Recent chest pain with heart risk factors needs a doctor today (ECG).",
+      "hinglish": "Seene ke dard ke saath dil ke risk factors mein aaj doctor/ECG zaroori hai.",
+      "hi": "सीने के दर्द के साथ दिल के जोखिम में आज डॉक्टर/ECG ज़रूरी है।"
+     }
+    },
+    {
+     "when": {
+      "risk": [
+       "no"
+      ]
+     },
+     "disposition": "routine",
+     "care_type": "teleconsultation",
+     "urgency": "scheduled",
+     "why": {
+      "en": "Pain that has settled, without risk factors: see a doctor soon.",
+      "hinglish": "Dard theek ho chuka aur risk factor nahi: jaldi doctor se milein.",
+      "hi": "दर्द ठीक हो चुका और जोखिम नहीं: जल्द डॉक्टर से मिलें।"
+     }
+    }
+   ]
+  },
+  {
+   "id": "injury_wound",
+   "title": {
+    "en": "Injury or wound",
+    "hinglish": "Chot ya ghaav",
+    "hi": "चोट या घाव"
+   },
+   "cues": [
+    "\\binjur",
+    "\\bwound\\b",
+    "\\bcut\\b",
+    "\\bfell\\b",
+    "\\bburn",
+    "\\bbite\\b",
+    "\\bchot\\b",
+    "\\bghaav\\b",
+    "\\bgir gay",
+    "चोट",
+    "घाव",
+    "जल गया",
+    "\\bdressing\\b"
+   ],
+   "questions": [
+    {
+     "id": "danger",
+     "text": {
+      "en": "Heavy bleeding that does not stop after 10 minutes of firm pressure, a bone showing, a head injury with vomiting or drowsiness, or a very large burn?",
+      "hinglish": "10 minute dabane par bhi khoon nahi ruk raha, haddi dikh rahi, sir ki chot ke saath ulti/neend, ya bahut badi jalan?",
+      "hi": "10 मिनट दबाने पर भी खून नहीं रुक रहा, हड्डी दिख रही, सिर की चोट के साथ उल्टी/नींद, या बहुत बड़ी जलन?"
+     },
+     "danger": true,
+     "options": [
+      {
+       "id": "yes",
+       "label": {
+        "en": "Yes",
+        "hinglish": "Haan",
+        "hi": "हाँ"
+       }
+      },
+      {
+       "id": "no",
+       "label": {
+        "en": "No",
+        "hinglish": "Nahi",
+        "hi": "नहीं"
+       }
+      },
+      {
+       "id": "unsure",
+       "label": {
+        "en": "Not sure",
+        "hinglish": "Pata nahi",
+        "hi": "पता नहीं"
+       }
+      }
+     ]
+    },
+    {
+     "id": "deep",
+     "text": {
+      "en": "Is the wound deep, gaping, dirty, or an animal bite?",
+      "hinglish": "Kya ghaav gehra, khula, gandaa hai ya jaanwar ne kaata hai?",
+      "hi": "क्या घाव गहरा, खुला, गंदा है या जानवर ने काटा है?"
+     },
+     "danger": false,
+     "options": [
+      {
+       "id": "yes",
+       "label": {
+        "en": "Yes",
+        "hinglish": "Haan",
+        "hi": "हाँ"
+       }
+      },
+      {
+       "id": "no",
+       "label": {
+        "en": "No",
+        "hinglish": "Nahi",
+        "hi": "नहीं"
+       }
+      },
+      {
+       "id": "unsure",
+       "label": {
+        "en": "Not sure",
+        "hinglish": "Pata nahi",
+        "hi": "पता नहीं"
+       }
+      }
+     ]
+    },
+    {
+     "id": "tetanus",
+     "text": {
+      "en": "Tetanus shot in the last 5 years?",
+      "hinglish": "Pichhle 5 saal mein tetanus injection laga?",
+      "hi": "पिछले 5 साल में टिटनेस इंजेक्शन लगा?"
+     },
+     "danger": false,
+     "options": [
+      {
+       "id": "yes",
+       "label": {
+        "en": "Yes",
+        "hinglish": "Haan",
+        "hi": "हाँ"
+       }
+      },
+      {
+       "id": "no",
+       "label": {
+        "en": "No",
+        "hinglish": "Nahi",
+        "hi": "नहीं"
+       }
+      },
+      {
+       "id": "unsure",
+       "label": {
+        "en": "Not sure",
+        "hinglish": "Pata nahi",
+        "hi": "पता नहीं"
+       }
+      }
+     ]
+    }
+   ],
+   "rules": [
+    {
+     "when": {
+      "danger": [
+       "yes",
+       "unsure"
+      ]
+     },
+     "disposition": "emergency",
+     "care_type": "emergency_112",
+     "urgency": "emergency",
+     "why": {
+      "en": "Uncontrolled bleeding, head injury signs or a large burn need emergency care.",
+      "hinglish": "Na rukne wala khoon, sir ki chot ke lakshan ya badi jalan emergency hai.",
+      "hi": "न रुकने वाला खून, सिर की चोट के लक्षण या बड़ी जलन इमरजेंसी है।"
+     }
+    },
+    {
+     "when": {
+      "deep": [
+       "yes",
+       "unsure"
+      ]
+     },
+     "disposition": "urgent",
+     "care_type": "home_nursing",
+     "urgency": "same_day",
+     "why": {
+      "en": "A deep, dirty or bite wound needs a nurse or doctor today (cleaning, dressing, possible stitches, tetanus/rabies advice).",
+      "hinglish": "Gehre, gande ya kaatne wale ghaav ko aaj nurse/doctor chahiye (safai, dressing, tanke, tetanus/rabies salah).",
+      "hi": "गहरे, गंदे या काटने वाले घाव को आज नर्स/डॉक्टर चाहिए (सफ़ाई, ड्रेसिंग, टाँके, टिटनेस/रेबीज़ सलाह)।"
+     }
+    },
+    {
+     "when": {
+      "tetanus": [
+       "no",
+       "unsure"
+      ]
+     },
+     "disposition": "routine",
+     "care_type": "teleconsultation",
+     "urgency": "scheduled",
+     "why": {
+      "en": "Ask a doctor whether a tetanus booster is needed.",
+      "hinglish": "Doctor se poochhein ki tetanus booster chahiye ya nahi.",
+      "hi": "डॉक्टर से पूछें कि टिटनेस बूस्टर चाहिए या नहीं।"
+     }
+    },
+    {
+     "when": {
+      "tetanus": [
+       "yes"
+      ]
+     },
+     "disposition": "self_care",
+     "care_type": "home_nursing",
+     "urgency": "scheduled",
+     "why": {
+      "en": "A small clean wound can be cared for at home.",
+      "hinglish": "Chhota saaf ghaav ghar par sambhal sakte hain.",
+      "hi": "छोटा साफ़ घाव घर पर संभाला जा सकता है।"
+     },
+     "advice": {
+      "en": "Wash with clean running water, press gently to stop bleeding, cover with a clean dressing, change daily. See a nurse if red, swollen, pus or fever appears.",
+      "hinglish": "Saaf behte paani se dhoyen, halka dabakar khoon rokein, saaf dressing lagayen, roz badlein. Laali, sujan, peep ya bukhar ho to nurse ko dikhayen.",
+      "hi": "साफ़ बहते पानी से धोएँ, हल्का दबाकर खून रोकें, साफ़ ड्रेसिंग लगाएँ, रोज़ बदलें। लाली, सूजन, मवाद या बुखार हो तो नर्स को दिखाएँ।"
+     }
+    }
+   ]
+  },
+  {
+   "id": "diabetes_bp",
+   "title": {
+    "en": "Diabetes or blood pressure",
+    "hinglish": "Sugar ya BP",
+    "hi": "शुगर या बीपी"
+   },
+   "cues": [
+    "\\bdiabet",
+    "\\bsugar\\b",
+    "\\bblood pressure\\b",
+    "\\bbp\\b",
+    "\\bhypertension\\b",
+    "\\binsulin\\b",
+    "शुगर",
+    "मधुमेह",
+    "ब्लड प्रेशर"
+   ],
+   "questions": [
+    {
+     "id": "danger",
+     "text": {
+      "en": "Confusion, fainting, fruity-smelling breath, or with high BP: severe headache, chest pain, or weakness on one side?",
+      "hinglish": "Uljhan, behoshi, saans mein meethi gandh, ya high BP ke saath tez sir dard, seene mein dard, ek taraf kamzori?",
+      "hi": "उलझन, बेहोशी, साँस में मीठी गंध, या हाई BP के साथ तेज़ सिर दर्द, सीने में दर्द, एक तरफ़ कमज़ोरी?"
+     },
+     "danger": true,
+     "options": [
+      {
+       "id": "yes",
+       "label": {
+        "en": "Yes",
+        "hinglish": "Haan",
+        "hi": "हाँ"
+       }
+      },
+      {
+       "id": "no",
+       "label": {
+        "en": "No",
+        "hinglish": "Nahi",
+        "hi": "नहीं"
+       }
+      },
+      {
+       "id": "unsure",
+       "label": {
+        "en": "Not sure",
+        "hinglish": "Pata nahi",
+        "hi": "पता नहीं"
+       }
+      }
+     ]
+    },
+    {
+     "id": "reading",
+     "text": {
+      "en": "Is today's reading very high (sugar above 300 mg/dL or BP 180/110 or more) or very low (sugar below 70)?",
+      "hinglish": "Aaj ka reading bahut high (sugar 300 se upar ya BP 180/110 ya zyada) ya bahut low (sugar 70 se neeche) hai?",
+      "hi": "आज की रीडिंग बहुत ज़्यादा (शुगर 300 से ऊपर या BP 180/110 या ज़्यादा) या बहुत कम (शुगर 70 से नीचे) है?"
+     },
+     "danger": false,
+     "options": [
+      {
+       "id": "yes",
+       "label": {
+        "en": "Yes",
+        "hinglish": "Haan",
+        "hi": "हाँ"
+       }
+      },
+      {
+       "id": "no",
+       "label": {
+        "en": "No",
+        "hinglish": "Nahi",
+        "hi": "नहीं"
+       }
+      },
+      {
+       "id": "unsure",
+       "label": {
+        "en": "Not sure",
+        "hinglish": "Pata nahi",
+        "hi": "पता नहीं"
+       }
+      }
+     ]
+    },
+    {
+     "id": "need",
+     "text": {
+      "en": "What do you need?",
+      "hinglish": "Aapko kya chahiye?",
+      "hi": "आपको क्या चाहिए?"
+     },
+     "danger": false,
+     "options": [
+      {
+       "id": "test",
+       "label": {
+        "en": "A routine check or lab test",
+        "hinglish": "Routine check ya lab test",
+        "hi": "रूटीन जाँच या लैब टेस्ट"
+       }
+      },
+      {
+       "id": "doctor",
+       "label": {
+        "en": "Medicine review with a doctor",
+        "hinglish": "Doctor se dawa review",
+        "hi": "डॉक्टर से दवा की समीक्षा"
+       }
+      },
+      {
+       "id": "other",
+       "label": {
+        "en": "Something else",
+        "hinglish": "Kuch aur",
+        "hi": "कुछ और"
+       }
+      }
+     ]
+    }
+   ],
+   "rules": [
+    {
+     "when": {
+      "danger": [
+       "yes",
+       "unsure"
+      ]
+     },
+     "disposition": "emergency",
+     "care_type": "emergency_112",
+     "urgency": "emergency",
+     "why": {
+      "en": "These are signs of a diabetic or hypertensive emergency.",
+      "hinglish": "Yeh sugar ya BP emergency ke sanket hain.",
+      "hi": "ये शुगर या BP इमरजेंसी के संकेत हैं।"
+     }
+    },
+    {
+     "when": {
+      "reading": [
+       "yes",
+       "unsure"
+      ]
+     },
+     "disposition": "urgent",
+     "care_type": "teleconsultation",
+     "urgency": "same_day",
+     "why": {
+      "en": "A very high or low reading needs a doctor today.",
+      "hinglish": "Bahut high ya low reading mein aaj doctor chahiye.",
+      "hi": "बहुत ज़्यादा या कम रीडिंग में आज डॉक्टर चाहिए।"
+     }
+    },
+    {
+     "when": {
+      "need": [
+       "test"
+      ]
+     },
+     "disposition": "routine",
+     "care_type": "lab_test_home",
+     "urgency": "scheduled",
+     "why": {
+      "en": "A routine test can be done by home sample collection.",
+      "hinglish": "Routine test ghar par sample collection se ho sakta hai.",
+      "hi": "रूटीन टेस्ट घर पर सैंपल कलेक्शन से हो सकता है।"
+     }
+    },
+    {
+     "when": {
+      "need": [
+       "doctor",
+       "other"
+      ]
+     },
+     "disposition": "routine",
+     "care_type": "teleconsultation",
+     "urgency": "scheduled",
+     "why": {
+      "en": "A medicine review can be done by teleconsultation.",
+      "hinglish": "Dawa review teleconsultation se ho sakta hai.",
+      "hi": "दवा की समीक्षा टेली-कंसल्टेशन से हो सकती है।"
+     }
+    }
+   ]
+  },
+  {
+   "id": "elderly_weakness",
+   "title": {
+    "en": "Weakness or dizziness",
+    "hinglish": "Kamzori ya chakkar",
+    "hi": "कमज़ोरी या चक्कर"
+   },
+   "cues": [
+    "\\bweak",
+    "\\bdizz",
+    "\\bkamzori\\b",
+    "\\bchakkar\\b",
+    "\\bthakan\\b",
+    "कमज़ोरी",
+    "कमजोरी",
+    "चक्कर",
+    "\\bfaint",
+    "\\bfatigue\\b"
+   ],
+   "questions": [
+    {
+     "id": "danger",
+     "text": {
+      "en": "Sudden weakness on one side, slurred speech, drooping face, fainting, or a fall with injury?",
+      "hinglish": "Achanak ek taraf kamzori, lada hua bolna, chehra tedha, behoshi ya girne se chot?",
+      "hi": "अचानक एक तरफ़ कमज़ोरी, लड़खड़ाती बोली, चेहरा टेढ़ा, बेहोशी या गिरने से चोट?"
+     },
+     "danger": true,
+     "options": [
+      {
+       "id": "yes",
+       "label": {
+        "en": "Yes",
+        "hinglish": "Haan",
+        "hi": "हाँ"
+       }
+      },
+      {
+       "id": "no",
+       "label": {
+        "en": "No",
+        "hinglish": "Nahi",
+        "hi": "नहीं"
+       }
+      },
+      {
+       "id": "unsure",
+       "label": {
+        "en": "Not sure",
+        "hinglish": "Pata nahi",
+        "hi": "पता नहीं"
+       }
+      }
+     ]
+    },
+    {
+     "id": "intake",
+     "text": {
+      "en": "Is the person eating, drinking and passing urine normally?",
+      "hinglish": "Kya khana-peena aur peshab normal hai?",
+      "hi": "क्या खाना-पीना और पेशाब सामान्य है?"
+     },
+     "danger": false,
+     "options": [
+      {
+       "id": "yes",
+       "label": {
+        "en": "Yes",
+        "hinglish": "Haan",
+        "hi": "हाँ"
+       }
+      },
+      {
+       "id": "no",
+       "label": {
+        "en": "No",
+        "hinglish": "Nahi",
+        "hi": "नहीं"
+       }
+      },
+      {
+       "id": "unsure",
+       "label": {
+        "en": "Not sure",
+        "hinglish": "Pata nahi",
+        "hi": "पता नहीं"
+       }
+      }
+     ]
+    },
+    {
+     "id": "duration",
+     "text": {
+      "en": "How long has this been going on?",
+      "hinglish": "Yeh kitne samay se hai?",
+      "hi": "यह कितने समय से है?"
+     },
+     "danger": false,
+     "options": [
+      {
+       "id": "short",
+       "label": {
+        "en": "Today or yesterday",
+        "hinglish": "Aaj ya kal se",
+        "hi": "आज या कल से"
+       }
+      },
+      {
+       "id": "mid",
+       "label": {
+        "en": "A few days",
+        "hinglish": "Kuch din se",
+        "hi": "कुछ दिन से"
+       }
+      },
+      {
+       "id": "long",
+       "label": {
+        "en": "Weeks",
+        "hinglish": "Hafton se",
+        "hi": "हफ्तों से"
+       }
+      }
+     ]
+    }
+   ],
+   "rules": [
+    {
+     "when": {
+      "danger": [
+       "yes",
+       "unsure"
+      ]
+     },
+     "disposition": "emergency",
+     "care_type": "emergency_112",
+     "urgency": "emergency",
+     "why": {
+      "en": "Stroke signs, fainting or injury from a fall are emergencies.",
+      "hinglish": "Stroke ke lakshan, behoshi ya girne ki chot emergency hai.",
+      "hi": "स्ट्रोक के लक्षण, बेहोशी या गिरने की चोट इमरजेंसी है।"
+     }
+    },
+    {
+     "when": {
+      "intake": [
+       "no"
+      ]
+     },
+     "disposition": "urgent",
+     "care_type": "paramedic_home_visit",
+     "urgency": "same_day",
+     "why": {
+      "en": "Not eating, drinking or passing urine needs a same-day check.",
+      "hinglish": "Khana-peena ya peshab band hone par aaj hi check chahiye.",
+      "hi": "खाना-पीना या पेशाब बंद होने पर आज ही जाँच चाहिए।"
+     }
+    },
+    {
+     "when": {
+      "duration": [
+       "mid",
+       "long"
+      ]
+     },
+     "disposition": "routine",
+     "care_type": "paramedic_home_visit",
+     "urgency": "scheduled",
+     "why": {
+      "en": "Ongoing weakness: a home visit for vitals and tests.",
+      "hinglish": "Lagatar kamzori: vitals aur jaanch ke liye home visit.",
+      "hi": "लगातार कमज़ोरी: वाइटल्स और जाँच के लिए होम विज़िट।"
+     }
+    },
+    {
+     "when": {
+      "duration": [
+       "short"
+      ]
+     },
+     "disposition": "self_care",
+     "care_type": "paramedic_home_visit",
+     "urgency": "scheduled",
+     "why": {
+      "en": "New mild weakness with normal intake can be watched at home for a day.",
+      "hinglish": "Nayi halki kamzori, khana-peena normal: ek din ghar par dekh sakte hain.",
+      "hi": "नई हल्की कमज़ोरी, खाना-पीना सामान्य: एक दिन घर पर देख सकते हैं।"
+     },
+     "advice": {
+      "en": "Rest, fluids, a light meal, stand up slowly. Book a visit if it lasts beyond a day or worsens.",
+      "hinglish": "Aaram, paani, halka khana, dheere uthein. Ek din se zyada ya badhe to visit book karein.",
+      "hi": "आराम, पानी, हल्का खाना, धीरे उठें। एक दिन से ज़्यादा या बढ़े तो विज़िट बुक करें।"
+     }
+    }
+   ]
+  }
+ ]
+}

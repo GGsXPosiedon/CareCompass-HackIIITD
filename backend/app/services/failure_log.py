@@ -25,6 +25,8 @@ def reasons(resp, state: dict) -> list[str]:
         out.append("fallback_route")
     if any("failed" in t.get("detail", "") for t in trace):
         out.append("llm_failed")
+    if any("skipped (LLM off)" in t.get("detail", "") for t in trace):
+        out.append("llm_off")  # no usable provider: no key found / LLM_BACKEND=off / every chain empty
     rs = state.get("rule_safety")
     if rs is not None and getattr(rs, "source", "") == "semantic":
         out.append("semantic_escalation")
@@ -41,6 +43,7 @@ def record(req, resp, state: dict) -> None:
         PATH.parent.mkdir(exist_ok=True)
         row = {"ts": int(time.time()), "why": why, "user_input": req.user_input,
                "history": [h.model_dump() if hasattr(h, "model_dump") else h for h in (req.conversation_history or [])][-6:],
+               "llm_errors": [f"{t.get('node')}: {t.get('detail', '')[:160]}" for t in state.get("trace", []) if "failed" in t.get("detail", "") or "skipped (LLM off)" in t.get("detail", "")],
                "care_type": resp.care_type, "follow_up": resp.follow_up_question, "red_flags": resp.red_flags}
         with PATH.open("a", encoding="utf-8") as fh:
             fh.write(json.dumps(row, ensure_ascii=False) + "\n")

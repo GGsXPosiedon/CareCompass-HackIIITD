@@ -9,22 +9,20 @@ import { VoiceSessionActiveContext } from '../voice/language';
 // Chat-style follow-up: the question "pops up" in the answer bar, the way ChatGPT/Claude ask clarifying
 // questions. Tapping an option (or pressing its number) answers immediately; "Something else" opens a
 // free-text answer. The conversation so far stays visible above.
-export function ChatQuestion({ copy, hindi, result, messages, symptom, input, setInput, onAnswer, onBack, busy, error }: {
-  copy: Copy; hindi: boolean; result: TriageResponse; messages: Message[]; symptom: string;
+export function AskCard({ copy, hindi, question, answerOptions, asked, input, setInput, onAnswer, onBack, busy, error }: {
+  copy: Copy; hindi: boolean; question: string; answerOptions: string[]; asked: number;
   input: string; setInput: (value: string) => void; onAnswer: (text: string) => void; onBack: () => void; busy: boolean; error: string;
 }) {
   const voiceActive = useContext(VoiceSessionActiveContext);
   const t = (en: string, hi: string) => hindi ? hi : en;
-  const options = result.answer_options ?? [];
+  const options = answerOptions;
   const [custom, setCustom] = useState(options.length === 0);
   const [picked, setPicked] = useState<string | null>(null);
   const card = useRef<HTMLFormElement>(null);
   const textarea = useRef<HTMLTextAreaElement>(null);
   const titleId = useId(); const errorId = useId();
-  const asked = messages.filter(m => m.role === 'assistant').length;
-  const thread = messages.slice(0, -1);
 
-  useEffect(() => { setCustom(options.length === 0); setPicked(null); card.current?.querySelector<HTMLElement>('.ask-option, textarea')?.focus({ preventScroll: true }); }, [result]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { setCustom(options.length === 0); setPicked(null); card.current?.querySelector<HTMLElement>('.ask-option, textarea')?.focus({ preventScroll: true }); }, [question, answerOptions.join('|')]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { if (custom) textarea.current?.focus(); }, [custom]);
 
   function choose(option: string) { if (busy) return; setPicked(option); onAnswer(option); }
@@ -36,19 +34,12 @@ export function ChatQuestion({ copy, hindi, result, messages, symptom, input, se
     else if (event.key === 'Escape') { event.preventDefault(); onBack(); }
   }
 
-  return <section className="chat-question" aria-label={copy.followTitle}>
-    <ol className="chat-thread" aria-label={copy.conversation}>
-      {thread.map((m, i) => <li key={`${i}-${m.role}`} className={`chat-bubble ${m.role}`}>
-        {m.role === 'assistant' ? <span className="chat-bubble-from">CareCompass</span> : null}
-        <p>{m.role === 'user' && i === 0 ? symptom : m.content}</p>
-      </li>)}
-    </ol>
-    <form ref={card} className="ask-card" aria-labelledby={titleId} onKeyDown={onKey} onSubmit={e => { e.preventDefault(); if (input.trim() && !busy) onAnswer(input.trim()); }}>
+  return <form ref={card} className="ask-card" aria-labelledby={titleId} onKeyDown={onKey} onSubmit={e => { e.preventDefault(); if (input.trim() && !busy) onAnswer(input.trim()); }}>
       <div className="ask-head">
         <span className="ask-badge"><MessageCircleQuestion size={15} />{t(`Question ${asked}`, `सवाल ${asked}`)}</span>
-        <div className="ask-head-actions"><ReadAloud text={result.follow_up_question ?? ''} copy={copy} hindi={hindi} /><button type="button" className="ask-edit" onClick={onBack} disabled={busy}><Pencil size={14} />{copy.edit}</button></div>
+        <div className="ask-head-actions"><ReadAloud text={question} copy={copy} hindi={hindi} /><button type="button" className="ask-edit" onClick={onBack} disabled={busy}><Pencil size={14} />{copy.edit}</button></div>
       </div>
-      <h2 id={titleId} className="ask-question">{result.follow_up_question}</h2>
+      <h2 id={titleId} className="ask-question">{question}</h2>
       {options.length ? <div className="ask-options" role="group" aria-label={t('Answer options', 'जवाब के विकल्प')}>
         {options.map((option, i) => <button type="button" key={option} className={`ask-option${picked === option ? ' picked' : ''}`} onClick={() => choose(option)} disabled={busy} aria-keyshortcuts={String(i + 1)}>
           <kbd aria-hidden="true">{i + 1}</kbd><span>{option}</span>{busy && picked === option ? <span className="spinner" aria-hidden="true" /> : <CornerDownLeft size={15} className="ask-option-enter" aria-hidden="true" />}
@@ -67,6 +58,22 @@ export function ChatQuestion({ copy, hindi, result, messages, symptom, input, se
       </>}</div> : null}
       {error ? <p className="error-message" id={errorId} role="alert">{error}</p> : null}
       <p className="ask-hint">{busy ? copy.checking : options.length ? t(`Press 1–${options.length + 1} to answer · Esc to edit your request`, `जवाब के लिए 1–${options.length + 1} दबाएँ · अनुरोध बदलने के लिए Esc`) : t('Enter to send · Shift+Enter for a new line', 'भेजने के लिए Enter · नई लाइन के लिए Shift+Enter')}</p>
-    </form>
+  </form>;
+}
+
+export function ChatQuestion({ copy, hindi, result, messages, symptom, input, setInput, onAnswer, onBack, busy, error }: {
+  copy: Copy; hindi: boolean; result: TriageResponse; messages: Message[]; symptom: string;
+  input: string; setInput: (value: string) => void; onAnswer: (text: string) => void; onBack: () => void; busy: boolean; error: string;
+}) {
+  const asked = messages.filter(m => m.role === 'assistant').length;
+  const thread = messages.slice(0, -1);
+  return <section className="chat-question" aria-label={copy.followTitle}>
+    <ol className="chat-thread" aria-label={copy.conversation}>
+      {thread.map((m, i) => <li key={`${i}-${m.role}`} className={`chat-bubble ${m.role}`}>
+        {m.role === 'assistant' ? <span className="chat-bubble-from">CareCompass</span> : null}
+        <p>{m.role === 'user' && i === 0 ? symptom : m.content}</p>
+      </li>)}
+    </ol>
+    <AskCard copy={copy} hindi={hindi} question={result.follow_up_question ?? ''} answerOptions={result.answer_options ?? []} asked={asked} input={input} setInput={setInput} onAnswer={onAnswer} onBack={onBack} busy={busy} error={error}/>
   </section>;
 }

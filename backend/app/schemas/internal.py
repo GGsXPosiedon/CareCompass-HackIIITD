@@ -52,7 +52,10 @@ class RouteDecision:
     answer_options: Optional[list[str]] = None
     required_skills: list[str] = field(default_factory=list)
     reasoning: str = ""
+    emergency_score: Optional[float] = None  # trained binary head (EncoderModels); None when no encoder is configured
     profile_used: bool = False
+    runner_up: Optional[str] = None  # second-best care type of the trained head (None for rules)
+    margin: Optional[float] = None   # log(p_top1 / p_top2); small = the head cannot tell the two apart
 
 
 @dataclass

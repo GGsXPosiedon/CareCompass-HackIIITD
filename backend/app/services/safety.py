@@ -17,6 +17,13 @@ from ..schemas.internal import CaseFacts, RouteDecision, SafetyResult
 from .lexicon import is_negated
 
 
+# An explicit ask for emergency help ("ambulance chahiye", "this is an emergency", the app's own 'Emergency' answer option) is
+# honoured even when no symptom is named. It carries no red-flag label (the API enum stays unchanged); it only ever raises.
+_EXPLICIT_EMERGENCY = re.compile(
+    r"\bambulance\b|\bambulans\b|(?<!not an )(?<!not a )(?<!no )(?<!not )\bemerg\w*\b|\b112\b|\b108\b|एम्बुलेंस|एंबुलेंस|इमरजेंसी|आपातकाल|आपात स्थिति"
+)
+
+
 class SafetyEngine:
     def __init__(self, rules_path: str | None = None, semantic: bool = True):
         self.semantic = semantic
@@ -52,6 +59,17 @@ class SafetyEngine:
             return True
         return False
 
+    def denied_flags(self, text: str) -> list[str]:
+        """Red flags the user explicitly denied ("seene me dard nahi hai", "no breathing problem"): a pattern matched but only negated.
+        Used only to avoid asking a danger-sign question the person has already answered."""
+        out: list[str] = []
+        for rule in self._rules:
+            pats = list(rule["patterns"]) + [rx for g in rule["all_of"] for rx in g]
+            hits = [m for rx in pats for m in rx.finditer(text)]
+            if hits and not rule["negation_safe"] and all(is_negated(text, m.start(), m.end()) for m in hits):
+                out.append(rule["flag"])
+        return out
+
     def evaluate(self, facts: CaseFacts) -> SafetyResult:
         flags: list[str] = []
         ids: list[str] = []
@@ -60,6 +78,10 @@ class SafetyEngine:
                 if rule["flag"] not in flags:
                     flags.append(rule["flag"])
                 ids.append(rule["id"])
+        if not flags:
+            t = facts.safety_text_norm or facts.text_norm
+            if any(not is_negated(t, m.start(), m.end()) for m in _EXPLICIT_EMERGENCY.finditer(t)):
+                return SafetyResult(True, [], ["RF-EX-01"], self.version, "rules")
         if not flags:  # meaning-based net: only runs when no rule fired, only ever raises urgency
             from .semantic_safety import get_semantic_safety
 

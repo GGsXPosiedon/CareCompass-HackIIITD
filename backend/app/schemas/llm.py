@@ -107,3 +107,11 @@ def _convert(node: dict, defs: dict) -> dict:
 def gemini_schema(model: type[BaseModel]) -> dict:
     js = model.model_json_schema()
     return _convert(js, js.get("$defs", {}))
+
+
+class IntentCheck(_Strict):
+    """Output of the intent-gate fallback: is the message a health or care request the triage flow should handle?"""
+
+    health_request: bool = Field(description="true only if the person describes a symptom, illness, medical condition, procedure, or asks for a "
+                                             "nurse, doctor, lab test, ambulance or home care for themselves or someone else")
+    confidence: Confidence

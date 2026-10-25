@@ -1,0 +1,270 @@
+{
+ "status": "UNREVIEWED (demo)",
+ "source": "areas derived from caregivers.csv; numbers/seasons curated",
+ "emergency": {
+  "unified": "112",
+  "ambulance_note": "102 (patient transport) is listed for Delhi; verify before launch",
+  "verified": false
+ },
+ "seasons": [
+  {
+   "months": [
+    8,
+    9,
+    10,
+    11
+   ],
+   "topic": "dengue_malaria",
+   "note": "Mosquito-borne fever season: ask about fever days, rash, bleeding gums, severe abdominal pain."
+  },
+  {
+   "months": [
+    10,
+    11,
+    12,
+    1
+   ],
+   "topic": "air_pollution",
+   "note": "Smog season: breathing complaints and asthma flares are more likely; lower threshold for breathing pathways."
+  },
+  {
+   "months": [
+    4,
+    5,
+    6
+   ],
+   "topic": "heat",
+   "note": "Heat illness: ask about exposure, confusion, no sweating."
+  },
+  {
+   "months": [
+    12,
+    1,
+    2
+   ],
+   "topic": "winter_respiratory",
+   "note": "Cold/flu and chest infections; elderly and children need stricter thresholds."
+  }
+ ],
+ "areas": [
+  {
+   "name": "Dwarka",
+   "lat": 28.5915,
+   "lng": 77.058,
+   "max_radius_km": 12,
+   "caregivers": 4,
+   "active": 3,
+   "aliases": [
+    "dwarka"
+   ]
+  },
+  {
+   "name": "Faridabad NIT",
+   "lat": 28.3794,
+   "lng": 77.3137,
+   "max_radius_km": 7,
+   "caregivers": 2,
+   "active": 2,
+   "aliases": [
+    "faridabad",
+    "faridabad nit",
+    "nit"
+   ]
+  },
+  {
+   "name": "Govindpuri",
+   "lat": 28.5434,
+   "lng": 77.2628,
+   "max_radius_km": 12,
+   "caregivers": 4,
+   "active": 4,
+   "aliases": [
+    "govind puri",
+    "govindpuri"
+   ]
+  },
+  {
+   "name": "Greater Noida",
+   "lat": 28.4757,
+   "lng": 77.5068,
+   "max_radius_km": 7,
+   "caregivers": 3,
+   "active": 3,
+   "aliases": [
+    "gr noida",
+    "greater noida"
+   ]
+  },
+  {
+   "name": "Gurugram DLF",
+   "lat": 28.4827,
+   "lng": 77.074,
+   "max_radius_km": 12,
+   "caregivers": 2,
+   "active": 2,
+   "aliases": [
+    "cyber city",
+    "dlf",
+    "gurgaon",
+    "gurugram dlf"
+   ]
+  },
+  {
+   "name": "Gurugram Sec 29",
+   "lat": 28.4763,
+   "lng": 77.0615,
+   "max_radius_km": 12,
+   "caregivers": 4,
+   "active": 4,
+   "aliases": [
+    "gurgaon",
+    "gurugram sec 29",
+    "sector 29"
+   ]
+  },
+  {
+   "name": "Indirapuram",
+   "lat": 28.6456,
+   "lng": 77.3683,
+   "max_radius_km": 12,
+   "caregivers": 6,
+   "active": 5,
+   "aliases": [
+    "ghaziabad",
+    "indirapuram",
+    "indrapuram"
+   ]
+  },
+  {
+   "name": "Janakpuri",
+   "lat": 28.6299,
+   "lng": 77.0853,
+   "max_radius_km": 12,
+   "caregivers": 3,
+   "active": 3,
+   "aliases": [
+    "janak puri",
+    "janakpuri"
+   ]
+  },
+  {
+   "name": "Kalkaji",
+   "lat": 28.5521,
+   "lng": 77.2598,
+   "max_radius_km": 12,
+   "caregivers": 3,
+   "active": 3,
+   "aliases": [
+    "kalka ji",
+    "kalkaji"
+   ]
+  },
+  {
+   "name": "Karol Bagh",
+   "lat": 28.6599,
+   "lng": 77.1856,
+   "max_radius_km": 12,
+   "caregivers": 3,
+   "active": 3,
+   "aliases": [
+    "karol bagh",
+    "karolbagh"
+   ]
+  },
+  {
+   "name": "Lajpat Nagar",
+   "lat": 28.5731,
+   "lng": 77.2389,
+   "max_radius_km": 12,
+   "caregivers": 1,
+   "active": 1,
+   "aliases": [
+    "lajpat nagar",
+    "lajpatnagar"
+   ]
+  },
+  {
+   "name": "Mayur Vihar",
+   "lat": 28.5973,
+   "lng": 77.2973,
+   "max_radius_km": 7,
+   "caregivers": 2,
+   "active": 1,
+   "aliases": [
+    "mayur vihar",
+    "mayurvihar"
+   ]
+  },
+  {
+   "name": "Noida Sec 18",
+   "lat": 28.5724,
+   "lng": 77.3332,
+   "max_radius_km": 12,
+   "caregivers": 5,
+   "active": 3,
+   "aliases": [
+    "noida",
+    "noida sec 18",
+    "sector 18"
+   ]
+  },
+  {
+   "name": "Noida Sec 62",
+   "lat": 28.6299,
+   "lng": 77.3611,
+   "max_radius_km": 7,
+   "caregivers": 3,
+   "active": 3,
+   "aliases": [
+    "noida",
+    "noida sec 62",
+    "sector 62"
+   ]
+  },
+  {
+   "name": "Pitampura",
+   "lat": 28.7038,
+   "lng": 77.1326,
+   "max_radius_km": 10,
+   "caregivers": 2,
+   "active": 1,
+   "aliases": [
+    "pitampura"
+   ]
+  },
+  {
+   "name": "Rohini",
+   "lat": 28.7363,
+   "lng": 77.1074,
+   "max_radius_km": 12,
+   "caregivers": 4,
+   "active": 2,
+   "aliases": [
+    "rohini"
+   ]
+  },
+  {
+   "name": "Saket",
+   "lat": 28.5325,
+   "lng": 77.2039,
+   "max_radius_km": 12,
+   "caregivers": 7,
+   "active": 7,
+   "aliases": [
+    "saket"
+   ]
+  },
+  {
+   "name": "Vasant Kunj",
+   "lat": 28.5267,
+   "lng": 77.1627,
+   "max_radius_km": 12,
+   "caregivers": 2,
+   "active": 2,
+   "aliases": [
+    "vasant kunj",
+    "vasantkunj"
+   ]
+  }
+ ]
+}

@@ -9,7 +9,7 @@ import { ChatIntake } from './ChatIntake';
 export interface IntakeProps {
   copy: Copy; hindi: boolean; language: Language; input: string; setInput: (input: string) => void;
   person: string; setPerson: (person: string) => void; location: Location; busy: boolean; error: string; onSubmit: () => void;
-  onLocation?: () => void; compact?: boolean;
+  onLocation?: () => void; onProfile?: () => void; compact?: boolean;
 }
 export function Intake(props: IntakeProps) {
   const { copy, hindi, language, input, setInput, person, setPerson, location, busy, error, onSubmit } = props;
