@@ -1,0 +1,130 @@
+/* Phone navigation is an overlay, never a full-height block above the page. */
+@media (max-width: 767px), (max-width: 1023px) and (max-height: 500px) {
+  .care-shell,
+  .care-shell.sidebar-collapsed {
+    display: block;
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+    min-width: 0;
+  }
+
+  .care-shell > .care-sidebar:not(.is-open) {
+    display: none;
+  }
+
+  .care-shell > .care-sidebar.is-open {
+    display: flex;
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 51;
+    width: min(320px, calc(100vw - 48px));
+    max-width: 100%;
+    height: 100dvh;
+    padding-top: max(16px, env(safe-area-inset-top));
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+  }
+
+  .care-shell .care-mobile-menu,
+  .care-shell .sidebar-mobile-close { display: inline-flex; }
+  .care-shell .care-mobile-brand { display: inline; }
+  .care-shell :is(.sidebar-desktop-toggle, .care-topbar-name, .care-topbar .care-demo-badge) { display: none; }
+
+  .care-shell.sidebar-collapsed > .care-sidebar.is-open { align-items: stretch; padding-inline: 14px; }
+  .care-shell.sidebar-collapsed .care-sidebar.is-open .care-sidebar-brand { justify-content: space-between; }
+  .care-shell.sidebar-collapsed .care-sidebar.is-open .care-sidebar-brand > button:first-child { display: flex; }
+  .care-shell.sidebar-collapsed .care-sidebar.is-open .sidebar-label { display: inline; }
+  .care-shell.sidebar-collapsed .care-sidebar.is-open :is(.sidebar-conversations, .care-sidebar-help, .sidebar-history-note) { display: block; }
+  .care-shell.sidebar-collapsed .care-sidebar.is-open .care-demo-note { display: flex; }
+  .care-shell.sidebar-collapsed .care-sidebar.is-open .care-sidebar-bottom { width: auto; }
+  .care-shell.sidebar-collapsed .care-sidebar.is-open :is(.care-new-request, .care-primary-nav a, .care-settings-link) {
+    width: 100%; height: auto; min-height: 44px; justify-content: flex-start; padding: 10px 12px;
+  }
+
+  .care-shell > .care-drawer-backdrop {
+    display: block;
+    background: #0009;
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    width: 100%;
+    height: 100dvh;
+  }
+
+  .care-stage,
+  .care-main,
+  .care-shell-flow {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .care-shell .care-topbar {
+    min-height: 68px;
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+  }
+
+  .care-topbar > div {
+    min-width: 0;
+  }
+
+  .care-topbar > div:first-child {
+    flex: 1;
+  }
+
+  .care-mobile-brand {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .care-shell :is(.care-mobile-menu, .sidebar-mobile-close, .care-back-button) {
+    min-width: 44px;
+    min-height: 44px;
+    flex-shrink: 0;
+  }
+
+  .care-topbar .language-control select {
+    min-height: 44px;
+    max-width: 86px;
+    font-size: 16px;
+  }
+
+  .care-shell :is(textarea, input, select) {
+    max-width: 100%;
+    font-size: 16px;
+  }
+
+  .care-shell textarea {
+    resize: vertical;
+  }
+
+  .care-chat-composer,
+  .care-chat-actions,
+  .care-send-actions,
+  .voice-inline {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .care-shell .care-chat-composer :is(.voice-button, .care-send, .care-attach-button) {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .chat-bubble,
+  .care-history-list strong {
+    overflow-wrap: anywhere;
+  }
+
+  .care-shell :is(.care-intake-bottom, .care-chat-reply) {
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-width: 380px) {
+  .care-topbar:has(.care-back-button) .care-mobile-brand {
+    display: none;
+  }
+}

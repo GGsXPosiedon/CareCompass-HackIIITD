@@ -1,0 +1,28 @@
+.care-shell .home-install {
+  margin:0 20px 12px;
+  padding:12px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:var(--care-raised);
+  color:var(--ink);
+  max-width:560px;
+  min-width:0;
+  flex-shrink:0;
+}
+.home-install-main { display:flex; align-items:center; gap:10px; }
+.home-install-main > img { border-radius:10px; flex-shrink:0; }
+.home-install-main > div { flex:1; min-width:0; }
+.home-install-main strong { display:block; font-size:14px; font-weight:600; }
+.home-install-main p { margin:4px 0 0; font-size:12px; color:var(--muted); line-height:1.5; }
+.care-shell .home-install-close { display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; flex-shrink:0; border-radius:8px; }
+.care-shell .home-install-action { display:inline-flex; align-items:center; justify-content:center; gap:8px; margin-top:10px; min-height:44px; padding:10px 14px; border-radius:8px; background:var(--ink); color:var(--care-ground); font-size:14px; }
+.home-install-steps { padding:12px 0 2px; font-size:13px; line-height:1.6; overflow-wrap:anywhere; }
+.home-install-steps p { margin:0 0 6px; }
+.home-install-steps svg { display:inline; vertical-align:middle; margin-right:5px; }
+.care-stage:has(textarea:focus, input:focus) .home-install { display:none; }
+@media (max-width:767px) {
+  .care-shell:has(.home-install) .chat-intake { min-height:calc(100svh - 220px); padding-top:20px; }
+  .care-shell:has(.home-install) .chat-intake-heading { margin-top:0; margin-bottom:24px; }
+  .care-shell:has(.home-install) .care-intake-bottom { padding-top:24px; }
+  .care-stage:has(.home-install) > .care-main { min-height:0; }
+}
