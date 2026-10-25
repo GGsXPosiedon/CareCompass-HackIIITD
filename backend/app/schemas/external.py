@@ -44,12 +44,18 @@ class Turn(BaseModel):
 
 
 
+class PatientContext(BaseModel):
+    age_years: Optional[float] = Field(default=None, ge=0, le=130, allow_inf_nan=False)
+    pregnant: bool = False
+
+
 class TriageRequest(BaseModel):
     # Unknown keys are ignored (the organiser harness may send extras); types/ranges are enforced.
     model_config = ConfigDict(extra="ignore", str_strip_whitespace=True)
     user_input: str = Field(min_length=1, max_length=2000)
     language: LanguageMode = "auto"
     location: Optional[Location] = None
+    patient_context: Optional[PatientContext] = None
     conversation_history: list[Turn] = Field(default_factory=list, max_length=40)
 
 

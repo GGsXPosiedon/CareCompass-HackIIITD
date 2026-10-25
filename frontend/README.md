@@ -60,7 +60,7 @@ Health state is provided once around the app in `src/health/Store.tsx`. `src/hea
 
 ## Run locally
 
-For same-server hosting or Vercel frontend/voice hosting with a separate Python API, see [the deployment guide](../docs/DEPLOYMENT.md). It includes phone installation instructions and remaining deployment risks. Vercel's Root Directory must be `frontend` to use the included `vercel.json`.
+For Vercel Services or same-server hosting, see [the deployment guide](../docs/DEPLOYMENT.md). Vercel now uses the repository root and the root `vercel.json`; the frontend runtime care function reaches the private Python service through the injected `BACKEND_URL` binding. Leave `VITE_API_BASE_URL` unset or `/api` for this setup.
 
 Sarvam conversational voice and reply-playback setup is documented in [VOICE.md](VOICE.md). The subscription key stays server-side; the Python care backend does not need speech changes.
 
@@ -227,7 +227,7 @@ frontend/
 
 ## Validation and known limits
 
-The deployment review passed **60 checks** with `npm test`, including HTTPS-origin voice handling, turn sequencing, silence, interruption, capture/playback cleanup, emergency termination, late-reply cancellation, red-flag priority, malformed responses, invalid rankings and profiles, multilingual demo escalation, intake, no availability and past-slot exclusion. `npm run build` checks TypeScript and generates the production bundle.
+The deployment review passed **64 checks** with `npm test`, including HTTPS-origin voice handling, turn sequencing, silence, interruption, capture/playback cleanup, emergency termination, late-reply cancellation, red-flag priority, malformed responses, invalid rankings and profiles, multilingual demo escalation, intake, no availability and past-slot exclusion. `npm run build` checks TypeScript and generates the production bundle.
 
 Browser QA covers the full synthetic booking flow, English/Hindi layouts at 1440, 768 and 390 pixels, emergency escalation during follow-up, booking validation/history, empty availability, location changes and the simulated failure state. See `frontend/QA.md` for the final verification notes.
 

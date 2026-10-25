@@ -271,7 +271,7 @@ def test_legacy_profile_is_ignored_and_never_sent_to_models():
     sent = cap[0][1]["contents"][0]["parts"][0]["text"]
     assert "<user_message>" in sent
     assert "Type 2 diabetes" not in sent and "Ramesh" not in sent and "PROFILE:" not in sent
-    assert "patient_context" not in TriageRequest(**body).model_dump()
+    assert TriageRequest(**body).patient_context.model_dump() == {"age_years": None, "pregnant": False}
 
 
 def test_trace_explains_every_step():
@@ -289,3 +289,7 @@ def test_llm_off_without_key(pipeline):
 
 def test_graph_renders():
     assert "fuse" in make(tri=triage()).graph.mermaid()
+
+
+# Exercise the fallback flow used when no pathway matches.
+pytestmark = pytest.mark.usefixtures("fallback_dialogue")

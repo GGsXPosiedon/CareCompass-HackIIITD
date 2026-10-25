@@ -13,17 +13,31 @@ Every number comes from a script in `pipeline/scripts/` and a report in `pipelin
 ### Decisions confirmed by the owner (2026-10-25, last session on the GPU-less handoff)
 Dataset may be used to guess unknowns; LLM may reword; keep the current API/urgency interface (emergency / same_day / scheduled) and add **self-care advice** inside the response text only when it has backing; demo build may ship **unreviewed** content (marked); cover all caregiver areas (18 in `caregivers.csv`); mood should guess anger/panic/anxiety and route accordingly; strict thresholds for infants, pregnancy, children, elderly; converge in 4 questions (more only if the user cannot answer); briefcase NOT used yet; languages: English, Hindi, Hinglish; LLM translation of missing Hindi/Hinglish names is approved (reviewable file).
 
-### New deterministic modules (built in the last session; unit-tested, NOT yet wired into the graph)
+### Deterministic modules (wired into the graph on 2026-10-25)
 - `backend/app/rules/pathways.json` (+ generator `pipeline/scripts/build_pathways.py`): 7 pathways (fever, cough/breathing, vomiting/diarrhoea, chest pain, injury/wound, diabetes/BP, weakness/dizziness), 2-4 questions each in en/hinglish/hi, rules -> emergency / urgent / routine / self_care, strictness table, "unsure on a danger question = yes". **UNREVIEWED.**
 - `backend/app/services/pathways.py`: `select(text)`, `evaluate(pid, answers, age_years, pregnant, lang)`, `parse_answer(...)`.
 - `backend/app/services/mood.py`: panic / anger / anxiety cues -> danger-first, unsure=yes, max 1 question, human call-back, tone hint. Can only add caution.
 - `backend/app/rules/delhi.json` (+ `pipeline/scripts/build_delhi_assets.py`): 18 service areas from caregivers.csv with aliases, emergency numbers (unverified), seasonal notes (unreviewed).
 - Tests: `backend/tests/test_pathways.py` (10), `test_encoder_router.py` (13).
 
+### Task 1 integration status (2026-10-25)
+
+- COMPLETE: `converse` selects a deterministic pathway for health complaints; questions use the existing response and answer-option contract. Fixed multilingual question texts are registered as dialogue slots, and each request rebuilds answers from the current conversation episode. Explicit service requests retain the existing route flow.
+- The rules safety engine still runs first. Pathway danger answers (including unsure) use the existing 112 response, without caregivers. Classifier and LLM safety escalation remain active on question turns. The LLM triage node is skipped for pathway dispositions, so it cannot change them.
+- Typed optional `patient_context` accepts only `age_years` and `pregnant` for pathway strictness; legacy briefcase/member records are ignored. No briefcase access was added.
+- Pathway conversations converge within four questions; unresolved answers at the cap are evaluated as unsure. Anger limits questions to one and offers a human call-back request (no call-back is booked); panic screens danger first; anxiety adds a supportive explanation. Tone never lowers a deterministic disposition.
+- `services/delhi.py` resolves aliases or supplied coordinates against all 18 areas. Coordinates take priority; ambiguous aliases do not invent a location. An unambiguous text alias supplies the area centre for matching only when coordinates are absent. Seasonal notes emphasise existing fever/respiratory questions; they never change dispositions. No unverified ambulance number was added to responses.
+- Demo pathway questions and dispositions are marked UNREVIEWED. Self-care advice is copied only from the existing pathway asset, with no added doses.
+- Validation: full backend suite **296 passed, 1 skipped** (real encoder test unavailable). Tests use rules, no runtime encoder or GPU. Existing fallback dialogue/fusion/simulation tests explicitly mock pathway selection to miss, preserving coverage of that retained branch; new API tests exercise real pathway selection. The failure-log test explicitly enables its log instead of depending on the shell's `FAILURE_LOG` setting.
+- Gold evaluation: `backend/eval/task1_report.md`, 52 cases, LLM off / rules only: **emergency recall 21/21 (100%)**, flags correct 21/21, 1 false alarm / 31 non-emergencies; care-type accuracy **39/48 (81.2%)**, macro-F1 0.7800. This is an end-to-end gold score, NOT LOFO and not comparable to the offline encoder LOFO F1. Eight previously immediate decisions now ask pathway questions, so the old single-turn care-type score fell; the gold labels were not changed.
+- Deployment still requires `ROUTER_BACKEND=rules`, `SEMANTIC_EMBEDDER=ngram`, and an empty `INTENT_ENCODER_PATH`. The existing private `.env` was neither edited nor displayed; its optional trained-router override remains an operator setting. No weights, GPU work, or git commands were used.
+
 ## 1. Architecture (request flow)
 
 ```
-intake -> rules_safety -> +-- classify   (trained slot: rules, then e5 head)
+intake -> rules_safety -> converse (pathway + mood + Delhi; replay current episode)
+                       -> pathway question via reply_guard | pathway disposition via fuse
+                       -> +-- classify   (trained slot: rules, then e5 head)
                           +-- llm_safety
                           +-- llm_triage
                        -> fuse (+ emergency score) -> follow_up (<= 2-4 questions) | match caregivers -> respond
@@ -33,7 +47,7 @@ intake -> rules_safety -> +-- classify   (trained slot: rules, then e5 head)
 |---|---|---|
 | Rules safety: 9 official red flags + explicit "ambulance / 112 / emergency" (EN/Hindi/Hinglish) | `backend/app/services/safety.py`, `app/rules/redflags.json` | always in front; false alarms accepted, misses are not |
 | Intent gate / dialogue (greeting, general, health, named condition, refusal, stop...) | `services/dialogue.py`, `conditions.py`, `lexicon.py` | health cue = lexicon, unwell phrases, **dataset vocabulary** (new) |
-| Trained care-type router | `services/routing.py::TrainedRouter`, `services/encoder_models.py`, `app/models/router_e5_lr.json` | ACTIVE (`ROUTER_BACKEND=trained`); rules first, e5 head when rules < 0.75 confident |
+| Trained care-type router | `services/routing.py::TrainedRouter`, `services/encoder_models.py`, `app/models/router_e5_lr.json` | optional offline/testing mode (`ROUTER_BACKEND=trained`); deployment uses rules; rules first, e5 head when rules < 0.75 confident |
 | Emergency score + danger-sign question | `encoder_models.py`, `graph/nodes.py` | score can only raise caution: ask once at >= 0.15, go to 112 at >= 0.65 |
 | Dataset vocabulary | `backend/app/rules/dataset_vocab.json` (generated) | 232 symptom cues, 4 Indian scripts; deterministic, no model |
 | Ambiguity question | `follow_up.ambiguity_question`, `graph/nodes.py::fuse`, `calibrate_ambiguity.py` | when the trained head cannot separate two care types (log-ratio < 0.0181, from LOFO), ask one two-option question; uses a free question slot. Needs the encoder, so it is off in a no-weights deployment |
@@ -112,7 +126,7 @@ Reference (CPU, shipped heads): e5 frozen head macro-F1 0.680 (optimistic, C tun
 | Stage A: lr 2e-5, 2 epochs, batch 32 | fixed a priori | standard recipe, no tuning on CareCompass folds | not searched |
 | Fuse policy llm_first, trust 0.85, max follow-ups 2 | earlier design decision | not derived from data | none |
 
-In short: only C and the two thresholds were looked at against data, and only on 66 texts. Everything else is a stated default. The GPU run exists to replace those defaults with measured values.
+In short: only C and the two thresholds were looked at against data, and only on 66 texts. Everything else is a stated default. The completed GPU results are in section 3b; none displaced the frozen e5 offline yardstick.
 
 ## 5. The GPU fine-tune script (`pipeline/scripts/gpu_finetune_multilingual.py`)
 
@@ -128,11 +142,11 @@ Status: EXECUTED on 2026-10-25 (RTX 4060 Laptop); results in section 3b.
 After a winner is chosen, exporting it to ONNX and re-fitting the heads is the next step (`export_router.py` with the new model dir).
 
 ## 6. Open work (next)
-0. **WIRE the new modules into the graph** (see docs/NEXT_PHASE_PROMPT.md section 5). Then continue:
+0. **DONE: modules wired into the graph**, stateless API tests and full regression suite added; gold emergency recall remains 21/21. See task 1 integration status above. Next:
 1. **Deterministic pathways (main goal):** write symptom pathways as data (JSON): entry cues (EN/Hinglish/Hindi) -> 2-4 questions -> disposition level + care type + explanation. Start with the Delhi-common set (fever, cough/breathing, diarrhoea/vomiting, chest pain, pregnancy, child fever, injury, diabetes/BP, elderly weakness). Content from public protocols; clinician review before use.
 2. Rules vs learned model gap: use the e5 head offline as a yardstick (rules must reach its 0.68 macro-F1 on LOFO and keep 100% emergency recall).
 3. Mood / distress layer (anxiety, panic, caregiver stress): deterministic cues + tone templates; the LLM does the wording.
-4. Delhi data: localities -> PIN -> service area, emergency numbers, hospitals, seasonal flags.
+4. Delhi: alias/coordinate mapping and seasonal emphasis are wired. PIN codes, verified emergency/facility data and hospitals remain future work.
 5. Follow-up selection from DDXPlus evidence statistics, severity as auxiliary prior (approved), feeding the pathway question order.
 6. Hindi/Hinglish names missing from all datasets: one-off LLM translation into a reviewable file (approved).
 7. GPU runs are done (section 3b) and are not on the critical path any more. Only worth repeating if a much larger labelled CareCompass-style set appears.
@@ -143,3 +157,16 @@ After a winner is chosen, exporting it to ONNX and re-fitting the heads is the n
 - CPU re-train and export: `cd pipeline && python scripts/export_router.py --model-dir <models>/multilingual-e5-base`
 - Dataset prep only: `python scripts/prepare_multilingual_triage.py --csv <datasets>/multilingual_triage/multilingual_medical_symptom_triage.csv`
 - Tests: `cd backend && uv run pytest -q`
+
+## 8. Files changed for the owner to review/commit (task 1)
+
+- `backend/app/graph/nodes.py`, `backend/app/graph/state.py`
+- `backend/app/schemas/external.py`
+- `backend/app/services/pathways.py`, `backend/app/services/dialogue.py`, `backend/app/services/delhi.py` (new)
+- `backend/tests/test_pathway_api.py` (new), `backend/tests/conftest.py`
+- `backend/tests/test_api.py`, `backend/tests/test_condition_intent.py`
+- `backend/tests/test_dialogue.py`, `backend/tests/test_graph.py`, `backend/tests/test_encoder_router.py`, `backend/tests/test_chat_sim.py`
+- `backend/eval/task1_report.md` (new)
+- `progress.md`, `docs/NEXT_PHASE_PROMPT.md`
+
+Next scoped work: extend the pathway content (task 4 of the handoff), then translated terms and DDXPlus question ordering. Clinical review is still pending. Model-head export is not needed for task 1.

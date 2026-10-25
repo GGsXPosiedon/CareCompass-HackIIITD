@@ -13,6 +13,9 @@ class TriageState(TypedDict, total=False):
     request: TriageRequest
     facts: CaseFacts
     rule_safety: SafetyResult            # deterministic red-flag engine
+    pathway: Any
+    mood: Any
+    service_area: Any
     dialogue: Any                        # dialogue.DialogueDecision (reply | ask | proceed)
     emergency_score: Optional[float]     # trained binary emergency head (None when no encoder configured)
     det: RouteDecision                   # deterministic classifier slot (rules now, trained model later)

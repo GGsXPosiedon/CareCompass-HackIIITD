@@ -217,7 +217,9 @@ _TEMPLATES = _template_rx()
 
 def slot_of(assistant_text: str) -> Optional[str]:
     t = assistant_text.strip()
-    return next((slot for slot, rx in _TEMPLATES if rx.match(t)), None)
+    from .pathways import question_slot
+
+    return question_slot(t) or next((slot for slot, rx in _TEMPLATES if rx.match(t)), None)
 
 
 def is_real_question(assistant_text: str) -> bool:
@@ -278,7 +280,7 @@ def classify_turn(text: str, awaiting_answer: bool, concepts: dict) -> tuple[str
         return "health", correction  # "not a lab test, a doctor": a changed request, not a refusal
     if STOP.search(t) and not has_health:
         return "stop", correction
-    if FRUSTRATION.search(t):
+    if FRUSTRATION.search(t) and not has_health:
         return "frustration", correction
     if REFUSAL.search(t):
         return "refusal", correction
@@ -357,6 +359,13 @@ def _fill_slots(messages: list[tuple[str, str]]) -> dict:
     return known
 
 
+def _pathway_answer(question: str, answer: str) -> bool:
+    from .pathways import question_slot, parse_answer
+
+    slot = question_slot(question)
+    return bool(slot and parse_answer(*slot.split(":")[1:], answer) is not None)
+
+
 def analyze(req: TriageRequest) -> Analysis:
     hist = [(t.role, strip_prefix(t.content) if t.role == "user" else t.content) for t in req.conversation_history if t.content]
     latest = strip_prefix(req.user_input)
@@ -377,7 +386,9 @@ def analyze(req: TriageRequest) -> Analysis:
         scope = next((sg for sg in reversed(segs[:-1]) if _health_concepts([c for r, c in sg if r == "user"])), [])
         act = "health" if scope else act
     elif act in ("health", "answer") and not CONTINUING.search(n_latest):
-        if awaiting and slot_of(hist[-1][1]) in ("associated", "bleed_check", "ambiguity"):
+        if awaiting and (slot_of(hist[-1][1]) in ("associated", "bleed_check", "ambiguity") or
+                         ((slot_of(hist[-1][1]) or "").startswith("pathway:") and
+                          _pathway_answer(hist[-1][1], latest))):
             scope = current  # a reply to OUR slot question, even one that names another symptom ("ulti bhi hai")
         elif awaiting:
             earlier = _health_concepts([c for r, c in current if r == "user"])

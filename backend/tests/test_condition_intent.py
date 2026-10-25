@@ -66,7 +66,7 @@ def test_negated_emergency_words_do_not_trigger_112(pipe, text):
 
 def test_condition_plus_symptom_uses_symptom_flow(pipe):
     r = say(pipe, "papa ko dengue hai aur bukhar 103")
-    assert r.follow_up_question and "bukhar" in r.follow_up_question.lower()
+    assert r.follow_up_question and "saans" in r.follow_up_question.lower()
 
 
 def test_fuzzy_and_block_lists():

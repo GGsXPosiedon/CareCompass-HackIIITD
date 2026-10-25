@@ -6,6 +6,7 @@
   "engines": { "node": "24.x" },
   "scripts": {
     "dev": "vite --configLoader native --host 127.0.0.1",
+    "dev:services": "node server/services-dev.mjs",
     "build": "tsc -b && vite build --configLoader native",
     "preview": "vite preview --configLoader native --host 127.0.0.1",
     "test": "node --experimental-strip-types --test --test-isolation=none tests/*.test.ts"

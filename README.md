@@ -182,7 +182,7 @@ For a fresh clone, copy `frontend/.env.example` to `frontend/.env.local` first. 
 
 The existing care backend supplies the answers; Sarvam provides speech recognition and speech synthesis. This is turn-based care conversation, with the microphone off during replies. Supported browsers provide speech fallback when Sarvam is not configured. Typed chat replies stay silent until **Read aloud** is selected; voice conversation mode speaks automatically.
 
-The latest local deployment review passed the frontend build and **60 frontend tests**. Backend checks passed with **267 passed and 1 skipped**, excluding `test_encoder_router.py` because the base environment lacks optional NumPy. These counts are a review snapshot, not a CI result. Live provider calls, phone installation and microphone behavior still need testing on the deployed domain. See the [frontend guide](frontend/README.md#voice-conversation) and [full voice setup](frontend/VOICE.md).
+The latest local deployment review passed the frontend build and **64 frontend tests**. Backend checks passed with **267 passed and 1 skipped**, excluding `test_encoder_router.py` because the base environment lacks optional NumPy. These counts are a review snapshot, not a CI result. Live provider calls, phone installation and microphone behavior still need testing on the deployed domain. See the [frontend guide](frontend/README.md#voice-conversation) and [full voice setup](frontend/VOICE.md).
 
 
 <!-- USAGE -->
@@ -215,7 +215,7 @@ The frontend walkthrough (Briefcase and health services) is in [`frontend/README
 ## Deployment
 
 - **One server:** follow [the deployment guide](docs/DEPLOYMENT.md) and use [`deploy/Caddyfile`](deploy/Caddyfile) for HTTPS, frontend deep links and API/voice routing.
-- **Vercel:** set **Root Directory** to `frontend`. [`frontend/vercel.json`](frontend/vercel.json) builds the Vite app, keeps `/api/voice` as a function and supports direct page links. Set `VITE_API_BASE_URL` to your separately hosted Python API's HTTPS base URL, `VITE_DEMO_MODE=false`, and `SARVAM_API_KEY` as a server-only variable. Configure `CORS_ORIGINS` on Python for the exact frontend origin. See [Vercel setup](docs/DEPLOYMENT.md#vercel-frontend-and-voice).
+- **Vercel Services:** use the repository root as the project Root Directory. [`vercel.json`](vercel.json) deploys `frontend` and private `backend` together. The frontend care function uses the runtime `BACKEND_URL` binding; voice stays at `/api/voice`. Leave `VITE_API_BASE_URL` unset (or `/api`), set `VITE_DEMO_MODE=false`, and configure provider keys as server-only environment variables. `pipeline/` remains offline. See [Vercel Services setup](docs/DEPLOYMENT.md#vercel-services).
 - **Phone shortcut/app:** on the HTTPS site, use Android's **Install app / Add to Home screen**, or Safari's **Share → Add to Home Screen**. The app includes a manifest and phone icons; care requests and voice require internet.
 
 This remains a hackathon prototype: backend bookings are in memory, so use one Python worker and expect reservations to disappear on restart. Documents and frontend bookings clear on refresh; chats are saved only in the current browser. Public paid API access needs quotas/access controls. Model fine-tuning is still in progress.

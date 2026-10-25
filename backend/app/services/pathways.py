@@ -2,7 +2,7 @@
 
 No model weights, no network: everything comes from app/rules/pathways.json (UNREVIEWED demo content, built by
 pipeline/scripts/build_pathways.py). The LLM chat may reword questions and advice, but the disposition comes from here.
-Not yet wired into the LangGraph request flow: call `evaluate()` from a node (see docs/NEXT_PHASE_PROMPT.md).
+Wired into the LangGraph conversation flow; state is reconstructed from conversation history.
 """
 from __future__ import annotations
 
@@ -133,3 +133,45 @@ def evaluate(pid: str, answers: dict, age_years: Optional[float] = None, pregnan
         care, advice = "emergency_112", None
     return Step("disposition", pid, disposition=disp, care_type=care, urgency=URGENCY[disp], why=_txt(why, lang) if isinstance(why, dict) else why,
                 advice=_txt(advice, lang) if advice else None, rule=rule, raised_by=raised, asked=len(answers), reviewed=False)
+
+
+def question_slot(text: str) -> Optional[str]:
+    for p in load()["pathways"]:
+        for q in p["questions"]:
+            if text.strip() in q["text"].values():
+                return f"pathway:{p['id']}:{q['id']}"
+    return None
+
+
+def conversation_step(analysis, context, mood) -> Optional[Step]:
+    """Replay only the current episode; no server session or model is needed."""
+    if analysis.act not in ("health", "answer") or analysis.service_request:
+        return None
+    messages = [*analysis.scoped_history, {"role": "user", "content": analysis.scoped_user[-1]}]
+    pid, answers, pending = None, {}, None
+    for turn in messages:
+        text = turn["content"]
+        if turn["role"] == "assistant":
+            slot = question_slot(text)
+            pending = slot.split(":")[1:] if slot else None
+        elif pending:
+            question_pid, qid = pending
+            if pid != question_pid:
+                pid, answers = question_pid, {}
+            answer = parse_answer(pid, qid, text, analysis.language)
+            if answer is not None:
+                answers[qid] = answer
+            pending = None
+        elif pid is None:
+            pid = select(text)
+    if pid is None:
+        return None
+    kwargs = dict(age_years=context.age_years if context else None,
+                  pregnant=context.pregnant if context else False, lang=analysis.language)
+    step = evaluate(pid, answers, **kwargs)
+    budget = min(4, mood.max_questions or 4)
+    # At the cap, unresolved answers remain uncertain, never silently negative.
+    while step.kind == "question" and analysis.questions_asked >= budget:
+        answers[step.question_id] = "unsure"
+        step = evaluate(pid, answers, **kwargs)
+    return step

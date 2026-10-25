@@ -19,7 +19,7 @@ LOC = {"lat": 28.54, "lng": 77.27}
 
 
 def seed_settings():
-    return dataclasses.replace(get_settings(), caregivers_path=str(DATA_DIR / "caregivers_seed.csv"))
+    return dataclasses.replace(get_settings(), router_backend="rules", encoder_path="", caregivers_path=str(DATA_DIR / "caregivers_seed.csv"))
 
 
 @pytest.fixture()
@@ -45,3 +45,13 @@ def req(text, language="auto", history=None, location=LOC):
     if location:
         d["location"] = location
     return d
+
+
+@pytest.fixture()
+def fallback_dialogue(monkeypatch):
+    """Isolate fallback dialogue/fusion when no pathway cue matches.
+
+    Production pathways are covered separately in test_pathway_api.
+    """
+    from app.services import pathways
+    monkeypatch.setattr(pathways, "select", lambda text: None)

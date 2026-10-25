@@ -50,7 +50,7 @@ The browser calls only these same-origin routes. The adapter forwards validated 
 
 **Vite dev/preview:** `server/voice-plugin.mjs` registers the voice route before the existing `/api` care-backend proxy. Both services use the same frontend origin, and no Python speech route is needed.
 
-**Vercel:** deploy with **Root Directory `frontend`** to use the included `vercel.json`. `api/voice.mjs` serves the adapter as a Node function. Set `SARVAM_API_KEY` and optional model/voice variables in the project's server environment, then redeploy. The SPA rewrite excludes `/api`. Configure the separately hosted care API through `VITE_API_BASE_URL` and Python CORS as described in [the deployment guide](../docs/DEPLOYMENT.md#vercel-frontend-and-voice).
+**Vercel Services:** use the repository root and its `vercel.json`. The specific `/api/voice` rewrite selects the frontend voice function before the general care API proxy rule. Set `SARVAM_API_KEY` and optional model/voice variables server-side. The care function separately calls the private backend through its runtime `BACKEND_URL` binding. See [the services deployment guide](../docs/DEPLOYMENT.md#vercel-services).
 
 **Other/static hosts:** uploading only `dist` does not deploy the adapter. Host the voice function separately behind the same-origin `/api/voice` route. Without a working route/key, supported browsers use their speech APIs instead and identify browser voice as the fallback. The UI does not claim to use Sarvam when it is unavailable. In conversation mode, Sarvam failures pause the session with a retry control; typing remains available. Standalone read-aloud can fall back to browser speech with an explicit notice.
 

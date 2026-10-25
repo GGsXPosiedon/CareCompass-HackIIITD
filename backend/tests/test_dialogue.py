@@ -270,6 +270,7 @@ def test_semantic_net_catches_unlisted_wording_and_only_raises(client):
 
 
 def test_failure_log_records_generic_replies(client, tmp_path, monkeypatch):
+    monkeypatch.setenv("FAILURE_LOG", "on")
     from app.services import failure_log
     monkeypatch.setattr(failure_log, "PATH", tmp_path / "f.jsonl")
     client.post("/triage", json=req("abba dabba jabba"))
@@ -333,3 +334,7 @@ def test_reasoning_names_the_real_symptoms_and_a_symptom_specific_safety_line(cl
     assert "warning sign" in r["reasoning"] and r["care_type"] != "emergency_112"
     k = chat(client, ["knee pain", "a week", "swelling"])[2]
     assert "knee pain" in k["reasoning"] and "swelling" in k["reasoning"]
+
+
+# Exercise the fallback flow used when no pathway matches.
+pytestmark = pytest.mark.usefixtures("fallback_dialogue")

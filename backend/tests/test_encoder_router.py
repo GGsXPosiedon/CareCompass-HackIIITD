@@ -178,3 +178,7 @@ def test_llm_intent_fallback_skips_everyday_tasks():
     llm = YesLLM(True)
     Pipeline(llm=llm).triage(TriageRequest(user_input="write a python script for my homework", conversation_history=[]))
     assert llm.calls == 0
+
+
+# Exercise the fallback flow used when no pathway matches.
+pytestmark = pytest.mark.usefixtures("fallback_dialogue")
