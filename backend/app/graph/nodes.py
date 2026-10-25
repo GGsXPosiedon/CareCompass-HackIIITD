@@ -185,10 +185,12 @@ class Nodes:
             return {"llm_safety": out, **_t("llm_safety", f"{pr.tag}: " + (", ".join(f"{x.flag}:{x.status}" for x in out.findings) or "no findings"))}
         except LLMError as e:
             log.warning("llm_safety failed: %s", e)
-            return {"llm_safety": None, **_t("llm_safety", f"{pr.tag} failed ({e}); rules remain the safety floor")}
+            return {"llm_safety": None, "llm_failures": ["safety"], **_t("llm_safety", f"{pr.tag} failed ({e}); rules remain the safety floor")}
 
     def llm_triage(self, s: TriageState) -> dict:
-        if s.get("pathway") or not self.p.llm or not self._llm("triage").enabled:
+        if s.get("pathway"):
+            return {"llm_triage": None, **_t("llm_triage", "skipped (deterministic pathway)")}
+        if not self.p.llm or not self._llm("triage").enabled:
             return {"llm_triage": None, **_t("llm_triage", "skipped (LLM off)")}
         pr = load(TRIAGE_PROMPT)
         try:
@@ -202,7 +204,7 @@ class Nodes:
             return {"llm_triage": out, **_t("llm_triage", f"{pr.tag}: {out.care_type} ({out.confidence}) flags={out.red_flags}")}
         except LLMError as e:
             log.warning("llm_triage failed: %s", e)
-            return {"llm_triage": None, **_t("llm_triage", f"{pr.tag} failed ({e}); using deterministic classifier")}
+            return {"llm_triage": None, "llm_failures": ["triage"], **_t("llm_triage", f"{pr.tag} failed ({e}); using deterministic classifier")}
 
     # -- 4. fusion + guard ---------------------------------------------------
     def fuse(self, s: TriageState) -> dict:

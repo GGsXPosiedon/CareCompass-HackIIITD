@@ -59,6 +59,28 @@ def test_question_is_about_the_users_symptom(client):
     assert "swelling" not in chat(client, ["I have a fever", "since yesterday"])[1]["follow_up_question"]
 
 
+@pytest.mark.parametrize("text,lang,label", [
+    ("pet me jalan", "hinglish", "pet mein jalan"),
+    ("pet mein jalan hai", "hinglish", "pet mein jalan"),
+    ("पेट में जलन है", "hi", "पेट में जलन"),
+    ("burning in my stomach", "en", "burning in your stomach"),
+    ("my stomach is burning", "en", "burning in your stomach"),
+    ("jalan hai", "hinglish", "jalan"),
+    ("burning sensation", "en", "burning sensation"),
+])
+def test_burning_does_not_invent_urinary_symptoms(client, text, lang, label):
+    body = client.post("/triage", json=req(text, language=lang)).json()
+    assert label in body["follow_up_question"]
+    assert not any(word in body["follow_up_question"] for word in ("peshab", "urinary", "पेशाब"))
+    assert not analysis(text).concepts.get("urinary_symptoms") == FactStatus.PRESENT
+
+
+def test_stomach_burning_follow_up_keeps_the_original_complaint(client):
+    replies = chat(client, ["pet me jalan", "aaj se"], language="hinglish")
+    assert "pet mein jalan" in replies[0]["follow_up_question"]
+    assert "peshab" not in (replies[1]["follow_up_question"] or replies[1]["reasoning"])
+
+
 def test_message_that_already_says_how_long_is_routed_without_questions(client):
     body = client.post("/triage", json=req("papa ko do din se bukhar hai aur khansi bhi", language="hinglish")).json()
     assert body["care_type"] == "paramedic_home_visit" and body["follow_up_question"] is None

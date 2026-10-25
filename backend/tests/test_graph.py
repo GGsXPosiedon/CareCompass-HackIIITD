@@ -251,6 +251,33 @@ def test_failed_safety_check_still_shows_notice_when_triage_succeeds():
     assert response.service_notice
 
 
+def test_pathway_disposition_skips_triage_without_a_false_warning(monkeypatch):
+    from app.services import pathways
+
+    # This module normally disables pathways to exercise fallback fusion.
+    monkeypatch.setattr(pathways, "select", lambda text: "stw_urinary")
+    history = [
+        {"role": "user", "content": "peshab mein jalan hai"},
+    ]
+    p = make(tri=triage())
+    for answer in ("Nahi", "Nahi"):
+        previous = history[-1]["content"]
+        response = run(p, previous, language="hinglish", history=history[:-1])
+        assert response.follow_up_question
+        history.extend([{"role": "assistant", "content": response.follow_up_question},
+                        {"role": "user", "content": answer}])
+    response, state = p.run(TriageRequest(**req(history[-1]["content"], language="hinglish", history=history[:-1])))
+    assert response.care_type is not None
+    assert state["llm_triage"] is None and state["llm_safety"] is not None
+    assert not state.get("llm_failures") and response.service_notice is None
+
+
+def test_failed_safety_on_a_question_still_shows_warning():
+    response = run(make(status=503), "pet me jalan", language="hinglish")
+    assert "pet mein jalan" in response.follow_up_question
+    assert response.service_notice
+
+
 def test_gemini3_uses_thinking_level_and_retries_temporary_server_failure():
     settings = dataclasses.replace(get_settings(), gemini_api_key="test", gemini_model="gemini-3.5-flash")
     requests = []

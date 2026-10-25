@@ -21,6 +21,7 @@ class TriageState(TypedDict, total=False):
     det: RouteDecision                   # deterministic classifier slot (rules now, trained model later)
     llm_safety: Optional[SafetyReview]   # Gemini safety screener
     llm_triage: Optional[TriageAssessment]  # Gemini triage analyst
+    llm_failures: Annotated[list[str], operator.add]
     decision: dict[str, Any]             # fused decision (see nodes.fuse)
     response: TriageResponse
     candidates: list                     # matcher output with score components (for /trace)

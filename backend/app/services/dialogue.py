@@ -110,7 +110,8 @@ OTHER_NAMES = [  # (stem regex, names per language) - readable names for complai
     (re.compile(r"dizz|chakkar|lightheaded|vertigo|चक्कर"), {"en": "dizziness", "hi": "चक्कर", "hinglish": "chakkar"}),
     (re.compile(r"skin|rash|itch|khujli|khujlee|daane|allerg|त्वचा|खुजली"), {"en": "skin problem", "hi": "त्वचा की परेशानी", "hinglish": "skin ki pareshani"}),
     (re.compile(r"sardi|zukam|zukaam|runny|sneez|chheenk|naak|nose|नाक|सर्दी|जुकाम"), {"en": "cold / runny nose", "hi": "सर्दी-जुकाम", "hinglish": "sardi-zukam"}),
-    (re.compile(r"urin|peshab|jalan|burning|पेशाब|जलन"), {"en": "urinary problem", "hi": "पेशाब की परेशानी", "hinglish": "peshab ki taklif"}),
+    (re.compile(r"urin|peeing|peshab|पेशाब"), {"en": "urinary problem", "hi": "पेशाब की परेशानी", "hinglish": "peshab ki taklif"}),
+    (re.compile(r"jalan|burning|जलन|acidity|heartburn"), {"en": "burning sensation", "hi": "जलन", "hinglish": "jalan"}),
     (re.compile(r"tooth|dant|दांत"), {"en": "toothache", "hi": "दांत का दर्द", "hinglish": "dant ka dard"}),
     (re.compile(r"\bear\b|kaan|कान"), {"en": "ear problem", "hi": "कान की तकलीफ़", "hinglish": "kaan ki taklif"}),
     (re.compile(r"eye|aankh|आंख|आँख"), {"en": "eye problem", "hi": "आँख की तकलीफ़", "hinglish": "aankh ki taklif"}),
@@ -124,6 +125,7 @@ _COVERED_BY_CONCEPTS = {"ache", "aches", "hurt", "hurts", "hurting", "tired", "f
 _CHECK_WORDS = {"bp", "sugar", "diabetes", "thyroid", "period", "periods", "cold"}
 
 BODY_PAIN = {
+    "stomach_burning": re.compile(r"\b(?:pet|stomach|abdomen|belly|tummy)\b[^.!?\n]{0,25}\b(?:jalan|burning)\b|\bburning\b[^.!?\n]{0,25}\b(?:stomach|abdomen|belly|tummy)\b|पेट\s*(?:में\s*)?जलन"),
     "knee_pain": re.compile(r"\bknee|ghutn|घुटन"),
     "back_pain": re.compile(r"\bback ?(pain|ache)|\bback (?:hurts?|is (?:hurting|paining|sore))|backache|peeth|kamar|पीठ|कमर"),
     "headache": re.compile(r"headache|head ache|head (?:hurts?|pain|is (?:hurting|paining)|is aching)|migraine|\bsir (dard|me dard)|\bsar (dard|me dard)|सिरदर्द|(?:सिर|सर) (?:में )?दर्द"),
@@ -131,6 +133,7 @@ BODY_PAIN = {
     "bleeding": re.compile(r"nose ?bleed|\bbleed\w*|\bkhoon\b|\bblood\b|\u0916\u0942\u0928|\bcut\b"),
 }
 NAMES = {
+    "stomach_burning": {"en": "burning in your stomach", "hi": "पेट में जलन", "hinglish": "pet mein jalan"},
     "fever": {"en": "fever", "hi": "बुखार", "hinglish": "bukhar"},
     "cough": {"en": "cough", "hi": "खांसी", "hinglish": "khansi"},
     "weakness": {"en": "weakness", "hi": "कमज़ोरी", "hinglish": "kamzori"},
@@ -323,6 +326,8 @@ def _symptoms(text_norm_turns: list[str], concepts: dict) -> list[str]:
     out: list[str] = []
     for t in text_norm_turns:
         for key, rx in BODY_PAIN.items():
+            if key == "stomach_pain" and "stomach_burning" in out:
+                continue
             if rx.search(t) and key not in out:
                 out.append(key)
     for c in ("fever", "cough", "stomach_upset", "weakness", "pain"):

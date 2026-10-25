@@ -105,7 +105,7 @@ class Settings:
     # Optional extra providers. Chains are comma lists of: gemini, gemini2, groq, compat (default: every configured one).
     gemini_api_key_2: str = field(default_factory=lambda: os.getenv("GEMINI_API_KEY_2", ""), repr=False)
     groq_api_key: str = field(default_factory=lambda: os.getenv("GROQ_API_KEY", ""), repr=False)
-    groq_model: str = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+    groq_model: str = os.getenv("GROQ_MODEL", "openai/gpt-oss-20b")
     groq_base_url: str = os.getenv("GROQ_BASE_URL", "https://api.groq.com/openai/v1")
     compat_api_key: str = field(default_factory=lambda: os.getenv("COMPAT_API_KEY", ""), repr=False)  # any OpenAI-compatible API
     compat_base_url: str = os.getenv("COMPAT_BASE_URL", "")

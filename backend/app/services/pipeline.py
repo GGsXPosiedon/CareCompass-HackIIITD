@@ -54,7 +54,7 @@ class Pipeline:
         else:
             resp.response_source = "gemini" if state.get("llm_triage") is not None else "rules"
             # Dialogue turns can intentionally skip triage; missing output is not a failed call.
-            if self.llm.enabled and any(node in state and state[node] is None for node in ("llm_triage", "llm_safety")):
+            if state.get("llm_failures"):
                 resp.service_notice = {
                     "en": "Some AI checks are temporarily unavailable, so this reply may be limited.",
                     "hi": "AI की कुछ जाँच अभी उपलब्ध नहीं हैं, इसलिए यह जवाब अधूरा हो सकता है।",
