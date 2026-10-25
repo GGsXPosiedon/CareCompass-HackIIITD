@@ -51,7 +51,7 @@ class TriageGraph:
         g.add_edge("intake", "rules_safety")
         g.add_conditional_edges("rules_safety", n.after_rules, ["emergency", "converse"])
         g.add_conditional_edges("converse", n.after_converse, ["reply_guard", "classify", "llm_safety", "llm_triage"])
-        g.add_conditional_edges("reply_guard", n.after_guard, ["emergency", "follow_up", "dialogue_reply"])
+        g.add_conditional_edges("reply_guard", n.after_guard, ["emergency", "follow_up", "dialogue_reply", "match"])
         g.add_edge(["classify", "llm_safety", "llm_triage"], "fuse")
         g.add_conditional_edges("fuse", n.after_fuse, ["emergency", "follow_up", "match"])
         g.add_edge("match", "respond")

@@ -35,10 +35,10 @@ def test_select_in_three_languages():
     assert pw.select("I have chest pain") == "chest_pain" and pw.select("write a poem") is None
 
 
-def test_danger_answer_or_unsure_is_emergency_immediately():
-    for ans in ("yes", "unsure"):
-        s = pw.evaluate("fever", {"danger": ans})
-        assert s.kind == "disposition" and s.care_type == "emergency_112" and s.asked == 1
+def test_only_confirmed_danger_is_emergency_immediately():
+    s = pw.evaluate("fever", {"danger": "yes"})
+    assert s.kind == "disposition" and s.care_type == "emergency_112" and s.asked == 1
+    assert pw.evaluate("fever", {"danger": "unsure"}).urgency == "same_day"
     assert pw.evaluate("chest_pain", {"now": "yes"}).care_type == "emergency_112"
 
 
@@ -59,7 +59,8 @@ def test_strict_thresholds_infant_pregnant_child_elder():
 
 
 def test_skip_is_treated_as_unsure_and_never_lowers_a_danger_answer():
-    assert pw.evaluate("cough_breathing", {"danger": "skip"}).care_type == "emergency_112"
+    assert pw.evaluate("cough_breathing", {"danger": "skip"}).urgency == "same_day"
+    assert pw.evaluate("chest_pain", {"now": "unsure", "spread": "yes"}).care_type == "emergency_112"
 
 
 def test_parse_answer_multilingual():
@@ -79,7 +80,7 @@ def test_mood_panic_anger_anxiety_neutral():
     m = mood.detect("mujhe bahut dar lag raha hai, is it serious?")
     assert m.label == "anxiety" and not m.danger_first
     assert mood.detect("papa ko do din se bukhar hai").label == "neutral"
-    assert mood.detect("help me please").unsure_is_yes
+    assert not mood.detect("help me please").unsure_is_yes
 
 
 def test_delhi_assets_cover_every_caregiver_area():

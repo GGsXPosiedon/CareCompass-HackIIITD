@@ -5,6 +5,7 @@ import re
 import unicodedata
 
 from ..schemas.internal import FactStatus
+from .clinical_reference import load as load_reference
 
 DEVANAGARI = re.compile(r"[ऀ-ॿ]")
 HINGLISH_MARKERS = {
@@ -95,21 +96,22 @@ CONCEPTS: dict[str, tuple[str, str]] = {
     "bp_sugar_check": ("symptom", r"\bbp\b|blood pressure|बीपी|बी पी"),
     "home_visit_request": ("context", r"\bghar\b|\bat home\b|\bhome (?:visit|check|collection|sample)\b|\bhome\b|घर"),
     # nursing procedures
-    "injection": ("nursing", r"inject|इंजेक्शन|insulin|इंसुलिन|इन्सुलिन"),
+    "injection": ("nursing", r"inject|इंजेक्शन"),
     "dressing": ("nursing", r"dressing|bandage|bedsore|\bwound\b|\bpatti\b|\bghaav\b|\bghav\b|stitch|पट्टी|घाव|ड्रेसिंग"),
-    "catheter": ("nursing", r"catheter|कैथेटर"),
+    "catheter": ("nursing", r"catheter (?:care|change|replace|flush|badal|badl|lag|chahiye)|(?:change|replace|flush) (?:the |my )?catheter|कैथेटर (?:बदल|लग|देखभाल)"),
     "iv_drip": ("nursing", r"\biv\b|\bdrip\b|saline|ड्रिप"),
     "nebulization": ("nursing", r"nebuli[sz]|नेबुलाइ"),
     # lab
-    "lab_test": ("lab", r"blood test|lab test|urine test|pathology|khoo?n ki ja+n?ch|blood ki ja+n?ch|खून की (?:जांच|जाँच)|ब्लड टेस्ट|पेशाब की (?:जांच|जाँच)|\btests?\b|\bcbc\b|thyroid|lipid|hba1c|full body|\bsample\b|\bculture\b|टेस्ट|सैंपल|थायराइड|फुल बॉडी"),
+    "lab_test": ("lab", r"blood test|lab test|urine test|pathology|khoo?n ki ja+n?ch|blood ki ja+n?ch|खून की (?:जांच|जाँच)|ब्लड टेस्ट|पेशाब की (?:जांच|जाँच)|\btests?\b|\bcbc\b|lipid|hba1c|full body|\bsample\b|\bculture\b|टेस्ट|सैंपल|फुल बॉडी"),
     # consult
-    "consult": ("consult", r"consult|\bsalah\b|सलाह|opinion|ओपिनियन|talk to (?:a |the |my )?doctor|speak to (?:a |the )?doctor|doctor (?:se|ko) (?:baat|bat)|doctor se consult|doctor online|online doctor|online|video (?:call|consult)|teleconsult|baat karni|बात करनी|ऑनलाइन|डॉक्टर से (?:\S+ )?(?:बात|सलाह)|doctor ko (?:\S+ )?dikha|show (?:\S+ ){0,2}to (?:a |the )?doctor|डॉक्टर को (?:\S+ )?दिखा"),
+    "consult": ("consult", r"consult|\bfollow up\b|\bsalah\b|सलाह|opinion|ओपिनियन|talk to (?:a |the |my )?doctor|speak to (?:a |the )?doctor|doctor (?:se|ko) (?:baat|bat)|doctor se consult|doctor online|online doctor|online|video (?:call|consult)|teleconsult|baat karni|बात करनी|ऑनलाइन|डॉक्टर से (?:\S+ )?(?:बात|सलाह)|doctor ko (?:\S+ )?dikha|show (?:\S+ ){0,2}to (?:a |the )?doctor|डॉक्टर को (?:\S+ )?दिखा"),
     "report_review": ("consult", r"\breports?\b|रिपोर्ट|prescription"),
     # a nurse / attendant asked for in general terms (no specific procedure named)
     "nurse_request": ("nursing", r"\bnurses?\b|\bnursing\b|\bcaregivers?\b|\battendant\b|\bayah\b|\bcare at home\b|नर्स|देखभाल"),
     # set by the dialogue layer when a condition (AIDS, TB, cancer ...) is named; never matches text by itself
     "named_condition": ("condition", r"(?!)"),
 }
+CONCEPTS.update({key: ("symptom", item["pattern"]) for key, item in load_reference()["symptom_concepts"].items()})
 _COMPILED = {k: (g, re.compile(unicodedata.normalize("NFKC", p))) for k, (g, p) in CONCEPTS.items()}
 
 # concept -> any-of skill groups a caregiver must satisfy (list of alternative sets)
@@ -140,6 +142,11 @@ LABELS = {  # human-readable concept names for explanations
                  "consult": "doctor se salah", "report_review": "report review",
                  "nurse_request": "ghar par nurse", "named_condition": "aapki batayi health condition"},
 }
+
+
+for _key, _item in load_reference()["symptom_concepts"].items():
+    for _lang in LABELS:
+        LABELS[_lang][_key] = _item["label"][_lang]
 
 
 def extract_concepts(text_norm: str) -> tuple[dict[str, FactStatus], dict[str, str]]:

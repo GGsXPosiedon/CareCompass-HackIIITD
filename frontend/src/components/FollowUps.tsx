@@ -12,6 +12,7 @@ export function FollowUps({ copy, hindi, result, messages, input, setInput, onSu
     <div className="page-heading"><h1 tabIndex={-1}>{copy.followTitle}</h1><p>{copy.followIntro}</p></div>
     <div className="care-grid"><section className="request-panel follow-panel">
       <div className="question-meta"><span><MessageCircle size={18} />CareCompass</span><ReadAloud text={result.follow_up_question ?? ''} copy={copy} hindi={hindi} /></div>
+      {result.reasoning ? <p className="small muted">{result.reasoning}</p> : null}
       <h2 className="question-title">{result.follow_up_question}</h2>
       {result.answer_options?.length ? <div className="answer-options">{result.answer_options.map(option => <button type="button" key={option} className={`answer-option ${input === option ? 'chosen' : ''}`} aria-pressed={input === option} onClick={() => setInput(option)} disabled={busy}>{option}</button>)}</div> : null}
       <form onSubmit={e => { e.preventDefault(); onSubmit(); }}><label className="field-label" htmlFor="answer">{copy.followLabel}</label><textarea id="answer" rows={2} value={input} onChange={e => setInput(e.target.value)} placeholder={copy.followPlaceholder} maxLength={2000} disabled={busy} aria-invalid={!!error} aria-describedby={error ? 'answer-error' : undefined} />

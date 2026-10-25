@@ -36,7 +36,7 @@
   },
   "note": "Infants and pregnant women never get self-care or routine from these pathways; they are raised to a same-day review. Children under 5 and over-65s never get self-care."
  },
- "unknown_policy": "On a danger question, 'unsure' counts as 'yes' (false alarms are acceptable, misses are not).",
+ "unknown_policy": "Unknown danger signs require same-day human assessment; only affirmative danger answers trigger emergency rules.",
  "max_questions": 4,
  "pathways": [
   {
@@ -204,8 +204,7 @@
     {
      "when": {
       "danger": [
-       "yes",
-       "unsure"
+       "yes"
       ]
      },
      "disposition": "emergency",
@@ -293,9 +292,9 @@
       "hi": "कम दिन का बुखार बिना चेतावनी संकेत के आम तौर पर घर पर संभाला जा सकता है।"
      },
      "advice": {
-      "en": "Rest, drink plenty of fluids, light cotton clothing, take paracetamol only as per the label or your doctor. Seek care if fever passes 3 days or any warning sign appears.",
-      "hinglish": "Aaram karein, khoob paani/ORS piyen, halke kapde. Paracetamol sirf label ya doctor ke anusaar. 3 din se zyada ya koi warning sign ho to doctor dikhayen.",
-      "hi": "आराम करें, खूब पानी/ORS पिएँ, हल्के कपड़े। पैरासिटामोल केवल लेबल या डॉक्टर के अनुसार। 3 दिन से ज़्यादा या कोई चेतावनी संकेत हो तो डॉक्टर को दिखाएँ।"
+      "en": "Rest and stay comfortable. Follow any fluid restrictions or care plan given by your doctor. Seek care if fever passes 3 days or any warning sign appears.",
+      "hinglish": "Aaram karein aur aaraamdayak kapde pehnein. Paani ki pabandi ya doctor ka care plan ho to usi ko follow karein. 3 din se zyada ya koi warning sign ho to doctor dikhayen.",
+      "hi": "आराम करें और आरामदायक कपड़े पहनें। पानी की पाबंदी या डॉक्टर की देखभाल योजना हो तो उसका पालन करें। 3 दिन से ज़्यादा या कोई चेतावनी संकेत हो तो डॉक्टर को दिखाएँ।"
      }
     }
    ]
@@ -431,8 +430,7 @@
     {
      "when": {
       "danger": [
-       "yes",
-       "unsure"
+       "yes"
       ]
      },
      "disposition": "emergency",
@@ -633,8 +631,7 @@
     {
      "when": {
       "danger": [
-       "yes",
-       "unsure"
+       "yes"
       ]
      },
      "disposition": "emergency",
@@ -657,9 +654,9 @@
      "care_type": "paramedic_home_visit",
      "urgency": "same_day",
      "why": {
-      "en": "Signs of dehydration need same-day care (possible drip).",
-      "hinglish": "Dehydration ke lakshan mein aaj hi care chahiye (drip lag sakti hai).",
-      "hi": "निर्जलीकरण के लक्षणों में आज ही देखभाल चाहिए (ड्रिप लग सकती है)।"
+      "en": "Possible dehydration needs medical assessment today; a clinician can decide what care is needed.",
+      "hinglish": "Dehydration ke lakshan mein aaj doctor se assessment karwayein; woh sahi care batayenge.",
+      "hi": "निर्जलीकरण के लक्षणों की आज डॉक्टर से जाँच करवाएँ; वे सही देखभाल बताएँगे।"
      }
     },
     {
@@ -826,8 +823,7 @@
     {
      "when": {
       "now": [
-       "yes",
-       "unsure"
+       "yes"
       ]
      },
      "disposition": "emergency",
@@ -842,8 +838,7 @@
     {
      "when": {
       "spread": [
-       "yes",
-       "unsure"
+       "yes"
       ]
      },
      "disposition": "emergency",
@@ -1021,8 +1016,7 @@
     {
      "when": {
       "danger": [
-       "yes",
-       "unsure"
+       "yes"
       ]
      },
      "disposition": "emergency",
@@ -1217,8 +1211,7 @@
     {
      "when": {
       "danger": [
-       "yes",
-       "unsure"
+       "yes"
       ]
      },
      "disposition": "emergency",
@@ -1409,8 +1402,7 @@
     {
      "when": {
       "danger": [
-       "yes",
-       "unsure"
+       "yes"
       ]
      },
      "disposition": "emergency",

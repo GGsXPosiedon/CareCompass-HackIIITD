@@ -1,7 +1,7 @@
 """Deterministic mood cues (panic / anger / anxiety) in English, Hindi and Hinglish, and how each should change the conversation.
 
 Rules, not a model. The LLM writes the wording; this module decides the stance and routing flags:
-  panic   -> ask the danger-sign question first, treat 'unsure' as yes, short calm sentences, offer 112
+  panic   -> ask the danger-sign question first, short calm sentences, offer human assessment if unclear
   anger   -> apologise once, no more than one question, offer a human call-back
   anxiety -> reassure and explain the next step; same disposition as for a calm user (never lowers urgency)
 Mood can only add caution or a human hand-off. It never downgrades a disposition.
@@ -31,7 +31,7 @@ def detect(text: str) -> Mood:
     t = text.casefold()
     p, a, x = (rx.findall(t) for rx in (PANIC, ANGER, ANXIETY))
     if p or text.count("!") >= 3:
-        return Mood("panic", danger_first=True, unsure_is_yes=True, tone="calm, short sentences, say 112 is available", cues=tuple(map(str, p)) or ("!!!",))
+        return Mood("panic", danger_first=True, tone="calm, short sentences, say 112 is available", cues=tuple(map(str, p)) or ("!!!",))
     if a:
         return Mood("anger", max_questions=1, human_callback=True, tone="apologise once, be brief, offer a human call-back", cues=tuple(map(str, a)))
     if x:

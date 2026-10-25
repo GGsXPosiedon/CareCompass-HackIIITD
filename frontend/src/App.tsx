@@ -140,7 +140,15 @@ export default function App({ active = true, embedded = false, chatLayout = fals
       setMessages(nextMessages); setResult(response); setView(nextView(response));
       onConversation?.({ id: conversationId.current, title: (followUp ? input : text).slice(0, 100), input: followUp ? input : text, language, location: requestLocation, messages: nextMessages, result: response, updatedAt: new Date().toISOString() });
       return response;
-    } catch (cause) { if (current === generation.current) setError(signal.aborted ? (hindi ? 'जवाब रोक दिया गया। फिर कोशिश करें।' : 'Response stopped. You can retry or send another message.') : !DEMO_MODE && (cause instanceof TypeError || cause instanceof DOMException || (cause instanceof ApiError && cause.status >= 500)) ? copy.connectionError : copy.genericError); }
+    } catch (cause) {
+      if (current === generation.current) {
+        const message = signal.aborted ? (hindi ? 'जवाब रोक दिया गया। फिर कोशिश करें।' : 'Response stopped. You can retry or send another message.')
+          : cause instanceof ApiError && cause.code === 'API_ROUTE_NOT_FOUND'
+            ? (hindi ? 'इस साइट का केयर API उपलब्ध नहीं है। सर्वर की डिप्लॉयमेंट सेटिंग जाँचें। आपके जवाब सुरक्षित हैं।' : 'The care API is missing from this deployment. Check the server deployment settings. Your answers are still here.')
+            : !DEMO_MODE && (cause instanceof TypeError || cause instanceof DOMException || (cause instanceof ApiError && (cause.status >= 500 || cause.code === 'INVALID_API_RESPONSE'))) ? copy.connectionError : copy.genericError;
+        setError(`${message}${cause instanceof ApiError && cause.requestId ? ` (${hindi ? 'संदर्भ' : 'Reference'}: ${cause.requestId})` : ''}`);
+      }
+    }
     finally { if (current === generation.current) { setBusy(false); locked.current = false; intakeController.current = null; } }
   }
   function stopReply() {
@@ -236,7 +244,7 @@ export default function App({ active = true, embedded = false, chatLayout = fals
     const replyHindi = response.response_language === 'hi' || (language === 'hi');
     const replyCopy = getCopy(replyHindi);
     const reply: SpokenReply = destination === 'emergency' ? { text: `${replyCopy.emergencyTitle} ${response.reasoning} ${replyCopy.emergencyBody}`, terminal: true }
-      : destination === 'questions' ? { text: `${response.follow_up_question} ${response.answer_options?.join('. ') ?? ''}` }
+      : destination === 'questions' ? { text: `${response.reasoning} ${response.follow_up_question} ${response.answer_options?.join('. ') ?? ''}` }
       : { text: `${careLabel(response.care_type!, replyHindi)}. ${response.reasoning} ${replyCopy.voiceSessionNext}` };
     return reply;
   }}/> : null}

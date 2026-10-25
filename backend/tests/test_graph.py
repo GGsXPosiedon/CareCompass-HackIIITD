@@ -88,6 +88,46 @@ def test_rules_emergency_short_circuits_without_calling_llm():
     assert r.care_type == "emergency_112" and cap == []
 
 
+def test_screener_cannot_invent_chest_location_for_generic_pain():
+    safety = {"findings": [{"flag": "chest_pain", "status": "possible", "evidence": "dard hora hai"}],
+              "screening_question": "Seene mein dard hai?", "screening_options": ["Haan", "Nahi", "Pata nahi"]}
+    result = run(make(safety=safety, tri=triage()), "dard hora hai")
+    assert result.follow_up_question == "Dard kahan ho raha hai?"
+    assert result.red_flags == []
+
+
+def test_encoder_score_alone_cannot_escalate_unlocated_pain_or_idk():
+    class HighScore:
+        tau_ask, tau_emergency = 0.5, 0.99
+
+        def emergency_score(self, *args):
+            return 1.0
+
+    p = make(tri=triage())
+    p.encoder = HighScore()
+    assert run(p, "dard hora hai").follow_up_question == "Dard kahan ho raha hai?"
+    result = run(p, "idk", history=[{"role": "user", "content": "dard hora hai"},
+                                   {"role": "assistant", "content": "Dard kahan ho raha hai?", "kind": "follow_up"}])
+    assert result.care_type != "emergency_112" and result.red_flags == []
+
+
+def test_idk_cannot_confirm_assistant_suggested_chest_pain():
+    safety = {"findings": [{"flag": "chest_pain", "status": "present", "evidence": "idk"}],
+              "screening_question": None, "screening_options": []}
+    history = [{"role": "user", "content": "dard hora hai"},
+               {"role": "assistant", "content": "Seene mein dard hai?", "kind": "follow_up"}]
+    result = run(make(safety=safety, tri=triage(care_type="emergency_112", urgency="emergency", red_flags=["chest_pain"])), "idk", history=history)
+    assert result.care_type != "emergency_112" and result.red_flags == []
+
+
+def test_uncertain_reply_to_screener_is_possible_even_if_model_says_present():
+    safety = {"findings": [{"flag": "breathlessness", "status": "present", "evidence": "not sure"}],
+              "screening_question": None, "screening_options": []}
+    result = run(make(safety=safety, tri=triage(care_type="emergency_112", red_flags=["breathlessness"])), "idk",
+                 history=[{"role": "user", "content": "I feel unwell"}, {"role": "assistant", "content": "Is breathing difficult?", "kind": "follow_up"}])
+    assert result.care_type == "teleconsultation" and result.urgency == "same_day" and result.red_flags == []
+
+
 def test_llm_safety_present_flag_escalates():
     s = {"findings": [{"flag": "stroke_symptoms", "status": "present", "evidence": "ek taraf kamzori"}], "screening_question": None, "screening_options": []}
     r = run(make(safety=s, tri=triage(care_type="teleconsultation")), "mummy ek taraf se kamzor lag rahi hain")
@@ -100,7 +140,7 @@ def test_llm_triage_red_flag_escalates_even_if_screener_misses():
     assert r.care_type == "emergency_112" and "breathlessness" in r.red_flags
 
 
-def test_possible_flag_asks_danger_sign_question_then_escalates_when_budget_spent():
+def test_possible_flag_asks_then_routes_to_human_when_budget_spent():
     s = {"findings": [{"flag": "high_fever_infant", "status": "possible", "evidence": "baby fever"}],
          "screening_question": "Is the baby younger than 3 months?", "screening_options": ["Yes", "No", "Not sure"]}
     p = make(safety=s, tri=triage(care_type="paramedic_home_visit"))
@@ -108,7 +148,7 @@ def test_possible_flag_asks_danger_sign_question_then_escalates_when_budget_spen
     assert r.follow_up_question == "Is the baby younger than 3 months?" and r.answer_options == ["Yes", "No", "Not sure"]
     hist = [{"role": "user", "content": "x"}, {"role": "assistant", "content": "q1?"}, {"role": "user", "content": "y"}, {"role": "assistant", "content": "q2?"}]
     r2 = run(p, "pata nahi", history=hist)
-    assert r2.care_type == "emergency_112"
+    assert r2.care_type == "teleconsultation" and r2.urgency == "same_day" and r2.red_flags == []
 
 
 def test_deterministic_model_can_escalate_too(pipeline):
@@ -239,8 +279,8 @@ def test_unresolved_danger_sign_does_not_repeat_the_same_screening_question():
               "screening_question": "Is breathing difficult?", "screening_options": ["Yes", "No"]}
     p = make(safety=safety, tri=triage(care_type="paramedic_home_visit"))
     result = run(p, "I cannot tell", history=[{"role": "assistant", "content": "Is breathing difficult?", "kind": "follow_up"}])
-    assert result.care_type == "emergency_112" and result.follow_up_question is None
-    assert result.matched_caregivers == []
+    assert result.care_type == "teleconsultation" and result.follow_up_question is None
+    assert result.urgency == "same_day" and result.red_flags == [] and "112" in result.reasoning
 
 
 def test_agree_or_ask_policy_asks_on_disagreement():

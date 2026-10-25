@@ -6,20 +6,26 @@
       "framework": "fastapi",
       "entrypoint": "app.main:app"
     },
+    "gateway": {
+      "root": "frontend",
+      "framework": "node",
+      "entrypoint": "server/gateway.mjs",
+      "installCommand": "npm ci",
+      "buildCommand": "node --check server/gateway.mjs",
+      "bindings": [
+        { "type": "service", "service": "backend", "format": "url", "env": "BACKEND_URL" }
+      ],
+      "functions": {
+        "server/gateway.mjs": { "maxDuration": 60 }
+      }
+    },
     "frontend": {
       "root": "frontend",
       "framework": "vite",
       "installCommand": "npm ci",
       "buildCommand": "npm run build",
-      "devCommand": "npm run dev:services",
+      "devCommand": "npm run dev -- --mode services",
       "outputDirectory": "dist",
-      "bindings": [
-        { "type": "service", "service": "backend", "format": "url", "env": "BACKEND_URL" }
-      ],
-      "functions": {
-        "api/care.mjs": { "maxDuration": 60 },
-        "api/voice.mjs": { "maxDuration": 30 }
-      },
       "rewrites": [
         { "source": "/(care|bookings|briefcase|services|history|settings)", "destination": "/index.html" },
         { "source": "/chat/:id", "destination": "/index.html" }
@@ -27,8 +33,7 @@
     }
   },
   "rewrites": [
-    { "source": "/api/voice", "destination": { "service": "frontend", "path": "/api/voice" } },
-    { "source": "/api/(.*)", "destination": { "service": "frontend", "path": "/api/care" } },
+    { "source": "/api/(.*)", "destination": { "service": "gateway" } },
     { "source": "/(.*)", "destination": { "service": "frontend" } }
   ]
 }

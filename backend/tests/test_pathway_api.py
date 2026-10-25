@@ -14,7 +14,7 @@ def ask(client, text, history, **extra):
     return body
 
 
-@pytest.mark.parametrize("answer", ["Yes", "Not sure", "Haan", "पता नहीं"])
+@pytest.mark.parametrize("answer", ["Yes", "Haan"])
 def test_pathway_danger_uses_existing_emergency_response(client, answer):
     history = []
     first = ask(client, "I have a fever", history)
@@ -24,6 +24,32 @@ def test_pathway_danger_uses_existing_emergency_response(client, answer):
     assert "112" in body["reasoning"] and body["matched_caregivers"] == []
 
 
+@pytest.mark.parametrize("answer", ["idk", "Not sure", "pata nahi", "पता नहीं"])
+def test_unknown_danger_answer_is_not_confirmed(client, answer):
+    history = []
+    ask(client, "I have a fever", history)
+    body = ask(client, answer, history)
+    assert body["care_type"] == "teleconsultation" and body["urgency"] == "same_day"
+    assert body["red_flags"] == [] and "112" in body["reasoning"]
+
+
+def test_vague_pain_first_asks_location_without_suggesting_chest(client):
+    history = []
+    body = ask(client, "dard hora hai", history, language="hinglish")
+    assert body["follow_up_question"] == "Dard kahan ho raha hai?"
+    assert body["care_type"] is None and body["red_flags"] == []
+    body = ask(client, "idk", history, language="hinglish")
+    assert body["care_type"] != "emergency_112" and body["red_flags"] == []
+
+
+def test_pain_location_answer_moves_on_to_duration(client):
+    history = []
+    ask(client, "dard hora hai", history, language="hinglish")
+    body = ask(client, "pet mein", history, language="hinglish")
+    assert "kab se" in body["follow_up_question"]
+    assert "seene" not in body["follow_up_question"] and body["red_flags"] == []
+
+
 @pytest.mark.parametrize("context,urgency", [({}, "scheduled"), ({"age_years": 0.5}, "same_day"),
                                           ({"pregnant": True}, "same_day")])
 def test_pathway_replays_history_and_converges_in_four_questions(client, context, urgency):
@@ -31,7 +57,7 @@ def test_pathway_replays_history_and_converges_in_four_questions(client, context
     for text in ["I have a fever in govind puri", "No", "No", "Less than 2 days", "Yes"]:
         body = ask(client, text, history, patient_context=context)
     assert body["follow_up_question"] is None
-    assert body["urgency"] == urgency and "UNREVIEWED" in body["reasoning"]
+    assert body["urgency"] == urgency and "UNREVIEWED" not in body["reasoning"]
     assert len([t for t in history if t["role"] == "assistant" and pathways.question_slot(t["content"])]) == 4
 
 
@@ -44,11 +70,13 @@ def test_anger_limits_questions_and_offers_callback_without_claiming_booking(cli
     assert "human call-back" in body["reasoning"]
 
 
-def test_panic_uncertain_danger_escalates(client):
+def test_panic_uncertain_danger_gets_human_assessment(client):
     history = []
     first = ask(client, "Help me please", history)
     assert "chest pain" in first["follow_up_question"]
-    assert ask(client, "Not sure", history)["care_type"] == "emergency_112"
+    body = ask(client, "Not sure", history)
+    assert body["care_type"] == "teleconsultation" and body["urgency"] == "same_day"
+    assert body["red_flags"] == [] and "112" in body["reasoning"]
 
 
 def test_new_topic_and_stop_do_not_continue_pathway(client):
@@ -70,7 +98,7 @@ def test_unrecognised_answers_converge_conservatively(client):
     history = []
     for text in ["I have a fever", "xyz", "xyz", "xyz", "xyz"]:
         body = ask(client, text, history)
-    assert body["care_type"] == "emergency_112"
+    assert body["care_type"] == "teleconsultation" and body["urgency"] == "same_day"
 
 
 def test_pathway_runs_without_loading_weights(client, pipeline, monkeypatch):
@@ -100,7 +128,9 @@ def test_seasonal_emphasis_keeps_question_and_disposition(client):
     ask(client, "I have a fever in govind puri", history)
     body = ask(client, "No", history)
     assert pathways.question_slot(body["follow_up_question"]) == "pathway:fever:bleed"
-    assert "Seasonal context (UNREVIEWED)" in body["reasoning"]
+    assert "ask about" not in body["reasoning"] and "UNREVIEWED" not in body["reasoning"]
+    trace = client.post("/api/v1/triage/trace", json=req("No", history=history[:-2], location=None)).json()
+    assert trace["response"]["care_type"] is None
     assert body["care_type"] is None
 
 

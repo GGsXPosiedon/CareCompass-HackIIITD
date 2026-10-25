@@ -21,6 +21,7 @@ from ..schemas.external import TriageRequest
 from ..schemas.internal import FactStatus
 from .conditions import _PERSON_CUE, NON_HEALTH_TASK, find_conditions, health_signal
 from .lexicon import detect_language, extract_concepts, group_of, normalize, resolve_language, strip_prefix
+from .clinical_reference import load as load_reference
 
 _RUNS = re.compile(r"(.)\1{2,}")
 
@@ -58,7 +59,15 @@ CONTINUING = _rx(r"\b(aur|also|and|bhi|saath|along|plus|ab bhi|still)\b", r"औ�
 TIMING_NOW = re.compile(r"\bright now\b|\bnow\b|\bimmediate\w*|\bright away\b|\basap\b|\burgent\w*|\babhi\b(?! se)|\bturant\b|\bjaldi\b|\bfauran\b|अभी|तुरंत|जल्दी", re.I)
 TIMING_TODAY = re.compile(r"\blater today\b|(?<!since )\btoday\b|\baaj\b(?! se)|\bshaam\b|\bevening\b|\bafternoon\b|\bdopahar\b|\btonight\b|\braat\b|in a few hours|aaj baad|आज(?! से)|शाम|दोपहर", re.I)
 TIMING_LATER = re.compile(r"\btomorrow\b|\bkal\b(?! se)|\bparso\b|\bschedul\w*|next week|later this week|कल(?! से)|परसों|शेड्यूल", re.I)
-UNSURE = _rx(r"pata nahi", r"not sure", r"don't know", r"dont know", r"पता नहीं")
+UNSURE = _rx(r"(?:mujhe )?(?:pata nahi|nahi pata|maloom nahi|malum nahi)(?: hai)?", r"(?:i(?: am|'m)? )?not sure",
+             r"(?:i )?(?:do not|don't|dont) know", r"(?:मुझे )?(?:पता नहीं|नहीं पता)(?: है)?", r"\bidk\b", r"(?:i )?(?:cannot|can't) tell")
+
+
+def is_unknown_answer(text: str) -> bool:
+    # Keep uncertainty separate from symptom-negation rewriting ("I don't know" is not "no know").
+    return bool(UNSURE.fullmatch(normalize(text)))
+
+
 YES = _rx(r"^(yes|yeah|yep|haan|han|ha|haa|हाँ|हां)\b")
 NO = _rx(r"^(no|nope|nahi|नहीं|नही)\b")
 RELATION = re.compile(r"\b(papa|pitaji|father|dad|mummy|maa|mother|mom|son|beta|beti|daughter|wife|husband|biwi|patni|pati|baby|infant|child|"
@@ -142,7 +151,10 @@ HINTS = {
     "bleeding": {"en": "dizziness, weakness or a fall", "hi": "चक्कर, कमज़ोरी या गिरना", "hinglish": "chakkar, kamzori ya girna"},
     "default": {"en": "fever, vomiting or breathing trouble", "hi": "बुखार, उल्टी या साँस में तकलीफ़", "hinglish": "bukhar, ulti ya saans mein taklif"},
 }
+NAMES.update({key: item["label"] for key, item in load_reference()["symptom_concepts"].items()})
 QUESTIONS = {
+    "child_age": {"en": "How old is the child? An approximate age is fine.", "hinglish": "Bacche ki umar kitni hai? Andaza bhi chalega.", "hi": "बच्चे की उम्र कितनी है? अंदाज़ा भी चलेगा।"},
+    "location": {"en": "Where does it hurt?", "hi": "दर्द कहाँ हो रहा है?", "hinglish": "Dard kahan ho raha hai?"},
     # Danger-sign screen. The wording lists the official red-flag symptoms (chest pain, breathing, bleeding, fainting, seizure,
     # stroke signs); it is asked when the trained emergency score is in the grey zone.
     "danger": {"en": "Right now, is there chest pain, trouble breathing, heavy bleeding, fainting, a seizure, or sudden weakness or confusion?",
@@ -177,7 +189,7 @@ BLEED_OPTIONS = {"en": ["Slow / stopped", "Still heavy", "Not sure"], "hi": ["�
                  "hinglish": ["Kam / ruk gaya", "Abhi bhi tez", "Pata nahi"]}
 TIMING_OPTIONS = {"en": ["Right now", "Later today", "Tomorrow / schedule it"], "hi": ["अभी", "आज बाद में", "कल / शेड्यूल"],
                   "hinglish": ["Abhi", "Aaj baad mein", "Kal / schedule"]}
-SLOT_ORDER = {"bleeding": ["bleed_check"], "fever": ["duration", "temperature"], "pain": ["duration", "associated"], "default": ["duration", "associated"]}
+SLOT_ORDER = {"bleeding": ["bleed_check"], "fever": ["duration", "temperature"], "pain": ["location", "duration", "associated"], "default": ["duration", "associated"]}
 
 REPLIES = {
     "greeting": {"en": "Hello! Tell me what is troubling you or someone in your family, and I will help find the right care.",
@@ -316,6 +328,9 @@ def _symptoms(text_norm_turns: list[str], concepts: dict) -> list[str]:
     for c in ("fever", "cough", "stomach_upset", "weakness", "pain"):
         if concepts.get(c) == FactStatus.PRESENT and c not in out and not (c == "pain" and out):
             out.append(c)
+    for key in load_reference()["symptom_concepts"]:
+        if concepts.get(key) == FactStatus.PRESENT and key not in out:
+            out.append(key)
     for t in text_norm_turns:  # an everyday complaint with no routing concept: keep it, named in readable words
         m = next((x for x in GENERAL_SYMPTOMS.finditer(t)
                   if x.group(0).lower() not in _CHECK_WORDS and not any(x.group(0).lower().startswith(c) for c in _COVERED_BY_CONCEPTS)), None)
@@ -345,8 +360,12 @@ def _fill_slots(messages: list[tuple[str, str]]) -> dict:
             known["timing"] = tm
         if SEVERITY.search(t):
             known["severity"] = SEVERITY.search(t).group(0)
-        if pending and UNSURE.search(t):
+        if AGE.search(t):
+            known["child_age"] = AGE.search(t).group(0)
+        if pending and (is_unknown_answer(content) or UNSURE.search(t)):
             known[pending] = "unknown"
+        elif pending in ("location", "child_age"):
+            known[pending] = t
         if pending == "temperature" and NO.search(t):
             known["temperature"] = "not_measured"
         if pending == "bleed_check" and len(t.split()) >= 1:
@@ -386,7 +405,7 @@ def analyze(req: TriageRequest) -> Analysis:
         scope = next((sg for sg in reversed(segs[:-1]) if _health_concepts([c for r, c in sg if r == "user"])), [])
         act = "health" if scope else act
     elif act in ("health", "answer") and not CONTINUING.search(n_latest):
-        if awaiting and (slot_of(hist[-1][1]) in ("associated", "bleed_check", "ambiguity") or
+        if awaiting and (slot_of(hist[-1][1]) in ("associated", "bleed_check", "ambiguity", "location", "child_age") or
                          ((slot_of(hist[-1][1]) or "").startswith("pathway:") and
                           _pathway_answer(hist[-1][1], latest))):
             scope = current  # a reply to OUR slot question, even one that names another symptom ("ulti bhi hai")
@@ -456,7 +475,7 @@ def next_slot_question(a: Analysis) -> Optional[DialogueDecision]:
     if not a.symptoms:
         return None
     main = a.symptoms[0]
-    order = SLOT_ORDER["fever" if main == "fever" else "bleeding" if main == "bleeding" else "pain" if main.endswith("pain") or main == "headache" else "default"]
+    order = SLOT_ORDER["fever" if main == "fever" else "bleeding" if main == "bleeding" else "pain" if main == "pain" else "default"]
     lang = a.language
     for slot in order:
         if slot in a.asked_slots or slot in a.known_slots:
@@ -470,6 +489,12 @@ def decide(a: Analysis, max_questions: int, adaptive: bool = True) -> DialogueDe
     lang = a.language
     if a.act in ("greeting", "general", "refusal", "frustration", "stop"):
         return DialogueDecision("reply", REPLIES[a.act][lang], reason=f"intent={a.act}: no triage, no caregivers")
+    if (adaptive and "development_symptoms" in a.symptoms and not a.service_request and a.questions_asked < max_questions
+            and "child_age" not in a.known_slots and "child_age" not in a.asked_slots):
+        return DialogueDecision("ask", QUESTIONS["child_age"][lang], slot="child_age", reason="development concern: child age unknown")
+    if (adaptive and a.symptoms == ["pain"] and not a.service_request and a.questions_asked < max_questions
+            and "location" not in a.known_slots and "location" not in a.asked_slots):
+        return DialogueDecision("ask", QUESTIONS["location"][lang], slot="location", reason="pain location unknown")
     # Start asking only when the message lacks the basics (how long) and nothing was asked yet; once OUR slot question is open,
     # finish the core slots. An answer to the generic 'what care do you need?' question goes straight to routing.
     # A message that already says how long ("papa ko do din se bukhar hai aur khansi bhi") is specific enough to route.

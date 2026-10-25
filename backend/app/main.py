@@ -11,6 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse
 
 from .config import ROLE_BY_CARE_TYPE, get_settings
+from .observability import configure_logging, log_request
 from .schemas.external import BookingRequest, BookingResponse, CaregiverProfile, Location, TriageRequest, TriageResponse
 from .services.matching import Matcher, haversine_km
 from .services.pipeline import Pipeline
@@ -33,9 +34,12 @@ def get_pipeline() -> Pipeline:
 
 def create_app() -> FastAPI:
     settings = get_settings()
+    configure_logging()
     app = FastAPI(title="CareCompass API", version="0.1.0")
+    app.middleware("http")(log_request)
     app.add_middleware(
-        CORSMiddleware, allow_origins=list(settings.cors_origins), allow_methods=["GET", "POST"], allow_headers=["Content-Type"]
+        CORSMiddleware, allow_origins=list(settings.cors_origins), allow_methods=["GET", "POST"],
+        allow_headers=["Content-Type", "X-Request-ID"], expose_headers=["X-Request-ID"]
     )
     api = APIRouter()
 

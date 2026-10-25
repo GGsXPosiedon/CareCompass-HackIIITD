@@ -162,6 +162,11 @@ class ConditionMatch:
         return f"{self.key}<{self.matched}>[{self.how}]"
 
 
+from .clinical_reference import load as load_reference
+
+for _topic in load_reference()["topics"]:
+    _RAW["stw_" + _topic["id"]] = (_topic["specialty"], _topic["title"], _topic["aliases"])
+
 _CONDITIONS = {k: (cat, name, _alias_rx(al)) for k, (cat, name, al) in _RAW.items()}
 _CARE_RX = _alias_rx(_CARE_WORDS)
 

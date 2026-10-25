@@ -60,7 +60,7 @@ Health state is provided once around the app in `src/health/Store.tsx`. `src/hea
 
 ## Run locally
 
-For Vercel Services or same-server hosting, see [the deployment guide](../docs/DEPLOYMENT.md). Vercel now uses the repository root and the root `vercel.json`; the frontend runtime care function reaches the private Python service through the injected `BACKEND_URL` binding. Leave `VITE_API_BASE_URL` unset or `/api` for this setup.
+For Vercel Services or same-server hosting, see [the deployment guide](../docs/DEPLOYMENT.md). Vercel now uses the repository root and the root `vercel.json`; an explicit Node `gateway` service runs the care and voice handlers and reaches the private Python service through the injected `BACKEND_URL` binding. The Vite service serves static assets only. Leave `VITE_API_BASE_URL` unset or `/api` for this setup.
 
 Sarvam conversational voice and reply-playback setup is documented in [VOICE.md](VOICE.md). The subscription key stays server-side; the Python care backend does not need speech changes.
 

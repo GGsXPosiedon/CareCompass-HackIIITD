@@ -32,7 +32,7 @@ P.append({"id": "fever", "title": T("Fever", "Bukhar", "बुखार"),
   R({"duration": ["long"]}, "urgent", "teleconsultation", "same_day", T("Fever for 5 days or more needs a doctor and usually blood tests.", "5 din ya zyada ka bukhar doctor aur aksar blood test maangta hai.", "5 दिन या ज़्यादा का बुखार डॉक्टर और अक्सर ब्लड टेस्ट माँगता है।")),
   R({"duration": ["mid"]}, "routine", "teleconsultation", "scheduled", T("Fever for 2-4 days: book a doctor consult within a day or two.", "2-4 din ka bukhar: ek-do din mein doctor se consult lein.", "2-4 दिन का बुखार: एक-दो दिन में डॉक्टर से परामर्श लें।")),
   R({"duration": ["short"]}, "self_care", "teleconsultation", "scheduled", T("Short fever with no warning signs can usually be managed at home.", "Kam din ka bukhar bina warning signs ke aam taur par ghar par sambhal sakte hain.", "कम दिन का बुखार बिना चेतावनी संकेत के आम तौर पर घर पर संभाला जा सकता है।"),
-    T("Rest, drink plenty of fluids, light cotton clothing, take paracetamol only as per the label or your doctor. Seek care if fever passes 3 days or any warning sign appears.", "Aaram karein, khoob paani/ORS piyen, halke kapde. Paracetamol sirf label ya doctor ke anusaar. 3 din se zyada ya koi warning sign ho to doctor dikhayen.", "आराम करें, खूब पानी/ORS पिएँ, हल्के कपड़े। पैरासिटामोल केवल लेबल या डॉक्टर के अनुसार। 3 दिन से ज़्यादा या कोई चेतावनी संकेत हो तो डॉक्टर को दिखाएँ।"))]})
+    T("Rest and stay comfortable. Follow any fluid restrictions or care plan given by your doctor. Seek care if fever passes 3 days or any warning sign appears.", "Aaram karein aur aaraamdayak kapde pehnein. Paani ki pabandi ya doctor ka care plan ho to usi ko follow karein. 3 din se zyada ya koi warning sign ho to doctor dikhayen.", "आराम करें और आरामदायक कपड़े पहनें। पानी की पाबंदी या डॉक्टर की देखभाल योजना हो तो उसका पालन करें। 3 दिन से ज़्यादा या कोई चेतावनी संकेत हो तो डॉक्टर को दिखाएँ।"))]})
 
 P.append({"id": "cough_breathing", "title": T("Cough or breathing", "Khansi ya saans", "खाँसी या साँस"),
  "cues": [r"\bcough\b", r"\bkhansi\b", r"खांसी", r"खाँसी", r"\bbreath", r"\bsaans\b", r"साँस", r"सांस", r"\bwheez", r"\basthma\b", r"\bdama\b"],
@@ -56,7 +56,7 @@ P.append({"id": "vomit_diarrhoea", "title": T("Vomiting or loose motions", "Ulti
   Q("duration", T("For how long?", "Kitne samay se?", "कितने समय से?"), [O("short", "Under 2 days", "2 din se kam", "2 दिन से कम"), O("long", "2 days or more", "2 din ya zyada", "2 दिन या ज़्यादा")])],
  "rules": [
   R({"danger": DEN}, *EM, T("Blood, severe pain or drowsiness is an emergency.", "Khoon, tez dard ya behoshi jaisi neend emergency hai.", "खून, तेज़ दर्द या बेहोशी जैसी नींद इमरजेंसी है।")),
-  R({"dehydration": DEN}, "urgent", "paramedic_home_visit", "same_day", T("Signs of dehydration need same-day care (possible drip).", "Dehydration ke lakshan mein aaj hi care chahiye (drip lag sakti hai).", "निर्जलीकरण के लक्षणों में आज ही देखभाल चाहिए (ड्रिप लग सकती है)।")),
+  R({"dehydration": DEN}, "urgent", "paramedic_home_visit", "same_day", T("Possible dehydration needs medical assessment today; a clinician can decide what care is needed.", "Dehydration ke lakshan mein aaj doctor se assessment karwayein; woh sahi care batayenge.", "निर्जलीकरण के लक्षणों की आज डॉक्टर से जाँच करवाएँ; वे सही देखभाल बताएँगे।")),
   R({"duration": ["long"]}, "routine", "teleconsultation", "scheduled", T("Symptoms for 2 days or more: book a doctor consult.", "2 din ya zyada: doctor se consult lein.", "2 दिन या ज़्यादा: डॉक्टर से परामर्श लें।")),
   R({"duration": ["short"]}, "self_care", "teleconsultation", "scheduled", T("Short illness without dehydration can be managed at home.", "Kam din ki bimari bina dehydration ke ghar par sambhal sakte hain.", "कम दिन की बीमारी बिना निर्जलीकरण के घर पर संभाली जा सकती है।"),
     T("Sip ORS or clean fluids often, small light meals, wash hands, no self-started antibiotics. Seek care if you cannot keep fluids down.", "ORS ya saaf paani thoda-thoda baar-baar piyen, halka khana, haath dhoyen, bina doctor ke antibiotic nahi. Paani na tik paye to doctor dikhayen.", "ORS या साफ़ पानी थोड़ा-थोड़ा बार-बार पिएँ, हल्का खाना, हाथ धोएँ, बिना डॉक्टर के एंटीबायोटिक नहीं। पानी न टिके तो डॉक्टर को दिखाएँ।"))]})
@@ -116,7 +116,11 @@ DOC = {"status": "UNREVIEWED (demo): drafted from public, general guidance (WHO 
  "strictness": {"age_groups": {"infant": {"max_years": 1}, "child": {"max_years": 5}, "elder": {"min_years": 65}},
    "raise": {"infant": {"self_care": "urgent", "routine": "urgent"}, "child": {"self_care": "routine"}, "pregnant": {"self_care": "urgent", "routine": "urgent"}, "elder": {"self_care": "routine"}},
    "note": "Infants and pregnant women never get self-care or routine from these pathways; they are raised to a same-day review. Children under 5 and over-65s never get self-care."},
- "unknown_policy": "On a danger question, 'unsure' counts as 'yes' (false alarms are acceptable, misses are not).",
+ "unknown_policy": "Unknown danger signs require same-day human assessment; only affirmative danger answers trigger emergency rules.",
  "max_questions": 4, "pathways": P}
+for pathway in P:
+    for rule in pathway["rules"]:
+        if rule["disposition"] == "emergency":
+            rule["when"] = {key: [v for v in values if v != "unsure"] for key, values in rule["when"].items()}
 OUT.write_text(json.dumps(DOC, ensure_ascii=False, indent=1), encoding="utf-8")
 print(len(P), "pathways ->", OUT)

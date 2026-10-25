@@ -1,26 +1,28 @@
 # Deployment
 
-## Vercel frontend and voice
+## Vercel Services (frontend, care API and voice)
 
-This is an alternative to the same-server setup below. Set the Vercel project's **Root Directory** to `frontend` to use `frontend/vercel.json`. Node 24 is pinned in `frontend/package.json`. The configuration installs with `npm ci`, builds with `npm run build`, publishes `dist`, and sets the voice function's maximum duration to 30 seconds. Its SPA rewrite excludes `/api` so voice/API requests cannot turn into HTML responses.
+Use the repository root as the Vercel project's **Root Directory**. The root `vercel.json` builds three services: `frontend` (Vite static pages), `gateway` (Node care proxy and voice), and `backend` (private FastAPI). The gateway explicitly uses `framework: node` with `server/gateway.mjs` as its entrypoint; it reuses the handlers in `frontend/server/`. Remove dashboard overrides for a frontend-only build/output directory; the service configuration owns those settings. There is no `frontend/vercel.json` in this setup.
 
-Configure these environment variables for each deployment environment you use, then rebuild/redeploy:
+Set `VITE_DEMO_MODE=false` and leave `VITE_API_BASE_URL` unset (or `/api`). `CARECOMPASS_API_TARGET` only affects ordinary Vite development/preview; it does not connect production care requests. Configure provider keys on the backend service, and optional `SARVAM_API_KEY` on the gateway service. Never put secrets in `VITE_*` variables. The `BACKEND_URL` service binding is injected into the gateway at runtime; do not hardcode it into the browser build.
 
-| Location | Variable | Value |
-|---|---|---|
-| Vercel | `VITE_API_BASE_URL` | Public HTTPS Python API base, e.g. `https://api.example.com` or `https://api.example.com/api/v1`; do not append `/triage` |
-| Vercel | `VITE_DEMO_MODE` | `false` |
-| Vercel | `SARVAM_API_KEY` | Server-only Sarvam key; optional for browser voice fallback |
-| Python host | `CORS_ORIGINS` | Exact allowed frontend origins, comma separated, e.g. `https://care.example.com,https://carecompass.vercel.app` |
-| Python host | Provider keys | Configure Gemini/other providers only on the Python host |
+Redeploy after changing the project root, environment or source. The previous deployment showed zero functions for the Vite service even though both frontend and backend builds succeeded; its API rewrites pointed at functions that were never emitted. The explicit Node gateway fixes that missing deployment artifact. After redeployment, the frontend may still show zero functions (it serves static assets), but the **gateway must show a Node function** and the backend must show its Python function. Deploying only `frontend/dist` is insufficient.
 
-`VITE_*` values are public build-time settings. Never put provider secrets in them. `CARECOMPASS_API_TARGET` is a Vite dev/preview setting and does not proxy production traffic on Vercel. `VOICE_PUBLIC_ORIGIN` belongs to the standalone same-server voice adapter; the Vercel voice function uses its incoming request URL.
+Run the smoke check after deployment (Node 24):
 
-This configuration deploys React and the existing Node voice function. It does **not** deploy the Python API or training pipeline. Without `VITE_API_BASE_URL`, care requests still target `/api` and fail on this Vercel deployment. Preview domains also need an explicitly allowed Python CORS origin. Keep `/api/voice` on Vercel; do not rewrite it to Python. Python serverless hosting would also require replacing the in-memory booking store before relying on reservations across instances.
+```sh
+node deploy/check-services.mjs https://your-deployment.vercel.app
+```
 
-After deploying, refresh `/bookings` and `/settings`, check that `/api/voice` returns JSON, and complete a synthetic care flow against the hosted Python API. Local checks validate JSON and route exclusions; an actual Vercel build/deployment has not been run.
+It checks public pages, JSON health/voice/caregivers responses, method restrictions and invalid POST validation without paid AI calls or reservations. `GET /api/triage` should return JSON with status **405**; `POST /api/triage` with an empty `user_input` should return **422**. A plain-text Vercel **404 NOT_FOUND** on `/api/triage`, `/api/health` and `/api/voice`, while `/care` loads, means the API handlers are not reachable: check the selected project root, deployed revision and generated functions before debugging model keys. The screenshot's public deployment exhibited this combination during diagnosis.
 
-References: [Vercel Vite SPA setup](https://vercel.com/docs/frameworks/frontend/vite), [rewrite syntax](https://vercel.com/docs/project-configuration/vercel-json), [Node function handlers](https://vercel.com/docs/functions/runtimes/node-js).
+The top-level `/api/(.*)` rewrite now targets the gateway service directly, preserving URLs such as `/api/triage` and `/api/voice`. The gateway forwards only allowlisted care routes to the private backend. See [Vercel service routing](https://vercel.com/docs/services/routing).
+
+### Request logs
+
+Browser API failures appear in DevTools Console as `carecompass.api` with path, method, status, code, duration and server request ID. Missing routes display a deployment-specific error. Proxy logs appear in the gateway function's runtime logs as JSON (`care_proxy_request`); backend logs appear in the Python service logs. Search both by `request_id`, also returned as `X-Request-ID` and shown in failed chat replies when available. Proxy logs distinguish missing bindings, timeouts, unavailable backends, non-JSON responses and upstream HTTP errors. Platform 404s occur before these handlers and therefore have no application request ID.
+
+Backend request logs include method, path, status, elapsed time and exception type/stack locations for unexpected failures. `LOG_LEVEL` defaults to `INFO`. These request diagnostics exclude bodies, query values, cookies, binding URLs and raw exception messages. The separate existing conversation failure recorder can store raw text: set `FAILURE_LOG=off` to disable it for hosted use.
 
 ## Same-server deployment
 

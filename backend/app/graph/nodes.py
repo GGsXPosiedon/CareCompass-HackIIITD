@@ -4,8 +4,7 @@ Safety contract (enforced here, tested in tests/):
   1. The deterministic rule engine runs first; if it fires, no model is consulted and the answer is 112.
   2. Any model (LLM safety screener, LLM triage, or the deterministic classifier) can ESCALATE to 112.
      Nothing can de-escalate a rules emergency.
-  3. A 'possible' red flag is never silently dropped: we ask one danger-sign question, or escalate if the
-     question budget is used up.
+  3. Possible red flags prompt clarification; unresolved uncertainty gets same-day human assessment.
   4. Emergencies never carry caregivers; follow-ups never carry a decision (TriageResponse validator).
 """
 from __future__ import annotations
@@ -18,11 +17,12 @@ from ..prompts import load, render_case
 from ..schemas.external import MatchedCaregiver, TriageResponse
 from ..schemas.internal import RouteDecision, SafetyResult
 from ..schemas.llm import SafetyReview, TriageAssessment
-from ..services import delhi, dialogue, explain, follow_up, intake, intent_llm, mood, pathways
+from ..services import clinical_reference, delhi, dialogue, explain, follow_up, intake, intent_llm, mood, pathways
 from ..services.conditions import NON_HEALTH_TASK
 from ..services.gemini import LLMError
 from ..services.lexicon import REQUIRED_SKILLS
 from ..services.routing import urgency_for
+from ..services.semantic_safety import _ANCHORS
 from .state import TriageState
 
 if TYPE_CHECKING:
@@ -45,7 +45,8 @@ class Nodes:
     def intake(self, s: TriageState) -> dict:
         facts = intake.build_facts(s["request"])
         found = [c for c in facts.concepts if facts.present(c)]
-        return {"facts": facts, **_t("intake", f"language={facts.language}; follow-ups asked={facts.n_follow_ups_asked}; concepts={found}")}
+        return {"facts": facts, **_t("intake", f"language={facts.language}; follow-ups asked={facts.n_follow_ups_asked}; concepts={found}",
+                                     clinical_details=facts.clinical_details)}
 
     # -- 2. deterministic red-flag rules -------------------------------------
     def rules_safety(self, s: TriageState) -> dict:
@@ -59,7 +60,9 @@ class Nodes:
             r = SafetyResult(True, [], ["DANGER-CONFIRMED"], r.ruleset_version, "rules")
             extra = "; user confirmed the danger-sign question"
         enc = getattr(self.p, "encoder", None)
-        if enc is not None and not r.requires_emergency and (a is None or a.act in ("health", "answer")):
+        vague_pain = a is not None and a.symptoms == ["pain"] and "location" not in a.known_slots
+        unknown_reply = dialogue.is_unknown_answer(f.latest_input)
+        if enc is not None and not r.requires_emergency and not vague_pain and not unknown_reply and (a is None or a.act in ("health", "answer")):
             es = enc.emergency_score(f.latest_input or f.text_norm, f.safety_text_norm or f.text_norm)
             extra += f"; emergency score {es:.2f} (ask>={enc.tau_ask}, escalate>={enc.tau_emergency})"
             if es >= enc.tau_emergency:
@@ -96,10 +99,9 @@ class Nodes:
         if current_mood.danger_first and a.act in ("health", "answer") and "danger" not in a.asked_slots and not any(
                 slot.startswith("pathway:") for slot in a.asked_slots) and not step:
             d = dialogue.danger_decision(a.language)
-        if current_mood.unsure_is_yes and "danger" in a.asked_slots and a.danger_answer is None:
-            # An uncertain or unrecognised danger reply cannot clear a panic screen.
-            step = pathways.Step("disposition", "panic", disposition="emergency", care_type="emergency_112",
-                                 urgency="emergency", why="Danger signs could not be ruled out during panic.")
+        if current_mood.danger_first and "danger" in a.asked_slots and a.danger_answer is None:
+            step = pathways.Step("disposition", "panic", disposition="urgent", care_type="teleconsultation",
+                                 urgency="same_day", why="The symptoms are still unclear; speak to a doctor today. If immediate danger develops, call 112.")
             d = dialogue.DialogueDecision("proceed", reason="uncertain danger answer")
         if current_mood.max_questions and a.questions_asked >= current_mood.max_questions and d.kind == "ask":
             d = dialogue.DialogueDecision("proceed", reason="mood question cap; offer human call-back")
@@ -131,22 +133,26 @@ class Nodes:
             out["decision"] = {"outcome": "follow_up", "question": sr.screening_question, "options": sr.screening_options or None,
                                "basis": "safety_screen", "possible": possible}
         elif possible:
-            out["decision"] = {"outcome": "emergency", "flags": possible, "basis": "safety_screen", "escalated_by": ["possible_flag_no_budget"]}
+            out["decision"] = self._uncertain_decision()
         return out
 
     @staticmethod
     def after_guard(s: TriageState) -> str:
         d = s.get("decision")
-        return {"emergency": "emergency", "follow_up": "follow_up"}.get(d["outcome"], "dialogue_reply") if d else "dialogue_reply"
+        return {"emergency": "emergency", "follow_up": "follow_up", "route": "match"}.get(d["outcome"], "dialogue_reply") if d else "dialogue_reply"
+
+    @staticmethod
+    def _uncertain_decision() -> dict:
+        return {"outcome": "route", "care_type": "teleconsultation", "urgency": "same_day", "basis": "uncertain"}
 
     def dialogue_reply(self, s: TriageState) -> dict:
         d = s["dialogue"]
-        resp = TriageResponse(follow_up_question=d.message, reasoning=("UNREVIEWED (demo pathway)." if s.get("pathway") else "") + self._mood_text(s), answer_options=d.options)
-        if s.get("pathway") and s.get("service_area"):
-            notes = delhi.seasonal_notes(s["pathway"], self.p.matcher.now().month)
-            if notes:
-                resp.reasoning += " Seasonal context (UNREVIEWED): " + " ".join(notes)
-        return {"response": resp, **_t("dialogue_reply", f"{d.kind}: {d.slot or s['facts'].analysis.act}")}
+        unknown = dialogue.is_unknown_answer(s["facts"].latest_input)
+        intro = clinical_reference.acknowledgement(s["facts"].language, unknown=unknown, continuing=s["facts"].n_follow_ups_asked > 0) if d.kind == "ask" else ""
+        resp = TriageResponse(follow_up_question=d.message, reasoning=intro + self._mood_text(s), answer_options=d.options)
+        notes = delhi.seasonal_notes(s["pathway"], self.p.matcher.now().month) if s.get("pathway") and s.get("service_area") else []
+        return {"response": resp, **_t("dialogue_reply", f"{d.kind}: {d.slot or s['facts'].analysis.act}",
+                                      seasonal_context=notes, pathway_reviewed=False if s.get("pathway") else None)}
 
     # -- 3a. deterministic classifier slot ---------------------------------
     def classify(self, s: TriageState) -> dict:
@@ -157,7 +163,7 @@ class Nodes:
     def _case(self, s: TriageState) -> str:
         f = s["facts"]
         return render_case(language=f.language, history=f.history, message=f.latest_input,
-                           follow_ups_asked=f.n_follow_ups_asked)
+                           follow_ups_asked=f.n_follow_ups_asked) + clinical_reference.context(" ".join(f.analysis.scoped_user))
 
     def _llm(self, role: str):
         llm = self.p.llm
@@ -169,6 +175,13 @@ class Nodes:
         pr = load(SAFETY_PROMPT)
         try:
             out = self._llm("safety").structured(pr.text, self._case(s), SafetyReview, max_tokens=600)
+            # A chest location introduced only in an assistant question is not patient evidence.
+            user_text = " ".join(s["facts"].analysis.scoped_user).casefold()
+            if not _ANCHORS["chest_pain"].search(user_text):
+                out = out.model_copy(update={"findings": [x for x in out.findings if x.flag != "chest_pain"]})
+            # An unknown answer cannot confirm symptoms introduced by the assistant.
+            if dialogue.is_unknown_answer(s["facts"].latest_input):
+                out = out.model_copy(update={"findings": [x.model_copy(update={"status": "possible"}) for x in out.findings]})
             return {"llm_safety": out, **_t("llm_safety", f"{pr.tag}: " + (", ".join(f"{x.flag}:{x.status}" for x in out.findings) or "no findings"))}
         except LLMError as e:
             log.warning("llm_safety failed: %s", e)
@@ -180,6 +193,12 @@ class Nodes:
         pr = load(TRIAGE_PROMPT)
         try:
             out = self._llm("triage").structured(pr.text, self._case(s), TriageAssessment)
+            if "chest_pain" in out.red_flags and not _ANCHORS["chest_pain"].search(" ".join(s["facts"].analysis.scoped_user).casefold()):
+                flags = [x for x in out.red_flags if x != "chest_pain"]
+                changes = {"red_flags": flags}
+                if not flags:
+                    changes.update(care_type=None, urgency=None)
+                out = out.model_copy(update=changes)
             return {"llm_triage": out, **_t("llm_triage", f"{pr.tag}: {out.care_type} ({out.confidence}) flags={out.red_flags}")}
         except LLMError as e:
             log.warning("llm_triage failed: %s", e)
@@ -196,6 +215,12 @@ class Nodes:
 
         present = [x.flag for x in (sr.findings if sr else []) if x.status == "present"]
         possible = [x.flag for x in (sr.findings if sr else []) if x.status == "possible"]
+        uncertain_reply = dialogue.is_unknown_answer(f.latest_input)
+        if uncertain_reply and tr and (tr.red_flags or tr.care_type == "emergency_112" or tr.urgency == "emergency"):
+            possible = list(dict.fromkeys([*possible, *tr.red_flags]))
+            tr = tr.model_copy(update={"red_flags": [], "care_type": None, "urgency": None})
+            if not possible:
+                return {"decision": self._uncertain_decision(), **_t("fuse", "unknown reply requires human assessment, not emergency confirmation")}
         flags = list(dict.fromkeys([*present, *(tr.red_flags if tr else [])]))
         flags = [x for x in flags if x in RED_FLAGS]
 
@@ -218,8 +243,8 @@ class Nodes:
             if f.analysis.questions_asked < min(4 if s.get("pathway") else st.max_follow_ups, s["mood"].max_questions or 4) and q and not already_asked:
                 d = {"outcome": "follow_up", "question": q, "options": sr.screening_options or None, "basis": "safety_screen", "possible": possible}
                 return {"decision": d, **_t("fuse", f"possible red flag {possible}: asking one danger-sign question")}
-            d = {"outcome": "emergency", "flags": possible, "basis": "model_guard", "escalated_by": ["possible_flag_no_budget"]}
-            return {"decision": d, **_t("fuse", f"possible red flag {possible} and no question budget left -> 112 as a precaution")}
+            d = self._uncertain_decision()
+            return {"decision": d, **_t("fuse", f"possible red flag {possible} remains unknown -> same-day human assessment")}
 
         step = s.get("pathway")
         if step and step.kind == "disposition":
@@ -301,12 +326,13 @@ class Nodes:
             d = s["decision"]
             safety = SafetyResult(True, d["flags"], ["LLM-ESCALATION"], rs.ruleset_version, source="model_guard")
         resp = TriageResponse(care_type="emergency_112", urgency="emergency", red_flags=list(safety.flags),
-                              reasoning=explain.emergency_text(safety, f.language) + (" UNREVIEWED (demo). " + (s["pathway"].why or "") if s.get("pathway") else ""), matched_caregivers=[])
+                              reasoning=explain.emergency_text(safety, f.language), matched_caregivers=[])
         return {"response": resp, **_t("emergency", f"112 response; flags={safety.flags}; source={safety.source}")}
 
     def follow_up(self, s: TriageState) -> dict:
         d = s["decision"]
-        resp = TriageResponse(follow_up_question=d["question"], reasoning="", answer_options=d.get("options"))
+        unknown = dialogue.is_unknown_answer(s["facts"].latest_input)
+        resp = TriageResponse(follow_up_question=d["question"], reasoning=clinical_reference.acknowledgement(s["facts"].language, unknown=unknown, continuing=s["facts"].n_follow_ups_asked > 0), answer_options=d.get("options"))
         return {"response": resp, **_t("follow_up", d["basis"])}
 
     def match(self, s: TriageState) -> dict:
@@ -339,22 +365,36 @@ class Nodes:
         if not m:
             return ""
         if m.human_callback:
-            return " I'm sorry this has been frustrating. You can request a human call-back from the care team."
+            return {"en": " I'm sorry this has been frustrating. You can request a human call-back from the care team.",
+                    "hinglish": " Samajh sakta hoon ki yeh pareshan kar raha hai. Aap care team se insaan se baat karne ki madad maang sakte hain.",
+                    "hi": " समझ सकता हूँ कि यह परेशान कर रहा है। आप देखभाल टीम से किसी व्यक्ति से बात करने की मदद माँग सकते हैं।"}[s["facts"].language]
         if m.label == "anxiety":
-            return " We will take this one step at a time and check the warning signs first."
+            return {"en": " We will take this one step at a time.", "hinglish": " Hum ek-ek karke samajhte hain.", "hi": " हम एक-एक करके समझते हैं।"}[s["facts"].language]
         if m.label == "panic":
-            return " Take this one step at a time. If there is immediate danger, call 112."
+            return {"en": " Take this one step at a time. If there is immediate danger, call 112.",
+                    "hinglish": " Ek-ek karke samajhte hain. Turant khatra ho to 112 call karein.",
+                    "hi": " एक-एक करके समझते हैं। तुरंत ख़तरा हो तो 112 पर कॉल करें।"}[s["facts"].language]
         return ""
 
     def respond(self, s: TriageState) -> dict:
         f, d = s["facts"], s["decision"]
         tr: TriageAssessment | None = s.get("llm_triage")
         ct, cands = d["care_type"], s["candidates"]
-        if d["basis"] == "pathway":
+        if d["basis"] == "uncertain":
+            reasoning = {
+                "en": "It's okay if you're not sure. A doctor can assess this with you today. If chest pain, difficulty breathing, collapse or heavy bleeding occurs, call 112 immediately.",
+                "hinglish": "Pata nahi ho to koi baat nahi. Aaj doctor aapki baat sunkar assessment kar sakte hain. Seene mein dard, saans mein taklif, behoshi ya tez khoon behna ho to turant 112 call karein.",
+                "hi": "पता न हो तो कोई बात नहीं। आज डॉक्टर आपकी बात सुनकर जाँच कर सकते हैं। सीने में दर्द, साँस में तकलीफ़, बेहोशी या तेज़ खून बहने पर तुरंत 112 पर कॉल करें।",
+            }[f.language]
+            if not cands:
+                reasoning += explain.no_match_suffix(f.language)
+        elif d["basis"] == "pathway":
             step = s["pathway"]
-            reasoning = "UNREVIEWED (demo). " + (step.why or "")
+            reasoning = step.why or ""
             if step.raised_by:
-                reasoning += f" Caution increased for {step.raised_by}."
+                reasoning = {"en": "Considering the patient context you shared, an earlier medical assessment is appropriate.",
+                             "hinglish": "Aapne patient ke baare mein jo bataya, uske hisaab se jaldi medical assessment karwana behtar rahega.",
+                             "hi": "आपने मरीज़ के बारे में जो बताया, उसके अनुसार जल्दी चिकित्सा जाँच करवाना बेहतर रहेगा।"}[f.language]
             # Advice is supplied only by the existing sourced pathway content.
             if step.advice:
                 reasoning += " " + step.advice

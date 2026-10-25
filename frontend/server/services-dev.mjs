@@ -1,6 +1,6 @@
 import { createServer } from 'node:http';
 import { createServer as createViteServer, loadEnv } from 'vite';
-import care from '../api/care.mjs';
+import { handleCare } from './care-proxy.mjs';
 import { handleVoice } from './sarvam.mjs';
 
 // vercel dev's Vite service runner does not dispatch api/ functions itself.
@@ -24,10 +24,13 @@ const server = createServer(async (req, res) => {
     }
     const request = new Request(url, { method: req.method, headers: req.headers, signal: controller.signal,
       ...(size ? { body: Buffer.concat(chunks) } : {}) });
-    const response = url.pathname === '/api/voice' ? await handleVoice(request, env) : await care.fetch(request);
+    const response = url.pathname === '/api/voice' ? await handleVoice(request, env) : await handleCare(request, env);
     res.writeHead(response.status, Object.fromEntries(response.headers));
     res.end(Buffer.from(await response.arrayBuffer()));
-  } catch { res.writeHead(500); res.end('{"error":"DEV_SERVER_ERROR"}'); }
+  } catch (error) {
+    console.error(JSON.stringify({ event: 'dev_request_failed', error_type: error?.name || 'Error' }));
+    res.writeHead(500, { 'Content-Type': 'application/json' }); res.end('{"error":"DEV_SERVER_ERROR"}');
+  }
 });
 server.listen(Number(process.env.PORT || 3000), '127.0.0.1');
 async function close() { server.closeAllConnections(); server.close(); await vite.close(); }

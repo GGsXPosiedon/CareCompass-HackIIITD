@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from ..schemas.external import TriageRequest
 from ..schemas.internal import CaseFacts
-from . import dialogue
+from . import clinical_reference, dialogue
 from .lexicon import normalize, resolve_language, strip_prefix
 
 
@@ -25,4 +25,5 @@ def build_facts(req: TriageRequest) -> CaseFacts:
         history=a.scoped_history,
         safety_text_norm=normalize(" . ".join(all_user)),
         analysis=a,
+        clinical_details=clinical_reference.extract_details(scoped),
     )

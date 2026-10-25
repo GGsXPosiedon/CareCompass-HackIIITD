@@ -17,14 +17,18 @@ RULES = Path(__file__).resolve().parents[1] / "rules" / "pathways.json"
 LANGS = ("en", "hi", "hinglish")
 ORDER = {"self_care": 0, "routine": 1, "urgent": 2, "emergency": 3}
 URGENCY = {"emergency": "emergency", "urgent": "same_day", "routine": "scheduled", "self_care": "scheduled"}
-YES_RX = re.compile(r"\b(yes|yeah|yep|haan|han|ha|haa|ji haan|hai|ho raha|hota hai)\b|^(हाँ|हां|जी)", re.I)
+YES_RX = re.compile(r"\b(yes|yeah|yep|haan|han|ha|haa|ji haan)\b|^(हाँ|हां|जी)|^(?:hai|ho raha hai|hota hai)$", re.I)
 NO_RX = re.compile(r"\b(no|nope|nahi|nahin|nhi|na|nai)\b|^(नहीं|नही)", re.I)
 UNSURE_RX = re.compile(r"(not sure|don'?t know|dont know|pata nahi|pata nhi|maloom nahi|पता नहीं|पता नही|idk)", re.I)
 
 
 @lru_cache(maxsize=1)
 def load() -> dict:
-    return json.loads(RULES.read_text(encoding="utf-8"))
+    from .clinical_reference import load as load_reference
+
+    spec = json.loads(RULES.read_text(encoding="utf-8"))
+    spec["pathways"].extend(load_reference()["pathways"])
+    return spec
 
 
 def _pw(pid: str) -> dict:
@@ -37,10 +41,12 @@ def _txt(d: dict, lang: str) -> str:
 
 def select(text: str) -> Optional[str]:
     """Pathway whose cues match the text best (most distinct cue hits); None when nothing matches."""
-    t = text.casefold()
+    from .lexicon import normalize, is_negated
+
+    t = normalize(text)
     best, best_n = None, 0
     for p in load()["pathways"]:
-        n = sum(1 for rx in p["cues"] if re.search(rx, t, re.I))
+        n = sum(1 for rx in p["cues"] if any(not is_negated(t, m.start(), m.end()) for m in re.finditer(rx, t, re.I)))
         if n > best_n:
             best, best_n = p["id"], n
     return best
@@ -111,6 +117,15 @@ def evaluate(pid: str, answers: dict, age_years: Optional[float] = None, pregnan
         if _matches(r, answers) and (done or not final_only):
             hit = (i, r)
             break
+    # Unknown danger signs cannot confirm an emergency or unlock self-care.
+    # A confirmed emergency rule still wins if another answer is unknown.
+    unknown_danger = any(q["danger"] and answers.get(q["id"]) == "unsure" for q in qs)
+    if unknown_danger and (hit is None or hit[1]["disposition"] != "emergency"):
+        why = {"en": "It's okay if you're not sure. A doctor can assess this with you today. If chest pain, difficulty breathing, collapse or heavy bleeding occurs, call 112 immediately.",
+               "hinglish": "Pata nahi ho to koi baat nahi. Aaj doctor aapki baat sunkar assessment kar sakte hain. Seene mein dard, saans mein taklif, behoshi ya tez khoon behna ho to turant 112 call karein.",
+               "hi": "पता न हो तो कोई बात नहीं। आज डॉक्टर आपकी बात सुनकर जाँच कर सकते हैं। सीने में दर्द, साँस में तकलीफ़, बेहोशी या तेज़ खून बहने पर तुरंत 112 पर कॉल करें।"}
+        return Step("disposition", pid, disposition="urgent", care_type="teleconsultation", urgency="same_day",
+                    why=_txt(why, lang), rule=f"{pid}#unknown", asked=len(answers))
     if hit is None and not done:
         q = next(q for q in qs if q["id"] not in answers)
         return Step("question", pid, q["id"], _txt(q["text"], lang), [{"id": o["id"], "label": _txt(o["label"], lang)} for o in q["options"]], asked=len(answers))
@@ -164,6 +179,9 @@ def conversation_step(analysis, context, mood) -> Optional[Step]:
             pending = None
         elif pid is None:
             pid = select(text)
+    # A short answer may add the first specific symptom/location to a previously vague episode.
+    if pid is None:
+        pid = select(" ".join(analysis.scoped_user))
     if pid is None:
         return None
     kwargs = dict(age_years=context.age_years if context else None,

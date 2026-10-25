@@ -60,3 +60,33 @@ test('care proxy sanitizes connection errors and timeouts without leaking the bi
     assert.ok(!(await response.text()).includes(env.BACKEND_URL));
   }
 });
+
+test('care proxy correlates backend and client diagnostics without logging patient input or query values', async () => {
+  const entries: string[] = [];
+  const original = console.info;
+  console.info = entry => entries.push(entry);
+  try {
+    let forwardedId: string | undefined;
+    const response = await handleCare(request('/api/triage?private=secret', { user_input: 'patient-private-text' }), env, async (_, init) => {
+      forwardedId = init.headers['X-Request-ID'];
+      return Response.json({ follow_up_question: 'Hello' });
+    });
+    assert.ok(forwardedId);
+    assert.equal(response.headers.get('x-request-id'), forwardedId);
+    const row = JSON.parse(entries[0]);
+    assert.equal(row.request_id, forwardedId);
+    assert.equal(row.status, 200);
+    assert.equal(row.path, '/api/triage');
+    assert.equal(typeof row.duration_ms, 'number');
+    assert.ok(!entries.join('').includes('patient-private-text'));
+    assert.ok(!entries.join('').includes('secret'));
+    assert.ok(!entries.join('').includes(env.BACKEND_URL));
+  } finally { console.info = original; }
+});
+
+test('care proxy reports a non-JSON backend response as a gateway failure', async () => {
+  const response = await handleCare(request('/api/health'), env, async () => new Response('<html>private error</html>'));
+  assert.equal(response.status, 502);
+  assert.deepEqual(await response.json(), { error: 'INVALID_BACKEND_RESPONSE' });
+  assert.ok(response.headers.get('x-request-id'));
+});

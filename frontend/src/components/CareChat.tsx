@@ -71,7 +71,7 @@ export function CareChat({ copy, hindi, messages, result, pendingText, input, se
     </div>
     {asking ? <div className="care-chat-reply care-ask-wrap">
       {showJump ? <button className="care-jump-latest" type="button" onClick={followLatest} aria-label={t('Scroll to latest message', 'नए संदेश पर जाएँ')}><ArrowDown size={18}/></button> : null}
-      <AskCard key={result?.follow_up_question ?? ''} copy={copy} hindi={hindi} question={result?.follow_up_question ?? ''} answerOptions={result?.answer_options ?? []} asked={messages.filter(m => m.role === 'assistant').length}
+      <AskCard key={result?.follow_up_question ?? ''} copy={copy} hindi={hindi} question={result?.follow_up_question ?? ''} intro={result?.reasoning} answerOptions={result?.answer_options ?? []} asked={messages.filter(m => m.role === 'assistant').length}
         input={input} setInput={setInput} onAnswer={onSend} onBack={onEdit} busy={busy} error={error}/>
     </div> : <form className="care-chat-reply" onSubmit={event => { event.preventDefault(); if (input.trim() && !busy) onSend(input.trim()); }}>
       {showJump ? <button className="care-jump-latest" type="button" onClick={followLatest} aria-label={t('Scroll to latest message', 'नए संदेश पर जाएँ')}><ArrowDown size={18}/></button> : null}

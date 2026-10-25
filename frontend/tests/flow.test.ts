@@ -35,9 +35,10 @@ test('demo asks two questions and returns the fever fixture', () => {
   const final = mockIntake(request('No', history));
   assert.equal(final.follow_up_question, null); assert.equal(final.care_type, 'paramedic_home_visit'); assert.equal(final.urgency, 'same_day'); assert.equal(final.matched_caregivers.length, 3);
 });
-test('affirmative or uncertain emergency follow-up bypasses matching', () => {
+test('affirmative danger answer escalates but uncertain answer gets same-day assessment', () => {
   const history: Message[] = [{ role: 'user', content: 'fever' }, { role: 'assistant', content: 'Age?' }, { role: 'user', content: '60' }, { role: 'assistant', content: 'Is there any difficulty breathing or severe chest pain right now?' }];
-  for (const input of ['Yes', 'Not sure']) { const result = mockIntake(request(input, history)); assert.equal(nextView(result), 'emergency'); assert.deepEqual(result.matched_caregivers, []); }
+  const confirmed = mockIntake(request('Yes', history)); assert.equal(nextView(confirmed), 'emergency'); assert.deepEqual(confirmed.matched_caregivers, []);
+  for (const input of ['Not sure', 'idk', 'pata nahi']) { const result = mockIntake(request(input, history)); assert.equal(result.care_type, 'teleconsultation'); assert.equal(result.urgency, 'same_day'); assert.deepEqual(result.red_flags, []); assert.match(result.reasoning, /112/); }
 });
 test('Hindi affirmative follow-up immediately escalates', () => {
   const history: Message[] = [{ role: 'assistant', content: 'क्या साँस लेने में कठिनाई है?' }];

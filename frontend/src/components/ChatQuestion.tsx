@@ -9,8 +9,8 @@ import { VoiceSessionActiveContext } from '../voice/language';
 // Chat-style follow-up: the question "pops up" in the answer bar, the way ChatGPT/Claude ask clarifying
 // questions. Tapping an option (or pressing its number) answers immediately; "Something else" opens a
 // free-text answer. The conversation so far stays visible above.
-export function AskCard({ copy, hindi, question, answerOptions, asked, input, setInput, onAnswer, onBack, busy, error }: {
-  copy: Copy; hindi: boolean; question: string; answerOptions: string[]; asked: number;
+export function AskCard({ copy, hindi, question, intro, answerOptions, asked, input, setInput, onAnswer, onBack, busy, error }: {
+  copy: Copy; hindi: boolean; question: string; intro?: string; answerOptions: string[]; asked: number;
   input: string; setInput: (value: string) => void; onAnswer: (text: string) => void; onBack: () => void; busy: boolean; error: string;
 }) {
   const voiceActive = useContext(VoiceSessionActiveContext);
@@ -37,8 +37,9 @@ export function AskCard({ copy, hindi, question, answerOptions, asked, input, se
   return <form ref={card} className="ask-card" aria-labelledby={titleId} onKeyDown={onKey} onSubmit={e => { e.preventDefault(); if (input.trim() && !busy) onAnswer(input.trim()); }}>
       <div className="ask-head">
         <span className="ask-badge"><MessageCircleQuestion size={15} />{t(`Question ${asked}`, `सवाल ${asked}`)}</span>
-        <div className="ask-head-actions"><ReadAloud text={question} copy={copy} hindi={hindi} /><button type="button" className="ask-edit" onClick={onBack} disabled={busy}><Pencil size={14} />{copy.edit}</button></div>
+        <div className="ask-head-actions"><ReadAloud text={`${intro ?? ''} ${question}`.trim()} copy={copy} hindi={hindi} /><button type="button" className="ask-edit" onClick={onBack} disabled={busy}><Pencil size={14} />{copy.edit}</button></div>
       </div>
+      {intro ? <p className="small muted">{intro}</p> : null}
       <h2 id={titleId} className="ask-question">{question}</h2>
       {options.length ? <div className="ask-options" role="group" aria-label={t('Answer options', 'जवाब के विकल्प')}>
         {options.map((option, i) => <button type="button" key={option} className={`ask-option${picked === option ? ' picked' : ''}`} onClick={() => choose(option)} disabled={busy} aria-keyshortcuts={String(i + 1)}>
@@ -74,6 +75,6 @@ export function ChatQuestion({ copy, hindi, result, messages, symptom, input, se
         <p>{m.role === 'user' && i === 0 ? symptom : m.content}</p>
       </li>)}
     </ol>
-    <AskCard copy={copy} hindi={hindi} question={result.follow_up_question ?? ''} answerOptions={result.answer_options ?? []} asked={asked} input={input} setInput={setInput} onAnswer={onAnswer} onBack={onBack} busy={busy} error={error}/>
+    <AskCard copy={copy} hindi={hindi} question={result.follow_up_question ?? ''} intro={result.reasoning} answerOptions={result.answer_options ?? []} asked={asked} input={input} setInput={setInput} onAnswer={onAnswer} onBack={onBack} busy={busy} error={error}/>
   </section>;
 }

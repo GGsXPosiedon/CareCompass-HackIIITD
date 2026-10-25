@@ -56,9 +56,9 @@ START → intake → rules_safety ──fired──▶ emergency (112, no caregi
 
 ### Safety contract (tested)
 1. Rules run first; a rules emergency cannot be overridden by anything.
-2. Any source (LLM screener, LLM triage, your classifier) can **escalate** to `emergency_112`; none can de-escalate.
+2. Sources can escalate reported red flags; none can de-escalate a rules emergency. Assistant-suggested chest locations and purely unknown replies cannot establish a red flag.
 3. A `possible` red flag is never dropped: the graph asks one danger-sign question (e.g. "Is the baby under 3 months?");
-   if the question budget (2) is used up, it escalates as a precaution.
+   if clarification repeats or the question budget is used up, it routes to same-day doctor assessment with conditional 112 guidance. Unknown danger answers do not qualify for self-care.
 4. Emergency ⇒ `matched_caregivers = []`; follow-up ⇒ no decision fields. Enforced by the `TriageResponse` validator.
 5. If Gemini fails, times out, or returns anything that violates the schema, the deterministic path answers.
 
@@ -109,7 +109,7 @@ The default model is `gemini-3.5-flash`, verified with a neutral live greeting. 
 
 Responses include `response_source` (`gemini`, `rules`, or `safety_rules`) and an optional `service_notice` when any Gemini check falls back. The UI displays that notice so fallback answers cannot silently look like live Gemini replies. `/health` reports configuration; a configured model name alone does not prove a successful provider call.
 
-Text and voice share the same history. Assistant turns may carry `kind` (`follow_up`, `recommendation`, `emergency`); a completed recommendation resets the next clarification budget. Legacy turns without `kind` remain supported. The frontend sends at most 40 history turns and keeps the complete saved transcript locally. Repeated ordinary questions are replaced; an unresolved possible danger sign that would repeat its screening question escalates rather than looping.
+Text and voice share the same history. Assistant turns may carry `kind` (`follow_up`, `recommendation`, `emergency`); a completed recommendation resets the next clarification budget. Legacy turns without `kind` remain supported. The frontend sends at most 40 history turns and keeps the complete saved transcript locally. Repeated ordinary questions are replaced; unresolved possible danger signs get same-day human assessment rather than looping. See [triage evidence and uncertainty policy](../docs/TRIAGE_EVIDENCE.md).
 
 ## Supplied caregiver roster
 
@@ -118,6 +118,10 @@ The default repository is `app/data/caregivers.csv`, copied from the supplied `H
 The synthetic `caregivers_seed.csv` remains a regression-test fixture. Tests explicitly select that fixture, while roster integration checks load the supplied data and verify that the default API returns `CG_` profiles.
 
 ## Audit corrections
+
+The supplied ICMR/DHR STW 2019 volume I is now a local navigation reference: 53 clinical topics across nine specialties, ten additional symptom groups, eleven focused question pathways and eighteen synthetic decision examples. The same reference feeds condition intent, structured intake and bounded page-linked context for both AI prompts; it does not diagnose, prescribe or load PDF instructions into the model. The runtime needs no PDF parser or external vector database.
+
+See [the extracted topic guide](../docs/STW_REFERENCE.md) and [source-page hashes, bibliography and printed resource links](../docs/STW_SOURCE_MANIFEST.json). Rebuild the curated reference with `python pipeline/scripts/build_stw_reference.py`; audit a supplied PDF with `python pipeline/scripts/extract_stw_sources.py --pdf ../STW_Manual_v1.pdf` (authoring only, requires `pypdf`). Clinical adaptations remain UNREVIEWED. Patient-facing questions use plain wording; source/review and seasonal notes remain available in the trace and documentation.
 
 `TriageAssessment.urgency` allows Gemini to distinguish routine scheduled care from same-day needs. Emergency urgency alone triggers the guard. Each Gemini-required skill is a hard filter; unavailable skill combinations return no matches rather than relaxing requirements. Matching also excludes caregivers whose slots for the recommendation date are all booked. Invalid dates and incomplete/out-of-range coordinates on caregiver lookup return 422.
 

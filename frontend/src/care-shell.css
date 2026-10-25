@@ -159,7 +159,7 @@ body:has(.care-shell) { min-width:0; background:#20201e; }
 }
 @media(max-width:767px) {
   .care-shell,.care-shell.sidebar-collapsed { display:block; }
-  .care-sidebar,.sidebar-collapsed > .care-sidebar { display:flex; }
+  .care-sidebar,.sidebar-collapsed > .care-sidebar { display:none; }
   .care-sidebar.is-open { display:flex; position:fixed; width:min(290px,85vw); inset:0 auto 0 0; z-index:21; }
   .care-drawer-backdrop { display:block; position:fixed; inset:0; background:#0009; z-index:20; }
   .care-mobile-menu,.sidebar-mobile-close { display:inline-flex; }

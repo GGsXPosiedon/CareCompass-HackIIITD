@@ -23,6 +23,13 @@ _EXPLICIT_EMERGENCY = re.compile(
     r"\bambulance\b|\bambulans\b|(?<!not an )(?<!not a )(?<!no )(?<!not )\bemerg\w*\b|\b112\b|\b108\b|एम्बुलेंस|एंबुलेंस|इमरजेंसी|आपातकाल|आपात स्थिति"
 )
 
+# Remove only explicitly historical diagnosis labels, never their associated current symptoms.
+# "Had a stroke last year, now one side is weak" still fires the current weakness rule.
+_PAST_DIAGNOSIS = re.compile(
+    r"\b(?:history of|previous|past|old|prior) (?:a )?(?:stroke|heart attack)\b|"
+    r"\b(?:had (?:a )?)?(?:stroke|heart attack) (?:last year|\d+ years? ago)\b"
+)
+
 
 class SafetyEngine:
     def __init__(self, rules_path: str | None = None, semantic: bool = True):
@@ -71,22 +78,23 @@ class SafetyEngine:
         return out
 
     def evaluate(self, facts: CaseFacts) -> SafetyResult:
+        text = _PAST_DIAGNOSIS.sub("past medical condition", facts.safety_text_norm or facts.text_norm)
         flags: list[str] = []
         ids: list[str] = []
         for rule in self._rules:
-            if self._fires(rule, facts.safety_text_norm or facts.text_norm):
+            if self._fires(rule, text):
                 if rule["flag"] not in flags:
                     flags.append(rule["flag"])
                 ids.append(rule["id"])
         if not flags:
-            t = facts.safety_text_norm or facts.text_norm
+            t = text
             if any(not is_negated(t, m.start(), m.end()) for m in _EXPLICIT_EMERGENCY.finditer(t)):
                 return SafetyResult(True, [], ["RF-EX-01"], self.version, "rules")
         if not flags:  # meaning-based net: only runs when no rule fired, only ever raises urgency
             from .semantic_safety import get_semantic_safety
 
             net = get_semantic_safety() if self.semantic else None
-            hit = net.check(facts.safety_text_norm or facts.text_norm) if net else None
+            hit = net.check(text) if net else None
             if hit:
                 return SafetyResult(True, [hit.flag], [f"SEM-{hit.flag}"], self.version, "semantic")
         return SafetyResult(bool(flags), flags, ids, self.version, "rules")

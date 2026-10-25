@@ -1,0 +1,2863 @@
+{
+  "version": "1.0.0",
+  "status": "UNREVIEWED application adaptation; clinical content requires clinician review",
+  "source": {
+    "id": "ICMR_STW_2019_V1",
+    "file": "STW_Manual_v1.pdf",
+    "title": "Standard Treatment Workflows of India, 2019 Edition, Volume I",
+    "publisher": "Indian Council of Medical Research / Department of Health Research, MoHFW, India",
+    "pdf_pages": 75
+  },
+  "scope": "Intake, intent, service navigation and referral cues only. No diagnosis, prescribing, treatment doses or invasive-procedure instructions.",
+  "topics": [
+    {
+      "id": "atrial_fibrillation",
+      "specialty": "cardiology",
+      "pdf_page": 10,
+      "title": "Atrial fibrillation",
+      "aliases": [
+        "atrial fibrillation",
+        "afib",
+        "irregular heartbeat",
+        "dhadkan aniyamit",
+        "अनियमित धड़कन"
+      ],
+      "intake": [
+        "Onset and duration of heartbeat change",
+        "Known heart condition",
+        "Fainting or current chest/breathing symptoms"
+      ],
+      "warning_signs": [
+        "Collapse",
+        "Ongoing chest pain",
+        "Breathing difficulty",
+        "Heavy bleeding while on blood thinners"
+      ],
+      "navigation": "New symptoms need assessment today; a stable known condition can have a doctor follow-up."
+    },
+    {
+      "id": "bradyarrhythmia",
+      "specialty": "cardiology",
+      "pdf_page": 11,
+      "title": "Bradyarrhythmias",
+      "aliases": [
+        "bradyarrhythmia",
+        "bradycardia",
+        "slow heartbeat",
+        "dhadkan dheemi",
+        "धीमी धड़कन"
+      ],
+      "intake": [
+        "Measured pulse if available",
+        "Dizziness or fainting",
+        "Whether this is new or a planned review"
+      ],
+      "warning_signs": [
+        "Ongoing fainting",
+        "Chest pain",
+        "Reduced alertness"
+      ],
+      "navigation": "Do not infer instability from a condition name; a clinician must interpret pulse and associated symptoms."
+    },
+    {
+      "id": "heart_failure",
+      "specialty": "cardiology",
+      "pdf_page": 12,
+      "title": "Heart failure",
+      "aliases": [
+        "heart failure",
+        "congestive heart failure",
+        "dil ki pumping kam",
+        "हार्ट फेल्योर"
+      ],
+      "intake": [
+        "Change from usual breathing",
+        "New leg swelling",
+        "Reduced urine",
+        "Known diagnosis and current follow-up plan"
+      ],
+      "warning_signs": [
+        "Breathlessness at rest",
+        "Confusion",
+        "Collapse"
+      ],
+      "navigation": "New worsening needs prompt in-person assessment; routine follow-up is different from an acute episode."
+    },
+    {
+      "id": "stable_angina",
+      "specialty": "cardiology",
+      "pdf_page": 13,
+      "title": "Stable angina",
+      "aliases": [
+        "stable angina",
+        "angina",
+        "एंजाइना"
+      ],
+      "intake": [
+        "Location and character",
+        "Relation to exertion",
+        "Duration",
+        "Change from usual pattern"
+      ],
+      "warning_signs": [
+        "New or ongoing chest pain",
+        "Pain at rest",
+        "Sweating or breathlessness with chest pain"
+      ],
+      "navigation": "Do not diagnose angina; current red-flag chest symptoms follow the emergency safety contract."
+    },
+    {
+      "id": "stemi",
+      "specialty": "cardiology",
+      "pdf_page": 14,
+      "title": "ST elevation myocardial infarction",
+      "aliases": [
+        "stemi",
+        "myocardial infarction",
+        "हार्ट अटैक का फॉलोअप"
+      ],
+      "intake": [
+        "Current episode versus past diagnosis",
+        "Chest discomfort location",
+        "Onset",
+        "Associated symptoms"
+      ],
+      "warning_signs": [
+        "Ongoing chest discomfort",
+        "Collapse",
+        "Breathing difficulty"
+      ],
+      "navigation": "A suspected current attack needs emergency help; historical discharge/report review does not prove a current attack."
+    },
+    {
+      "id": "nstemi",
+      "specialty": "cardiology",
+      "pdf_page": 15,
+      "title": "Unstable angina / NSTEMI",
+      "aliases": [
+        "nstemi",
+        "unstable angina",
+        "अस्थिर एंजाइना"
+      ],
+      "intake": [
+        "Pain at rest or exertion",
+        "New or worsening pattern",
+        "Sweating",
+        "Fainting"
+      ],
+      "warning_signs": [
+        "Ongoing or recurrent chest pain",
+        "Breathlessness",
+        "Syncope"
+      ],
+      "navigation": "Navigation must not calculate a diagnosis or cardiac risk score from incomplete chat data."
+    },
+    {
+      "id": "acute_sinusitis",
+      "specialty": "ent",
+      "pdf_page": 17,
+      "title": "Acute rhinosinusitis",
+      "aliases": [
+        "acute sinusitis",
+        "rhinosinusitis",
+        "sinus infection",
+        "साइनस का संक्रमण"
+      ],
+      "intake": [
+        "Blocked nose or discharge",
+        "Facial symptoms",
+        "Duration",
+        "Eye symptoms"
+      ],
+      "warning_signs": [
+        "Eye swelling with visual change",
+        "Confusion",
+        "Severe deterioration"
+      ],
+      "navigation": "Ask about the actual nose/face complaint; doctor assessment can determine whether ENT referral is needed."
+    },
+    {
+      "id": "chronic_sinusitis",
+      "specialty": "ent",
+      "pdf_page": 18,
+      "title": "Chronic rhinosinusitis",
+      "aliases": [
+        "chronic sinusitis",
+        "nasal polyps",
+        "purana sinus",
+        "पुराना साइनस"
+      ],
+      "intake": [
+        "Duration and recurring pattern",
+        "Smell change",
+        "Allergy history",
+        "Previous ENT plan"
+      ],
+      "warning_signs": [
+        "New visual change",
+        "Eye swelling",
+        "Altered alertness"
+      ],
+      "navigation": "Stable recurring symptoms suit doctor/ENT review; never prescribe antibiotics or decongestants."
+    },
+    {
+      "id": "epistaxis",
+      "specialty": "ent",
+      "pdf_page": 19,
+      "title": "Nosebleed",
+      "aliases": [
+        "epistaxis",
+        "nosebleed",
+        "naak se khoon",
+        "नाक से खून"
+      ],
+      "intake": [
+        "Is bleeding ongoing",
+        "Amount and duration",
+        "Injury",
+        "Blood thinner use if stated"
+      ],
+      "warning_signs": [
+        "Profuse or persistent bleeding",
+        "Fainting",
+        "Breathing problems"
+      ],
+      "navigation": "Small stopped bleeding differs from heavy ongoing bleeding; avoid turning the word blood alone into a severity claim."
+    },
+    {
+      "id": "child_hearing",
+      "specialty": "ent",
+      "pdf_page": 20,
+      "title": "Hearing impairment in children",
+      "aliases": [
+        "child hearing loss",
+        "hearing impairment",
+        "hearing problem",
+        "sunai kam",
+        "सुनाई कम"
+      ],
+      "intake": [
+        "Child's age",
+        "Response to sound",
+        "Speech development",
+        "Sudden versus gradual change"
+      ],
+      "warning_signs": [
+        "Developmental regression",
+        "New marked hearing change",
+        "Other acute neurological symptoms"
+      ],
+      "navigation": "Arrange hearing/ENT assessment; delayed speech alone is not a life-threatening emergency."
+    },
+    {
+      "id": "neck_infection",
+      "specialty": "ent",
+      "pdf_page": 21,
+      "title": "Neck space infection",
+      "aliases": [
+        "neck space infection",
+        "neck abscess",
+        "gale mein sujan",
+        "गले में सूजन"
+      ],
+      "intake": [
+        "Site and progression of swelling",
+        "Swallowing ability",
+        "Fever",
+        "Breathing"
+      ],
+      "warning_signs": [
+        "Breathing difficulty",
+        "Drooling or inability to swallow",
+        "Rapidly worsening neck swelling"
+      ],
+      "navigation": "Potential airway compromise needs immediate help; uncomplicated throat discomfort needs different questions."
+    },
+    {
+      "id": "ear_discharge",
+      "specialty": "ent",
+      "pdf_page": 22,
+      "title": "Otorrhoea",
+      "aliases": [
+        "otorrhoea",
+        "otorrhea",
+        "ear discharge",
+        "kaan se paani",
+        "कान से पानी"
+      ],
+      "intake": [
+        "One or both ears",
+        "Pain or fever",
+        "Duration",
+        "Hearing change or injury"
+      ],
+      "warning_signs": [
+        "Severe headache with illness",
+        "Facial weakness",
+        "Severe deterioration"
+      ],
+      "navigation": "Doctor/ENT examination is appropriate; do not suggest ear drops or ear instrumentation."
+    },
+    {
+      "id": "sore_throat",
+      "specialty": "ent",
+      "pdf_page": 23,
+      "title": "Pharyngitis and sore throat",
+      "aliases": [
+        "pharyngitis",
+        "sore throat",
+        "gala kharab",
+        "gale mein kharash",
+        "गले में खराश"
+      ],
+      "intake": [
+        "Duration",
+        "Ability to drink and swallow",
+        "Fever",
+        "Voice change"
+      ],
+      "warning_signs": [
+        "Breathing difficulty",
+        "Unable to swallow saliva",
+        "Rapid neck swelling"
+      ],
+      "navigation": "A simple sore throat is not automatically an emergency; assess swallowing and breathing before choosing care."
+    },
+    {
+      "id": "aki",
+      "specialty": "nephrology",
+      "pdf_page": 25,
+      "title": "Acute kidney injury",
+      "aliases": [
+        "acute kidney injury",
+        "aki",
+        "अचानक किडनी की परेशानी"
+      ],
+      "intake": [
+        "Urine change",
+        "Recent vomiting or fluid loss",
+        "Swelling",
+        "Known kidney problem"
+      ],
+      "warning_signs": [
+        "Very low or absent urine",
+        "Breathing difficulty",
+        "Confusion"
+      ],
+      "navigation": "New reduced urine needs medical assessment; never infer kidney failure solely from dark urine."
+    },
+    {
+      "id": "ckd",
+      "specialty": "nephrology",
+      "pdf_page": 26,
+      "title": "Chronic kidney disease",
+      "aliases": [
+        "chronic kidney disease",
+        "ckd",
+        "kidney disease",
+        "gurde ki bimari",
+        "गुर्दे की बीमारी"
+      ],
+      "intake": [
+        "Routine follow-up versus new change",
+        "Urine",
+        "Swelling",
+        "Existing clinician plan"
+      ],
+      "warning_signs": [
+        "New breathlessness",
+        "Confusion",
+        "New major reduction in urine"
+      ],
+      "navigation": "Review reports and follow-up needs; do not give blanket fluid, protein or medication advice to kidney patients."
+    },
+    {
+      "id": "glomerulonephritis",
+      "specialty": "nephrology",
+      "pdf_page": 27,
+      "title": "Glomerulonephritis",
+      "aliases": [
+        "glomerulonephritis",
+        "nephrotic syndrome",
+        "nephritic syndrome",
+        "नेफ्रोटिक सिंड्रोम"
+      ],
+      "intake": [
+        "Urine colour and amount",
+        "Face/leg swelling",
+        "Age",
+        "Known diagnosis"
+      ],
+      "warning_signs": [
+        "Seizure",
+        "Altered alertness",
+        "Breathing difficulty"
+      ],
+      "navigation": "A doctor must assess urine changes and swelling; do not diagnose from a symptom pair."
+    },
+    {
+      "id": "uti",
+      "specialty": "nephrology",
+      "pdf_page": 28,
+      "title": "Urinary tract infection",
+      "aliases": [
+        "urinary tract infection",
+        "uti",
+        "urine infection",
+        "peshab mein infection",
+        "पेशाब में संक्रमण"
+      ],
+      "intake": [
+        "Burning or frequency",
+        "Fever or side pain",
+        "Pregnancy if stated",
+        "Ability to pass urine"
+      ],
+      "warning_signs": [
+        "Sudden inability to urinate",
+        "Severe illness",
+        "Confusion"
+      ],
+      "navigation": "Symptoms need assessment rather than an automatic lab order or antibiotic recommendation."
+    },
+    {
+      "id": "acute_paralysis",
+      "specialty": "neurology",
+      "pdf_page": 30,
+      "title": "Acute paralysis",
+      "aliases": [
+        "acute paralysis",
+        "new paralysis",
+        "achanak lakwa",
+        "अचानक लकवा"
+      ],
+      "intake": [
+        "Sudden versus longstanding weakness",
+        "Affected limbs",
+        "Time last well",
+        "Bladder/bowel change"
+      ],
+      "warning_signs": [
+        "Sudden weakness",
+        "Breathing or swallowing difficulty",
+        "New inability to walk"
+      ],
+      "navigation": "New neurological loss needs urgent hospital evaluation; longstanding rehabilitation is a separate service need."
+    },
+    {
+      "id": "dementia",
+      "specialty": "neurology",
+      "pdf_page": 31,
+      "title": "Dementia",
+      "aliases": [
+        "dementia",
+        "alzheimer",
+        "memory problem",
+        "yaaddasht kam",
+        "याददाश्त कम"
+      ],
+      "intake": [
+        "Gradual memory change versus sudden confusion",
+        "Daily functioning",
+        "Caregiver concern",
+        "Recent illness or fall"
+      ],
+      "warning_signs": [
+        "Rapid deterioration",
+        "Seizure",
+        "New fever with confusion",
+        "Recent head injury"
+      ],
+      "navigation": "Support patient and caregiver respectfully; do not label normal forgetfulness as dementia."
+    },
+    {
+      "id": "epilepsy",
+      "specialty": "neurology",
+      "pdf_page": 32,
+      "title": "Epilepsy",
+      "aliases": [
+        "epilepsy",
+        "seizure disorder",
+        "mirgi",
+        "मिर्गी"
+      ],
+      "intake": [
+        "Current event versus known history",
+        "Duration and recovery",
+        "First versus recurring event",
+        "Injury"
+      ],
+      "warning_signs": [
+        "Current/recent convulsion",
+        "Not recovering consciousness",
+        "Breathing difficulty"
+      ],
+      "navigation": "Current red-flag seizures follow emergency rules; a stable history can need routine clinician follow-up."
+    },
+    {
+      "id": "headache",
+      "specialty": "neurology",
+      "pdf_page": 33,
+      "title": "Headache",
+      "aliases": [
+        "headache",
+        "migraine",
+        "sir dard",
+        "sar dard",
+        "सिरदर्द"
+      ],
+      "intake": [
+        "Sudden versus gradual onset",
+        "New/worsening pattern",
+        "Severity",
+        "Associated neurological symptoms"
+      ],
+      "warning_signs": [
+        "Sudden extremely severe headache",
+        "Weakness or speech change",
+        "Fever with stiff neck",
+        "Reduced alertness"
+      ],
+      "navigation": "Do not diagnose migraine or recommend medicines; screen warning signs then offer suitable assessment."
+    },
+    {
+      "id": "neuroinfection",
+      "specialty": "neurology",
+      "pdf_page": 34,
+      "title": "Neuroinfections",
+      "aliases": [
+        "neuroinfection",
+        "meningitis",
+        "encephalitis",
+        "brain infection",
+        "दिमाग का संक्रमण"
+      ],
+      "intake": [
+        "Fever",
+        "Alertness change",
+        "Seizures",
+        "Timing"
+      ],
+      "warning_signs": [
+        "Confusion or reduced responsiveness",
+        "Seizures",
+        "Breathing compromise"
+      ],
+      "navigation": "Possible acute neurological infection needs urgent in-person care; historical diagnosis alone is not proof of current danger."
+    },
+    {
+      "id": "stroke",
+      "specialty": "neurology",
+      "pdf_page": 35,
+      "title": "Stroke",
+      "aliases": [
+        "stroke",
+        "cerebrovascular accident",
+        "लकवा"
+      ],
+      "intake": [
+        "Time last well",
+        "Sudden face/arm/speech change",
+        "Balance or vision change",
+        "New versus historical deficit"
+      ],
+      "warning_signs": [
+        "Sudden focal weakness",
+        "Slurred speech",
+        "New loss of balance or vision"
+      ],
+      "navigation": "Do not delay emergency help for a current stroke pattern while collecting routine details."
+    },
+    {
+      "id": "antenatal",
+      "specialty": "obg",
+      "pdf_page": 37,
+      "title": "Antenatal management",
+      "aliases": [
+        "antenatal",
+        "prenatal",
+        "pregnancy checkup",
+        "garbhavati",
+        "गर्भवती"
+      ],
+      "intake": [
+        "Pregnancy stage if known",
+        "Main concern",
+        "Existing maternity plan",
+        "Routine visit versus current symptoms"
+      ],
+      "warning_signs": [
+        "Heavy bleeding",
+        "Severe pain with faintness",
+        "Seizures",
+        "Breathing difficulty"
+      ],
+      "navigation": "Routine antenatal review is a planned doctor/maternity service; symptoms require targeted assessment."
+    },
+    {
+      "id": "d_and_c",
+      "specialty": "obg",
+      "pdf_page": 38,
+      "title": "Dilatation and curettage",
+      "aliases": [
+        "dilatation and curettage",
+        "dilation and curettage",
+        "d&c",
+        "डी एंड सी"
+      ],
+      "intake": [
+        "Planned procedure versus aftercare",
+        "Date if supplied",
+        "Current bleeding/pain",
+        "Clinician's aftercare plan"
+      ],
+      "warning_signs": [
+        "Severe pain",
+        "Heavy bleeding",
+        "Fever or marked deterioration after a procedure"
+      ],
+      "navigation": "D&C requires a facility; home nursing can support only a stated aftercare task, not perform the procedure."
+    },
+    {
+      "id": "menstrual_bleeding",
+      "specialty": "obg",
+      "pdf_page": 39,
+      "title": "Heavy menstrual bleeding",
+      "aliases": [
+        "heavy menstrual bleeding",
+        "heavy periods",
+        "periods zyada",
+        "पीरियड में ज्यादा खून"
+      ],
+      "intake": [
+        "Bleeding amount and duration",
+        "Faintness",
+        "Pregnancy possibility if relevant",
+        "Pattern change"
+      ],
+      "warning_signs": [
+        "Heavy ongoing loss with faintness",
+        "Collapse",
+        "Possible pregnancy with severe pain"
+      ],
+      "navigation": "Distinguish a routine period concern from active major bleeding; arrange appropriate doctor review."
+    },
+    {
+      "id": "hysterectomy",
+      "specialty": "obg",
+      "pdf_page": 40,
+      "title": "Hysterectomy",
+      "aliases": [
+        "hysterectomy",
+        "uterus removal",
+        "बच्चेदानी का ऑपरेशन"
+      ],
+      "intake": [
+        "Planned surgery versus postoperative need",
+        "Wound/aftercare task",
+        "New symptoms"
+      ],
+      "warning_signs": [
+        "Heavy bleeding",
+        "Severe pain",
+        "Fever with deterioration"
+      ],
+      "navigation": "Surgery belongs in a facility; a prescribed wound-care task can use home nursing."
+    },
+    {
+      "id": "postpartum_bleeding",
+      "specialty": "obg",
+      "pdf_page": 41,
+      "title": "Postpartum haemorrhage",
+      "aliases": [
+        "postpartum haemorrhage",
+        "postpartum hemorrhage",
+        "delivery ke baad khoon",
+        "डिलीवरी के बाद खून"
+      ],
+      "intake": [
+        "Time since delivery",
+        "Is bleeding heavy now",
+        "Faintness",
+        "Alertness"
+      ],
+      "warning_signs": [
+        "Heavy bleeding after delivery",
+        "Collapse",
+        "Reduced alertness"
+      ],
+      "navigation": "Current heavy postpartum bleeding needs emergency help; do not wait for a home caregiver."
+    },
+    {
+      "id": "fibroids",
+      "specialty": "obg",
+      "pdf_page": 42,
+      "title": "Uterine fibroids and polyps",
+      "aliases": [
+        "uterine fibroid",
+        "fibroids",
+        "uterine polyps",
+        "फाइब्रॉइड"
+      ],
+      "intake": [
+        "Known diagnosis versus new symptoms",
+        "Bleeding pattern",
+        "Pressure/pain",
+        "Report-review request"
+      ],
+      "warning_signs": [
+        "Heavy ongoing bleeding with weakness/faintness",
+        "Severe deterioration"
+      ],
+      "navigation": "Doctor or gynaecology review; do not assume surgery is needed from a diagnosis label."
+    },
+    {
+      "id": "child_encephalitis",
+      "specialty": "paediatrics",
+      "pdf_page": 44,
+      "title": "Acute encephalitis syndrome in children",
+      "aliases": [
+        "acute encephalitis syndrome",
+        "child encephalitis",
+        "बच्चे का दिमागी बुखार"
+      ],
+      "intake": [
+        "Age",
+        "Fever",
+        "Alertness",
+        "Seizures",
+        "Recent exposures if already stated"
+      ],
+      "warning_signs": [
+        "Fever with reduced responsiveness",
+        "Seizures",
+        "Breathing difficulty"
+      ],
+      "navigation": "Urgent assessment is guided by the child's reported condition, not a guessed diagnosis."
+    },
+    {
+      "id": "child_diarrhoea",
+      "specialty": "paediatrics",
+      "pdf_page": 45,
+      "title": "Acute diarrhoea",
+      "aliases": [
+        "acute diarrhoea",
+        "acute diarrhea",
+        "loose motions",
+        "dast",
+        "दस्त"
+      ],
+      "intake": [
+        "Age",
+        "Stool frequency and duration",
+        "Ability to drink",
+        "Urine output"
+      ],
+      "warning_signs": [
+        "Unable to drink",
+        "Repeated vomiting with reduced urine",
+        "Lethargy",
+        "Blood in stool"
+      ],
+      "navigation": "Check hydration and age; avoid blanket advice to increase fluids in people with stated fluid restrictions."
+    },
+    {
+      "id": "dengue",
+      "specialty": "paediatrics",
+      "pdf_page": 46,
+      "title": "Dengue fever",
+      "aliases": [
+        "dengue",
+        "dengu",
+        "डेंगू"
+      ],
+      "intake": [
+        "Duration of fever",
+        "Vomiting",
+        "Bleeding",
+        "Urine",
+        "Existing test or diagnosis"
+      ],
+      "warning_signs": [
+        "Persistent vomiting",
+        "Abdominal pain",
+        "Mucosal bleeding",
+        "Breathlessness",
+        "Altered consciousness"
+      ],
+      "navigation": "Report warning symptoms without diagnosing dengue or interpreting platelet counts in isolation."
+    },
+    {
+      "id": "child_fever",
+      "specialty": "paediatrics",
+      "pdf_page": 47,
+      "title": "Fever in children",
+      "aliases": [
+        "child fever",
+        "baby fever",
+        "bacche ko bukhar",
+        "बच्चे को बुखार"
+      ],
+      "intake": [
+        "Exact age",
+        "Fever duration",
+        "Measured temperature if available",
+        "Feeding and responsiveness"
+      ],
+      "warning_signs": [
+        "Very young infant with fever",
+        "Poor feeding with serious illness",
+        "Reduced responsiveness",
+        "Breathing difficulty"
+      ],
+      "navigation": "Do not assume every child is an infant; ask age when it changes the safe next step."
+    },
+    {
+      "id": "child_sepsis",
+      "specialty": "paediatrics",
+      "pdf_page": 48,
+      "title": "Sepsis and septic shock in children",
+      "aliases": [
+        "child sepsis",
+        "septic shock",
+        "बच्चे में सेप्सिस"
+      ],
+      "intake": [
+        "Age",
+        "Feeding",
+        "Breathing",
+        "Alertness",
+        "Urine"
+      ],
+      "warning_signs": [
+        "Poor responsiveness",
+        "Convulsion",
+        "Cold/blue extremities with illness",
+        "Severe breathing difficulty"
+      ],
+      "navigation": "A child with reported danger signs needs emergency care; a fever label alone does not establish sepsis."
+    },
+    {
+      "id": "malnutrition",
+      "specialty": "paediatrics",
+      "pdf_page": 49,
+      "title": "Severe acute malnutrition with complications",
+      "aliases": [
+        "malnutrition",
+        "poor weight gain",
+        "weight not increasing",
+        "wazan nahi badh raha",
+        "वजन नहीं बढ़ रहा"
+      ],
+      "intake": [
+        "Age",
+        "Feeding",
+        "Growth concern",
+        "Recent illness",
+        "Loss of acquired skills"
+      ],
+      "warning_signs": [
+        "Lethargy",
+        "Unable to feed",
+        "Severe dehydration",
+        "Seizures"
+      ],
+      "navigation": "Nutrition/growth concerns need paediatric assessment; do not score malnutrition from chat alone."
+    },
+    {
+      "id": "child_pneumonia",
+      "specialty": "paediatrics",
+      "pdf_page": 50,
+      "title": "Severe pneumonia in children",
+      "aliases": [
+        "child pneumonia",
+        "bacche ko nimoniya",
+        "बच्चे को निमोनिया"
+      ],
+      "intake": [
+        "Age",
+        "Cough duration",
+        "Breathing effort",
+        "Feeding",
+        "Alertness"
+      ],
+      "warning_signs": [
+        "Unable to drink",
+        "Chest indrawing or severe breathing effort",
+        "Convulsions",
+        "Reduced responsiveness"
+      ],
+      "navigation": "Assess actual breathing and feeding signs; diagnosis and treatment require a clinician."
+    },
+    {
+      "id": "alcohol_use",
+      "specialty": "psychiatry",
+      "pdf_page": 52,
+      "title": "Alcohol use disorders",
+      "aliases": [
+        "alcohol use disorder",
+        "alcohol dependence",
+        "sharab ki lat",
+        "शराब की लत"
+      ],
+      "intake": [
+        "Reason for seeking support",
+        "Last use if relevant",
+        "Withdrawal symptoms",
+        "Current safety"
+      ],
+      "warning_signs": [
+        "Seizures",
+        "Confusion",
+        "Immediate risk of harm"
+      ],
+      "navigation": "Use nonjudgmental language; treatment/withdrawal planning needs a clinician, not unsupervised instructions to stop or change drugs."
+    },
+    {
+      "id": "anxiety",
+      "specialty": "psychiatry",
+      "pdf_page": 53,
+      "title": "Anxiety disorders",
+      "aliases": [
+        "anxiety",
+        "panic disorder",
+        "ghabrahat",
+        "चिंता",
+        "घबराहट"
+      ],
+      "intake": [
+        "What feels most difficult",
+        "Duration",
+        "Sleep/function",
+        "Current safety"
+      ],
+      "warning_signs": [
+        "Current self-harm risk",
+        "New physical red flags"
+      ],
+      "navigation": "Validate distress without promising everything is fine; anxiety does not prove or rule out a physical emergency."
+    },
+    {
+      "id": "child_behaviour",
+      "specialty": "psychiatry",
+      "pdf_page": 54,
+      "title": "Childhood behavioural disorders",
+      "aliases": [
+        "child behavioural disorder",
+        "child behavioral disorder",
+        "adhd",
+        "बच्चे के व्यवहार की परेशानी"
+      ],
+      "intake": [
+        "Child's age",
+        "Specific change",
+        "Onset",
+        "Effect at home/school",
+        "Parent's main concern"
+      ],
+      "warning_signs": [
+        "Immediate danger to self or others",
+        "New neurological loss"
+      ],
+      "navigation": "Ask respectfully without labelling the child; clinician assessment can guide referral and family support."
+    },
+    {
+      "id": "child_emotional",
+      "specialty": "psychiatry",
+      "pdf_page": 55,
+      "title": "Childhood emotional disorders",
+      "aliases": [
+        "childhood emotional disorder",
+        "school anxiety",
+        "school refusal",
+        "school nahi jana",
+        "स्कूल जाने से डर"
+      ],
+      "intake": [
+        "Age",
+        "Change in mood",
+        "Stressors if volunteered",
+        "Daily functioning",
+        "Safety"
+      ],
+      "warning_signs": [
+        "Self-harm thoughts",
+        "Immediate threat or abuse-related danger"
+      ],
+      "navigation": "Provide supportive clinician referral; avoid forcing sensitive details or assigning a diagnosis."
+    },
+    {
+      "id": "development",
+      "specialty": "psychiatry",
+      "pdf_page": 56,
+      "title": "Children with developmental problems",
+      "aliases": [
+        "developmental delay",
+        "delayed speech",
+        "not speaking yet",
+        "bolna nahi seekha",
+        "बोलना नहीं सीखा"
+      ],
+      "intake": [
+        "Child's age",
+        "Which skill is delayed",
+        "Any loss of previously learned skills",
+        "Hearing concerns"
+      ],
+      "warning_signs": [
+        "Loss of acquired skills",
+        "Acute neurological symptoms"
+      ],
+      "navigation": "Early paediatric/hearing assessment can help; delayed milestones alone are not an emergency."
+    },
+    {
+      "id": "depression",
+      "specialty": "psychiatry",
+      "pdf_page": 57,
+      "title": "Depression",
+      "aliases": [
+        "depression",
+        "low mood",
+        "mann udaas",
+        "man udaas",
+        "मन उदास"
+      ],
+      "intake": [
+        "Duration",
+        "Sleep/appetite",
+        "Daily functioning",
+        "Whether the person feels safe"
+      ],
+      "warning_signs": [
+        "Current self-harm thoughts or actions",
+        "Immediate danger"
+      ],
+      "navigation": "Acknowledge distress and offer doctor/mental-health support; never diagnose from a short message."
+    },
+    {
+      "id": "psychosis",
+      "specialty": "psychiatry",
+      "pdf_page": 58,
+      "title": "Psychosis",
+      "aliases": [
+        "psychosis",
+        "schizophrenia",
+        "hearing voices",
+        "awaazein sunai",
+        "आवाजें सुनाई"
+      ],
+      "intake": [
+        "New versus known symptoms",
+        "Current distress",
+        "Functioning",
+        "Safety and available support"
+      ],
+      "warning_signs": [
+        "Immediate risk of harm",
+        "Severe confusion",
+        "Unable to care for immediate needs"
+      ],
+      "navigation": "Respond calmly without endorsing unusual beliefs; prompt clinician assessment is appropriate."
+    },
+    {
+      "id": "somatic_distress",
+      "specialty": "psychiatry",
+      "pdf_page": 59,
+      "title": "Somatoform disorders",
+      "aliases": [
+        "somatoform",
+        "somatic symptom disorder",
+        "medically unexplained symptoms",
+        "बार बार तकलीफ"
+      ],
+      "intake": [
+        "What symptoms are troubling",
+        "Duration",
+        "Previous assessment if volunteered",
+        "Daily impact"
+      ],
+      "warning_signs": [
+        "New physical red flags",
+        "Current self-harm risk"
+      ],
+      "navigation": "Treat the distress as real; do not dismiss symptoms as imaginary or assume a psychological cause."
+    },
+    {
+      "id": "adult_respiratory",
+      "specialty": "pulmonology",
+      "pdf_page": 61,
+      "title": "Acute respiratory infection in adults",
+      "aliases": [
+        "respiratory infection",
+        "chest infection",
+        "flu like illness",
+        "सांस का संक्रमण"
+      ],
+      "intake": [
+        "Cough duration",
+        "Fever",
+        "Breathing",
+        "Change from baseline",
+        "Known lung condition"
+      ],
+      "warning_signs": [
+        "Breathing difficulty",
+        "Confusion",
+        "Coughing significant blood"
+      ],
+      "navigation": "Symptoms guide care navigation; do not diagnose pneumonia or prescribe antibiotics."
+    },
+    {
+      "id": "asthma",
+      "specialty": "pulmonology",
+      "pdf_page": 62,
+      "title": "Asthma",
+      "aliases": [
+        "asthma",
+        "asthama",
+        "dama",
+        "दमा",
+        "अस्थमा"
+      ],
+      "intake": [
+        "Current breathing versus routine follow-up",
+        "Wheezing",
+        "Night symptoms",
+        "Existing action plan if stated"
+      ],
+      "warning_signs": [
+        "Unable to speak comfortably",
+        "Severe breathlessness",
+        "Drowsiness or blue lips"
+      ],
+      "navigation": "Do not label a stable asthma history as a current attack or change inhaler doses."
+    },
+    {
+      "id": "copd",
+      "specialty": "pulmonology",
+      "pdf_page": 63,
+      "title": "Chronic obstructive pulmonary disease",
+      "aliases": [
+        "copd",
+        "chronic obstructive pulmonary disease",
+        "पुरानी फेफड़े की बीमारी"
+      ],
+      "intake": [
+        "Change from usual breathlessness",
+        "Sputum change",
+        "Known diagnosis",
+        "Current follow-up need"
+      ],
+      "warning_signs": [
+        "Sudden worsening at rest",
+        "Confusion",
+        "Blue lips",
+        "Drowsiness"
+      ],
+      "navigation": "New deterioration needs assessment; do not use a generic oxygen target or treatment plan."
+    },
+    {
+      "id": "respiratory_failure",
+      "specialty": "pulmonology",
+      "pdf_page": 64,
+      "title": "Respiratory failure",
+      "aliases": [
+        "respiratory failure",
+        "low oxygen",
+        "oxygen kam",
+        "ऑक्सीजन कम"
+      ],
+      "intake": [
+        "Breathing effort",
+        "Alertness",
+        "Measured reading only if available",
+        "Current versus past episode"
+      ],
+      "warning_signs": [
+        "Severe breathing effort",
+        "Blue lips",
+        "Altered alertness"
+      ],
+      "navigation": "Life-threatening breathing symptoms need emergency help; never delay while asking for a device reading."
+    },
+    {
+      "id": "retention",
+      "specialty": "urology",
+      "pdf_page": 66,
+      "title": "Acute urinary retention in men",
+      "aliases": [
+        "urinary retention",
+        "unable to pass urine",
+        "peshab ruk gaya",
+        "पेशाब रुक गया"
+      ],
+      "intake": [
+        "Sudden inability versus longstanding poor flow",
+        "Last urine",
+        "Lower belly discomfort",
+        "Fever"
+      ],
+      "warning_signs": [
+        "Sudden inability to pass urine",
+        "Severe pain",
+        "Neurological loss"
+      ],
+      "navigation": "Acute retention needs facility assessment; do not send a routine home catheter booking for an undiagnosed acute problem."
+    },
+    {
+      "id": "haematuria",
+      "specialty": "urology",
+      "pdf_page": 67,
+      "title": "Gross haematuria",
+      "aliases": [
+        "haematuria",
+        "hematuria",
+        "blood in urine",
+        "peshab mein khoon",
+        "पेशाब में खून"
+      ],
+      "intake": [
+        "Visible blood versus colour change",
+        "Clots",
+        "Pain",
+        "Ability to pass urine",
+        "Duration"
+      ],
+      "warning_signs": [
+        "Clots with retention",
+        "Heavy ongoing bleeding",
+        "Faintness",
+        "Severe illness"
+      ],
+      "navigation": "Visible blood needs assessment; do not infer cancer, infection or harmless food-related colour from chat."
+    },
+    {
+      "id": "male_infertility",
+      "specialty": "urology",
+      "pdf_page": 68,
+      "title": "Male infertility",
+      "aliases": [
+        "male infertility",
+        "fertility concern",
+        "conceive nahi ho raha",
+        "संतान की परेशानी"
+      ],
+      "intake": [
+        "Reason for consultation",
+        "Duration if volunteered",
+        "Prior assessment or report-review need"
+      ],
+      "warning_signs": [
+        "Sudden painful scrotal swelling is a separate acute symptom"
+      ],
+      "navigation": "Offer a private doctor consultation and specialist referral where appropriate; no emergency from infertility alone."
+    },
+    {
+      "id": "stones",
+      "specialty": "urology",
+      "pdf_page": 69,
+      "title": "Renal and ureteric stones",
+      "aliases": [
+        "renal stone",
+        "ureteric stone",
+        "kidney stone",
+        "pathri",
+        "पथरी"
+      ],
+      "intake": [
+        "Location and duration of pain",
+        "Fever",
+        "Urine amount",
+        "Known stone history"
+      ],
+      "warning_signs": [
+        "No urine",
+        "Fever with chills",
+        "Persistent visible blood",
+        "Severe deterioration"
+      ],
+      "navigation": "Do not diagnose a stone or recommend expulsive medication; new concerning symptoms require in-person assessment."
+    },
+    {
+      "id": "scrotal_swelling",
+      "specialty": "urology",
+      "pdf_page": 70,
+      "title": "Scrotal swelling",
+      "aliases": [
+        "scrotal swelling",
+        "testicular swelling",
+        "testicle pain",
+        "andkosh mein sujan",
+        "अंडकोष में सूजन"
+      ],
+      "intake": [
+        "Sudden versus gradual onset",
+        "Pain",
+        "Fever",
+        "Injury"
+      ],
+      "warning_signs": [
+        "Sudden severe testicular pain or swelling",
+        "Severe illness"
+      ],
+      "navigation": "Acute painful swelling needs immediate facility assessment; a stable longstanding swelling needs doctor review."
+    }
+  ],
+  "symptom_concepts": {
+    "urinary_symptoms": {
+      "pattern": "burning (?:when|while) (?:passing urine|peeing)|burning urine|painful urination|urine (?:burning|problem)|peshab (?:me |mein )?(?:jalan|dard|dikkat|ruk)|baar baar peshab|पेशाब.*(?:जलन|दर्द|दिक्कत|रुक)|blood in urine|पेशाब में खून",
+      "label": {
+        "en": "urinary trouble",
+        "hinglish": "peshab ki pareshani",
+        "hi": "पेशाब की परेशानी"
+      }
+    },
+    "ear_symptoms": {
+      "pattern": "ear (?:ache|pain|discharge)|earache|hearing (?:loss|problem)|kaan (?:me |mein )?(?:dard|paani|taklif)|kaan se|sunai (?:kam|nahi)|कान.*(?:दर्द|पानी|बह)|सुनाई (?:कम|नहीं)",
+      "label": {
+        "en": "ear or hearing trouble",
+        "hinglish": "kaan ya sunai ki pareshani",
+        "hi": "कान या सुनने की परेशानी"
+      }
+    },
+    "throat_symptoms": {
+      "pattern": "sore throat|throat pain|gala (?:kharab|dukh)|gale (?:me |mein )?(?:dard|kharash|sujan)|गले.*(?:दर्द|खराश|सूजन)",
+      "label": {
+        "en": "throat discomfort",
+        "hinglish": "gale ki taklif",
+        "hi": "गले की तकलीफ़"
+      }
+    },
+    "nasal_symptoms": {
+      "pattern": "blocked nose|runny nose|nasal (?:block|congestion)|naak (?:band|beh)|नाक (?:बंद|बह)|sinus pain",
+      "label": {
+        "en": "nose or sinus trouble",
+        "hinglish": "naak ya sinus ki pareshani",
+        "hi": "नाक या साइनस की परेशानी"
+      }
+    },
+    "swelling": {
+      "pattern": "(?:feet|legs|face|ankle) (?:are )?(?:swollen|swelling)|swollen (?:feet|legs|face|ankle)|pair(?:on)? (?:me |mein )?sujan|chehre (?:me |mein |par )?sujan|(?:पैर|चेहरे).*सूजन",
+      "label": {
+        "en": "swelling",
+        "hinglish": "sujan",
+        "hi": "सूजन"
+      }
+    },
+    "palpitations": {
+      "pattern": "palpitation|heart (?:is )?racing|fast heartbeat|dhadkan (?:tez|badh)|dil (?:tez|jor se) dhadak|धड़कन (?:तेज|बढ़)",
+      "label": {
+        "en": "heartbeat changes",
+        "hinglish": "dhadkan mein badlav",
+        "hi": "धड़कन में बदलाव"
+      }
+    },
+    "mood_symptoms": {
+      "pattern": "low mood|feeling (?:low|anxious)|mann? (?:bahut )?udaas|ghabrahat|neend nahi|मन उदास|घबराहट|नींद नहीं",
+      "label": {
+        "en": "mood or sleep concerns",
+        "hinglish": "mann ya neend ki pareshani",
+        "hi": "मन या नींद की परेशानी"
+      }
+    },
+    "memory_symptoms": {
+      "pattern": "memory (?:loss|problem)|keeps forgetting|baar baar bhool|yaaddasht|याददाश्त|बार बार भूल",
+      "label": {
+        "en": "memory changes",
+        "hinglish": "yaaddasht mein badlav",
+        "hi": "याददाश्त में बदलाव"
+      }
+    },
+    "menstrual_symptoms": {
+      "pattern": "heavy periods|periods (?:bahut |zyada)|period (?:problem|late)|periods late|पीरियड.*(?:ज्यादा|परेशानी|देर)|माहवारी.*(?:दिक्कत|ज्यादा)",
+      "label": {
+        "en": "period concerns",
+        "hinglish": "period ki pareshani",
+        "hi": "माहवारी की परेशानी"
+      }
+    },
+    "development_symptoms": {
+      "pattern": "delayed speech|not speaking yet|developmental delay|bolna nahi seekha|wazan nahi badh|बोलना नहीं सीखा|वजन नहीं बढ़",
+      "label": {
+        "en": "child development concerns",
+        "hinglish": "bacche ki growth ya bolne ki pareshani",
+        "hi": "बच्चे के विकास की परेशानी"
+      }
+    }
+  },
+  "pathways": [
+    {
+      "id": "stw_headache",
+      "title": {
+        "en": "Headache",
+        "hinglish": "Sir dard",
+        "hi": "सिरदर्द"
+      },
+      "cues": [
+        "\\bheadache\\b",
+        "\\bmigraine\\b",
+        "\\b(?:sir|sar) (?:me |mein )?dard\\b",
+        "सिरदर्द",
+        "सिर में दर्द"
+      ],
+      "source_pages": [
+        33,
+        35
+      ],
+      "source": "ICMR_STW_2019_V1",
+      "reviewed": false,
+      "questions": [
+        {
+          "id": "danger",
+          "text": {
+            "en": "Did the headache start suddenly and become extremely painful within minutes?",
+            "hinglish": "Kya sir dard achanak shuru hua aur kuch minute mein bahut tez ho gaya?",
+            "hi": "क्या सिरदर्द अचानक शुरू होकर कुछ मिनट में बहुत तेज़ हो गया?"
+          },
+          "danger": true,
+          "options": [
+            {
+              "id": "yes",
+              "label": {
+                "en": "Yes",
+                "hinglish": "Haan",
+                "hi": "हाँ"
+              }
+            },
+            {
+              "id": "no",
+              "label": {
+                "en": "No",
+                "hinglish": "Nahi",
+                "hi": "नहीं"
+              }
+            },
+            {
+              "id": "unsure",
+              "label": {
+                "en": "Not sure",
+                "hinglish": "Pata nahi",
+                "hi": "पता नहीं"
+              }
+            }
+          ]
+        },
+        {
+          "id": "detail",
+          "text": {
+            "en": "Is this headache new or getting worse than usual?",
+            "hinglish": "Kya yeh sir dard naya hai ya pehle se badh raha hai?",
+            "hi": "क्या यह सिरदर्द नया है या पहले से बढ़ रहा है?"
+          },
+          "danger": false,
+          "options": [
+            {
+              "id": "yes",
+              "label": {
+                "en": "Yes",
+                "hinglish": "Haan",
+                "hi": "हाँ"
+              }
+            },
+            {
+              "id": "no",
+              "label": {
+                "en": "No",
+                "hinglish": "Nahi",
+                "hi": "नहीं"
+              }
+            },
+            {
+              "id": "unsure",
+              "label": {
+                "en": "Not sure",
+                "hinglish": "Pata nahi",
+                "hi": "पता नहीं"
+              }
+            }
+          ]
+        }
+      ],
+      "rules": [
+        {
+          "when": {
+            "danger": [
+              "yes"
+            ]
+          },
+          "disposition": "emergency",
+          "care_type": "emergency_112",
+          "urgency": "emergency",
+          "why": {
+            "en": "You described a warning sign. Please get medical help now.",
+            "hinglish": "Aapne khatre ka lakshan bataya hai. Abhi medical madad lein.",
+            "hi": "आपने खतरे का लक्षण बताया है। अभी चिकित्सा सहायता लें।"
+          }
+        },
+        {
+          "when": {
+            "detail": [
+              "yes",
+              "no",
+              "unsure"
+            ]
+          },
+          "disposition": "urgent",
+          "care_type": "teleconsultation",
+          "urgency": "same_day",
+          "why": {
+            "en": "Thanks for explaining. A doctor can assess the headache today and guide the next step.",
+            "hinglish": "Batane ke liye shukriya. Aaj doctor sir dard ka assessment karke agla kadam bata sakte hain.",
+            "hi": "बताने के लिए धन्यवाद। आज डॉक्टर सिरदर्द की जाँच करके अगला कदम बता सकते हैं।"
+          }
+        }
+      ]
+    },
+    {
+      "id": "stw_urinary",
+      "title": {
+        "en": "Urinary trouble",
+        "hinglish": "Peshab ki pareshani",
+        "hi": "पेशाब की परेशानी"
+      },
+      "cues": [
+        "burning (?:when|while) (?:passing urine|peeing)|burning urine|painful urination|urine (?:burning|problem)|peshab (?:me |mein )?(?:jalan|dard|dikkat|ruk)|baar baar peshab|पेशाब.*(?:जलन|दर्द|दिक्कत|रुक)|blood in urine|पेशाब में खून",
+        "\\burinary retention\\b",
+        "\\bhematuria\\b",
+        "\\bhaematuria\\b"
+      ],
+      "source_pages": [
+        25,
+        28,
+        66,
+        67,
+        69
+      ],
+      "source": "ICMR_STW_2019_V1",
+      "reviewed": false,
+      "questions": [
+        {
+          "id": "danger",
+          "text": {
+            "en": "Have you suddenly become unable to pass any urine?",
+            "hinglish": "Kya achanak peshab bilkul band ho gaya hai?",
+            "hi": "क्या अचानक पेशाब बिल्कुल बंद हो गया है?"
+          },
+          "danger": true,
+          "options": [
+            {
+              "id": "yes",
+              "label": {
+                "en": "Yes",
+                "hinglish": "Haan",
+                "hi": "हाँ"
+              }
+            },
+            {
+              "id": "no",
+              "label": {
+                "en": "No",
+                "hinglish": "Nahi",
+                "hi": "नहीं"
+              }
+            },
+            {
+              "id": "unsure",
+              "label": {
+                "en": "Not sure",
+                "hinglish": "Pata nahi",
+                "hi": "पता नहीं"
+              }
+            }
+          ]
+        },
+        {
+          "id": "detail",
+          "text": {
+            "en": "Is there fever or pain in your side or back with the urinary trouble?",
+            "hinglish": "Kya peshab ki pareshani ke saath bukhar ya peeth ke ek taraf dard hai?",
+            "hi": "क्या पेशाब की परेशानी के साथ बुखार या पीठ के एक तरफ़ दर्द है?"
+          },
+          "danger": false,
+          "options": [
+            {
+              "id": "yes",
+              "label": {
+                "en": "Yes",
+                "hinglish": "Haan",
+                "hi": "हाँ"
+              }
+            },
+            {
+              "id": "no",
+              "label": {
+                "en": "No",
+                "hinglish": "Nahi",
+                "hi": "नहीं"
+              }
+            },
+            {
+              "id": "unsure",
+              "label": {
+                "en": "Not sure",
+                "hinglish": "Pata nahi",
+                "hi": "पता नहीं"
+              }
+            }
+          ]
+        }
+      ],
+      "rules": [
+        {
+          "when": {
+            "danger": [
+              "yes"
+            ]
+          },
+          "disposition": "emergency",
+          "care_type": "emergency_112",
+          "urgency": "emergency",
+          "why": {
+            "en": "You described a warning sign. Please get medical help now.",
+            "hinglish": "Aapne khatre ka lakshan bataya hai. Abhi medical madad lein.",
+            "hi": "आपने खतरे का लक्षण बताया है। अभी चिकित्सा सहायता लें।"
+          }
+        },
+        {
+          "when": {
+            "detail": [
+              "yes",
+              "no",
+              "unsure"
+            ]
+          },
+          "disposition": "urgent",
+          "care_type": "teleconsultation",
+          "urgency": "same_day",
+          "why": {
+            "en": "A doctor should assess the urinary symptoms today and decide whether tests or an in-person examination are needed.",
+            "hinglish": "Aaj doctor se peshab ki pareshani ka assessment karwayein. Woh batayenge ki jaanch ya saamne se check karna chahiye.",
+            "hi": "आज डॉक्टर से पेशाब की परेशानी की जाँच करवाएँ। वे बताएँगे कि जाँच या सामने से परीक्षण की ज़रूरत है।"
+          }
+        }
+      ]
+    },
+    {
+      "id": "stw_throat",
+      "title": {
+        "en": "Throat or neck discomfort",
+        "hinglish": "Gale ki taklif",
+        "hi": "गले की तकलीफ़"
+      },
+      "cues": [
+        "sore throat|throat pain|gala (?:kharab|dukh)|gale (?:me |mein )?(?:dard|kharash|sujan)|गले.*(?:दर्द|खराश|सूजन)"
+      ],
+      "source_pages": [
+        21,
+        23
+      ],
+      "source": "ICMR_STW_2019_V1",
+      "reviewed": false,
+      "questions": [
+        {
+          "id": "danger",
+          "text": {
+            "en": "Are you unable to swallow your own saliva?",
+            "hinglish": "Kya apni laar bhi nigalne mein mushkil ho rahi hai?",
+            "hi": "क्या अपनी लार भी निगल नहीं पा रहे हैं?"
+          },
+          "danger": true,
+          "options": [
+            {
+              "id": "yes",
+              "label": {
+                "en": "Yes",
+                "hinglish": "Haan",
+                "hi": "हाँ"
+              }
+            },
+            {
+              "id": "no",
+              "label": {
+                "en": "No",
+                "hinglish": "Nahi",
+                "hi": "नहीं"
+              }
+            },
+            {
+              "id": "unsure",
+              "label": {
+                "en": "Not sure",
+                "hinglish": "Pata nahi",
+                "hi": "पता नहीं"
+              }
+            }
+          ]
+        },
+        {
+          "id": "detail",
+          "text": {
+            "en": "Is the throat or neck swelling getting worse?",
+            "hinglish": "Kya gale ya gardan ki sujan badh rahi hai?",
+            "hi": "क्या गले या गर्दन की सूजन बढ़ रही है?"
+          },
+          "danger": false,
+          "options": [
+            {
+              "id": "yes",
+              "label": {
+                "en": "Yes",
+                "hinglish": "Haan",
+                "hi": "हाँ"
+              }
+            },
+            {
+              "id": "no",
+              "label": {
+                "en": "No",
+                "hinglish": "Nahi",
+                "hi": "नहीं"
+              }
+            },
+            {
+              "id": "unsure",
+              "label": {
+                "en": "Not sure",
+                "hinglish": "Pata nahi",
+                "hi": "पता नहीं"
+              }
+            }
+          ]
+        }
+      ],
+      "rules": [
+        {
+          "when": {
+            "danger": [
+              "yes"
+            ]
+          },
+          "disposition": "emergency",
+          "care_type": "emergency_112",
+          "urgency": "emergency",
+          "why": {
+            "en": "You described a warning sign. Please get medical help now.",
+            "hinglish": "Aapne khatre ka lakshan bataya hai. Abhi medical madad lein.",
+            "hi": "आपने खतरे का लक्षण बताया है। अभी चिकित्सा सहायता लें।"
+          }
+        },
+        {
+          "when": {
+            "detail": [
+              "yes",
+              "no",
+              "unsure"
+            ]
+          },
+          "disposition": "urgent",
+          "care_type": "teleconsultation",
+          "urgency": "same_day",
+          "why": {
+            "en": "A doctor can assess your throat today and advise if an ENT examination is needed.",
+            "hinglish": "Aaj doctor gale ka assessment karke batayenge ki ENT se check karwana chahiye ya nahi.",
+            "hi": "आज डॉक्टर गले की जाँच करके बताएँगे कि ENT परीक्षण की ज़रूरत है या नहीं।"
+          }
+        }
+      ]
+    },
+    {
+      "id": "stw_ear",
+      "title": {
+        "en": "Ear or hearing concern",
+        "hinglish": "Kaan ki pareshani",
+        "hi": "कान की परेशानी"
+      },
+      "cues": [
+        "ear (?:ache|pain|discharge)|earache|hearing (?:loss|problem)|kaan (?:me |mein )?(?:dard|paani|taklif)|kaan se|sunai (?:kam|nahi)|कान.*(?:दर्द|पानी|बह)|सुनाई (?:कम|नहीं)"
+      ],
+      "source_pages": [
+        20,
+        22
+      ],
+      "source": "ICMR_STW_2019_V1",
+      "reviewed": false,
+      "questions": [
+        {
+          "id": "danger",
+          "text": {
+            "en": "Has the hearing suddenly become much worse?",
+            "hinglish": "Kya achanak sunai bahut kam dene laga hai?",
+            "hi": "क्या अचानक सुनाई बहुत कम देने लगा है?"
+          },
+          "danger": true,
+          "options": [
+            {
+              "id": "yes",
+              "label": {
+                "en": "Yes",
+                "hinglish": "Haan",
+                "hi": "हाँ"
+              }
+            },
+            {
+              "id": "no",
+              "label": {
+                "en": "No",
+                "hinglish": "Nahi",
+                "hi": "नहीं"
+              }
+            },
+            {
+              "id": "unsure",
+              "label": {
+                "en": "Not sure",
+                "hinglish": "Pata nahi",
+                "hi": "पता नहीं"
+              }
+            }
+          ]
+        },
+        {
+          "id": "detail",
+          "text": {
+            "en": "Is there ear pain, discharge or fever?",
+            "hinglish": "Kya kaan mein dard, paani aana ya bukhar hai?",
+            "hi": "क्या कान में दर्द, पानी आना या बुखार है?"
+          },
+          "danger": false,
+          "options": [
+            {
+              "id": "yes",
+              "label": {
+                "en": "Yes",
+                "hinglish": "Haan",
+                "hi": "हाँ"
+              }
+            },
+            {
+              "id": "no",
+              "label": {
+                "en": "No",
+                "hinglish": "Nahi",
+                "hi": "नहीं"
+              }
+            },
+            {
+              "id": "unsure",
+              "label": {
+                "en": "Not sure",
+                "hinglish": "Pata nahi",
+                "hi": "पता नहीं"
+              }
+            }
+          ]
+        }
+      ],
+      "rules": [
+        {
+          "when": {
+            "danger": [
+              "yes"
+            ]
+          },
+          "disposition": "urgent",
+          "care_type": "teleconsultation",
+          "urgency": "same_day",
+          "why": {
+            "en": "This change needs a doctor to assess it today.",
+            "hinglish": "Is badlav ka aaj doctor se assessment karwayein.",
+            "hi": "इस बदलाव की आज डॉक्टर से जाँच करवाएँ।"
+          }
+        },
+        {
+          "when": {
+            "detail": [
+              "yes",
+              "no",
+              "unsure"
+            ]
+          },
+          "disposition": "urgent",
+          "care_type": "teleconsultation",
+          "urgency": "same_day",
+          "why": {
+            "en": "A doctor can assess the ear or hearing concern today and guide an ENT or hearing check.",
+            "hinglish": "Aaj doctor kaan ya sunai ki pareshani ka assessment karke ENT ya hearing check ka agla kadam bata sakte hain.",
+            "hi": "आज डॉक्टर कान या सुनने की परेशानी की जाँच करके ENT या श्रवण परीक्षण का अगला कदम बता सकते हैं।"
+          }
+        }
+      ]
+    },
+    {
+      "id": "stw_nasal",
+      "title": {
+        "en": "Nose or sinus concern",
+        "hinglish": "Naak ki pareshani",
+        "hi": "नाक की परेशानी"
+      },
+      "cues": [
+        "blocked nose|runny nose|nasal (?:block|congestion)|naak (?:band|beh)|नाक (?:बंद|बह)|sinus pain"
+      ],
+      "source_pages": [
+        17,
+        18
+      ],
+      "source": "ICMR_STW_2019_V1",
+      "reviewed": false,
+      "questions": [
+        {
+          "id": "danger",
+          "text": {
+            "en": "Have the nose or facial symptoms come with a change in your vision?",
+            "hinglish": "Kya naak ya chehre ki taklif ke saath dikhne mein badlav hua hai?",
+            "hi": "क्या नाक या चेहरे की तकलीफ़ के साथ देखने में बदलाव हुआ है?"
+          },
+          "danger": true,
+          "options": [
+            {
+              "id": "yes",
+              "label": {
+                "en": "Yes",
+                "hinglish": "Haan",
+                "hi": "हाँ"
+              }
+            },
+            {
+              "id": "no",
+              "label": {
+                "en": "No",
+                "hinglish": "Nahi",
+                "hi": "नहीं"
+              }
+            },
+            {
+              "id": "unsure",
+              "label": {
+                "en": "Not sure",
+                "hinglish": "Pata nahi",
+                "hi": "पता नहीं"
+              }
+            }
+          ]
+        },
+        {
+          "id": "detail",
+          "text": {
+            "en": "Have these symptoms been lasting or repeatedly coming back?",
+            "hinglish": "Kya yeh taklif kaafi din se hai ya baar-baar laut rahi hai?",
+            "hi": "क्या यह तकलीफ़ कई दिन से है या बार-बार लौट रही है?"
+          },
+          "danger": false,
+          "options": [
+            {
+              "id": "yes",
+              "label": {
+                "en": "Yes",
+                "hinglish": "Haan",
+                "hi": "हाँ"
+              }
+            },
+            {
+              "id": "no",
+              "label": {
+                "en": "No",
+                "hinglish": "Nahi",
+                "hi": "नहीं"
+              }
+            },
+            {
+              "id": "unsure",
+              "label": {
+                "en": "Not sure",
+                "hinglish": "Pata nahi",
+                "hi": "पता नहीं"
+              }
+            }
+          ]
+        }
+      ],
+      "rules": [
+        {
+          "when": {
+            "danger": [
+              "yes"
+            ]
+          },
+          "disposition": "urgent",
+          "care_type": "teleconsultation",
+          "urgency": "same_day",
+          "why": {
+            "en": "This change needs a doctor to assess it today.",
+            "hinglish": "Is badlav ka aaj doctor se assessment karwayein.",
+            "hi": "इस बदलाव की आज डॉक्टर से जाँच करवाएँ।"
+          }
+        },
+        {
+          "when": {
+            "detail": [
+              "yes",
+              "no",
+              "unsure"
+            ]
+          },
+          "disposition": "urgent",
+          "care_type": "teleconsultation",
+          "urgency": "same_day",
+          "why": {
+            "en": "A doctor can review the nose or sinus symptoms and guide the right care today.",
+            "hinglish": "Aaj doctor naak ya sinus ki taklif samajhkar sahi care bata sakte hain.",
+            "hi": "आज डॉक्टर नाक या साइनस की तकलीफ़ समझकर सही देखभाल बता सकते हैं।"
+          }
+        }
+      ]
+    },
+    {
+      "id": "stw_swelling",
+      "title": {
+        "en": "Swelling",
+        "hinglish": "Sujan",
+        "hi": "सूजन"
+      },
+      "cues": [
+        "(?:feet|legs|face|ankle) (?:are )?(?:swollen|swelling)|swollen (?:feet|legs|face|ankle)|pair(?:on)? (?:me |mein )?sujan|chehre (?:me |mein |par )?sujan|(?:पैर|चेहरे).*सूजन"
+      ],
+      "source_pages": [
+        12,
+        25,
+        26,
+        27
+      ],
+      "source": "ICMR_STW_2019_V1",
+      "reviewed": false,
+      "questions": [
+        {
+          "id": "danger",
+          "text": {
+            "en": "Is the swelling happening along with difficulty breathing right now?",
+            "hinglish": "Kya sujan ke saath abhi saans lene mein taklif bhi hai?",
+            "hi": "क्या सूजन के साथ अभी साँस लेने में तकलीफ़ भी है?"
+          },
+          "danger": true,
+          "options": [
+            {
+              "id": "yes",
+              "label": {
+                "en": "Yes",
+                "hinglish": "Haan",
+                "hi": "हाँ"
+              }
+            },
+            {
+              "id": "no",
+              "label": {
+                "en": "No",
+                "hinglish": "Nahi",
+                "hi": "नहीं"
+              }
+            },
+            {
+              "id": "unsure",
+              "label": {
+                "en": "Not sure",
+                "hinglish": "Pata nahi",
+                "hi": "पता नहीं"
+              }
+            }
+          ]
+        },
+        {
+          "id": "detail",
+          "text": {
+            "en": "Are you passing noticeably less urine than usual?",
+            "hinglish": "Kya aam se kaafi kam peshab aa raha hai?",
+            "hi": "क्या सामान्य से काफ़ी कम पेशाब आ रहा है?"
+          },
+          "danger": false,
+          "options": [
+            {
+              "id": "yes",
+              "label": {
+                "en": "Yes",
+                "hinglish": "Haan",
+                "hi": "हाँ"
+              }
+            },
+            {
+              "id": "no",
+              "label": {
+                "en": "No",
+                "hinglish": "Nahi",
+                "hi": "नहीं"
+              }
+            },
+            {
+              "id": "unsure",
+              "label": {
+                "en": "Not sure",
+                "hinglish": "Pata nahi",
+                "hi": "पता नहीं"
+              }
+            }
+          ]
+        }
+      ],
+      "rules": [
+        {
+          "when": {
+            "danger": [
+              "yes"
+            ]
+          },
+          "disposition": "emergency",
+          "care_type": "emergency_112",
+          "urgency": "emergency",
+          "why": {
+            "en": "You described a warning sign. Please get medical help now.",
+            "hinglish": "Aapne khatre ka lakshan bataya hai. Abhi medical madad lein.",
+            "hi": "आपने खतरे का लक्षण बताया है। अभी चिकित्सा सहायता लें।"
+          }
+        },
+        {
+          "when": {
+            "detail": [
+              "yes",
+              "no",
+              "unsure"
+            ]
+          },
+          "disposition": "urgent",
+          "care_type": "paramedic_home_visit",
+          "urgency": "same_day",
+          "why": {
+            "en": "A Medic can assess the swelling and check vitals today. A doctor can guide further tests if needed.",
+            "hinglish": "Aaj Medic sujan aur vitals check kar sakte hain. Zaroorat ho to doctor aage ki jaanch bata sakte hain.",
+            "hi": "आज मेडिक सूजन और शारीरिक माप जाँच सकते हैं। ज़रूरत होने पर डॉक्टर आगे की जाँच बता सकते हैं।"
+          }
+        }
+      ]
+    },
+    {
+      "id": "stw_palpitations",
+      "title": {
+        "en": "Heartbeat changes",
+        "hinglish": "Dhadkan mein badlav",
+        "hi": "धड़कन में बदलाव"
+      },
+      "cues": [
+        "palpitation|heart (?:is )?racing|fast heartbeat|dhadkan (?:tez|badh)|dil (?:tez|jor se) dhadak|धड़कन (?:तेज|बढ़)"
+      ],
+      "source_pages": [
+        10,
+        11
+      ],
+      "source": "ICMR_STW_2019_V1",
+      "reviewed": false,
+      "questions": [
+        {
+          "id": "danger",
+          "text": {
+            "en": "Have you fainted with the heartbeat changes?",
+            "hinglish": "Kya dhadkan mein badlav ke saath behoshi hui hai?",
+            "hi": "क्या धड़कन में बदलाव के साथ बेहोशी हुई है?"
+          },
+          "danger": true,
+          "options": [
+            {
+              "id": "yes",
+              "label": {
+                "en": "Yes",
+                "hinglish": "Haan",
+                "hi": "हाँ"
+              }
+            },
+            {
+              "id": "no",
+              "label": {
+                "en": "No",
+                "hinglish": "Nahi",
+                "hi": "नहीं"
+              }
+            },
+            {
+              "id": "unsure",
+              "label": {
+                "en": "Not sure",
+                "hinglish": "Pata nahi",
+                "hi": "पता नहीं"
+              }
+            }
+          ]
+        },
+        {
+          "id": "detail",
+          "text": {
+            "en": "Is this a new change or happening more often than usual?",
+            "hinglish": "Kya yeh badlav naya hai ya pehle se zyada ho raha hai?",
+            "hi": "क्या यह बदलाव नया है या पहले से ज़्यादा हो रहा है?"
+          },
+          "danger": false,
+          "options": [
+            {
+              "id": "yes",
+              "label": {
+                "en": "Yes",
+                "hinglish": "Haan",
+                "hi": "हाँ"
+              }
+            },
+            {
+              "id": "no",
+              "label": {
+                "en": "No",
+                "hinglish": "Nahi",
+                "hi": "नहीं"
+              }
+            },
+            {
+              "id": "unsure",
+              "label": {
+                "en": "Not sure",
+                "hinglish": "Pata nahi",
+                "hi": "पता नहीं"
+              }
+            }
+          ]
+        }
+      ],
+      "rules": [
+        {
+          "when": {
+            "danger": [
+              "yes"
+            ]
+          },
+          "disposition": "emergency",
+          "care_type": "emergency_112",
+          "urgency": "emergency",
+          "why": {
+            "en": "You described a warning sign. Please get medical help now.",
+            "hinglish": "Aapne khatre ka lakshan bataya hai. Abhi medical madad lein.",
+            "hi": "आपने खतरे का लक्षण बताया है। अभी चिकित्सा सहायता लें।"
+          }
+        },
+        {
+          "when": {
+            "detail": [
+              "yes",
+              "no",
+              "unsure"
+            ]
+          },
+          "disposition": "urgent",
+          "care_type": "teleconsultation",
+          "urgency": "same_day",
+          "why": {
+            "en": "A doctor should review the heartbeat changes today and decide whether an in-person check is needed.",
+            "hinglish": "Aaj doctor dhadkan ke badlav ka assessment karke batayenge ki saamne se check karna chahiye ya nahi.",
+            "hi": "आज डॉक्टर धड़कन के बदलाव की जाँच करके बताएँगे कि सामने से परीक्षण की ज़रूरत है या नहीं।"
+          }
+        }
+      ]
+    },
+    {
+      "id": "stw_mood",
+      "title": {
+        "en": "Mood or sleep concern",
+        "hinglish": "Mann ya neend ki pareshani",
+        "hi": "मन या नींद की परेशानी"
+      },
+      "cues": [
+        "low mood|feeling (?:low|anxious)|mann? (?:bahut )?udaas|ghabrahat|neend nahi|मन उदास|घबराहट|नींद नहीं"
+      ],
+      "source_pages": [
+        53,
+        55,
+        57,
+        59
+      ],
+      "source": "ICMR_STW_2019_V1",
+      "reviewed": false,
+      "questions": [
+        {
+          "id": "danger",
+          "text": {
+            "en": "Are you at risk of hurting yourself right now?",
+            "hinglish": "Kya abhi aapko khud ko nuksan pahunchane ka khatra lag raha hai?",
+            "hi": "क्या अभी आपको खुद को नुकसान पहुँचाने का ख़तरा लग रहा है?"
+          },
+          "danger": true,
+          "options": [
+            {
+              "id": "yes",
+              "label": {
+                "en": "Yes",
+                "hinglish": "Haan",
+                "hi": "हाँ"
+              }
+            },
+            {
+              "id": "no",
+              "label": {
+                "en": "No",
+                "hinglish": "Nahi",
+                "hi": "नहीं"
+              }
+            },
+            {
+              "id": "unsure",
+              "label": {
+                "en": "Not sure",
+                "hinglish": "Pata nahi",
+                "hi": "पता नहीं"
+              }
+            }
+          ]
+        },
+        {
+          "id": "detail",
+          "text": {
+            "en": "Is this making daily activities or sleep difficult?",
+            "hinglish": "Kya isse roz ke kaam ya neend mein dikkat ho rahi hai?",
+            "hi": "क्या इससे रोज़ के काम या नींद में दिक्कत हो रही है?"
+          },
+          "danger": false,
+          "options": [
+            {
+              "id": "yes",
+              "label": {
+                "en": "Yes",
+                "hinglish": "Haan",
+                "hi": "हाँ"
+              }
+            },
+            {
+              "id": "no",
+              "label": {
+                "en": "No",
+                "hinglish": "Nahi",
+                "hi": "नहीं"
+              }
+            },
+            {
+              "id": "unsure",
+              "label": {
+                "en": "Not sure",
+                "hinglish": "Pata nahi",
+                "hi": "पता नहीं"
+              }
+            }
+          ]
+        }
+      ],
+      "rules": [
+        {
+          "when": {
+            "danger": [
+              "yes"
+            ]
+          },
+          "disposition": "emergency",
+          "care_type": "emergency_112",
+          "urgency": "emergency",
+          "why": {
+            "en": "You described a warning sign. Please get medical help now.",
+            "hinglish": "Aapne khatre ka lakshan bataya hai. Abhi medical madad lein.",
+            "hi": "आपने खतरे का लक्षण बताया है। अभी चिकित्सा सहायता लें।"
+          }
+        },
+        {
+          "when": {
+            "detail": [
+              "yes",
+              "no",
+              "unsure"
+            ]
+          },
+          "disposition": "urgent",
+          "care_type": "teleconsultation",
+          "urgency": "same_day",
+          "why": {
+            "en": "Thank you for sharing this. A doctor can listen and help you find suitable support today.",
+            "hinglish": "Yeh batane ke liye shukriya. Aaj doctor aapki baat sunkar sahi support dhoondhne mein madad kar sakte hain.",
+            "hi": "यह बताने के लिए धन्यवाद। आज डॉक्टर आपकी बात सुनकर सही सहायता ढूँढने में मदद कर सकते हैं।"
+          }
+        }
+      ]
+    },
+    {
+      "id": "stw_memory",
+      "title": {
+        "en": "Memory changes",
+        "hinglish": "Yaaddasht mein badlav",
+        "hi": "याददाश्त में बदलाव"
+      },
+      "cues": [
+        "memory (?:loss|problem)|keeps forgetting|baar baar bhool|yaaddasht|याददाश्त|बार बार भूल"
+      ],
+      "source_pages": [
+        31,
+        35
+      ],
+      "source": "ICMR_STW_2019_V1",
+      "reviewed": false,
+      "questions": [
+        {
+          "id": "danger",
+          "text": {
+            "en": "Has the person suddenly become confused or hard to wake?",
+            "hinglish": "Kya achanak uljhan hui hai ya unhe jagana mushkil ho raha hai?",
+            "hi": "क्या अचानक उलझन हुई है या उन्हें जगाना मुश्किल हो रहा है?"
+          },
+          "danger": true,
+          "options": [
+            {
+              "id": "yes",
+              "label": {
+                "en": "Yes",
+                "hinglish": "Haan",
+                "hi": "हाँ"
+              }
+            },
+            {
+              "id": "no",
+              "label": {
+                "en": "No",
+                "hinglish": "Nahi",
+                "hi": "नहीं"
+              }
+            },
+            {
+              "id": "unsure",
+              "label": {
+                "en": "Not sure",
+                "hinglish": "Pata nahi",
+                "hi": "पता नहीं"
+              }
+            }
+          ]
+        },
+        {
+          "id": "detail",
+          "text": {
+            "en": "Is the memory change affecting everyday activities?",
+            "hinglish": "Kya yaaddasht ka badlav roz ke kaam par asar daal raha hai?",
+            "hi": "क्या याददाश्त का बदलाव रोज़ के काम पर असर डाल रहा है?"
+          },
+          "danger": false,
+          "options": [
+            {
+              "id": "yes",
+              "label": {
+                "en": "Yes",
+                "hinglish": "Haan",
+                "hi": "हाँ"
+              }
+            },
+            {
+              "id": "no",
+              "label": {
+                "en": "No",
+                "hinglish": "Nahi",
+                "hi": "नहीं"
+              }
+            },
+            {
+              "id": "unsure",
+              "label": {
+                "en": "Not sure",
+                "hinglish": "Pata nahi",
+                "hi": "पता नहीं"
+              }
+            }
+          ]
+        }
+      ],
+      "rules": [
+        {
+          "when": {
+            "danger": [
+              "yes"
+            ]
+          },
+          "disposition": "emergency",
+          "care_type": "emergency_112",
+          "urgency": "emergency",
+          "why": {
+            "en": "You described a warning sign. Please get medical help now.",
+            "hinglish": "Aapne khatre ka lakshan bataya hai. Abhi medical madad lein.",
+            "hi": "आपने खतरे का लक्षण बताया है। अभी चिकित्सा सहायता लें।"
+          }
+        },
+        {
+          "when": {
+            "detail": [
+              "yes",
+              "no",
+              "unsure"
+            ]
+          },
+          "disposition": "urgent",
+          "care_type": "teleconsultation",
+          "urgency": "same_day",
+          "why": {
+            "en": "A doctor can review the memory changes and help you and your family plan the next step.",
+            "hinglish": "Doctor yaaddasht ke badlav ko samajhkar aap aur parivar ko agla kadam bata sakte hain.",
+            "hi": "डॉक्टर याददाश्त के बदलाव को समझकर आपको और परिवार को अगला कदम बता सकते हैं।"
+          }
+        }
+      ]
+    },
+    {
+      "id": "stw_periods",
+      "title": {
+        "en": "Period concerns",
+        "hinglish": "Period ki pareshani",
+        "hi": "माहवारी की परेशानी"
+      },
+      "cues": [
+        "heavy periods|periods (?:bahut |zyada)|period (?:problem|late)|periods late|पीरियड.*(?:ज्यादा|परेशानी|देर)|माहवारी.*(?:दिक्कत|ज्यादा)"
+      ],
+      "source_pages": [
+        37,
+        39,
+        41,
+        42
+      ],
+      "source": "ICMR_STW_2019_V1",
+      "reviewed": false,
+      "questions": [
+        {
+          "id": "danger",
+          "text": {
+            "en": "Is there heavy ongoing bleeding with faintness or feeling very unwell?",
+            "hinglish": "Kya abhi bahut khoon beh raha hai aur behoshi jaisa ya bahut bura lag raha hai?",
+            "hi": "क्या अभी बहुत खून बह रहा है और बेहोशी जैसा या बहुत बुरा लग रहा है?"
+          },
+          "danger": true,
+          "options": [
+            {
+              "id": "yes",
+              "label": {
+                "en": "Yes",
+                "hinglish": "Haan",
+                "hi": "हाँ"
+              }
+            },
+            {
+              "id": "no",
+              "label": {
+                "en": "No",
+                "hinglish": "Nahi",
+                "hi": "नहीं"
+              }
+            },
+            {
+              "id": "unsure",
+              "label": {
+                "en": "Not sure",
+                "hinglish": "Pata nahi",
+                "hi": "पता नहीं"
+              }
+            }
+          ]
+        },
+        {
+          "id": "detail",
+          "text": {
+            "en": "Could you be pregnant, or have you recently given birth?",
+            "hinglish": "Kya pregnancy ho sakti hai ya haal mein delivery hui hai?",
+            "hi": "क्या गर्भावस्था की संभावना है या हाल में प्रसव हुआ है?"
+          },
+          "danger": false,
+          "options": [
+            {
+              "id": "yes",
+              "label": {
+                "en": "Yes",
+                "hinglish": "Haan",
+                "hi": "हाँ"
+              }
+            },
+            {
+              "id": "no",
+              "label": {
+                "en": "No",
+                "hinglish": "Nahi",
+                "hi": "नहीं"
+              }
+            },
+            {
+              "id": "unsure",
+              "label": {
+                "en": "Not sure",
+                "hinglish": "Pata nahi",
+                "hi": "पता नहीं"
+              }
+            }
+          ]
+        }
+      ],
+      "rules": [
+        {
+          "when": {
+            "danger": [
+              "yes"
+            ]
+          },
+          "disposition": "emergency",
+          "care_type": "emergency_112",
+          "urgency": "emergency",
+          "why": {
+            "en": "You described a warning sign. Please get medical help now.",
+            "hinglish": "Aapne khatre ka lakshan bataya hai. Abhi medical madad lein.",
+            "hi": "आपने खतरे का लक्षण बताया है। अभी चिकित्सा सहायता लें।"
+          }
+        },
+        {
+          "when": {
+            "detail": [
+              "yes",
+              "no",
+              "unsure"
+            ]
+          },
+          "disposition": "urgent",
+          "care_type": "teleconsultation",
+          "urgency": "same_day",
+          "why": {
+            "en": "A doctor can assess the period concern today and guide appropriate women's health care.",
+            "hinglish": "Aaj doctor period ki pareshani ka assessment karke sahi women's health care bata sakte hain.",
+            "hi": "आज डॉक्टर माहवारी की परेशानी की जाँच करके सही महिला स्वास्थ्य देखभाल बता सकते हैं।"
+          }
+        }
+      ]
+    },
+    {
+      "id": "stw_scrotal",
+      "title": {
+        "en": "Scrotal pain or swelling",
+        "hinglish": "Andkosh ki taklif",
+        "hi": "अंडकोष की तकलीफ़"
+      },
+      "cues": [
+        "testic(?:le|ular) (?:pain|swelling)",
+        "scrotal (?:pain|swelling)",
+        "andkosh",
+        "अंडकोष"
+      ],
+      "source_pages": [
+        70
+      ],
+      "source": "ICMR_STW_2019_V1",
+      "reviewed": false,
+      "questions": [
+        {
+          "id": "danger",
+          "text": {
+            "en": "Did severe testicular pain or swelling start suddenly?",
+            "hinglish": "Kya andkosh mein tez dard ya sujan achanak shuru hui?",
+            "hi": "क्या अंडकोष में तेज़ दर्द या सूजन अचानक शुरू हुई?"
+          },
+          "danger": true,
+          "options": [
+            {
+              "id": "yes",
+              "label": {
+                "en": "Yes",
+                "hinglish": "Haan",
+                "hi": "हाँ"
+              }
+            },
+            {
+              "id": "no",
+              "label": {
+                "en": "No",
+                "hinglish": "Nahi",
+                "hi": "नहीं"
+              }
+            },
+            {
+              "id": "unsure",
+              "label": {
+                "en": "Not sure",
+                "hinglish": "Pata nahi",
+                "hi": "पता नहीं"
+              }
+            }
+          ]
+        },
+        {
+          "id": "detail",
+          "text": {
+            "en": "Is there fever or a recent injury with it?",
+            "hinglish": "Kya iske saath bukhar ya haal ki chot hai?",
+            "hi": "क्या इसके साथ बुखार या हाल की चोट है?"
+          },
+          "danger": false,
+          "options": [
+            {
+              "id": "yes",
+              "label": {
+                "en": "Yes",
+                "hinglish": "Haan",
+                "hi": "हाँ"
+              }
+            },
+            {
+              "id": "no",
+              "label": {
+                "en": "No",
+                "hinglish": "Nahi",
+                "hi": "नहीं"
+              }
+            },
+            {
+              "id": "unsure",
+              "label": {
+                "en": "Not sure",
+                "hinglish": "Pata nahi",
+                "hi": "पता नहीं"
+              }
+            }
+          ]
+        }
+      ],
+      "rules": [
+        {
+          "when": {
+            "danger": [
+              "yes"
+            ]
+          },
+          "disposition": "emergency",
+          "care_type": "emergency_112",
+          "urgency": "emergency",
+          "why": {
+            "en": "You described a warning sign. Please get medical help now.",
+            "hinglish": "Aapne khatre ka lakshan bataya hai. Abhi medical madad lein.",
+            "hi": "आपने खतरे का लक्षण बताया है। अभी चिकित्सा सहायता लें।"
+          }
+        },
+        {
+          "when": {
+            "detail": [
+              "yes",
+              "no",
+              "unsure"
+            ]
+          },
+          "disposition": "urgent",
+          "care_type": "teleconsultation",
+          "urgency": "same_day",
+          "why": {
+            "en": "A doctor should assess the pain or swelling today and guide an in-person examination.",
+            "hinglish": "Aaj doctor dard ya sujan ka assessment karke saamne se check karne ka agla kadam bata sakte hain.",
+            "hi": "आज डॉक्टर दर्द या सूजन की जाँच करके सामने से परीक्षण का अगला कदम बता सकते हैं।"
+          }
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "input": "dard hora hai",
+      "expect": "ask_location",
+      "note": "Generic symptom: do not assume chest pain."
+    },
+    {
+      "input": "peshab mein jalan ho rahi hai",
+      "expect": "stw_urinary",
+      "note": "Recognise urinary symptoms; ask ability to pass urine."
+    },
+    {
+      "input": "mere kaan se paani aa raha hai",
+      "expect": "stw_ear",
+      "note": "Recognise ear discharge; ask about hearing change."
+    },
+    {
+      "input": "gale mein kharash hai",
+      "expect": "stw_throat",
+      "note": "Assess swallowing rather than inventing chest symptoms."
+    },
+    {
+      "input": "pairon mein sujan hai",
+      "expect": "stw_swelling",
+      "note": "Recognise swelling; ask a relevant breathing question."
+    },
+    {
+      "input": "mann udaas hai aur neend nahi aa rahi",
+      "expect": "stw_mood",
+      "note": "Validate feelings and check current safety without diagnosing."
+    },
+    {
+      "input": "papa baar baar bhool rahe hain",
+      "expect": "stw_memory",
+      "note": "Distinguish sudden confusion from gradual memory change."
+    },
+    {
+      "input": "periods bahut zyada aa rahe hain",
+      "expect": "stw_periods",
+      "note": "Clarify bleeding severity and relevant maternity context."
+    },
+    {
+      "input": "baccha bolna nahi seekha",
+      "expect": "ask_child_age",
+      "note": "Development concern warrants assessment, not a guessed diagnosis."
+    },
+    {
+      "input": "dil tez dhadak raha hai",
+      "expect": "stw_palpitations",
+      "note": "Heartbeat change alone does not establish a heart attack."
+    },
+    {
+      "input": "papa ko CKD hai, reports doctor ko dikhani hain",
+      "expect": "teleconsultation",
+      "note": "Explicit report review takes precedence over symptom intake."
+    },
+    {
+      "input": "doctor ne catheter change bola hai, ghar pe nurse chahiye",
+      "expect": "home_nursing",
+      "note": "Planned nursing task, distinct from acute urinary retention."
+    },
+    {
+      "input": "ghar pe urine test ka sample dena hai",
+      "expect": "lab_test_home",
+      "note": "Explicit sample collection; do not diagnose UTI."
+    },
+    {
+      "input": "routine pregnancy checkup ke liye doctor se baat karni hai",
+      "expect": "teleconsultation",
+      "note": "Planned consultation is not an emergency."
+    },
+    {
+      "input": "I had a stroke last year and need a routine doctor follow-up",
+      "expect": "teleconsultation",
+      "note": "Historical diagnosis does not establish current stroke signs."
+    },
+    {
+      "input": "papa ko achanak seene mein dard hai aur saans nahi aa rahi",
+      "expect": "emergency_112",
+      "note": "Actual current red flags bypass further questions and matching."
+    },
+    {
+      "input": "idk",
+      "history": [
+        {
+          "role": "user",
+          "content": "peshab mein jalan hai"
+        },
+        {
+          "role": "assistant",
+          "content": "Kya achanak peshab bilkul band ho gaya hai?"
+        }
+      ],
+      "expect": "teleconsultation",
+      "note": "Unknown danger answer needs same-day assessment, not invented confirmation."
+    },
+    {
+      "input": "write a program about kidney stones",
+      "expect": "general",
+      "note": "Educational/software task is not a patient symptom episode."
+    }
+  ]
+}

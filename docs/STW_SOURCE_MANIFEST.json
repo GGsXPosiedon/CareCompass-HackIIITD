@@ -1,0 +1,787 @@
+{
+  "source": {
+    "id": "ICMR_STW_2019_V1",
+    "file": "STW_Manual_v1.pdf",
+    "title": "Standard Treatment Workflows of India, 2019 Edition, Volume I",
+    "publisher": "Indian Council of Medical Research / Department of Health Research, MoHFW, India",
+    "pdf_pages": 75
+  },
+  "source_file_sha256": "32b024a0a00dd42bba50d58b505242db114026d0ec3e403d4e87e11f647985be",
+  "extraction": "pypdf; diagram layout can affect reading order; reference blocks and links are unverified printed source data",
+  "clinical_topic_count": 53,
+  "pages": [
+    {
+      "pdf_page": 1,
+      "clinical_topic": null,
+      "text_characters": 97,
+      "extracted_text_sha256": "c60440c1fe06591c8c57f820337ebeab96f1c93296d6b6aab66e3d4e2fd2c5e6",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 2,
+      "clinical_topic": null,
+      "text_characters": 437,
+      "extracted_text_sha256": "aa974107ae70919cba0bf8efe37f87e26dd24a7d48287f2664da0f36bafea7d5",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 3,
+      "clinical_topic": null,
+      "text_characters": 0,
+      "extracted_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 4,
+      "clinical_topic": null,
+      "text_characters": 750,
+      "extracted_text_sha256": "035520eda17e1406f9c4456639a7d892436df7bbcc4a7b79b6be8613751da3ef",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 5,
+      "clinical_topic": null,
+      "text_characters": 0,
+      "extracted_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 6,
+      "clinical_topic": null,
+      "text_characters": 0,
+      "extracted_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 7,
+      "clinical_topic": null,
+      "text_characters": 1302,
+      "extracted_text_sha256": "c0538022fdec5cadb7eeb6bb18685d8956ee1316f4e364e7b8356d45f36ab740",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 8,
+      "clinical_topic": null,
+      "text_characters": 1466,
+      "extracted_text_sha256": "0a664d305772eceb7ef3927e05c13d4cd1ac2aac0f408fb502b7800aa9897a15",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 9,
+      "clinical_topic": null,
+      "text_characters": 10,
+      "extracted_text_sha256": "730234099535398de34b598eeaccb0f2b5ff42811ecaf7015c3cc8fc7fc16069",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 10,
+      "clinical_topic": "Atrial fibrillation",
+      "text_characters": 5677,
+      "extracted_text_sha256": "c7ff111d223a6cf023cba43a8bb33dc40f13d0ce7607da12c843ee2907b5a289",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 11,
+      "clinical_topic": "Bradyarrhythmias",
+      "text_characters": 4501,
+      "extracted_text_sha256": "62473884464ab2ed920366d6ec19664aeb66d6fc895a4f78673c9b2474b8088b",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 12,
+      "clinical_topic": "Heart failure",
+      "text_characters": 7462,
+      "extracted_text_sha256": "04e2d4c21971989029e125f1051d62d8597b64e4f2dae695996a329b43a1d405",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": "1. Management Protocols for Chronic Heart Failure in India. Mishra S, Mohan JC, Nair T et al. Indian Heart J.2018;70:105-127, \n2. ESC Guidelines for the diagnosis and treatment of acute and chronic heart failure: The Task Force for the diagnosis and treatment of acute and chronic heart failure of the European Society of Cardiology (ESC). \nDeveloped with the special contribution of the Heart Failure Association (HFA) of the ESC. Ponikowski P, Voors AA. Anker SD et al. European Heart Journal. 2016;37:2129–2200\n3. Chronic heart failure in adults: diagnosis and management. NICE guideline [NG106] Published date: September 2018 \n4. 2013 ACCF/AHA Guideline for the Management of Heart Failure. A Report of the American College of Cardiology Foundation/American Heart Association Task Force on Practice Guidelines. Yancy CW, Jessup M, \nBozkurt B. J Am Coll Cardiol. 2013;62-16: e150-e210\n      KEEP A HIGH THRESHOLD FOR INVASIVE PROCEDURES"
+    },
+    {
+      "pdf_page": 13,
+      "clinical_topic": "Stable angina",
+      "text_characters": 5879,
+      "extracted_text_sha256": "11a0f5452a202127fbb0de9c703bf2ea598bd98f4c4493e437fe7c0bfd59b028",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 14,
+      "clinical_topic": "ST elevation myocardial infarction",
+      "text_characters": 6521,
+      "extracted_text_sha256": "987047f8fb24c8ed7aa0bd741e59eb1395f2c4952de03bf2972fa0f14631b66a",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 15,
+      "clinical_topic": "Unstable angina / NSTEMI",
+      "text_characters": 8166,
+      "extracted_text_sha256": "4f016f98e5daf97a23ae7d41902950f7bbd4cdfb3959af0c5a9b46218ef84d13",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 16,
+      "clinical_topic": null,
+      "text_characters": 3,
+      "extracted_text_sha256": "1f635e128bede643122c57139103060bc578ac38d2cddbeb95547caeb3da56a7",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 17,
+      "clinical_topic": "Acute rhinosinusitis",
+      "text_characters": 5357,
+      "extracted_text_sha256": "44fcac12e454d1643e47d3049a213ec2866c7c7e0ac1472e47f2953a655bc66b",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": "1. Indian Council of Medical Research. Treatment Guidelines for Antimicrobial Use in Common Syndromes. New Delhi, India, 2017.\n 2. Fokkens W, Lund V, Mullol J, et al. EPOS 2012: European Position Paper on Rhinosinusitis and Nasal Polyps 2012. Rhinol 2012;50(Suppl 23):1-298.\n3. Sharma V, Saxena RK, Sharma S, Sharma G, Dhasmana DC, Mishra KC. Comparative Eﬃcacy and safety of various anti-microbials in patients of acute rhinosinusitis at tertiary-care hospital in Uttarakhand. Indian \nJour Otol Head & Neck Surg, 2011, Oct ; 63 (4): 364 - 9 \n4. Blomgren K, Eliander L, Hytönen M, Ylinen S, Laitio M, Virkkula P. How patients experience antral irrigation. Clin Med Insights Ear Nose Throat. 2015;8:13-7.\nCT: Computerized Tomogram\nPHC: Primary Health Center\nDNS: Deviated Nasal Septum\nLPR: Laryngo Pharyngeal Reﬂux"
+    },
+    {
+      "pdf_page": 18,
+      "clinical_topic": "Chronic rhinosinusitis",
+      "text_characters": 5067,
+      "extracted_text_sha256": "3f7243fbe08ab63101465aeed430bfab0c8d6ca015032e3531ec36b273ae79b4",
+      "printed_links": [],
+      "incomplete_link_fragments": [
+        "https://www.dovemed.c"
+      ],
+      "printed_reference_block": "• Fokkens W, Lund V, Mullol J, et al. EPOS 2012: European Position Paper on Rhinosinusitis and Nasal Polyps 2012. Rhinol 2012;50(Suppl 23):1-298.     \n• Cain RB, Lal D. Update on the management of chronic rhinosinusitis. Infect Drug Resist. 2013;6:1-14. \n• Ah-See KL, MacKenzie JM, As-See KW. Management of chronicrhinosinusitis. BMJ. 2012;345:e7054. \n• Slovick A, Long J, Hopkins C: Updates in the management of chronic rhinosinusitis. Clin Pract. 2014;11(6):649–63. 10.2217/cpr.14.71 \n  CT: Computerized Tomogram"
+    },
+    {
+      "pdf_page": 19,
+      "clinical_topic": "Nosebleed",
+      "text_characters": 4109,
+      "extracted_text_sha256": "96847fdd09aad1afb6097d4870504a88973eb6c461a374b81d0fd8f323e3ce3c",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 20,
+      "clinical_topic": "Hearing impairment in children",
+      "text_characters": 6611,
+      "extracted_text_sha256": "2f127f87165f568f952471c4826dfc9976b2c68769ec453fa66d6b277b5f17e2",
+      "printed_links": [
+        "http://disabilityaffairs.gov.in/content/page/adip-scheme.php"
+      ],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": "• Indian Council of Medical Research. Audiological evaluation protocols. Task force project on prevalence and etiology of hearing impairment, New Delhi. 2015   \n• Ramesh A, Jagdish C, Suman Rao PN et al. Low cost calibrated mechanical noisemaker for hearing screening in resource constrained settings. Indian Journal of Medical Research. 2012, 135: 170 - 176.\n•  Rathna.B.Shetty. Manual for training parents of hearing impaired children (Kannada : Kivudu makkalige kalisuva vidhana). Parents association of deaf children. Mysore.   \n•  Chapal Mkhasnabis, Karen Heinicke Motsch (eds.) Towards community based inclusive development. World Health Organisation: 2010.       \n• Margaret Lavina Fernandes. Guidelines to establish a community based rehabilitation program for hearing impaired children in medically underserved areas. St. John’s Medical Journal, 2018 (1), 5 : 14 - 27 \n• ADIP Guidelines : http:/ /disabilityaﬀairs.gov.in/content/page/adip-scheme.php\nFA : Friedreich Ataxia\nNF : NeuroFibromatosis\nOME : Otitis Media with Effusion\nADIP : Assistance to disabled \npersons for purchase/ ﬁtting of \naids and appliances"
+    },
+    {
+      "pdf_page": 21,
+      "clinical_topic": "Neck space infection",
+      "text_characters": 5802,
+      "extracted_text_sha256": "d3014ca7337a8278b38f2a398709e204a5537f326d5729bf2ab27c159fbf96dc",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": "1. Smith II JL, Hsu JM, Chang J (2006) Predicting deep neck space abscess using computed tomography. Am J Otolaryngol 27: 244-247.\n2. Mayor GP, Millán JMS, Martínez VA (2001) Is conservative treatment of deep neck space infections appropriate? Head And Neck 23: 126-133.\n3. Bottin R, Marioni G, Rinaldi R, Boninsegna M, Salvadori L, et al. (2003) Deep neck infection: A present day complication. A retrospective review of 83 cases. Eur Arch Otorhinolaryngol 260: 576-579.\nCT – Computerized Tomography MRI – Magnetic Resonance Imaging\nRapidly progressive bacterial infections which spread along facial planes and spaces of head and neck region. They may be fatal unless \nemergently treated. Most of these infections are secondary to dental infection."
+    },
+    {
+      "pdf_page": 22,
+      "clinical_topic": "Otorrhoea",
+      "text_characters": 6313,
+      "extracted_text_sha256": "527caafa44ab1fd4a83a55526c01f976725866323aca0e2ccf460910ff8f1b0e",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": "• Otitis media (acute): antimicrobial prescribing. NICE guideline. Published: 28 March 2018. nice.org.uk/guidance/ng91\n• Primary ear and hearing care training resource, Student’s workbook: intermediate level. Chronic disease prevention and management. WHO 2006\n• Primary ear and hearing care training resource, advanced level. Chronic disease prevention and management. WHO 2006\n• Treatment Guidelines for antimicrobial use in common syndromes. ICMR."
+    },
+    {
+      "pdf_page": 23,
+      "clinical_topic": "Pharyngitis and sore throat",
+      "text_characters": 5146,
+      "extracted_text_sha256": "0404f921d289aa333e9694a33be8a654ad28b756915dea774cb001558175c0a5",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": "Cochrane Database Syst Rev. 21. CD004872."
+    },
+    {
+      "pdf_page": 24,
+      "clinical_topic": null,
+      "text_characters": 10,
+      "extracted_text_sha256": "9ded10d027e98eb74c598a457e3c3fd7e581c89c7bef86d78360b29551a6e48e",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 25,
+      "clinical_topic": "Acute kidney injury",
+      "text_characters": 5082,
+      "extracted_text_sha256": "a46b0bd3207b75650e230f2c22e07f19bf6b35006186e02981a6d58021cdfabf",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 26,
+      "clinical_topic": "Chronic kidney disease",
+      "text_characters": 6307,
+      "extracted_text_sha256": "d23c225af00d371e7e47440673472fe53c1f3d0bb274af4da2e94a10c36f3456",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 27,
+      "clinical_topic": "Glomerulonephritis",
+      "text_characters": 5566,
+      "extracted_text_sha256": "f6df2f181b0089872898951525f0a2583754a0717c251e333b0d1117c5ec4f2c",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 28,
+      "clinical_topic": "Urinary tract infection",
+      "text_characters": 7094,
+      "extracted_text_sha256": "1e97b4a92b3d37ce40f4cd1321aab0b38ce97aaadba00f4a3c9ea0ea45d6ea9c",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 29,
+      "clinical_topic": null,
+      "text_characters": 9,
+      "extracted_text_sha256": "e60ba23ef5f487f3533bc4b550a5f472ff037bd2369b958744476d52d195dc12",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 30,
+      "clinical_topic": "Acute paralysis",
+      "text_characters": 4262,
+      "extracted_text_sha256": "ab1dea3e94effd26cf3ae41f670913b9460f89b2168707de3bc126dbaa0cfa03",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 31,
+      "clinical_topic": "Dementia",
+      "text_characters": 5166,
+      "extracted_text_sha256": "4e8c347a069bb224e494ae19500e75602b479fe52ad4ffcfc5a56eac7350daab",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 32,
+      "clinical_topic": "Epilepsy",
+      "text_characters": 7528,
+      "extracted_text_sha256": "66dace4c08a1540ca3ecd0cd4d64ce6d1fceb12b82fd92b424130d51685d49d4",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 33,
+      "clinical_topic": "Headache",
+      "text_characters": 5589,
+      "extracted_text_sha256": "a8ba730a280c3bd4ea455f70823e904aac4c4ec3141689cb39d008a6dd6667c5",
+      "printed_links": [
+        "https://www.uptodate.com/contents/evaluation-of-headache-in-adults"
+      ],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": "1.  Hainer BL, Matheson EM. Approach to acute headache in adults. American family physician. 2013 May 15;87(10).\n2.  https:/ /www.uptodate.com/contents/evaluation-of-headache-in-adults"
+    },
+    {
+      "pdf_page": 34,
+      "clinical_topic": "Neuroinfections",
+      "text_characters": 5165,
+      "extracted_text_sha256": "04fc5701c1b82b329aa84af99d95e15d4c8176be78ff771e3631b6947f880afe",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 35,
+      "clinical_topic": "Stroke",
+      "text_characters": 5349,
+      "extracted_text_sha256": "5df26620f81bf6ed6b97b7bfecade8519a319464523b54a4c66f1e7f6b0ebba3",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 36,
+      "clinical_topic": null,
+      "text_characters": 3,
+      "extracted_text_sha256": "15c4ad2d6479ce519aa9bb83d1804101b665707492fc70b4cfaae2c86ce3f6aa",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 37,
+      "clinical_topic": "Antenatal management",
+      "text_characters": 6494,
+      "extracted_text_sha256": "4b5be800a6dd0107d9fc7c7d794027d3f045584cda0724e927b2c1f4ef24287c",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 38,
+      "clinical_topic": "Dilatation and curettage",
+      "text_characters": 4304,
+      "extracted_text_sha256": "61103a12214f4c0735a495d6a7a9685d6f770429cd9b8e42eeb89d6441bfc169",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 39,
+      "clinical_topic": "Heavy menstrual bleeding",
+      "text_characters": 4725,
+      "extracted_text_sha256": "114b9a878b81cf9afd7d33cbfa7e2cbbf4edb4709b360479c0060647db62b2b9",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 40,
+      "clinical_topic": "Hysterectomy",
+      "text_characters": 4064,
+      "extracted_text_sha256": "36c96b03895041a682c724698565efe32ad593d4364a0ca6eec00f4b03b0182e",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 41,
+      "clinical_topic": "Postpartum haemorrhage",
+      "text_characters": 5368,
+      "extracted_text_sha256": "32adf3e4ef8b1ddb078400ea88f0340f8cf51f54123e99ad37cbdd8e18da37d1",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 42,
+      "clinical_topic": "Uterine fibroids and polyps",
+      "text_characters": 2752,
+      "extracted_text_sha256": "d2fe73229aac415b3e30dda8c2119915550c321d3f7008b1ca91c64dec7827e5",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 43,
+      "clinical_topic": null,
+      "text_characters": 11,
+      "extracted_text_sha256": "e999d6d694a2fe3c958e6132ce347028aee334c73d421b17202b96af27876e0e",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 44,
+      "clinical_topic": "Acute encephalitis syndrome in children",
+      "text_characters": 7822,
+      "extracted_text_sha256": "0a39639dd9873fce4672f8fe4b578f02a1b8d0d695618bf0dace6668743b2d58",
+      "printed_links": [],
+      "incomplete_link_fragments": [
+        "http://www"
+      ],
+      "printed_reference_block": "1. World Health Oraganisation. Acute Encephalitis Syndrome. Japanese encephalitis surveillance standards.January 2006. From WHO-recommended standards for surveillance of selected vaccine-preventable diseases. \nWHO/V&B/03.01. Available from: http:/ /www. who. int/vaccines-documents/ DocsPDF06/843.pdf\n2. National Program for Prevention and Control of Japanese Encephalitis/Acute Encephalitis Syndrome 2014. Government of India Ministry of Health & Family Welfare Directorate General of Health Services National Vector \nBorne Disease Control Programme.\n3. Sharma S, Mishra D, Aneja S, Kumar R, Jain A, Vashishtha VM. Consensus guidelines on evaluation and management of suspected acute viral encephalitis in children in India. Indian Pediatr. Nov 2012;49(11):897-910.\n4. Sankhyan N, Vykunta Raju KN, Sharma S, Gulati S. Management of raised intracranial pressure. Indian J Pediatr. 2010 Dec;77(12):1409-16.\n Acute onset of fever \n( </= 5-7 days) with \naltered sensorium \nand/or new onset of \nseizures \n(excluding simple \nfebrile seizures)"
+    },
+    {
+      "pdf_page": 45,
+      "clinical_topic": "Acute diarrhoea",
+      "text_characters": 8867,
+      "extracted_text_sha256": "8fa751f43813a8c6911d33768bb44201760adaebdb4199e5552c84df87b88d3c",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 46,
+      "clinical_topic": "Dengue fever",
+      "text_characters": 4333,
+      "extracted_text_sha256": "0f6567cebc97cc2c4bd1a50d478d54c8fbb21e9d077b33eca2a867821266a317",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 47,
+      "clinical_topic": "Fever in children",
+      "text_characters": 7136,
+      "extracted_text_sha256": "6c198254cc6e26fbe21a51fbd80529730df4062be602fb2a3e6404184a73aeb3",
+      "printed_links": [
+        "http://apps.who.int/iris/bitstream/handle/10665/104772/9789241506823_Module-5_eng.pdf;jsessionid=942F89F89671BA396EC7F46C9B5C1158?sequence=7"
+      ],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": "1. World Health Organization. Integrated Management of Childhood Illness: distance learning course. \n    http:/ /apps.who.int/iris/bitstream/handle/10665/104772/9789241506823_Module-5_eng.pdf;jsessionid=942F89F89671BA396EC7F46C9B5C1158?sequence=7\n2. Mahajan P, et al. Consensus Guidelines on Evaluation and Management of the Febrile Child Presenting to the Emergency Department in India. Indian Pediatr 2017; 54: 652-60.\n3. World Health Organization 2015. Government of India National Guidelines for Clinical Management of Dengue Fever. \n4. Kliegman RM (ed). Nelson Textbook of Pediatrics 20th edition, 2016.\n>7 DAYS AND LOCALIZING"
+    },
+    {
+      "pdf_page": 48,
+      "clinical_topic": "Sepsis and septic shock in children",
+      "text_characters": 6163,
+      "extracted_text_sha256": "e2ea800b0a24e322b0c4c10e516f3e22b75ef3290d3d8b9fbdbf8d6d691163a2",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 49,
+      "clinical_topic": "Severe acute malnutrition with complications",
+      "text_characters": 7738,
+      "extracted_text_sha256": "21943e66bbb45b66336a9f861d9e9239559c529e57fbe8a8e7e9ef93e9cba3e2",
+      "printed_links": [
+        "http://nhm.gov.in/nrhm-components/rmnch-a/child-health-immunization/child-health/guidelines.html",
+        "http://www.who.int/childgrowth/standards/en/",
+        "http://www.who.int/elena/titles/oedema_sam/en/"
+      ],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": "1. The WHO growth standards. Available at http://www.who.int/childgrowth/standards/en/\n2. Management of severe acute malnutrition in children 6–59 months of age with oedema. Available at http://www.who.int/elena/titles/oedema_sam/en/\n3. Operational guidelines on Facility Based Management of Children with Severe Acute Malnutrition.Available at \nhttp://nhm.gov.in/nrhm-components/rmnch-a/child-health-immunization/child-health/guidelines.html\n4.  Kumar R, Kumar P, Aneja S, Kumar V, Rehan HS. Safety and Efﬁcacy of Low-osmolarity ORS vs. Modiﬁed Rehydration Solution for Malnourished Children \nfor Treatment of Children with Severe Acute Malnutrition and Diarrhea: A Randomized Controlled Trial. J Trop Pediatr. 2015 Dec;61(6):435-41."
+    },
+    {
+      "pdf_page": 50,
+      "clinical_topic": "Severe pneumonia in children",
+      "text_characters": 7332,
+      "extracted_text_sha256": "2794de583ba0cb6dccee8c9c349880dcda2da0a772f723c6b64d5c5c6968928b",
+      "printed_links": [
+        "http://apps.who.int/iris/bitstream/handle/10665/137319/9789241507813_eng.pdf;jsessionid=8BF6F1C94BD7BA81B8F464D4CBA40249?sequence=1",
+        "http://www.who.int/maternal_child_adolescent/documents/IMCI_chartbooklet/en/"
+      ],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": "1. Integrated Management of Childhood Illness (IMCI) (revised). Geneva, World Health Organization/The United Nation Children’s Fund (UNICEF), 2014 \n(http:/ /www.who.int/maternal_child_adolescent/documents/IMCI_chartbooklet/en/). \n2. Revised WHO classiﬁcation and treatment of childhood pneumonia at health facilities. \nhttp:/ /apps.who.int/iris/bitstream/handle/10665/137319/9789241507813_eng.pdf;jsessionid=8BF6F1C94BD7BA81B8F464D4CBA40249?sequence=1\n3. Bradley JS, Byington CL, Shah SS, et al. Executive summary: the management of community-acquired pneumonia in infants and children older than 3 months of age: clinical practice guidelines by the Pediatric \nInfectious Diseases Society and the Infectious Diseases Society of America. Clin Infect Dis 2011;53:617-30.\n4. Lodha R, Kabra SK, Pandey RM. Antibiotics for community-acquired pneumonia in children. Cochrane Database Syst Rev. 2013 Jun 4;(6):CD004874\n      KEEP A HIGH THRESHOLD FOR INVASIVE PROCEDURES\n+-"
+    },
+    {
+      "pdf_page": 51,
+      "clinical_topic": null,
+      "text_characters": 10,
+      "extracted_text_sha256": "5ce187a70197911bab6ffbf4bb911b7d4a1b825dee12900b54c243498d5e8a1f",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 52,
+      "clinical_topic": "Alcohol use disorders",
+      "text_characters": 6575,
+      "extracted_text_sha256": "13e09d4109abd3ffce41cf81f0f1e19191436b7f84093f2648e99899fede744e",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 53,
+      "clinical_topic": "Anxiety disorders",
+      "text_characters": 6149,
+      "extracted_text_sha256": "6e3978e6f8230576c9376d0752265c91128ca56c3ca2cab56de6e92022a189da",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 54,
+      "clinical_topic": "Childhood behavioural disorders",
+      "text_characters": 8483,
+      "extracted_text_sha256": "5c223a162651cd238915d64ed265f4472c477b43834a492888a4f1d67a169d11",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": "Alcohol and substance abuse\n• Analyse the problem behaviors and understand patterns : time of occurance, triggers, \nduration and consequencies\n• Engage with child in mutually enjoyable, pleasurable activities (playing games, \ndiscussing interesting things or doing activities together)\n• Set clear do’s and don’ts and explain to child in clear, simple, short instructions the \nconsequencies (like withholding privileges following misbehavior; use star-charting \n(contingency management) and rewards based on number of stars earned\n• In children with ADHD, develop clear daily routines, supervise activities and appreciate \non completion of taks\n• Limit screen time/ monitor use of electronic devices"
+    },
+    {
+      "pdf_page": 55,
+      "clinical_topic": "Childhood emotional disorders",
+      "text_characters": 8313,
+      "extracted_text_sha256": "3944af13c7b4aec9b2ce84f2eaf2aaa2fa07534b61c2221e030e193fc59c2788",
+      "printed_links": [
+        "https://dhr.gov.in/"
+      ],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 56,
+      "clinical_topic": "Children with developmental problems",
+      "text_characters": 8065,
+      "extracted_text_sha256": "ae6b5be5b090a554faf9a54bd6898361833df60583048b4855be9cd795c08f58",
+      "printed_links": [
+        "www.indianjpsychiatry.org/cpg/cpg2008/CPG-CAP_05.pdf"
+      ],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": "Slow in development / \ndelayed milestones of \ndevelopment\nLess intelligent \ncompared to other \nchildren\nPoor speech, \nself-care, learning \nand memory\nIntellectual disability \n(mental retardation)* - \nglobal developmental \ndelay + impairment \ncompared to peers in \nintellectual functioning \nand adaptive skills\nSpeciﬁc speech delay – Only \nlagging in speech with normal \nintelligence, hearing and \nnon-verbal communication  \nAutism Spectrum Disorder \n(ASD) marked impairment in \nverbal and non-verbal social \ninteractions (being solitary or \n“in his own world”, poor \nresponse to name call and poor \neye-to-eye contact) and \nstereotyped behaviors  *in \nchildren under 5 years, avoid \ndiagnosis of ID, name it as \nglobal developmental delay \nand start intervention\nSpeciﬁc Learning \nDisorder (SLD)- Average \nintelligence with poor \nacademic skills (reading, \nwriting, spelling and \nmaths inspite of \nadequate schooling)"
+    },
+    {
+      "pdf_page": 57,
+      "clinical_topic": "Depression",
+      "text_characters": 6305,
+      "extracted_text_sha256": "9801b6ea6973ae5554e7ea318558d5f4fdd75fd63c76d84bf48bd698441a9df3",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": "Severity of\ndepression\nCore\nsymptoms\nAdditional\nsymptoms\nMild\ndepression\nModerate\ndepression\nSevere\ndepression\n2\n2\n3\n2 or more\n3 or more\n4 or more\nRule out Bipolar Disorder /  Grief / Adjustment \nDisorder"
+    },
+    {
+      "pdf_page": 58,
+      "clinical_topic": "Psychosis",
+      "text_characters": 7421,
+      "extracted_text_sha256": "acda67cb0fa90575ffdb042c9ed1b4424875af916716e6eea7b7d50149e7daa4",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 59,
+      "clinical_topic": "Somatoform disorders",
+      "text_characters": 7174,
+      "extracted_text_sha256": "d35fe1d15b5633bd200f084e42375c9c6a33bde1e77ee2e1e2f0ad57cbf422b6",
+      "printed_links": [
+        "http://www.who.int/iris/handle/10665/259161",
+        "https://www.rcpsych.ac.uk/pdf/CHECKED%20MUS%20Guidance_A4_4pp_6.pdf"
+      ],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": "∙ Desai G & Chaturvedi SK. Medically Unexplained Somatic Symptoms & Chronic Pain – assessment & management. A primer for Healthcare professionals. 1st Edition 2017. Paras medical publisher, Hyderabad, \nIndia.\n∙ World Health Organization. (□2017)□. mhGAP training manuals for the mhGAP intervention guide for mental, neurological and substance use disorders in non-specialized health settings - version 2.0 (□for ﬁeld \ntesting)□. World Health Organization. http://www.who.int/iris/handle/10665/259161.   \n∙ Agarwal V, Srivastava C &  Sitholey P. Clinical Practice Guidelines for the Management of Paediatric Somatoform disorders. Indian Psychiatric Society – Practice guidelines 2018.\n∙ Guidance for health professionals on medically unexplained symptoms (MUS) - https://www.rcpsych.ac.uk/pdf/CHECKED%20MUS%20Guidance_A4_4pp_6.pdf\n∙ Jacob KS. A simple protocol to manage patients with unexplained somatic symptoms in medical practice. Natl. Med. J. India. 2004; 17: 326-8"
+    },
+    {
+      "pdf_page": 60,
+      "clinical_topic": null,
+      "text_characters": 11,
+      "extracted_text_sha256": "75c94289cc3666fb73044350aad8d2867bc606f07f792508fff81293c1a41b16",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 61,
+      "clinical_topic": "Acute respiratory infection in adults",
+      "text_characters": 7416,
+      "extracted_text_sha256": "6dbdb6b21d5831c48e0814c53f371a5a2fe63895f5f7734bf7b47ad3ea4b582d",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 62,
+      "clinical_topic": "Asthma",
+      "text_characters": 6025,
+      "extracted_text_sha256": "1bedf85f06b4ed2f41e7d4ff4dc0c5ad5be936524fcc7eb2edc8a089facaf402",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": "1. Agarwal R, et al. Guidelines for diagnosis and management of bronchial asthma: Joint ICS/ NCCP(I) recommendations. Lung India 2015;32(Suppl 1):S3-S42.\n2. Global Initiative for Asthma (GINA). Global strategy for asthma management and prevention. 2018.\n3. National Institute for Health and Care Excellence (NICE). Asthma: diagnosis, monitoring and chronic asthma management. 2017."
+    },
+    {
+      "pdf_page": 63,
+      "clinical_topic": "Chronic obstructive pulmonary disease",
+      "text_characters": 6041,
+      "extracted_text_sha256": "4f73c5844fae4ac95f49988450db3c90f3b9f24d0acad5b2e543e20757dc4f6a",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 64,
+      "clinical_topic": "Respiratory failure",
+      "text_characters": 4378,
+      "extracted_text_sha256": "540b44a7bfff7e9a840d738b9fac93ec3094535302c935f16fb661ba29383ab8",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 65,
+      "clinical_topic": null,
+      "text_characters": 19,
+      "extracted_text_sha256": "8259e645760647e10e85d8cf20b5c418565963b95c061dfabd00317dd459acf5",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 66,
+      "clinical_topic": "Acute urinary retention in men",
+      "text_characters": 4421,
+      "extracted_text_sha256": "50d500a850ba03d3e0d817d7122844e3ebb491276fa73fe26fcee633968d7e01",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 67,
+      "clinical_topic": "Gross haematuria",
+      "text_characters": 5004,
+      "extracted_text_sha256": "eb6ed0a10f58fa62a3dcbf48b873bb1f5125712629410342ada9a3ea1a85aaf4",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": "• Start intravenous ﬂuids \nif required (primary \nlevel)\n• If Anaemia - may trans-\nfuse blood as required  \n(primary level)\n• Manage clot colic / \nﬂank pain with analge-\nsics (primary level)\n• If Acute urinary reten-\ntion - catheterise with \n20/22Fr 3 way Foley and \nmay start continuous \nirrigation with normal \nsaline (Primary level)\n• Cystoscopic clot evacu-\nation may be per-\nformed if feasible (ter-\ntiary level)\n• If basic evaluation and \nmanagement facilities \nare unavailable - refer \n(tertiary level)\n• Haematuria should be considered as a symptom of genitourinary malignancy in patients >40years old until \nproven otherwise\n• Suspected nephrotic/nephritic syndrome: cola coloured urine, proteinuria, anasarca, hypertension - Refer to \n  nephrologist (tertiary level)\n• Suspect urinary tract infection : presents with dysuria, increased frequency of voiding and other irritative lower \nurinary tract symptoms with/ without fever- treat with broad spectrum oral antibiotics (primary level)"
+    },
+    {
+      "pdf_page": 68,
+      "clinical_topic": "Male infertility",
+      "text_characters": 8130,
+      "extracted_text_sha256": "cb8dc0cf9af5dd27851593911771838c75564c5933d5df43c8ccf34f866742d8",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 69,
+      "clinical_topic": "Renal and ureteric stones",
+      "text_characters": 5052,
+      "extracted_text_sha256": "15a22f4c1e1c9a1552cd90f7443492c10ec8e1414f7df09e9d1cd737f4f7cddd",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 70,
+      "clinical_topic": "Scrotal swelling",
+      "text_characters": 5155,
+      "extracted_text_sha256": "a6ce9d0396dbb488e77a692fe6f7de48fb3f6e4addf1aac79bc060ec2ed34252",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 71,
+      "clinical_topic": null,
+      "text_characters": 2992,
+      "extracted_text_sha256": "68bbfe2b808c787373008543e3dc83427a35f86931d6d739e3b476d16a44ca12",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 72,
+      "clinical_topic": null,
+      "text_characters": 2239,
+      "extracted_text_sha256": "959d23c33d5bc5fed82c814c047b3407634734ea52cf5ca2256205e5d32b2790",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 73,
+      "clinical_topic": null,
+      "text_characters": 2075,
+      "extracted_text_sha256": "d008b9adcc09b142c89e1e86110ffe4fab7e4cb42761f13f622a49307334d345",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 74,
+      "clinical_topic": null,
+      "text_characters": 1409,
+      "extracted_text_sha256": "ee6824f594cc1858692d9ab9bbdc8091c2ddb1ed8ea78c93806eaa21b15c4bb8",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    },
+    {
+      "pdf_page": 75,
+      "clinical_topic": null,
+      "text_characters": 149,
+      "extracted_text_sha256": "5a90f42ffd368c0f11e6101e1c326950bb641dc4494b49f3132f8bc494be53d5",
+      "printed_links": [],
+      "incomplete_link_fragments": [],
+      "printed_reference_block": ""
+    }
+  ],
+  "printed_links": [
+    {
+      "url": "http://apps.who.int/iris/bitstream/handle/10665/104772/9789241506823_Module-5_eng.pdf;jsessionid=942F89F89671BA396EC7F46C9B5C1158?sequence=7",
+      "pdf_pages": [
+        47
+      ]
+    },
+    {
+      "url": "http://apps.who.int/iris/bitstream/handle/10665/137319/9789241507813_eng.pdf;jsessionid=8BF6F1C94BD7BA81B8F464D4CBA40249?sequence=1",
+      "pdf_pages": [
+        50
+      ]
+    },
+    {
+      "url": "http://disabilityaffairs.gov.in/content/page/adip-scheme.php",
+      "pdf_pages": [
+        20
+      ]
+    },
+    {
+      "url": "http://nhm.gov.in/nrhm-components/rmnch-a/child-health-immunization/child-health/guidelines.html",
+      "pdf_pages": [
+        49
+      ]
+    },
+    {
+      "url": "http://www.who.int/childgrowth/standards/en/",
+      "pdf_pages": [
+        49
+      ]
+    },
+    {
+      "url": "http://www.who.int/elena/titles/oedema_sam/en/",
+      "pdf_pages": [
+        49
+      ]
+    },
+    {
+      "url": "http://www.who.int/iris/handle/10665/259161",
+      "pdf_pages": [
+        59
+      ]
+    },
+    {
+      "url": "http://www.who.int/maternal_child_adolescent/documents/IMCI_chartbooklet/en/",
+      "pdf_pages": [
+        50
+      ]
+    },
+    {
+      "url": "https://dhr.gov.in/",
+      "pdf_pages": [
+        55
+      ]
+    },
+    {
+      "url": "https://www.rcpsych.ac.uk/pdf/CHECKED%20MUS%20Guidance_A4_4pp_6.pdf",
+      "pdf_pages": [
+        59
+      ]
+    },
+    {
+      "url": "https://www.uptodate.com/contents/evaluation-of-headache-in-adults",
+      "pdf_pages": [
+        33
+      ]
+    },
+    {
+      "url": "www.indianjpsychiatry.org/cpg/cpg2008/CPG-CAP_05.pdf",
+      "pdf_pages": [
+        56
+      ]
+    }
+  ]
+}
