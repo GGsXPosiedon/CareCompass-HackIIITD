@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import type { MouseEvent } from 'react';
 import { ArrowLeft, BriefcaseMedical, CalendarDays, ChevronRight, Globe2, History, Menu, MessageSquare, PanelLeftClose, PanelLeftOpen, Plus, Settings as SettingsIcon, X } from 'lucide-react';
 import App from './App';
+import { HomeScreenInstall } from './components/HomeScreenInstall';
 import { getCopy } from './i18n';
 import type { Language } from './types';
 import { HealthProvider } from './health/Store';
@@ -99,7 +100,7 @@ function Shell() {
     try { localStorage.setItem('carecompass.sidebarCollapsed', String(collapsed)); } catch { /* In-memory preference still works. */ }
   }, [collapsed]);
   useEffect(() => {
-    const mobile = window.matchMedia('(max-width: 767px)');
+    const mobile = window.matchMedia('(max-width: 767px), (max-width: 1023px) and (max-height: 500px)');
     const sync = () => { if (!mobile.matches) setDrawer(false); };
     mobile.addEventListener('change', sync);
     return () => mobile.removeEventListener('change', sync);
@@ -141,6 +142,7 @@ function Shell() {
     </aside>
     <div className="care-stage" inert={drawer}>
       <header className="care-topbar"><div>{page !== 'care' ? <button type="button" className="care-back-button" onClick={goBack} aria-label={t('Go back', 'वापस जाएँ')}><ArrowLeft size={17}/><span>{t('Back', 'वापस')}</span></button> : null}<button ref={menuButton} className="icon-button care-mobile-menu" aria-label={t('Open navigation', 'नेविगेशन खोलें')} aria-expanded={drawer} onClick={() => setDrawer(true)}><Menu size={21}/></button><span className="care-mobile-brand">CareCompass</span><span className="care-topbar-name">{page === 'bookings' ? copy.bookings : page === 'briefcase' ? t('Briefcase', 'ब्रीफ़केस') : page === 'services' ? t('Health services', 'स्वास्थ्य सेवाएँ') : page === 'history' ? t('Chat history', 'बातचीत का इतिहास') : page === 'settings' ? t('Settings', 'सेटिंग्स') : copy.findCare}</span></div><div><span className="care-demo-badge">{t('Demo', 'डेमो')}</span><label className="language-control"><Globe2 size={16}/><select aria-label={copy.language} value={language} onChange={e => setLanguage(e.target.value as Language)}><option value="en">English</option><option value="hi">हिंदी</option><option value="hinglish">Hinglish</option><option value="auto">Auto</option></select></label></div></header>
+      <HomeScreenInstall hindi={hi} hidden={drawer}/>
       <div id="care-main" role="main" className="care-main">
         {page === 'not-found' || (route.conversationId && !history.some(entry => entry.id === route.conversationId)) ? <section className="care-route-missing"><h1>{t('Page not found', 'पेज नहीं मिला')}</h1><p>{t('This page or saved conversation is unavailable on this device.', 'यह पेज या सहेजी गई बातचीत इस डिवाइस पर उपलब्ध नहीं है।')}</p><button className="button primary" onClick={newRequest}>{t('Start a new conversation', 'नई बातचीत शुरू करें')}</button></section> : null}
         <div className="care-shell-flow" hidden={(page !== 'care' && page !== 'bookings') || !!(route.conversationId && !history.some(entry => entry.id === route.conversationId))}><App active={page === 'care'} embedded chatLayout restoredConversation={restoredConversation} onConversation={entry => { setActiveId(entry.id); setHistory(previous => saveConversation(previous, entry)); if (window.location.pathname !== conversationPath(entry.id)) changeRoute(conversationPath(entry.id)); }} externalLanguage={language} externalBookings={page === 'bookings'} resetRequest={resetKey} onStartCare={() => navigate('care')} onViewBookings={() => navigate('bookings')} onExploreServices={() => navigate('services')}/></div>

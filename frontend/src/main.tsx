@@ -13,4 +13,5 @@ import './health.css';
 import './care-shell.css';
 import './themes.css';
 import './motion.css';
+import './mobile.css';
 createRoot(document.getElementById('root')!).render(<StrictMode><CareShell /></StrictMode>);
